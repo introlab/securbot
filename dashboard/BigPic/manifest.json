@@ -1,0 +1,12 @@
+{
+    "name": "Big Pic",
+    "manifest_version": 2,
+    "version": "1.0.0",
+    "content_scripts": [
+      {
+        "matches": ["http://securbot.gel.usherbrooke.ca:9090/secure/Dashboard.jspa*"],
+        "run_at": "document_idle",
+        "js": ["big-pic.js"]
+      }
+    ]
+  }
