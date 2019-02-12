@@ -1,4 +1,4 @@
-const enlarge = function(options) {
+const enlarge = function({width = "80px", height = "80px", paddingBottom = "10px"} = {}) {
     let gadget = document.getElementById("iframe-gadget")
     let pictures = gadget.contentDocument.getElementsByClassName("dmmjUH")
 
@@ -7,8 +7,8 @@ const enlarge = function(options) {
     try {
         for(let pic of pictures) {
 
-            pic.style.width = options.width
-            pic.style.height = options.height
+            pic.style.width = width
+            pic.style.height = height
 
             let child = pic.firstChild
             let background = child.style.backgroundImage
@@ -16,9 +16,9 @@ const enlarge = function(options) {
             child.style.backgroundImage = updatedBackground
 
             let parent = pic.parentNode
-            parent.style.width = options.width
-            parent.style.height = options.height
-            parent.style.paddingBottom = options.paddingBottom
+            parent.style.width = width
+            parent.style.height = height
+            parent.style.paddingBottom = paddingBottom
 
             parent = parent.parentNode
             parent.style.flexDirection = "column"
@@ -30,4 +30,4 @@ const enlarge = function(options) {
     }
 }
 
-enlarge({width: "80px", height: "80px", paddingBottom = "10px"});
+setInterval(enlarge, 2000)
