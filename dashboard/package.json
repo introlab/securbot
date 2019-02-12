@@ -1,0 +1,22 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "description": "export jira dashboard using chrome",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoronixProduct3/dashboard.git"
+  },
+  "author": "MoronixProduct3",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MoronixProduct3/dashboard/issues"
+  },
+  "homepage": "https://github.com/MoronixProduct3/dashboard#readme",
+  "dependencies": {
+    "puppeteer-core": "^1.12.2"
+  }
+}
