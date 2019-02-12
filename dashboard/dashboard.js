@@ -1,7 +1,21 @@
 const puppeteer = require('puppeteer-core');
 const bigpic = require('./BigPic/node-big-pic.js');
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const imgSize = require('image-size');
 
-module.exports.getDashboard = async function (settings){
+module.exports.saveDashboard = async function (settings){
+    console.log(new Date().toLocaleString());
+    console.log('Starting Dashboard render');
+    await renderDashboard(settings);
+
+    console.log('Starting PDF conversion');
+    generatePDF(settings.output, settings.outputPDF);
+
+    console.log('Finished Dashboard export');
+}
+
+async function renderDashboard(settings){
     const browser = await puppeteer.launch({
         executablePath: settings.chromium_path,
         defaultViewport: {width: 1920, height: 1080}
@@ -41,4 +55,17 @@ module.exports.getDashboard = async function (settings){
     browser.close();
 
     return image;
+}
+
+function generatePDF(imagePath, pdfPath){
+    var dim = imgSize(imagePath);
+    // Adjusting pdf to 8 and 1/2 inches wide
+    dim.height = dim.height / dim.width * 612;
+    dim.width = 612;
+
+
+    var doc = new PDFDocument({size: [dim.width, dim.height]});
+    doc.pipe(fs.createWriteStream(pdfPath));
+    doc.image(imagePath, 0, 0, {width: dim.width});
+    doc.end();
 }

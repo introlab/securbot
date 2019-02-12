@@ -3,5 +3,7 @@
     "url": "",
     "user": "",
     "passwd": "",
-    "output": ""
+    "output": "",
+    "outputPDF": "",
+    "cron-schedule": ""
 }

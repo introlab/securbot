@@ -1,4 +1,3 @@
-const puppeteer = require('puppeteer-core');
 const dModule = require('./dashboard.js');
 
 // Loading settings
@@ -9,4 +8,4 @@ try{
     process.exit(1);
 }
 
-dModule.getDashboard(settings);
+dModule.saveDashboard(settings);

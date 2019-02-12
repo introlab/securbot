@@ -1,6 +1,10 @@
 # Application ignores
 *.png
 settings.json
+dashboard/package-lock.json
+
+# Vim swap files
+*.swp
 
 # Logs
 logs
