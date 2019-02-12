@@ -1,3 +1,6 @@
+# SecurBot
+An autonomous robotic security platform
+
 Created by Dominic Létourneau
 January 22 2019
 
