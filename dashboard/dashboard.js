@@ -5,7 +5,6 @@ const fs = require('fs');
 const imgSize = require('image-size');
 
 module.exports.saveDashboard = async function (settings){
-    console.log(new Date().toLocaleString());
     console.log('Starting Dashboard render');
     await renderDashboard(settings);
 

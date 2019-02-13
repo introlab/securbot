@@ -1,5 +1,4 @@
 const dModule = require('./dashboard.js');
-const schedule = require('node-schedule');
 const mail = require('./mail.js');
 
 // Loading settings
@@ -10,12 +9,6 @@ try{
     process.exit(1);
 }
 
-// Update dashboards regularly
-schedule.scheduleJob(settings.cron_schedule, ()=>{
-    dModule.saveDashboard(settings);
-});
-
-// Send updated dashboards
-schedule.scheduleJob(settings.cron_email, ()=>{
+dModule.saveDashboard(settings).then(()=>{
     mail.send(settings);
 });

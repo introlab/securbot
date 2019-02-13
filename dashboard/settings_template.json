@@ -5,5 +5,9 @@
     "passwd": "",
     "output": "",
     "outputPDF": "",
-    "cron-schedule": ""
+    "cron_schedule": "",
+    "cron_email": "",
+    "mail_transport": {},
+    "mail_from": "",
+    "mailing_list":[]
 }
