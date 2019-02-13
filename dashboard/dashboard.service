@@ -7,7 +7,7 @@ Documentation=https://github.com/introlab/securbot/dashboard
 User=root
 WorkingDirectory=/opt/securbot/dashboard/
 ExecStart=/usr/bin/node /opt/securbot/dashboard/scheduledRender.js
-Restart=always
+Restart=on-abnormal
 
 [Install]
 WantedBy=multi-user.target
