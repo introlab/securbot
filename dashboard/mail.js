@@ -9,7 +9,7 @@ module.exports.send = async function(settings){
     var mailOptions = {
         from: settings.mail_from,
         to: settings.mailing_list.join(', '),
-        subject: 'Securbot: tableu de bord hebdomadaire',
+        subject: 'Securbot: tableau de bord hebdomadaire',
         html: 'Vous trouverez ci-joint le tableau de bord de notre équipe',
         attachments: [
             {path: settings.output},
