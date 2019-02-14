@@ -1,0 +1,13 @@
+[Unit]
+Description=Renders the Jira dashboard
+After=network.service
+Documentation=https://github.com/introlab/securbot/dashboard
+
+[Service]
+User=dashboard
+WorkingDirectory=/opt/securbot/dashboard/
+ExecStart=/usr/bin/node /opt/securbot/dashboard/scheduledRender.js
+Restart=on-abnormal
+
+[Install]
+WantedBy=multi-user.target
