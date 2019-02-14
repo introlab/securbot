@@ -17,7 +17,11 @@ module.exports.saveDashboard = async function (settings){
 async function renderDashboard(settings){
     const browser = await puppeteer.launch({
         executablePath: settings.chromium_path,
-        defaultViewport: {width: 1920, height: 1080}
+        defaultViewport: {
+            width: settings.screenWidth,
+            height: 1080,
+            deviceScaleFactor: settings.deviceScalingFactor
+        }
     });
     const page = await browser.newPage();
     console.log('Chromium started');

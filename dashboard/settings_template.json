@@ -5,6 +5,8 @@
     "passwd": "",
     "output": "",
     "outputPDF": "",
+    "screenWidth": 1920,
+    "deviceScalingFactor": 1,
     "cron_schedule": "",
     "cron_email": "",
     "mail_transport": {},
