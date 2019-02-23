@@ -1,0 +1,8 @@
+To start robot:
+
+[On Robot]
+roslaunch turtlebot_bringup minimal.launch
+roslaunch launchfiles/3dsensor.launch
+
+[On Computer]
+roslaunch rtabmap_ros demo_turtlebot_rviz.launch
