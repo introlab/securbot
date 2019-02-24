@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  securbot:
+    build: ./express-hello-world
+    environment:
+      - VIRTUAL_HOST=localhost
