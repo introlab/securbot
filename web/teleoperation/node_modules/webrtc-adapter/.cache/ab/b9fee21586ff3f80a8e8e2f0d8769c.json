@@ -1,0 +1,1 @@
+{"id":"cNPp","dependencies":[{"name":"./src/js/adapter_core.js","dynamic":true,"resolved":"/home/fippo/webrtc/adapter/src/js/adapter_core.js","parent":"/home/fippo/webrtc/adapter/parcel.html"}],"generated":{"html":"<html> <body> <script src=\"/46dd217fd00a02806246675eeb9d535a.js\"></script> </body> </html>"},"hash":"6c121a04de14b4ec1dd7f8bc18d796aa","cacheData":{}}

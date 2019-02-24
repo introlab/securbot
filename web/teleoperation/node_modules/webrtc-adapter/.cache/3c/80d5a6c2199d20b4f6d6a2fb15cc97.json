@@ -1,0 +1,1 @@
+{"id":"parcel.html","dependencies":[{"name":"./src/js/adapter_core.js","dynamic":true,"resolved":"/home/fippo/webrtc/adapter/src/js/adapter_core.js","parent":"/home/fippo/webrtc/adapter/parcel.html"}],"generated":{"html":"<html>\n<body>\n<script src=\"/46dd217fd00a02806246675eeb9d535a.js\"></script>\n</body>\n</html>\n"},"hash":"168d453a88e851b36cf9b3306ecea45d","cacheData":{}}
