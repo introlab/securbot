@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# https://docs.docker.com/install/linux/linux-postinstall/
+
+# Starting docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Setting up docker group to not have to type sudo
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+# Show test option
+echo "To test the install, run $ docker run hello-world"
