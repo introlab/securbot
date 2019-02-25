@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="image_capture" type="virtualcam_node" name="virtualcam_node" output="screen">
+        <param name="image_topic" value="/operator_camera_node/image_raw" />        
+        <param name="virtual_dev" value="/dev/video2" />     
+    </node>
+</launch>

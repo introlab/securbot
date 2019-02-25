@@ -1,15 +1,38 @@
+let operatorID = null
+
 ipc.on('data', (emitter, data) => {
     console.log(data)
+    if(operatorID != null)
+        easyrtc.sendDataP2P(operatorID, 'rosdata', data);
 })
 
 easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
+    operatorID = callerEasyrtcid
     var video = document.getElementById('caller');
     easyrtc.setVideoObjectSrc(video, stream);
 });
 
  easyrtc.setOnStreamClosed( function (callerEasyrtcid) {
+     operatorID = null
     easyrtc.setVideoObjectSrc(document.getElementById('caller'), "");
 });
+
+function get_video_id() {
+    return new Promise((resolve, reject) => {
+        easyrtc.getVideoSourceList(list => {
+            list.forEach(source => {
+                if(source.label === "Virtual Webcam") {
+                    resolve(source.id)
+                }
+            })
+            reject()
+        })
+    })
+}
+
+function dataCallback(easyrtcid, msgType, msgData, targeting) {
+    console.log(msgData)
+}
 
 
 function my_init() {
@@ -21,14 +44,22 @@ function my_init() {
     var connectFailure = function(errorCode, errText) {
         console.log(errText);
     }
-    easyrtc.initMediaSource(
-          function(){        // success callback
-              var selfVideo = document.getElementById("self");
-              easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-              easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
-          },
-          connectFailure
-    );
+
+    get_video_id().then(videoId => {
+        easyrtc.setVideoSource(videoId)
+        easyrtc.enableDataChannels(true)
+        easyrtc.enableAudio(false)
+        easyrtc.setPeerListener(dataCallback, 'rosdata')
+
+        easyrtc.initMediaSource(
+              function(){        // success callback
+                  var selfVideo = document.getElementById("self");
+                  easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
+                  easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
+              },
+              connectFailure
+        );
+    })
  }
 
 
