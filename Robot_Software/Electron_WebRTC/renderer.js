@@ -1,3 +1,7 @@
+ipc.on('data', (emitter, data) => {
+    console.log(data)
+})
+
 easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
     var video = document.getElementById('caller');
     easyrtc.setVideoObjectSrc(video, stream);
