@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const bigpic = require('./BigPic/node-big-pic.js');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
@@ -16,7 +16,10 @@ module.exports.saveDashboard = async function (settings){
 
 async function renderDashboard(settings){
     const browser = await puppeteer.launch({
-        executablePath: settings.chromium_path,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+        ],
         defaultViewport: {
             width: settings.screenWidth,
             height: 1080,

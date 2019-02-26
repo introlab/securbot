@@ -2,9 +2,12 @@
 
 Export tools suite used to generate a `.PNG` and `.PDF` version of the Jira dashboard automatically. Also include a javascript function to enlarge member's profile pictures.
 
+## Warning !
+
+You should consider running this in a container or VM as the chromium sandbox is disabled.
+
 ## Installation
 - Install node and npm
-- Install Chromium 71.0
 - Run: `$ nmp install` in the dashboard directory
 - Copy the `settings_template.json` to `settings.json`
 - Fill in [all the fields](#Settings) in the `settings.json` file
@@ -25,22 +28,19 @@ To periodically generate files and send emails:
 
 ## Settings
 
-#### chromium_path <[string]>
-Path to the chromium executable ex: `/usr/bin/chromium`
-
 #### url <[string]>
 URL of the target Jira dashboard ex: `https://your.domain.com/Dashboard.jspa`
 
 #### user <[string]>
 Username of the authorized dashboard viewer
 
-#### passwd <[string]> 
+#### passwd <[string]>
 Password of the authorized dashboard viewer
 
-#### output <[string]> 
+#### output <[string]>
 Path of the `.PNG` destination file ex: `/home/user/dashboard.png`
 
-#### outputPDF <[string]> 
+#### outputPDF <[string]>
 Path of the `.PDF` destination file ex: `/home/user/dashboard.pdf`
 
 #### screenWidth <[number]>
@@ -59,7 +59,7 @@ Schedules the sending a new email containg the output files in attachement. Use 
 #### mail_transport <[Object]>
 This [Object] contains the `options` required to connect to an SMTP server. These `options` get sent to the `createTransport(options[, defaults])` method of the Nodemailer library. Refer to the [documentation](https://nodemailer.com/smtp/) for the appropriate syntax. This is an example for a Gmail:
 ```json
-"mail_transport": {                                                                     
+"mail_transport": {
         "service": "gmail",
         "auth": {
             "user": "your.email@gmail.com",
