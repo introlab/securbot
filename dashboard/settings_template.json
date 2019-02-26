@@ -4,6 +4,7 @@
     "passwd": "",
     "output": "",
     "outputPDF": "",
+    "outputLandscapePDF": "",
     "screenWidth": 1920,
     "deviceScalingFactor": 1,
     "cron_schedule": "",

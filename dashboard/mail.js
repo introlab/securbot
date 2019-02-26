@@ -13,7 +13,8 @@ module.exports.send = async function(settings){
         html: 'Vous trouverez ci-joint le tableau de bord de notre équipe',
         attachments: [
             {path: settings.output},
-            {path: settings.outputPDF}
+            {path: settings.outputPDF},
+            {path: settings.outputLandscapePDF}
         ]
     }
 
