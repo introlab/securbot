@@ -1,6 +1,6 @@
 let operatorID = null
 
-ipc.on('data', (emitter, data) => {
+ipc.on('rosdata', (emitter, data) => {
     console.log(data)
     if(operatorID != null)
         easyrtc.sendDataP2P(operatorID, 'rosdata', data);
@@ -34,11 +34,12 @@ function get_video_id() {
 
 function dataCallback(easyrtcid, msgType, msgData, targeting) {
     console.log(msgData)
+    ipc.send('msg', msgData)
 }
 
 
 function my_init() {
-    easyrtc.setSocketUrl('http://ubuntu-cg.local:8080');
+    easyrtc.setSocketUrl('http://excalibur1:8080');
     easyrtc.setRoomOccupantListener( loggedInListener);
     var connectSuccess = function(myId) {
         console.log("My easyrtcid is " + myId);
@@ -51,7 +52,7 @@ function my_init() {
         easyrtc.setVideoSource(videoId)
         easyrtc.enableDataChannels(true)
         easyrtc.enableAudio(false)
-        easyrtc.setPeerListener(dataCallback, 'rosdata')
+        easyrtc.setPeerListener(dataCallback, 'msg')
 
         easyrtc.initMediaSource(
               function(){        // success callback
