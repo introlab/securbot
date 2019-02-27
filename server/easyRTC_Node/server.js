@@ -9,7 +9,7 @@ var socketIo = require("socket.io");        // web socket external module
 // 1. you need to replace this "require("../");" by "require("easyrtc");"
 // 2. install easyrtc (npm i easyrtc --save) in server_example/package.json
 
-var easyrtc = require("./"); // EasyRTC internal module
+var easyrtc = require("easyrtc"); // EasyRTC internal module
 
 // Set process name
 process.title = "node-easyrtc";

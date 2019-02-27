@@ -15,12 +15,10 @@
     "docker-compose:stop": "docker-compose -f docker-compose.yml down"
   },
   "dependencies": {
+    "easyrtc": "git+https://github.com/priologic/easyrtc.git#v1.1.1-rc2",
     "express": "^4.10.7",
     "serve-static": "^1.8.0",
-    "socket.io": "^1.4.5",
-    "async": "0.2.x",
-    "colors": "*",
-    "underscore": "1.5.x"
+    "socket.io": "^1.4.5"
   },
   "license": "BSD2",
   "engines": {

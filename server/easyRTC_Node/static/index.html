@@ -11,7 +11,6 @@
                 width: 600px;
                 height: 320px;
             }
-
             #connectControls {
                 float:left;
                 width:286px;
@@ -28,6 +27,11 @@
                 width:298px;
                 border:1px solid gray;
                 margin-left:10px;
+            }
+            #selfVideo {
+                height:0px;
+                width:0px;
+                float:left;
             }
             #acceptCallBox {
                 display:none;
@@ -74,6 +78,7 @@
                 </div>
 
                 <div id="videos">
+                    <video autoplay="autoplay" playsinline="playsinline" id="selfVideo" class="easyrtcMirror"></video>
                     <video autoplay="autoplay" playsinline="playsinline" id="callerVideo"></video>
                     <div id="acceptCallBox"> <!-- Should be initially hidden using CSS -->
                         <div id="acceptCallLabel"></div>
@@ -84,12 +89,12 @@
                 <div id="robotControl">
                     <div id="robotControlContainer">
                             <div style="height:50%;text-align:center;padding:1px">
-                                    <button class="controlButton" id="fowardControl" onclick="controlClicked()">Foward</button>
+                                    <button class="controlButton" id="fowardControl" disabled="disabled" onclick="sendCmdP2P('foward')">Foward</button>
                             </div>
                             <div style="height:50%;text-align:center;padding:1px">
-                                    <button class="controlButton" id="leftControl" onclick="controlClicked()">Left</button>
-                                    <button class="controlButton" id="backwardControl" onclick="controlClicked()">Backward</button>
-                                    <button class="controlButton" id="rightControl" onclick="controlClicked()">Right</button>
+                                    <button class="controlButton" id="leftControl" disabled="disabled" onclick="sendCmdP2P('left')">Left</button>
+                                    <button class="controlButton" id="backwardControl" disabled="disabled" onclick="sendCmdP2P('backward')">Backward</button>
+                                    <button class="controlButton" id="rightControl" disabled="disabled" onclick="sendCmdP2P('right')">Right</button>
                             </div>
                     </div>
                 </div>

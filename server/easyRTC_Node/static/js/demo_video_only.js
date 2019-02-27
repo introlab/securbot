@@ -24,6 +24,7 @@
 //POSSIBILITY OF SUCH DAMAGE.
 //
 var selfEasyrtcid = "";
+var otherOccupant = "";
 
 function disable(domId) {
     document.getElementById(domId).disabled = "disabled";
@@ -38,14 +39,18 @@ function enable(domId) {
 function connect() {
     easyrtc.enableDebug(false);
     console.log("Initializing.");
+    easyrtc.enableDataChannels(true);
     easyrtc.enableAudio(false);
     easyrtc.enableAudioReceive(false);
+    easyrtc.setDataChannelOpenListener(openListener);
+    easyrtc.setDataChannelCloseListener(closeListener);
+    easyrtc.setPeerListener(sendCmd);
     easyrtc.setRoomOccupantListener(convertListToButtons);
     easyrtc.initMediaSource(
         function(){        // success callback
             var selfVideo = document.getElementById("selfVideo");
             easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-            easyrtc.connect("easyrtc.videoOnly", loginSuccess, loginFailure);
+            easyrtc.connect("easyrtc.securbot", loginSuccess, loginFailure);
         },
         function(errorCode, errmesg){
             easyrtc.showError("MEDIA-ERROR", errmesg);
@@ -53,6 +58,18 @@ function connect() {
         );
 }
 
+function sendCmd(who, msgType, content) {
+    console.log(who + " sent : " + content + "...");
+}
+
+function openListener(otherParty) {
+    console.log("Connected to : " + easyrtc.idToName(otherParty));
+}
+
+
+function closeListener(otherParty) {
+    console.log("No longer connected to : " + easyrtc.idToName(otherParty));
+}
 
 function terminatePage() {
     easyrtc.disconnect();
@@ -105,6 +122,11 @@ function performCall(otherEasyrtcid) {
     };
     var successCB = function() {
         enable('hangupButton');
+        enable('fowardControl');
+        enable('backwardControl');
+        enable('leftControl');
+        enable('rightControl');
+        otherOccupant = otherEasyrtcid;
     };
     var failureCB = function() {
         enable('otherClients');
@@ -149,6 +171,11 @@ easyrtc.setStreamAcceptor( function(easyrtcid, stream) {
 easyrtc.setOnStreamClosed( function (easyrtcid) {
     easyrtc.setVideoObjectSrc(document.getElementById('callerVideo'), "");
     disable("hangupButton");
+    disable('fowardControl');
+    disable('backwardControl');
+    disable('leftControl');
+    disable('rightControl');
+    otherOccupant = "";
 });
 
 
@@ -174,3 +201,14 @@ easyrtc.setAcceptChecker(function(easyrtcid, callback) {
         acceptTheCall(false);
     };
 } );
+
+
+function sendCmdP2P(direction) {
+    if (easyrtc.getConnectStatus(otherOccupant) === easyrtc.IS_CONNECTED) {
+        easyrtc.sendDataP2P(otherOccupant, 'msg', direction);
+        console.log("Command was sent...");
+    }
+    else {
+        easyrtc.showError("NOT-CONNECTED", "not connected to " + easyrtc.idToName(otherOccupant) + " yet.");
+    }
+}
