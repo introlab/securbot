@@ -8,6 +8,7 @@ You should consider running this in a container or VM as the chromium sandbox is
 
 ## Installation
 - Install node and npm
+- Install the pdfjam utility available with the tex suite
 - Run: `$ nmp install` in the dashboard directory
 - Copy the `settings_template.json` to `settings.json`
 - Fill in [all the fields](#Settings) in the `settings.json` file

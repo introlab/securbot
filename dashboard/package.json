@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/MoronixProduct3/dashboard#readme",
   "dependencies": {
+    "async-retry": "^1.2.3",
     "image-size": "^0.7.1",
     "node-schedule": "^1.3.1",
     "nodemailer": "^5.1.1",
+    "pdfjam": "^0.1.0",
     "pdfkit": "^0.9.0",
     "puppeteer": "^1.12.2"
   }
