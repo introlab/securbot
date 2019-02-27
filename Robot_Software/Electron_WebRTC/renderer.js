@@ -21,10 +21,12 @@ function get_video_id() {
     return new Promise((resolve, reject) => {
         easyrtc.getVideoSourceList(list => {
             list.forEach(source => {
-                if(source.label === "Virtual Webcam") {
+            console.log(source.label + 'found')
+            if(source.label === "virtual_kinect") {
                     resolve(source.id)
                 }
             })
+            console.log('No camera found')
             reject()
         })
     })
@@ -36,7 +38,7 @@ function dataCallback(easyrtcid, msgType, msgData, targeting) {
 
 
 function my_init() {
-    easyrtc.setSocketUrl('http://localhost:8080');
+    easyrtc.setSocketUrl('http://ubuntu-cg.local:8080');
     easyrtc.setRoomOccupantListener( loggedInListener);
     var connectSuccess = function(myId) {
         console.log("My easyrtcid is " + myId);
@@ -55,7 +57,7 @@ function my_init() {
               function(){        // success callback
                   var selfVideo = document.getElementById("self");
                   easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-                  easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
+                  easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
               },
               connectFailure
         );
