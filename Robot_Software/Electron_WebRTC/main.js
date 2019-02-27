@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const events = require('events')
 
 const rosnodejs = require('rosnodejs')
@@ -12,6 +12,9 @@ let win
 
 // Event emitter for ROS Node to app communication
 let hub = new events.EventEmitter()
+ipcMain.on('msg', (event, arg) => {
+    hub.emit('msg', arg)
+})
 
 function createWindow () {
   // Create the browser window.
@@ -27,8 +30,8 @@ function createWindow () {
   win.webContents.openDevTools()
 
   // Send data from ROS data hub
-  hub.on('data', (data) => {
-    win.webContents.send('data', data)
+  hub.on('rosdata', (data) => {
+    win.webContents.send('rosdata', data)
   })
 
   // Emitted when the window is closed.
@@ -36,7 +39,7 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    hub.removeAllListeners('data')
+    hub.removeAllListeners('rosdata')
     win = null
   })
 }
@@ -73,6 +76,12 @@ function startNode() {
   rosnodejs.initNode('/electron_node').then( (rosnode) => {
     let subscriber = rosnode.subscribe('toElectron', std_msgs.String, (data) => {
       hub.emit('data', data)
+    })
+    let publisher = rosnode.advertise('fromElectron', std_msgs.String)
+    publisher.publish({ data: 'Hello!' })
+    hub.on('msg', data => {
+        console.log(data)
+        publisher.publish({ data: data })
     })
   })
 }

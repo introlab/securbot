@@ -1,4 +1,3 @@
-
 <launch>
   <!-- 
        Bringup Turtlebot:
@@ -25,6 +24,7 @@
          $ roslaunch rtabmap_ros demo_turtlebot_mapping.launch simulation:=true
          $ roslaunch rtabmap_ros demo_turtlebot_rviz.launch
   -->
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch"/>
   
   <arg name="database_path"     default="rtabmap.db"/>
   <arg name="rgbd_odometry"     default="false"/>
@@ -48,7 +48,7 @@
   -->
   
   <!-- Navigation stuff (move_base) -->
-  <include unless="$(arg simulation)" file="3dsensor.launch">
+  <include unless="$(arg simulation)" file="$(find securbot_pkg)/launch/3dsensor.launch">
      <arg     if="$(arg sw_registered)" name="depth_registration" value="false"/>
      <arg unless="$(arg sw_registered)" name="depth_registration" value="true"/>
   </include>
