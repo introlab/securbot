@@ -52,5 +52,5 @@ module.exports.generateLandscapePDF = async function (imagePath, pdfPath,
             papersize: '{8.5in,11in}',
             trim: `-${margins.hMar}pts -${margins.vMar}pts -${margins.hMar}pts -${margins.vMar}pts`
         });
-    }, {minTimeout: 10});
+    }, {minTimeout: 10, maxTimeout: 3000, retries:50});
 }
