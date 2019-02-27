@@ -1,0 +1,8 @@
+*.pdf
+*.png
+settings_template.json
+dashboard.service
+readme.md
+Dockerfile
+node_modules
+npm-debug.log
