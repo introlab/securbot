@@ -3,18 +3,18 @@
     <head>
         <script src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="../easyrtc/easyrtc.js"></script>
-        <script type="text/javascript" src="js/demo_video_only.js"></script>
+        <script type="text/javascript" src="js/demo.js"></script>
 
         <style type="text/css">
             #videoDemoContainer {
                 position:relative;
                 width: 600px;
-                height: 320px;
+                height: 360px;
             }
             #connectControls {
                 float:left;
                 width:286px;
-                height: 316px;
+                height: 99%;
                 text-align:center;
                 border: 2px solid black;
             }
@@ -45,12 +45,12 @@
             }
             #robotControl {
                 width:600px;
-                height:80px;
+                height:128px;
                 margin-top: 7px;
             }
             #robotControlContainer {
                 position: absolute;
-                height:80px;
+                height:126px;
                 width:298px;
                 right: 0;
                 border:1px solid white;
@@ -59,6 +59,9 @@
                 height:35px;
                 width:95px;
                 text-align:center;
+            }
+            #stopControl {
+                background-color: #7f0000;
             }
         </style>
 
@@ -82,20 +85,23 @@
                     <video autoplay="autoplay" playsinline="playsinline" id="callerVideo"></video>
                     <div id="acceptCallBox"> <!-- Should be initially hidden using CSS -->
                         <div id="acceptCallLabel"></div>
-                        <button id="callAcceptButton" >Accept</button> <button id="callRejectButton">Reject</button>
+                        <button id="callAcceptButton">Accept</button> <button id="callRejectButton">Reject</button>
                     </div>
                 </div>
 
                 <div id="robotControl">
                     <div id="robotControlContainer">
-                            <div style="height:50%;text-align:center;padding:1px">
-                                    <button class="controlButton" id="fowardControl" disabled="disabled" onclick="sendCmdP2P('foward')">Foward</button>
+                            <div style="height:33.3%;text-align:center;padding:1px">
+                                    <button class="controlButton" id="forwardControl" disabled="disabled" onclick="sendCmdP2P('forward')">Forward</button>
                             </div>
-                            <div style="height:50%;text-align:center;padding:1px">
+                            <div style="height:33.4%;text-align:center;padding:1px">
                                     <button class="controlButton" id="leftControl" disabled="disabled" onclick="sendCmdP2P('left')">Left</button>
-                                    <button class="controlButton" id="backwardControl" disabled="disabled" onclick="sendCmdP2P('backward')">Backward</button>
+                                    <button class="controlButton" id="stopControl" disabled="disabled" onclick="sendCmdP2P('stop')">Stop</button>
                                     <button class="controlButton" id="rightControl" disabled="disabled" onclick="sendCmdP2P('right')">Right</button>
                             </div>
+                            <div style="height:33.3%;text-align:center;padding:1px">
+                                <button class="controlButton" id="backwardControl" disabled="disabled" onclick="sendCmdP2P('backward')">Backward</button>
+                        </div>
                     </div>
                 </div>
 
@@ -103,10 +109,3 @@
         </div>
     </body>
 </html>
-
-
-<script type="text/javascript">
-    function controlClicked() { 
-        console.log("Controled Clicked");
-    }
-</script>
