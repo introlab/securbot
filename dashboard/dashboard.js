@@ -1,19 +1,27 @@
 const puppeteer = require('puppeteer');
 const bigpic = require('./BigPic/node-big-pic.js');
 const pdf = require('./pdf.js');
+const worklog = require('./worklog.js')
 
 module.exports.saveDashboard = async function (settings){
-    console.log('Starting Dashboard render');
-    await renderDashboard(settings);
 
-    console.log('Starting PDF conversion');
+    console.group('Extracting Worklog')
+    var worklogP = await worklog.getWorklog(settings);
+    console.groupEnd();
+
+    console.group('Starting Dashboard render');
+    await renderDashboard(settings, worklogP);
+    console.groupEnd();
+
+    console.group('Starting PDF conversion');
     pdf.generatePDF(settings.output, settings.outputPDF);
-    pdf.generateLandscapePDF(settings.output, settings.outputLandscapePDF);
+    await pdf.generateLandscapePDF(settings.output, settings.outputLandscapePDF);
+    console.groupEnd();
 
     console.log('Finished Dashboard export');
 }
 
-async function renderDashboard(settings){
+async function renderDashboard(settings, worklogP){
     const browser = await puppeteer.launch({
         args: [
             '--no-sandbox',
@@ -47,12 +55,16 @@ async function renderDashboard(settings){
     var worklogFrame = page.frames().find(frame => frame.url().includes('worklog'));
     await worklogFrame.waitForSelector('#worklogs_main>div>div.main-content', {timeout: 60000});
 
-    console.log('Acquiring dashboard')
-    var dashboard = await page.$('#dashboard-content');
-
     // Apply the BigPic extension
     console.log('Adjusting picture size')
     await page.evaluate(bigpic)
+
+    // Adding the means to the table
+    console.log('Adding worklog means');
+    await page.evaluate(worklog.addMeans, await worklogP);
+
+    console.log('Acquiring dashboard')
+    var dashboard = await page.$('#dashboard-content');
 
     console.log('Printing dashboard')
     var image = await dashboard.screenshot({path: settings.output});
