@@ -13,7 +13,8 @@
     "easyrtc": "git+https://github.com/priologic/easyrtc.git#v1.1.1-rc2",
     "express": "^4.10.7",
     "serve-static": "^1.8.0",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "vue": "^2.6.8"
   },
   "license": "BSD2",
   "engines": {
