@@ -1,2 +1,3 @@
 #!/bin/bash
-sudo docker build -t securbot/dashboard .
+groups
+docker build -t securbot/dashboard .

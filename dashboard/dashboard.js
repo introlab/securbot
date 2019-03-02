@@ -61,7 +61,12 @@ async function renderDashboard(settings, worklogP){
 
     // Adding the means to the table
     console.log('Adding worklog means');
-    await page.evaluate(worklog.addMeans, await worklogP);
+    try {
+        await page.evaluate(worklog.addMeans, await worklogP);
+    } catch (e) {
+        console.log('Failed to add means')
+        console.error(e);
+    }
 
     console.log('Acquiring dashboard')
     var dashboard = await page.$('#dashboard-content');
