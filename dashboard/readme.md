@@ -1,20 +1,28 @@
 # SecurBot dashboard
 
-Export tools suite used to generate a `.PNG` and `.PDF` version of the Jira dashboard automatically. Also include a javascript function to enlarge member's profile pictures.
+Export tools suite used to generate a `.PNG` and `.PDF` version of the Jira dashboard automatically. Also include a javascript function to enlarge member's profile pictures. And various other adjustments
 
 ## Warning !
 
 You should consider running this in a container or VM as the chromium sandbox is disabled.
+A Dockerfile and some scripts are provided to help setup with the setup.
 
 ## Installation
+### Regular installation
 - Install node and npm
 - Install the pdfjam utility available with the tex suite
 - Run: `$ nmp install` in the dashboard directory
 - Copy the `settings_template.json` to `settings.json`
 - Fill in [all the fields](#Settings) in the `settings.json` file
-- Configure `dashboard.service` to execute automatically
+
+### Docker installation (recommended)
+- Install [Docker](https://www.docker.com/), installation scripts are available for Ubuntu and CentOs in the `../scripts/` directory.
+- Edit the `run.sh` file and change the `VOL_MNT` variable to the __absolute path__ where you want to map the `./out/` directory of the container. This is where the output files will be written by default.
+- Copy the `settings_template.json` to `settings.json`
+- Fill in [all the fields](#Settings) in the `settings.json` file
 
 ## Usage
+### Regular usage
 To generate output files run:
 
 ```$ node render.js```
@@ -27,10 +35,25 @@ To periodically generate files and send emails:
 
 ```$ node scheduledRender.js```
 
+### Docker usage
+To start `scheduledRender.js` as a daemon, use the `run.sh` script without any arguments:
+
+```$ ./run.sh```
+
+To execute `render.js` and `renderAndMail.js` once, append the desired script as an argument to the `run.sh` script:
+```
+$ ./run.sh render.js
+$ ./run.sh renderAndMail.js   
+```
+When executing for the first time, docker will have to build the images, this can take several minutes.
+
 ## Settings
 
 #### url <[string]>
 URL of the target Jira dashboard ex: `https://your.domain.com/Dashboard.jspa`
+
+#### worklogUrl <[string]>
+The url of the worklog page to parse and scrape data from. Used for computing time averages of members
 
 #### user <[string]>
 Username of the authorized dashboard viewer
@@ -43,6 +66,12 @@ Path of the `.PNG` destination file ex: `/home/user/dashboard.png`
 
 #### outputPDF <[string]>
 Path of the `.PDF` destination file ex: `/home/user/dashboard.pdf`
+
+#### outputLandscapePDF <[string]>
+Path of a `.PDF` destination file that will be printed in landscape format ex: `/home/user/dashboard_landscape.pdf`
+
+#### startDate <[string]>
+String representation of the start date of the project ex: `2018-06-14`
 
 #### screenWidth <[number]>
 Horizontal screen resolution of the simulated window to be opened by chromium.
