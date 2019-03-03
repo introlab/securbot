@@ -1,4 +1,4 @@
-const dModule = require('./dashboard.js');
+const dModule = require('./src/dashboard.js');
 
 // Loading settings
 try{

@@ -3,6 +3,9 @@
 *.pdf
 settings.json
 package-lock.json
+*.diff
+*.patch
+
 
 ## NODE ignores
 
