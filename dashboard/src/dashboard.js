@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const bigpic = require('./BigPic/node-big-pic.js');
 const pdf = require('./pdf.js');
 const worklog = require('./worklog.js')
+const burndown = require('./burndown.js');
 
 module.exports.saveDashboard = async function (settings){
 
@@ -58,6 +59,15 @@ async function renderDashboard(settings, worklogP){
     // Apply the BigPic extension
     console.log('Adjusting picture size')
     await page.evaluate(bigpic)
+
+    // Clearing burndown legend from graph
+    console.log('Adjusting burndown legend');
+    try {
+        await page.evaluate(burndown.clearLegend);
+    } catch (e) {
+        console.log('Failed to adjust burndown legend');
+        console.error(e);
+    }
 
     // Adding the means to the table
     console.log('Adding worklog means');
