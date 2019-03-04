@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="image_capture" type="virtualcam_node" name="map_virtualcam" output="screen">
+        <param name="image_topic" value="/map_image_generator/image"/>
+        <param name="virtual_dev" value="/dev/video6"/>
+        <param name="image_width" type="int" value="1000"/>
+        <param name="image_height" type="int" value="1000"/>
+    </node>
+</launch>

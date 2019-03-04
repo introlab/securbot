@@ -1,0 +1,8 @@
+<launch>
+  <node pkg="cv_camera" type="cv_camera_node" name="operator_camera_node" output="screen">
+    <param name="frame_id" value="test_camera" />
+    <param name="rate" value="15.0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+  </node>
+</launch>

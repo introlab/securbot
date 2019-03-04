@@ -1,0 +1,10 @@
+*.pdf
+*.png
+*.sh
+settings_template.json
+*.service
+*.md
+Dockerfile
+node_modules
+npm-debug.log
+.gitignore

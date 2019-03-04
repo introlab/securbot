@@ -1,5 +1,5 @@
-const dModule = require('./dashboard.js');
-const mail = require('./mail.js');
+const dModule = require('./src/dashboard.js');
+const mail = require('./src/mail.js');
 
 // Loading settings
 try{
