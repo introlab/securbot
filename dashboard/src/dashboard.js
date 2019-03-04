@@ -1,22 +1,33 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const bigpic = require('./BigPic/node-big-pic.js');
-const PDFDocument = require('pdfkit');
-const fs = require('fs');
-const imgSize = require('image-size');
+const pdf = require('./pdf.js');
+const worklog = require('./worklog.js')
+const burndown = require('./burndown.js');
 
 module.exports.saveDashboard = async function (settings){
-    console.log('Starting Dashboard render');
-    await renderDashboard(settings);
 
-    console.log('Starting PDF conversion');
-    generatePDF(settings.output, settings.outputPDF);
+    console.group('Extracting Worklog')
+    var worklogP = await worklog.getWorklog(settings);
+    console.groupEnd();
+
+    console.group('Starting Dashboard render');
+    await renderDashboard(settings, worklogP);
+    console.groupEnd();
+
+    console.group('Starting PDF conversion');
+    pdf.generatePDF(settings.output, settings.outputPDF);
+    await pdf.generateLandscapePDF(settings.output, settings.outputLandscapePDF);
+    console.groupEnd();
 
     console.log('Finished Dashboard export');
 }
 
-async function renderDashboard(settings){
+async function renderDashboard(settings, worklogP){
     const browser = await puppeteer.launch({
-        executablePath: settings.chromium_path,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+        ],
         defaultViewport: {
             width: settings.screenWidth,
             height: 1080,
@@ -45,30 +56,34 @@ async function renderDashboard(settings){
     var worklogFrame = page.frames().find(frame => frame.url().includes('worklog'));
     await worklogFrame.waitForSelector('#worklogs_main>div>div.main-content', {timeout: 60000});
 
-    console.log('Acquiring dashboard')
-    var dashboard = await page.$('#dashboard-content');
-
     // Apply the BigPic extension
     console.log('Adjusting picture size')
     await page.evaluate(bigpic)
 
+    // Clearing burndown legend from graph
+    console.log('Adjusting burndown legend');
+    try {
+        await page.evaluate(burndown.clearLegend);
+    } catch (e) {
+        console.log('Failed to adjust burndown legend');
+        console.error(e);
+    }
+
+    // Adding the means to the table
+    console.log('Adding worklog means');
+    try {
+        await page.evaluate(worklog.addMeans, await worklogP);
+    } catch (e) {
+        console.log('Failed to add means')
+        console.error(e);
+    }
+
+    console.log('Acquiring dashboard')
+    var dashboard = await page.$('#dashboard-content');
 
     console.log('Printing dashboard')
     var image = await dashboard.screenshot({path: settings.output});
     browser.close();
 
     return image;
-}
-
-function generatePDF(imagePath, pdfPath){
-    var dim = imgSize(imagePath);
-    // Adjusting pdf to 8 and 1/2 inches wide
-    dim.height = dim.height / dim.width * 612;
-    dim.width = 612;
-
-
-    var doc = new PDFDocument({size: [dim.width, dim.height]});
-    doc.pipe(fs.createWriteStream(pdfPath));
-    doc.image(imagePath, 0, 0, {width: dim.width});
-    doc.end();
 }
