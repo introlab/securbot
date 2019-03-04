@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	
+	<title>SecurBot Teleoperation Web Page</title>
+	
+	<link rel="stylesheet" href="../css/webClient.css" />
+	<script src="../js/socket.io/socket.io.js"></script>
+	<script src="../js/easyrtc/easyrtc.js"></script>
+
+	<!-- Linking client logic javascript used -->
+	<script src="../js/webClient.js"></script>
+</head>
+<body onload="initTeleop()">
+	<!-- Section holding other clients' calling buttons -->		
+	<div id="otherClients"></div>
+
+	<div id="container">
+		<h1><span>SecurBot Teleoperation Web Page</span></h1>
+
+		<p>Summary : Implementing teleoperation feature via this current web page</p>
+
+		<p><a href="http://securbot.gel.usherbrooke.ca:9090/browse/SEC-256">JIRA : SEC-256</a></p>
+		
+		<!--Video stream from the the robot -->
+               	<div style="position:relative;float:left;width:300px">
+			<video id ="caller" width="300" height="200"></video>
+		 <form>
+			String to send:<br>
+			<input type="text" name="dataToSend"><br>
+		</form>
+
+		<div class="box">
+			<button onclick="initTeleop()">Initialize</button>
+			<button onclick="loggedInListener()">Logged In</button>
+			<button onclick="performCall()">Call</button>
+			<button onclick="sendData()">Send Data</button>
+			<button onclick="hangUp()">Hang Up</button>
+			<button onclick="checkNbPeersConnected()">Check Peers Number</button>
+<button onclick="disconnect()"></button>
+		</div>
+	</div>
+</body>
+</html>

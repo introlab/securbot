@@ -2,7 +2,7 @@
   "name": "teleoperation",
   "version": "1.0.0",
   "description": "robotic teleoperation web module",
-  "main": "teleoperation.js",
+  "main": "webClient.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
