@@ -7,3 +7,4 @@ settings_template.json
 Dockerfile
 node_modules
 npm-debug.log
+.gitignore

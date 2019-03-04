@@ -34,11 +34,12 @@ module.exports.getWorklog = async function (settings)
 
     console.log('Navigating to Worklog');
     await page.goto(settings.worklogUrl, {
-        timeout: 40000,
+        timeout: 60000,
         waitUntil: 'networkidle0'
     });
 
     // Fetching entries in page
+    console.log('Parsing entries');
     var entriesList = await page.$$('.sc-hORach.kapOQE');
     entriesList.pop(); // removing total row
 
@@ -49,7 +50,7 @@ module.exports.getWorklog = async function (settings)
             '.sc-bMVAic.bKTmPP>span>span>span',
             element => element.innerText.trim());
         var timeP = line.$$eval(
-            '.total_cell>div>div>div.cell_component',
+            '.cell_component>.cell_wrapper_component',
             elementList => parseFloat(elementList[0].innerText.replace('h','').trim()));
 
         record.push(new Promise( async(resolve, reject) => {
@@ -61,6 +62,7 @@ module.exports.getWorklog = async function (settings)
     record = await Promise.all(record);
 
     // Computing average time per 7 days according to start date
+    console.log('Computing averages');
     var projectDays = new datediff(new Date(), new Date(settings.startDate)).days();
     record.forEach((entry) =>
         {entry.mean = Math.round( 100 * entry.time * 7.0 / projectDays)/100;});
