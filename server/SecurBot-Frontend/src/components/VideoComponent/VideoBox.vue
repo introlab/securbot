@@ -1,14 +1,19 @@
 <template>
-  <div id="VideoStream">
-    <div class="video-container">
-      <div class="inner-video-container video-size">
-        <video class="video-size" :id="VideoId" v-show="show"/>
-      </div>
+  <!-- Video stream box -->
+  <div id="VideoStream" class="video-container">
+    <div class="inner-video-container">
+      <video :id="VideoId" class="video-size" v-show="show"/>
     </div>
   </div>
 </template>
 
 <script>
+// Description of the component :
+// Needs an id for the html video element and a bool for the visibility of the element
+// To set the video stream you need the html element (document.getElementById("VideoId"))
+// Use easyrtc.setVideoObjectSrc(videoElement, stream) to set the stream
+
+// Export
 export default {
   name: 'video-box',
   props: ['VideoId','show']
@@ -16,18 +21,22 @@ export default {
 </script>
 
 <style>
+/* Some css element, subject to change */
 .video-container{
   width: 100%;
+  height: 100%;
   margin: auto;
   position: relative;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);
 }
 .inner-video-container{
+  width: 100%;
+  height: 100%;
   margin: auto;
   position: relative;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .video-size{
-    width: 480px;
-    height: 360px;
+    width: 99%;
+    height: 100%;
 }
 </style>

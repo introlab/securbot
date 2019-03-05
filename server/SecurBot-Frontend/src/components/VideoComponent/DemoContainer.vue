@@ -1,18 +1,22 @@
 <template>
+  <!-- Video stream container demo, shows how to call the video-box component and set a video
+  stream in it, also allow to quick test of the video-box component -->
     <div class="center-element full-width">
         <h1>Video Component</h1>
-        <div class="outer-video-box full-width">
+        <div class="outer-video-box custom-width">
             <video-box VideoId="self-video-stream" :show="showSelf"/>
         </div>
-        <div class="outer-video-box full-width">
+        <div class="outer-video-box custom-width">
             <video-box VideoId="robot-video-stream" :show="showRobot"/>
         </div>  
     </div>
 </template>
 
 <script>
+// Import component(s)
 import VideoBox from './VideoBox.vue'
 
+// Export
 export default {
     name: 'demo-container',
     components: {
@@ -44,7 +48,7 @@ export default {
       easyrtc.setAcceptChecker(this.acceptCall);
       easyrtc.setSocketUrl(":8080");
       easyrtc.initMediaSource(
-        function(){        // success callback
+        function(){
             this.localStream = easyrtc.getLocalStream();
             easyrtc.setVideoObjectSrc(this.selfStreamElement, this.localStream);
             easyrtc.connect("easyrtc.securbot", this.loginSuccess, this.loginFailure);
@@ -119,11 +123,18 @@ export default {
 </script>
     
 <style>
+/* Some styles, will probably be changed */
 .center-element{
     text-align: center
 }
 .full-width{
-    width: 100%
+    width: 100%;
+    height: 1000px;
+}
+.custom-width{
+  margin: auto;
+  width: 50%;
+  height: 40%;
 }
 .outer-video-box{
     margin-top: 20px
