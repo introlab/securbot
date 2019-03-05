@@ -1,36 +1,32 @@
 <template>
-  <div id="app">
-    <h1>SecurBot Vue.js APP</h1>
-    <Joystick/>
-    <Waypoint/>
-    <Connection/>
-    <demo-container/>
-  </div>
+    <div class="center-element full-width">
+        <h1>Video Component</h1>
+        <div class="outer-video-box full-width">
+            <video-box VideoId="self-video-stream" :show="showSelf"/>
+        </div>
+        <div class="outer-video-box full-width">
+            <video-box VideoId="robot-video-stream" :show="showRobot"/>
+        </div>  
+    </div>
 </template>
 
 <script>
-import Joystick from './components/Joystick.vue'
-import Waypoint from './components/Waypoint.vue'
-import Connection from './components/Connection.vue'
-import DemoContainer from './components/VideoComponent/DemoContainer.vue'
+import VideoBox from './VideoBox.vue'
 
 export default {
-  name: 'app',
-  components: {
-    Joystick,
-    Waypoint,
-    Connection,
-    DemoContainer
-  },
-  /*
-  data(){
+    name: 'demo-container',
+    components: {
+        VideoBox
+    },
+    data(){
     return {
-      showSelfVideo:false,
-      otherId:null,
-      selfEasyrtcid:null,
-      selfStreamElement:null,
-      robotStreamElement:null,
-      localStream:null
+        showSelf:true,
+        showRobot:true,
+        otherId:null,
+        selfEasyrtcid:null,
+        selfStreamElement:null,
+        robotStreamElement:null,
+        localStream:null
     }
   },
   methods:{
@@ -118,17 +114,18 @@ export default {
       easyrtc.hangupAll();
       easyrtc.disconnect();
     }
-  }*/
+  }
 };
 </script>
-
+    
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.center-element{
+    text-align: center
+}
+.full-width{
+    width: 100%
+}
+.outer-video-box{
+    margin-top: 20px
 }
 </style>
