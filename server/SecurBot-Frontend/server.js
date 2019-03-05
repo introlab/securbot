@@ -24,6 +24,6 @@ easyrtc.setOption("logLevel", "debug");
 var rtc = easyrtc.listen(app, socketServer);
 
 // Listen on port 8080
-webServer.listen(8081, function () {
+webServer.listen(8080, function () {
     console.log('listening on http://localhost:8080');
 });
