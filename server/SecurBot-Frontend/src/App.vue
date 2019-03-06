@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <h1>APP Vue.js</h1>
-    <Joystick/>
-    <Waypoint/>
-    <Connection/>
-    <VideoStream/>
+    <h1>SecurBot Vue.js APP</h1>
+    <joystick/>
+    <waypoint/>
+    <connection/>
+    <demo-container/>
   </div>
 </template>
 
@@ -12,7 +12,7 @@
 import Joystick from './components/Joystick.vue'
 import Waypoint from './components/Waypoint.vue'
 import Connection from './components/Connection.vue'
-import VideoStream from './components/VideoStream.vue'
+import DemoContainer from './components/VideoComponent/DemoContainer.vue'
 
 export default {
   name: 'app',
@@ -20,9 +20,9 @@ export default {
     Joystick,
     Waypoint,
     Connection,
-    VideoStream
-  }
-}
+    DemoContainer
+  },
+};
 </script>
 
 <style>
