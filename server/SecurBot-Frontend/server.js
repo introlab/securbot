@@ -10,7 +10,7 @@ process.title = "securBot-EasyRTC-Server";
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/dist')));
 
 // Start Express http server on port 8080
 var webServer = http.createServer(app);
@@ -24,6 +24,6 @@ easyrtc.setOption("logLevel", "debug");
 var rtc = easyrtc.listen(app, socketServer);
 
 // Listen on port 8080
-webServer.listen(8081, function () {
+webServer.listen(8080, function () {
     console.log('listening on http://localhost:8080');
 });
