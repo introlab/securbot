@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div>
+    <div class="waypoint-list">
       <video-box :VideoId="MapId" :show="ShowMap" class="map-video"/>
       <canvas ref="canvas" class="map-canvas"
-      @mousedown="onMouseDown" 
-      />
+      @mousedown="onMouseDown"/>
+      
     </div>  
     <div>
       <table id="waypoint-list" class="waypoint-list"></table>
+      <button class="button" v-on:click=clearWaypointList()>Clear all</button>
     </div>
   </div>
 </template>
@@ -27,8 +28,9 @@ export default {
       loopIntervalId: null,
       enable: false,
       CanvasRefreshRate: 60.0, //Hz
-      Waypoint: null,
+      context: null,
       WaypointList: [],
+      index: null,
     }
   },
   methods: {
@@ -73,15 +75,15 @@ export default {
 
     //Setup of waypoint list
     addWaypoint(WP) {
-      this.WaypointList.push = this.WP;
-      this.updateWaypointList(this.WP);
-      this.displayWaypoints(this.WP);
+      this.WaypointList.push(WP);
+      this.addWaypointToList(WP);
+      this.displayWaypoints(WP);
     },
     clearWaypointList(){
-      this.WaypointList = "";
+      this.WaypointList = [];
       var Table=document.getElementById("waypoint-list");
       Table.innerHTML =  "";
-      setTableHeader();
+      this.setTableHeader();
     },
     setTableHeader(){
       var Table=document.getElementById("waypoint-list");
@@ -94,15 +96,20 @@ export default {
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
       cell1.innerHTML = "Waypoint number";
-      cell2.innerHTML = "coordX";
-      cell3.innerHTML = "coordY";
-      cell4.innerHTML = "orient";
+      cell2.innerHTML = "Coordinate X";
+      cell3.innerHTML = "Coordinate Y";
+      cell4.innerHTML = "Orientation";
       cell5.innerHTML = "Delete waypoint";
     },
-    updateWaypointList(WL){
+    addWaypointToList(WL){
       var Table=document.getElementById("waypoint-list");
       var lengthTable= Table.rows.length;
-
+      //Create delete button
+      var trash = document.createElement("button");
+      trash.id="button_"+lengthTable;
+      trash.className="trash-can";
+      trash.onclick= function(){this.removeWaypointFromList(lengthTable);}.bind(this);   
+      //
       var row = Table.insertRow(lengthTable);
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
@@ -113,17 +120,40 @@ export default {
       cell2.innerHTML = WL.coordX;
       cell3.innerHTML = WL.coordY;
       cell4.innerHTML = WL.orient;
-      cell5.innerHTML = "byebye";
+      cell5.appendChild(trash);
+    },
+    removeWaypointFromList(index){
+      this.WaypointList.splice(index-1,1);
+      var Table=document.getElementById("waypoint-list");
+      var lengthTable= Table.rows.length;
+      var lengthWaypoints = this.WaypointList.length;
+      //console.log("removeWP lengthTable "+lengthTable+" lenghtWP "+lengthWaypoints);
+      var i;
+      for(i=index;i<lengthTable;i++)
+      {
+        var row = Table.deleteRow(index);
+      };
+      //console.log(index);
+      
+      for(i=index;i<lengthWaypoints;i++)
+      { 
+        //console.log(i);
+        var waypoint={};
+        waypoint.coordX = this.WaypointList[i].coordX;
+        waypoint.coordY = this.WaypointList[i].coordY;
+        waypoint.orient = this.WaypointList[i].orient;
+        this.addWaypointToList(waypoint);
+      };   
     },
     //END of Setup of waypoint list
 
     //Display of waypointslet goalColor = '#00FF00';
     displayWaypoints(WP){
-      let WPColor = '#00FF00';
+      let WPColor = "00FF00";
       let canvasWP = this.getCanvasCoordinatesFromVideo(WP.x, WP.y);
 
       //Draw the goal circle
-      let WPRadius = Math.max(1, 8 / 8)
+      let WPRadius = Math.max(10, 8 / 8);
 
       this.context.beginPath();
       this.context.arc(canvasWP.x, canvasWP.y, WPRadius, 0, 2 * Math.PI);
@@ -158,28 +188,27 @@ export default {
     onMouseDown(event) {
       if (event.button === 0) {
         let WPclick = this.getVideoCoordinatesFromEvent(event);
-        console.log("yo");
         if (this.isClickValid(WPclick)) {
-          console.log("hey");
-          this.Waypoint.coordX = WPclick.x;
-          this.Waypoint.coordY = WPclick.y;
-          this.Waypoint.orient = 0;
-          addWaypoint(this.Waypoint);
+          var waypoint={};
+          waypoint.coordX = WPclick.x;
+          waypoint.coordY = WPclick.y;
+          waypoint.orient = 0;
+          this.addWaypoint(waypoint);
         }
       }
     },
     isClickValid(WPclick) {
-      console.log(WPclick);
       return WPclick.x >= 0 &&
         WPclick.x < this.videoElement.videoWidth &&
         WPclick.y >= 0 &&
         WPclick.y < this.videoElement.videoHeight; 
-    }
+    },
     //END on mouse event
   },
   mounted() {
     this.videoElement = document.getElementById(this.MapId);
     this.canvas = this.$refs.canvas;
+    this.context = this.canvas.getContext('2d');
     this.init();
     this.setTableHeader();
   },
@@ -213,5 +242,13 @@ export default {
 .half-height{
   width: 100%;
   height: 50%;
+}
+.button{
+  width: 80px;
+  height: 20px;
+}
+.trash-can{
+  width: 20px;
+  height: 20px;
 }
 </style>
