@@ -3,10 +3,10 @@
     <div class="list-container">
       <button class="btn" v-on:click=sendPatrol()>Confirm</button>
       <button class="btn" v-on:click=clearWaypointList()>Reset</button>
-      <table id="waypoint-list" class="waypoint-list"></table>
+      <table id="waypoint-table" class="waypoint-list"></table>
     </div>
     <div class="map-container">
-      <video-box :VideoId="MapId" :show="ShowMap" class="map-video"/>
+      <video-box :VideoId="mapId" :show="showMap" class="map-video"/>
       <canvas ref="canvas" class="map-canvas"
       @mousedown="onMouseDown"/>
     </div>  
@@ -26,7 +26,7 @@
 import VideoBox from '../VideoComponent/VideoBox.vue'
 export default {
   name: 'waypoint',
-  props: ['MapId','ShowMap'],
+  props: ['mapId','showMap'],
   components: {
     VideoBox
   },
@@ -38,7 +38,7 @@ export default {
       enable: false,
       CanvasRefreshRate: 60.0, //Hz
       context: null,
-      WaypointList: [],
+      waypointList: [],
       index: null,
     }
   },
@@ -84,18 +84,18 @@ export default {
 
     //Setup of waypoint list
     addWaypoint(WP) {
-      this.WaypointList.push(WP);
+      this.waypointList.push(WP);
       this.addWaypointToList(WP);
       this.displayWaypoints(WP);
     },
     clearWaypointList(){
-      this.WaypointList = [];
-      var table = document.getElementById("waypoint-list");
+      this.waypointList = [];
+      var table = document.getElementById("waypoint-table");
       table.innerHTML =  "";
       this.setTableHeader();
     },
     setTableHeader(){
-      var table = document.getElementById("waypoint-list");
+      var table = document.getElementById("waypoint-table");
       var header = table.createTHead();
 
       //Create elements
@@ -121,7 +121,7 @@ export default {
       cell5.innerHTML = "Remove";
     },
     addWaypointToList(WL){
-      var table = document.getElementById("waypoint-list");
+      var table = document.getElementById("waypoint-table");
       var lengthTable = table.rows.length;
       //Create delete button
       var removeBtn = document.createElement("button");
@@ -142,10 +142,10 @@ export default {
       cell5.appendChild(removeBtn);
     },
     removeWaypointFromList(index){
-      this.WaypointList.splice(index-1,1);
-      var table = document.getElementById("waypoint-list");
+      this.waypointList.splice(index-1,1);
+      var table = document.getElementById("waypoint-table");
       var lengthTable = table.rows.length;
-      var lengthWaypoints = this.WaypointList.length;
+      var lengthWaypoints = this.waypointList.length;
       for(var i = index; i < lengthTable; i++)
       {
         var row = table.deleteRow(index);
@@ -154,9 +154,9 @@ export default {
       for(var i = index-1; i < lengthWaypoints; i++)
       { 
         var waypoint={};
-        waypoint.coordX = this.WaypointList[i].coordX;
-        waypoint.coordY = this.WaypointList[i].coordY;
-        waypoint.orient = this.WaypointList[i].orient;
+        waypoint.coordX = this.waypointList[i].coordX;
+        waypoint.coordY = this.waypointList[i].coordY;
+        waypoint.orient = this.waypointList[i].orient;
         this.addWaypointToList(waypoint);
       };   
     },
@@ -224,7 +224,7 @@ export default {
     }
   },
   mounted() {
-    this.videoElement = document.getElementById(this.MapId);
+    this.videoElement = document.getElementById(this.mapId);
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();

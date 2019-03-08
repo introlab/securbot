@@ -2,7 +2,7 @@
   <div class='waypoint-size'>
     <h1>Waypoints</h1>
     <div class='inner'> 
-        <waypoint MapId='map' ShowMap='true' class='waypoint-container'/>
+        <waypoint mapId='map' showMap='true' class='waypoint-container'/>
     </div>
   </div>
 </template>
