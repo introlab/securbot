@@ -1,19 +1,28 @@
 <template>
-  <div>
-    <div class="waypoint-list">
+  <div id="patrol-container">
+    <div class="list-container">
+      <button class="btn" v-on:click=sendPatrol()>Confirm</button>
+      <button class="btn" v-on:click=clearWaypointList()>Reset</button>
+      <table id="waypoint-list" class="waypoint-list"></table>
+    </div>
+    <div class="map-container">
       <video-box :VideoId="MapId" :show="ShowMap" class="map-video"/>
       <canvas ref="canvas" class="map-canvas"
       @mousedown="onMouseDown"/>
-      
     </div>  
-    <div>
-      <table id="waypoint-list" class="waypoint-list"></table>
-      <button class="button" v-on:click=clearWaypointList()>Clear all</button>
-    </div>
   </div>
 </template>
 
 <script>
+/*
+  Still to be done:
+    Fix the names and calls to fit standards
+    Program the sendPatrol function
+    Add some CSS (table row background, border, etc)
+    Fix the fact that waypoints are not shown on map
+    Add comment (Documentation)
+    Find images to use for some control
+*/
 import VideoBox from '../VideoComponent/VideoBox.vue'
 export default {
   name: 'waypoint',
@@ -81,63 +90,69 @@ export default {
     },
     clearWaypointList(){
       this.WaypointList = [];
-      var Table=document.getElementById("waypoint-list");
-      Table.innerHTML =  "";
+      var table = document.getElementById("waypoint-list");
+      table.innerHTML =  "";
       this.setTableHeader();
     },
     setTableHeader(){
-      var Table=document.getElementById("waypoint-list");
-      var header = Table.createTHead();
+      var table = document.getElementById("waypoint-list");
+      var header = table.createTHead();
 
+      //Create elements
       var row = header.insertRow(0);
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
-      cell1.innerHTML = "Waypoint number";
-      cell2.innerHTML = "Coordinate X";
-      cell3.innerHTML = "Coordinate Y";
-      cell4.innerHTML = "Orientation";
-      cell5.innerHTML = "Delete waypoint";
+
+      //Give class to the cells
+      cell1.className = "waypoint-cell";
+      cell2.className = "waypoint-cell";
+      cell3.className = "waypoint-cell";
+      cell4.className = "waypoint-cell";
+      cell5.className = "waypoint-cell";
+
+      //Set value of cells
+      cell1.innerHTML = "#";
+      cell2.innerHTML = "X";
+      cell3.innerHTML = "Y";
+      cell4.innerHTML = "Yaw";
+      cell5.innerHTML = "Remove";
     },
     addWaypointToList(WL){
-      var Table=document.getElementById("waypoint-list");
-      var lengthTable= Table.rows.length;
+      var table = document.getElementById("waypoint-list");
+      var lengthTable = table.rows.length;
       //Create delete button
-      var trash = document.createElement("button");
-      trash.id="button_"+lengthTable;
-      trash.className="trash-can";
-      trash.onclick= function(){this.removeWaypointFromList(lengthTable);}.bind(this);   
+      var removeBtn = document.createElement("button");
+      removeBtn.id = "removeBtn-"+lengthTable;
+      removeBtn.className = "removeBtn";
+      removeBtn.onclick = function(){this.removeWaypointFromList(lengthTable);}.bind(this);   
       //
-      var row = Table.insertRow(lengthTable);
+      var row = table.insertRow(lengthTable);
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
       cell1.innerHTML = lengthTable;
-      cell2.innerHTML = WL.coordX;
-      cell3.innerHTML = WL.coordY;
-      cell4.innerHTML = WL.orient;
-      cell5.appendChild(trash);
+      cell2.innerHTML = WL.coordX.toFixed(1);
+      cell3.innerHTML = WL.coordY.toFixed(1);
+      cell4.innerHTML = WL.orient.toFixed(1);
+      cell5.appendChild(removeBtn);
     },
     removeWaypointFromList(index){
       this.WaypointList.splice(index-1,1);
-      var Table=document.getElementById("waypoint-list");
-      var lengthTable= Table.rows.length;
+      var table = document.getElementById("waypoint-list");
+      var lengthTable = table.rows.length;
       var lengthWaypoints = this.WaypointList.length;
-      //console.log("removeWP lengthTable "+lengthTable+" lenghtWP "+lengthWaypoints);
-      var i;
-      for(i=index;i<lengthTable;i++)
+      for(var i = index; i < lengthTable; i++)
       {
-        var row = Table.deleteRow(index);
+        var row = table.deleteRow(index);
       };
-      //console.log(index);
       
-      for(i=index;i<lengthWaypoints;i++)
+      for(var i = index-1; i < lengthWaypoints; i++)
       { 
-        //console.log(i);
         var waypoint={};
         waypoint.coordX = this.WaypointList[i].coordX;
         waypoint.coordY = this.WaypointList[i].coordY;
@@ -204,6 +219,9 @@ export default {
         WPclick.y < this.videoElement.videoHeight; 
     },
     //END on mouse event
+    sendPatrol(){
+      console.log("I should be sending the patrol but im not :^)");
+    }
   },
   mounted() {
     this.videoElement = document.getElementById(this.MapId);
@@ -219,6 +237,10 @@ export default {
 </script>
 
 <style>
+#patrol-container{
+  width: 100%;
+  height: 100%;
+}
 .map-video {
   width: 100%;
   height: 100%;
@@ -234,21 +256,28 @@ export default {
   left: 0;
   z-index: 10;
 }
-.waypoint-list{
-  width: 100%;
+.list-container{
+  width: 18%;
   height: 100%;
   position: relative;
+  float: left;
 }
-.half-height{
-  width: 100%;
-  height: 50%;
+.map-container{
+  width: 80%;
+  height: 100%;
+  position: relative;
+  float: right;
 }
-.button{
+.btn{
   width: 80px;
   height: 20px;
 }
-.trash-can{
+.removeBtn{
   width: 20px;
   height: 20px;
+  background-color: darkred;
+}
+.waypoint-cell{
+  width: 20%;
 }
 </style>

@@ -58,8 +58,7 @@ export default {
 <style>
 .waypoint-size{
   width: 100%;
-  height: 100px;
-  position: fixed;
+  height: 700px;
 }
 .inner{
     width: 100%;
