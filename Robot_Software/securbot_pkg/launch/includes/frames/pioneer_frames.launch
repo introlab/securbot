@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="tf" type="static_transform_publisher" name="camera_transform" args="0 0.16 0.18 0 0 0 base_footprint camera_link 50" />
+</launch>

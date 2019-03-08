@@ -1,0 +1,14 @@
+<launch>
+	<!-- Frame definition for robot base -->
+	<include file="$(find securbot_pkg)/launch/includes/frames/$(env SECURBOT_BASE)_frame.launch" />
+
+	<!-- RGBD camera -->
+	<include file="$(find securbot_pkg)/launch/includes/sensors/$(env SECURBOT_CAMERA).launch" />
+
+	<!-- RTAB-Map -->
+	<include files="$(find rtabmap_ros)/launch/rtabmap.launch">
+		<arg name="rtabmapviz" default="false" />
+		<arg name="frame_id" default="base_footprint" />
+		<arg name="approx_sync" default="false" />
+	</include>
+</launch>
