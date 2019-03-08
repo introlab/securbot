@@ -2,13 +2,14 @@
   <div class='waypoint-size'>
     <h1>Waypoints</h1>
     <div class='inner'> 
-        <waypoint mapId='map' showMap='true' class='waypoint-container'/>
+        <waypoint mapId='map' showMap='true' :bus='patrolBus' class='waypoint-container'/>
     </div>
   </div>
 </template>
 
 <script>
 import Waypoint from './Waypoint.vue'
+import Vue from 'vue'
 
 export default {
   name: 'demo-waypoint',
@@ -19,6 +20,7 @@ export default {
       return{
           localStream: null,
           selfStreamElement: null,
+          patrolBus: new Vue(),
       }
   },
   methods:{
@@ -41,9 +43,15 @@ export default {
     loginFailure(errorCode, message) {
       easyrtc.showError(errorCode, message);
     },
+    sendPatrol(event){
+      console.log(event);
+    }
   },
     mounted() {
     this.selfStreamElement = document.getElementById("map");
+    
+    this.patrolBus.$on('send-patrol', this.sendPatrol);
+
     this.connect();
   },
   destroyed() {

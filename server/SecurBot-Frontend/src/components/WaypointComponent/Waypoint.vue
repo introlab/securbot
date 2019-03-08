@@ -1,8 +1,11 @@
 <template>
   <div id="patrol-container">
     <div class="list-container">
-      <button class="btn" v-on:click=sendPatrol()>Confirm</button>
-      <button class="btn" v-on:click=clearWaypointList()>Reset</button>
+      <div class="patrol-btn-container">
+          <div class="title">Patrol Point :</div>
+          <button class="btn btn-confirm" v-on:click=sendPatrol()>Confirm</button>
+          <button class="btn btn-cancel" v-on:click=clearWaypointList()>Reset</button>
+      </div>
       <table id="waypoint-table" class="waypoint-list"></table>
     </div>
     <div class="map-container">
@@ -15,18 +18,15 @@
 
 <script>
 /*
-  Still to be done:
-    Fix the names and calls to fit standards
-    Program the sendPatrol function
-    Add some CSS (table row background, border, etc)
-    Fix the fact that waypoints are not shown on map
-    Add comment (Documentation)
+  TO DO:
+    Integrate bootstrap and adapt CSS
     Find images to use for some control
 */
 import VideoBox from '../VideoComponent/VideoBox.vue'
+
 export default {
   name: 'waypoint',
-  props: ['mapId','showMap'],
+  props: ['mapId','showMap', 'bus'],
   components: {
     VideoBox
   },
@@ -35,7 +35,7 @@ export default {
       videoElement: null,
       canvas: null,
       loopIntervalId: null,
-      enable: false,
+      enable: true,
       CanvasRefreshRate: 60.0, //Hz
       context: null,
       waypointList: [],
@@ -43,6 +43,7 @@ export default {
     }
   },
   methods: {
+    //Initialisation of canvas input
     init() {
       this.loopIntervalId = setInterval(function() {
         if (this.enable) {
@@ -51,15 +52,50 @@ export default {
         }
       }.bind(this), 1000 / this.CanvasRefreshRate);
     },
-
-    // Setup of canvas and video 
+    //Setup for waypoint list
+    addWaypoint(wp) {
+      this.waypointList.push(wp);
+      this.addWaypointToList(wp);
+    },
+    //Draw the canvas and the waypoints
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.drawWaypoints()
     },
+    //Draw waypoints
+    drawWaypoints(){
+      this.waypointList.forEach(function(wp){
+        let wpColor = "#00FF00";
+        let coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
+
+        //Draw the goal circle
+        let wpRadius = 8;
+
+        this.context.beginPath();
+        this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI); 
+        this.context.fillStyle = wpColor;
+        this.context.fill();
+        
+      }.bind(this));
+    },    
+    //Get position from canvas on click
+    getVideoCoordinatesFromEvent(event) {
+      let offsetAndScale = this.getVideoOffsetAndScale();
+
+      let rect = this.videoElement.getBoundingClientRect();
+      let x = (event.clientX - rect.left - offsetAndScale.offsetX) / offsetAndScale.scale;
+      let y = (event.clientY - rect.top - offsetAndScale.offsetY) / offsetAndScale.scale;
+      return {
+        x: x,
+        y: y
+      };
+    },    
+    //Ajust canvas size to fit video
     adjustCanvasToVideo() {
       this.canvas.width = this.videoElement.offsetWidth;
       this.canvas.height = this.videoElement.offsetHeight;
     },
+    //Get the offset and scale of canvas
     getVideoOffsetAndScale() {
       let videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
 
@@ -80,26 +116,21 @@ export default {
         scale: scale
       }
     },
-    // END of Setup of canvas and video 
-
-    //Setup of waypoint list
-    addWaypoint(WP) {
-      this.waypointList.push(WP);
-      this.addWaypointToList(WP);
-      this.displayWaypoints(WP);
-    },
+    //Clear the list and empty the html table
     clearWaypointList(){
       this.waypointList = [];
       var table = document.getElementById("waypoint-table");
       table.innerHTML =  "";
       this.setTableHeader();
     },
+    //Set html table header
     setTableHeader(){
       var table = document.getElementById("waypoint-table");
       var header = table.createTHead();
 
       //Create elements
       var row = header.insertRow(0);
+      row.className = "table-header";
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
@@ -120,27 +151,33 @@ export default {
       cell4.innerHTML = "Yaw";
       cell5.innerHTML = "Remove";
     },
-    addWaypointToList(WL){
+    //Add waypoint to html table
+    addWaypointToList(wp){
+      //Get table
       var table = document.getElementById("waypoint-table");
       var lengthTable = table.rows.length;
-      //Create delete button
+      //Create remove button
       var removeBtn = document.createElement("button");
       removeBtn.id = "removeBtn-"+lengthTable;
       removeBtn.className = "removeBtn";
       removeBtn.onclick = function(){this.removeWaypointFromList(lengthTable);}.bind(this);   
-      //
+      //Create and set row
       var row = table.insertRow(lengthTable);
+      row.className = "table-row";
+      //Add a cells in row
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
+      //Set the cells content
       cell1.innerHTML = lengthTable;
-      cell2.innerHTML = WL.coordX.toFixed(1);
-      cell3.innerHTML = WL.coordY.toFixed(1);
-      cell4.innerHTML = WL.orient.toFixed(1);
+      cell2.innerHTML = wp.x.toFixed(1);
+      cell3.innerHTML = wp.y.toFixed(1);
+      cell4.innerHTML = wp.yaw.toFixed(1);
       cell5.appendChild(removeBtn);
     },
+    //Remove waypoint from html table
     removeWaypointFromList(index){
       this.waypointList.splice(index-1,1);
       var table = document.getElementById("waypoint-table");
@@ -153,42 +190,11 @@ export default {
       
       for(var i = index-1; i < lengthWaypoints; i++)
       { 
-        var waypoint={};
-        waypoint.coordX = this.waypointList[i].coordX;
-        waypoint.coordY = this.waypointList[i].coordY;
-        waypoint.orient = this.waypointList[i].orient;
-        this.addWaypointToList(waypoint);
+        var wp = this.waypointList[i];
+        this.addWaypointToList(wp);
       };   
     },
-    //END of Setup of waypoint list
-
-    //Display of waypointslet goalColor = '#00FF00';
-    displayWaypoints(WP){
-      let WPColor = "00FF00";
-      let canvasWP = this.getCanvasCoordinatesFromVideo(WP.x, WP.y);
-
-      //Draw the goal circle
-      let WPRadius = Math.max(10, 8 / 8);
-
-      this.context.beginPath();
-      this.context.arc(canvasWP.x, canvasWP.y, WPRadius, 0, 2 * Math.PI);
-      this.context.fillStyle = WPColor;
-      this.context.fill();
-    },
-    //END of display waypoints
-
-    //Get position from click
-    getVideoCoordinatesFromEvent(event) {
-      let offsetAndScale = this.getVideoOffsetAndScale();
-
-      let rect = this.videoElement.getBoundingClientRect();
-      let x = (event.clientX - rect.left - offsetAndScale.offsetX) / offsetAndScale.scale;
-      let y = (event.clientY - rect.top - offsetAndScale.offsetY) / offsetAndScale.scale;
-      return {
-        x: x,
-        y: y
-      };
-    },
+    //Get the right coordinate from canvas for the waypoint given 
     getCanvasCoordinatesFromVideo(x, y) {
       let offsetAndScale = this.getVideoOffsetAndScale();
 
@@ -197,32 +203,30 @@ export default {
         y: y * offsetAndScale.scale + offsetAndScale.offsetY
       };
     }, 
-    //END Get position on click
-
     //On mouse event
     onMouseDown(event) {
       if (event.button === 0) {
-        let WPclick = this.getVideoCoordinatesFromEvent(event);
-        if (this.isClickValid(WPclick)) {
-          var waypoint={};
-          waypoint.coordX = WPclick.x;
-          waypoint.coordY = WPclick.y;
-          waypoint.orient = 0;
-          this.addWaypoint(waypoint);
+        let coord = this.getVideoCoordinatesFromEvent(event);
+        if (this.isClickValid(coord)) {
+          var wp = coord;
+          wp.yaw = 0;
+          this.addWaypoint(wp);
         }
       }
     },
-    isClickValid(WPclick) {
-      return WPclick.x >= 0 &&
-        WPclick.x < this.videoElement.videoWidth &&
-        WPclick.y >= 0 &&
-        WPclick.y < this.videoElement.videoHeight; 
+    //Check is the click was inbound
+    isClickValid(coord) {
+      return coord.x >= 0 &&
+        coord.x < this.videoElement.videoWidth &&
+        coord.y >= 0 &&
+        coord.y < this.videoElement.videoHeight; 
     },
-    //END on mouse event
+    //Send the waypoint list for patrol scheduling
     sendPatrol(){
-      console.log("I should be sending the patrol but im not :^)");
+      this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
     }
   },
+  //On component mounted
   mounted() {
     this.videoElement = document.getElementById(this.mapId);
     this.canvas = this.$refs.canvas;
@@ -230,6 +234,7 @@ export default {
     this.init();
     this.setTableHeader();
   },
+  //On component destroyed
   destroyed() {
     clearInterval(this.loopIntervalId);
   }
@@ -240,6 +245,17 @@ export default {
 #patrol-container{
   width: 100%;
   height: 100%;
+}
+.patrol-btn-container{
+  height: 45px;
+  padding: 2px;
+  align-content: center
+}
+.title{
+  width: 75%;
+  height: 100%;
+  float: left;
+  text-align: left;
 }
 .map-video {
   width: 100%;
@@ -257,10 +273,11 @@ export default {
   z-index: 10;
 }
 .list-container{
-  width: 18%;
+  width: 19%;
   height: 100%;
   position: relative;
   float: left;
+  border: 1px solid #ddd;
 }
 .map-container{
   width: 80%;
@@ -269,15 +286,56 @@ export default {
   float: right;
 }
 .btn{
-  width: 80px;
+  width: 60px;
   height: 20px;
+  float: right;
+}
+.btn-confirm{
+  background-color: #4CAF50;
+  border: 1px solid dimgray;
+  border-radius: 4px;
+
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.btn-cancel{
+  background-color: rgb(221, 50, 50);
+  border: 1px solid dimgray;
+  border-radius: 4px;
+
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.waypoint-list{
+  border-collapse: collapse;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+}
+.table-header{
+  background-color: #4CAF50;
+  color: white;
+}
+.table-row{
+  border-bottom: 1px solid #ddd;
+}
+.table-row:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.waypoint-cell{
+  width: 20%;
+  border-radius: 0px;
 }
 .removeBtn{
   width: 20px;
   height: 20px;
-  background-color: darkred;
+  background-color: lightcoral;
+  border: 1px solid dimgray;
+  border-radius: 4px;
+
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
 }
-.waypoint-cell{
-  width: 20%;
+.removeBtn:hover{
+  background-color: darkred;
 }
 </style>
