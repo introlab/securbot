@@ -19,8 +19,8 @@ export default {
       canvas: null,
       context: null,      
       isMouseDown: false,
-      CanvasRefreshRate: 60.0, //Hz
-      OperatorCommandInterval: 100, //ms
+      canvasRefreshRate: 60.0, //Hz
+      operatorCommandInterval: 100, //ms
     }
   },
   methods: {
@@ -28,10 +28,11 @@ export default {
       this.loopIntervalId = setInterval(function() {
         this.findCenterCanvas();
         this.drawCanvas();
-      }.bind(this), 1000 / this.CanvasRefreshRate);
+      }.bind(this), 1000 / this.canvasRefreshRate);
+      
       this.positionChangeIntervalId = setInterval(function() {
         this.emitJoystickPosition();
-      }.bind(this), this.OperatorCommandInterval);
+      }.bind(this), this.operatorCommandInterval);
     },
     findCenterCanvas() {
       if (this.x === null || this.y === null || !this.isMouseDown) {
