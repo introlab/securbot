@@ -30,30 +30,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import rospy
 from std_msgs.msg import String
-from rtabmap_ros/SetGoal.srv import *
+from rtabmap_ros.srv import SetGoal
 
 #Using service to talk to SPLAM
-def setGoalClient(waypoint):
+def splamNodeTestClient(waypoint):
     rospy.loginfo("Sending waypoint from Electron to SPLAM")
-    rospy.loginfo("Attempting to set goal :" + waypoint)
-    rospy.wait_for_service('set_goal')
+    rospy.loginfo("   " + waypoint)
+    rospy.wait_for_service('splamNodeTest')
     try:
-        set_goal_handler = rospy.ServiceProxy('set_goal',SetGoal)
-        resp = set_goal(waypoint) # request : Set either node_id(int32)
-                                  #           or node_label(string)
+        handleSplamNodeTest = rospy.ServiceProxy('splamNodeTest', SetGoal)
+        resp = splamNodeTestServer(waypoint) # request : Set either node_id(int32)
+                                             #           or node_label(string)
         return resp
     except rospy.ServiceException, e:
-        print("Service call set_goal failed : %s"%e)
+        print("Service call splamNodeTestServer failed : %s"%e)
 
 #Subscribing and listening to Electron Node
-def setGoalClientCallback(data):
-    rospy.loginfo(rospy.get_caller_id() + "heard %s", data.data)
-    setGoalClient(data.data)
+def splamNodeTestClientCallback(data):
+    rospy.loginfo(rospy.get_caller_id() + " heard    %s   ", data.data)
+    splamNodeTestClient(data.data)
 
 def waypointListener():
-    rospy.init_node('waypointListener', anonymous=True)
-    rospy.Subscriber("waypoints", String, setGoalClientCallback)
+    rospy.init_node('waypointNodeTest', anonymous=True)
+    rospy.Subscriber("fromElectron", String, splamNodeTestClientCallback)
     rospy.spin()
 
- __name__ == '__main__':
+if __name__ == '__main__':
     waypointListener()
