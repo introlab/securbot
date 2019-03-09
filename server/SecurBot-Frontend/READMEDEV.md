@@ -13,15 +13,17 @@ The project was created with the vue_cli tool.
 ## Content of the App folder
 The application folder contains a few files not in a folder and (for now) 2 folders:   
 
+  * build : Config file for webpack   
+  * config : More webpack config (plugins)   
   * src : Contains the all the JavaScript and the Vue components.   
   * node_modules: Will be generated when setting up the project and contains all the modules that node.js needs.   
+  * static : Contains ressource that won't go through webpack (like images and api)   
   * index.html: Contain the main html (do not modify).   
   * package.json: Contain everything to setup the project (do not modify).   
   * package-lock.json: Something (do not modify).   
   * .gitignore: Everything that git should ignore, should already be correctly set (do not modify).  
-  * babel.config.js: config file for babel (do not modify).  
 
-Content of the src folder:
+Content of the src folder:   
 
   * components: All the Vue components.   
   * static: contains all static resources (images, API, etc.).   
@@ -30,7 +32,7 @@ Content of the src folder:
 
 
 ## How does Vue.js work and how are we using it ?
-### Hos does it work
+### How does it work
 Vue.js is a progressive framework for building user interfaces.
 This enables users to create UI with "components". Vue.js uses modern building tools to bundle modules like [Webpack](https://webpack.js.org/).
 
