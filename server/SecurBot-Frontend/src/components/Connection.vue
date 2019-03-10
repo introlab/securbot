@@ -7,8 +7,8 @@
         <h id="personalId"></h>
 
         <table id="peersTable">
-          <th>Robots</th>
-          <th>IDs</th>
+          <th>Robot</th>
+          <th>ID</th>
           <th>Connection</th>
         </table>
     </div>
@@ -23,6 +23,11 @@
 
 export default {
   name: 'connection',
+  data(){
+    return {
+        peersAvailableArray: []
+    }
+  },
   methods: {
     addPeerConnectionTable(peerName, peerID) {
       var peersTableElement = document.getElementById("peersTable");
@@ -45,13 +50,25 @@ export default {
       newConnectionButton.appendChild(connectText);
       var peersTableElement = document.getElementById("peersTable");
       connectionButton.appendChild(newConnectionButton);
+
+      //Add peer infos in array
+      peersAvailableArray.push({peerName, peerID});
     },
 
-  /*   removePeerConnectionTable() {
-      document.getElementById("peersList").deleteRow(0);
+    removeTopPeerConnectionTable() {
+      document.getElementById("peersTable").deleteRow(0);
+      peersAvailableArray.shift();
     },
 
-    initConnectionComponent(personalId, peersList) {
+    removeAllPeersConnectionTable() {
+      var currentPeer = peersAvailableArray.shift();
+      while(currentPeer != undefined){
+        removeTopPeerConnectionTable();
+      }
+    },
+
+/*
+    initConnectionComponent(personalId, peersTable) {
       var personalIdElement = document.getElementById("personalId")
       personalIdElement.innerHTML = personalId;
 
@@ -74,9 +91,11 @@ export default {
       var personalIdElement = document.getElementById("personalId")
       personalIdElement.innerHTML = "TEST ID";
 
-      for(var i = 0; i < 10; i++) {
+      for(var i = 0; i < 10; i++){
         this.addPeerConnectionTable(i, (i+1));
       }
+      
+      //this.removeTopPeerConnectionTable();
     }
   }
 }
@@ -85,7 +104,28 @@ export default {
 </script>
 
 <style>
-table, td {
-  border: 1px solid black;
+#peersTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  /* width: 100%; */
+}
+
+#peersTable td, #peersTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#peersTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#peersTable tr:hover {background-color: #ddd;}
+
+#peersTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
 }
 </style>
