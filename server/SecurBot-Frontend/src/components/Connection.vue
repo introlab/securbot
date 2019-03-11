@@ -47,7 +47,7 @@ export default {
       //Add peer's new connection button in the row
       var newConnectionButtonElement = document.createElement("BUTTON");
       newConnectionButtonElement.setAttribute("id", peerID);
-      newConnectionButtonElement.setAttribute("v-on:click", "handlePeerConnection()");
+      newConnectionButtonElement.setAttribute("v-on:click", "handlePeerConnection(5)");
 
       var connectText = document.createTextNode("Connect");
       newConnectionButtonElement.appendChild(connectText);
@@ -60,68 +60,74 @@ export default {
     },
 
     removeTopPeerConnectionTable() {
-      //TODO : Add a check if already no row before deleting a row
-      document.getElementById("peersTable").deleteRow(0);
-      return this.peersInfos.shift();
+      var peersTableElement = document.getElementById("peersTable");
+      if(peersTableElement.rows.length > 0){
+        peersTableElement.deleteRow(0);
+        return this.peersInfos.shift();
+      }
+      else{
+        console.log("Warning removeTopPeerConnectionTable : Can't erase more rows ");
+        console.log("Warning removeTopPeerConnectionTable : peersTableElement.length is " + peersTableElement.length);
+      }
     },
 
     removeAllPeersConnectionTable() {
-      var currentPeer = this.removeTopPeerConnectionTable();
-      while(currentPeer != undefined){
-        currentPeer = this.removeTopPeerConnectionTable();
-      }
+      do{
+          var currentPeer = this.removeTopPeerConnectionTable();
+      } while(currentPeer != undefined)
     },
 
     getPeerObjectByName(peerName){
-      return peersInfos.find(function(peerObject){ return peerObject.name == peerName})
+      return this.peersInfos.find(function(peerObject){ return peerObject.name == peerName})
     },
 
     getPeerObjectById(peerId){
-      return peersInfos.find(function(peerObject){ return peerObject.id == peerId})
+      return this.peersInfos.find(function(peerObject){ return peerObject.id == peerId})
     },
 
-    switchPeerConnectionButtonHtmlState(peerId){
-      var peerButtonElement = document.getElementById(peerId)
-      if(peerButtonElement.innerHTML == "Connect"){
-        peerButtonElement.innerHTML = "Disconnect";
-        // peerButtonElement.setAttribute("v-on:click", "disconnectToPeer");
-      }
-      else if (peerButtonElement.innerHTML == "Disconnect"){
-        peerButtonElement.innerHTML = "Connect";
-        // peerButtonElement.setAttribute("v-on:click", "connectToPeer");
-      }
-      else
-        console.log("Error switchPeerConnectionButtonHtmlState")
-    },
+    // switchPeerConnectionButtonHtmlState(peerId){
+    //   var peerButtonElement = document.getElementById(peerId)
+    //   if(peerButtonElement.innerHTML == "Connect"){
+    //     peerButtonElement.innerHTML = "Disconnect";
+    //     // peerButtonElement.setAttribute("v-on:click", "disconnectToPeer");
+    //   }
+    //   else if (peerButtonElement.innerHTML == "Disconnect"){
+    //     peerButtonElement.innerHTML = "Connect";
+    //     // peerButtonElement.setAttribute("v-on:click", "connectToPeer");
+    //   }
+    //   else
+    //     console.log("Error switchPeerConnectionButtonHtmlState")
+    // },
 
-    connectToPeer(peerId){
-      //Emit event
-      this.$emit('peer-connection', peerId);
-    },
+    // connectToPeer(peerId){
+    //   //Emit event
+    //   this.$emit('peer-connection', peerId);
+    // },
 
-    disconnectToPeer(peerId){
-      //Emit event
-      this.$emit('peer-disconnection', peerId);
-    },
+    // disconnectToPeer(peerId){
+    //   //Emit event
+    //   this.$emit('peer-disconnection', peerId);
+    // },
 
-    handlePeerConnection(peerObject){
-      if (peerObject.isConnected == false){
-        connectToPeer(peerObject.id);
+    // handlePeerConnection(peerId){
+    //   var peerObject = this.getPeerObjectById(peerId);
+    //   if (peerObject.isConnected == false){
+    //     this.connectToPeer(peerObject.id);
 
-        //TODO: Add check if connectToPeer succeeded : then change boolean and html
-        peerObject.isConnected = true;
-        this.switchPeerConnectionButtonHtmlState(peerObject.id);
-      }
-      else if (peerObject.isConnected == true){
-        disconnectToPeer(peerObject.id);
+    //     //TODO: Add check if connectToPeer succeeded : then change boolean and html
+    //     peerObject.isConnected = true;
+    //     this.switchPeerConnectionButtonHtmlState(peerObject.id);
+    //   }
+    //   else if (peerObject.isConnected == true){
+    //     this.disconnectToPeer(peerObject.id);
 
-        //TODO: Add check if connectToPeer succeeded : then change boolean and html
-        peerObject.isConnected = false;
-        this.switchPeerConnectionButtonHtmlState(peerObject.id);
-      }
-      else
-        console.log("Error handlePeerConnection")
-    },
+    //     //TODO: Add check if connectToPeer succeeded : then change boolean and html
+    //     peerObject.isConnected = false;
+    //     this.switchPeerConnectionButtonHtmlState(peerObject.id);
+    //   }
+    //   else
+    //     console.log("Error handlePeerConnection")
+    // },
 
     test(){
       var personalIdElement = document.getElementById("personalId")
@@ -130,6 +136,13 @@ export default {
       for(var i = 0; i < 10; i++){
         this.addPeerConnectionTable(i, (i+1));
       }
+
+      // console.log("peerObject Id : " + 5);
+      // console.log("name :"+this.getPeerObjectById(5).name);
+      // console.log("isConnected :"+this.getPeerObjectById(5).isConnected);
+
+      // this.removeAllPeersConnectionTable();
+
     }
   }
 }
