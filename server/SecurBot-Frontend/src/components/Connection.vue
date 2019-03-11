@@ -14,7 +14,8 @@
     </div>
 
     <!-- TODO: REMOVE WHEN DONE TESTING-->                                                     
-    <button @click=test()>TEST</button>
+    <button v-on:click="test">TEST</button>
+
   </div>
 </template>
 
@@ -47,7 +48,9 @@ export default {
       //Add peer's new connection button in the row
       var newConnectionButtonElement = document.createElement("BUTTON");
       newConnectionButtonElement.setAttribute("id", peerID);
-      newConnectionButtonElement.setAttribute("v-on:click", "handlePeerConnection(5)");
+
+      //TODO : add properly an event click listener to activate handlePeerConnection(peerId)
+      newConnectionButtonElement.setAttribute("v-on:click", "handlePeerConnection(peerId)");
 
       var connectText = document.createTextNode("Connect");
       newConnectionButtonElement.appendChild(connectText);
@@ -85,49 +88,47 @@ export default {
       return this.peersInfos.find(function(peerObject){ return peerObject.id == peerId})
     },
 
-    // switchPeerConnectionButtonHtmlState(peerId){
-    //   var peerButtonElement = document.getElementById(peerId)
-    //   if(peerButtonElement.innerHTML == "Connect"){
-    //     peerButtonElement.innerHTML = "Disconnect";
-    //     // peerButtonElement.setAttribute("v-on:click", "disconnectToPeer");
-    //   }
-    //   else if (peerButtonElement.innerHTML == "Disconnect"){
-    //     peerButtonElement.innerHTML = "Connect";
-    //     // peerButtonElement.setAttribute("v-on:click", "connectToPeer");
-    //   }
-    //   else
-    //     console.log("Error switchPeerConnectionButtonHtmlState")
-    // },
+    switchPeerConnectionButtonHtmlState(peerId){
+      var peerButtonElement = document.getElementById(peerId)
+      if(peerButtonElement.innerHTML == "Connect"){
+        peerButtonElement.innerHTML = "Disconnect";
+      }
+      else if (peerButtonElement.innerHTML == "Disconnect"){
+        peerButtonElement.innerHTML = "Connect";
+      }
+      else
+        console.log("Error switchPeerConnectionButtonHtmlState")
+    },
 
-    // connectToPeer(peerId){
-    //   //Emit event
-    //   this.$emit('peer-connection', peerId);
-    // },
+    connectToPeer(peerId){
+      //Emit event
+      this.$emit('peer-connection', peerId);
+    },
 
-    // disconnectToPeer(peerId){
-    //   //Emit event
-    //   this.$emit('peer-disconnection', peerId);
-    // },
+    disconnectToPeer(peerId){
+      //Emit event
+      this.$emit('peer-disconnection', peerId);
+    },
 
-    // handlePeerConnection(peerId){
-    //   var peerObject = this.getPeerObjectById(peerId);
-    //   if (peerObject.isConnected == false){
-    //     this.connectToPeer(peerObject.id);
+    handlePeerConnection(peerId){
+      var peerObject = this.getPeerObjectById(peerId);
+      if (peerObject.isConnected == false){
+        this.connectToPeer(peerObject.id);
 
-    //     //TODO: Add check if connectToPeer succeeded : then change boolean and html
-    //     peerObject.isConnected = true;
-    //     this.switchPeerConnectionButtonHtmlState(peerObject.id);
-    //   }
-    //   else if (peerObject.isConnected == true){
-    //     this.disconnectToPeer(peerObject.id);
+        //TODO: Add check if connectToPeer succeeded : then change boolean and html
+        peerObject.isConnected = true;
+        this.switchPeerConnectionButtonHtmlState(peerObject.id);
+      }
+      else if (peerObject.isConnected == true){
+        this.disconnectToPeer(peerObject.id);
 
-    //     //TODO: Add check if connectToPeer succeeded : then change boolean and html
-    //     peerObject.isConnected = false;
-    //     this.switchPeerConnectionButtonHtmlState(peerObject.id);
-    //   }
-    //   else
-    //     console.log("Error handlePeerConnection")
-    // },
+        //TODO: Add check if connectToPeer succeeded : then change boolean and html
+        peerObject.isConnected = false;
+        this.switchPeerConnectionButtonHtmlState(peerObject.id);
+      }
+      else
+        console.log("Error handlePeerConnection")
+    },
 
     test(){
       var personalIdElement = document.getElementById("personalId")
@@ -143,6 +144,10 @@ export default {
 
       // this.removeAllPeersConnectionTable();
 
+      // this.switchPeerConnectionButtonHtmlState(5);
+      // this.switchPeerConnectionButtonHtmlState(9);
+
+      //this.handlePeerConnection(5);
     }
   }
 }
