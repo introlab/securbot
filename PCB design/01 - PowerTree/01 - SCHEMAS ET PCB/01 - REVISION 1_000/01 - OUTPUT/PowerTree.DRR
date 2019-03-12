@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: PowerTree.PcbDoc   2019-03-12  14:20:42
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : PowerTree.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.33mm (13mil)                                            Round             46        PTH        238.95mm (9.41inch)
+T2      0.711mm (28mil)                                           Round             84        PTH        902.08mm (35.52inch)
+T3      1.4mm (55mil)                                             Round             60        PTH        360.18mm (14.18inch)
+T4      1.7mm (67mil)                                             Round             2         PTH        9.25mm (0.36inch)
+T5      2mm (79mil)                                               Round             4         PTH        23.70mm (0.93inch)
+T6      2.1mm (83mil)                                             Round             1         PTH        0.00mm (0.00inch)
+T7      4mm (157mil)                                              Round             4         PTH        536.89mm (21.14inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              201
+
+Total Processing Time (hh:mm:ss) : 00:00:01
