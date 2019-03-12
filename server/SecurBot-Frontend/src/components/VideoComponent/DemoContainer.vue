@@ -8,19 +8,25 @@
         </div>
         <div class="outer-video-box custom-width">
             <video-box VideoId="robot-video-stream" :show="showRobot"/>
+        </div>
+        <div>
+            <joystick width="200px" height="200px" :absolute-max-x="1" :absolute-max-y="1" :bus="teleopBus"/>
         </div>  
     </div>
 </template>
 
 <script>
 // Import component(s)
+import Vue from 'vue'
 import VideoBox from './VideoBox.vue'
+import Joystick from "../Joystick.vue"
 
 // Export
 export default {
     name: 'demo-container',
     components: {
-        VideoBox
+        VideoBox,
+        Joystick,
     },
     data(){
     return {
@@ -30,7 +36,8 @@ export default {
         selfEasyrtcid:null,
         selfStreamElement:null,
         robotStreamElement:null,
-        localStream:null
+        localStream:null,
+        teleopBus: new Vue(),
     }
   },
   methods:{
@@ -106,11 +113,16 @@ export default {
           easyrtc.hangupAll();
       }
       acceptor=true;
-    }
+    },
+    onJoystickPositionChange(){
+      //to implement
+      console.log("Joystick position sent");
+    },
   },
   mounted() {
     this.selfStreamElement = document.getElementById("self-video-stream");
     this.robotStreamElement = document.getElementById("robot-video-stream");
+    this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
     this.connect();
   },
   destroyed() {

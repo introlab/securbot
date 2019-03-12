@@ -39,6 +39,7 @@ import Vue from 'vue'
 import { constants } from 'fs';
 
 export default {
+
   name: 'app',
   data(){
     return{
@@ -84,4 +85,5 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>
