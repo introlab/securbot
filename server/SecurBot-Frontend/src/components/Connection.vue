@@ -3,38 +3,53 @@
     <h1>connection</h1>
     <!--img src="/static/logo.png" alt="LOGO"-->
     <div id="connectionDiv">
-        <h>My ID : </h>
-        <h id="personalId"></h>
-
+        <pre>My ID : </pre>
+        <pre id="whoAmI">{{selfId}}</pre>
         <table id="peersTable">
-          <th>Robot</th>
-          <th>ID</th>
-          <th>Connection</th>
+          <thead>
+            <th>Robot</th>
+            <th>ID</th>
+            <th>Connection</th>
+          </thead>
+          <tbody id="peersTableBody">
+            <tr v-for="peer in peersTable" v-bind:key="peer.peerID">
+              <td>{{peer.peerName}}</td>
+              <td>{{peer.peerID}}</td>
+              <td>
+                <button 
+                  v-bind:id="peer.peerID" 
+                  v-on:click="handlePeerConnection(peer.peerID)">
+                  Connect
+                </button>
+              </td>
+            </tr>
+          </tbody>
         </table>
     </div>
-
-    <!-- TODO: REMOVE WHEN DONE TESTING-->                                                     
-    <button v-on:click="test">TEST</button>
-
   </div>
 </template>
 
 <script>
-'use strict';
-
 export default {
   name: 'connection',
+  props: ["selfId","peersTable", "bus"],
   data(){
     return {
-        peersInfos: []
+      whoAmIElement: null,
+      peersTableElement: null,
+      peersTableBodyElement: null,
+      isConnected: false,
+      isConnectedToPeerId: null,
+      waitingForConnectionState: false,
+      peersInfos: []
     }
   },
   methods: {
-    addPeerConnectionTable(peerName, peerID) {
-      var peersTableElement = document.getElementById("peersTable");
-      
+    //NOT USED
+    addPeerConnectionTable(peer) {
       //Adding a row for new peer
-      var row = peersTableElement.insertRow(0);
+      var index = this.peersTableBodyElement.rows.length;
+      var row = this.peersTableBodyElement.insertRow(index);
 
       //Preparing new row for new peer
       var nameCell = row.insertCell(0);
@@ -42,26 +57,23 @@ export default {
       var connectionButtonCell = row.insertCell(2);
 
       //Write peer info in table
-      nameCell.innerHTML = peerName;
-      idCell.innerHTML = peerID;
+      nameCell.innerHTML = peer.peerName;
+      idCell.innerHTML = peer.peerID;
 
       //Add peer's new connection button in the row
-      var newConnectionButtonElement = document.createElement("BUTTON");
-      newConnectionButtonElement.setAttribute("id", peerID);
+      var newConnectionButtonElement = document.createElement("button");
+      newConnectionButtonElement.innerHTML = "Connect";
+      newConnectionButtonElement.id = peer.peerID;
 
       //TODO : add properly an event click listener to activate handlePeerConnection(peerId)
-      newConnectionButtonElement.setAttribute("v-on:click", "handlePeerConnection(peerId)");
+      newConnectionButtonElement.onclick = function(){this.handlePeerConnection(peer.peerId);}.bind(this);
 
-      var connectText = document.createTextNode("Connect");
-      newConnectionButtonElement.appendChild(connectText);
-
-      var peersTableElement = document.getElementById("peersTable");
       connectionButtonCell.appendChild(newConnectionButtonElement);
 
       //Add peer infos in array
-      this.peersInfos.push({name : peerName, id : peerID, isConnected : false});
+      this.peersInfos.push({name : peer.peerName, id : peer.peerID});
     },
-
+    //NOT USED
     removeTopPeerConnectionTable() {
       var peersTableElement = document.getElementById("peersTable");
       if(peersTableElement.rows.length > 0){
@@ -73,83 +85,120 @@ export default {
         console.log("Warning removeTopPeerConnectionTable : peersTableElement.length is " + peersTableElement.length);
       }
     },
-
+    //NOT USED
     removeAllPeersConnectionTable() {
       do{
           var currentPeer = this.removeTopPeerConnectionTable();
       } while(currentPeer != undefined)
     },
-
+    //NOT USED
+    clearPeerTables(){
+      this.peersInfos = [];
+      this.peersTableBodyElement = "";
+      this.setPeerTableHeaders();
+    },
+    //NOT USED
     getPeerObjectByName(peerName){
       return this.peersInfos.find(function(peerObject){ return peerObject.name == peerName})
     },
-
+    //NOT USED
     getPeerObjectById(peerId){
       return this.peersInfos.find(function(peerObject){ return peerObject.id == peerId})
     },
+    //Switch the state (text in innerHTML) of the peer button
+    switchPeerConnectionButtonHtmlState(peerId, state){
+      if(peerId == null){
+        console.warn("The Id is null...");
+        return;
+      }
 
-    switchPeerConnectionButtonHtmlState(peerId){
       var peerButtonElement = document.getElementById(peerId)
-      if(peerButtonElement.innerHTML == "Connect"){
+      if(state == "Connected"){
         peerButtonElement.innerHTML = "Disconnect";
       }
-      else if (peerButtonElement.innerHTML == "Disconnect"){
+      else if (state == "Disconnected"){
         peerButtonElement.innerHTML = "Connect";
       }
       else
         console.log("Error switchPeerConnectionButtonHtmlState")
     },
-
+    //Handle the answer of the connection-changed event
+    handleConnectionChanged(state){
+      switch(state){
+        case 'connected':
+          console.log('Connected!');
+          this.waitingForConnectionState = false;
+          this.isConnected = true;
+          this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Connected");
+          break;
+        case 'failed':
+          //Popup : Connection Failed...
+          console.log('Connection failed...');
+          this.waitingForConnectionState = false;
+          this.isConnectedToPeerId = null;
+          break;
+        case 'disconnected':
+          console.log('Disconnected!');
+          this.isConnected = false;
+          this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Disconnected");
+          this.isConnectedToPeerId = null;
+          break;
+        case 'lost':
+          //This is Id might not be available anymore... Might get a error...
+          //Popup : The connection was lost...
+          console.log('Connection lost...');
+          this.isConnectedToPeerId = null;
+          this.waitingForConnectionState = false;
+          this.isConnectedToPeerId = null;
+          break;
+        default:
+          console.log("Something Something : " + state);
+      }
+    },
+    //Ask to be connected to a peer
     connectToPeer(peerId){
+      //Emit event
+      console.log("Connecting to : " + peerId)
+      this.isConnectedToPeerId = peerId;
+      this.waitingForConnectionState = true;
+      this.bus.$emit('peer-connection', peerId);
+      console.log("Connecting...");
+    },
+    //Ask to be disconnect from the current connected peer (should be from and not to in name)
+    disconnectToPeer(peerId){
       //Emit event
       this.$emit('peer-connection', peerId);
     },
-
-    disconnectToPeer(peerId){
-      //Emit event
-      this.$emit('peer-disconnection', peerId);
-    },
-
+    //Button function to handle the connection/disconnection to a peer
     handlePeerConnection(peerId){
-      var peerObject = this.getPeerObjectById(peerId);
-      if (peerObject.isConnected == false){
-        this.connectToPeer(peerObject.id);
-
-        //TODO: Add check if connectToPeer succeeded : then change boolean and html
-        peerObject.isConnected = true;
-        this.switchPeerConnectionButtonHtmlState(peerObject.id);
+      if(this.isConnected && peerId == this.isConnectedToPeerId){
+        console.log("Disconnecting...");
+        this.disconnectToPeer(this.isConnectedToPeerId);
       }
-      else if (peerObject.isConnected == true){
-        this.disconnectToPeer(peerObject.id);
-
-        //TODO: Add check if connectToPeer succeeded : then change boolean and html
-        peerObject.isConnected = false;
-        this.switchPeerConnectionButtonHtmlState(peerObject.id);
+      else if(this.isConnected){
+        //Add popup message saying : "You are already connected to this.isConnectedToPeerId, 
+        //disconnect from it to connect to connect to an other robot"
+        console.log("Already connected to someone...");
       }
-      else
-        console.log("Error handlePeerConnection")
+      else if(this.waitingForConnectionState){
+        //Popup saying : "Currently trying to connect to this.isConnectedToPeerId,
+        //please be patient..."
+        console.log("Waiting for state...");
+      }
+      else{
+        this.connectToPeer(peerId);
+      }
     },
+  },
+  mounted(){
+    //Get HTML elements
+    this.whoAmIElement = document.getElementById("whoAmI")
+    this.peersTableElement = document.getElementById("peersTable");
+    this.peersTableBodyElement = document.getElementById("peersTableBody");
 
-    test(){
-      var personalIdElement = document.getElementById("personalId")
-      personalIdElement.innerHTML = "TEST ID";
-
-      for(var i = 0; i < 10; i++){
-        this.addPeerConnectionTable(i, (i+1));
-      }
-
-      // console.log("peerObject Id : " + 5);
-      // console.log("name :"+this.getPeerObjectById(5).name);
-      // console.log("isConnected :"+this.getPeerObjectById(5).isConnected);
-
-      // this.removeAllPeersConnectionTable();
-
-      // this.switchPeerConnectionButtonHtmlState(5);
-      // this.switchPeerConnectionButtonHtmlState(9);
-
-      //this.handlePeerConnection(5);
-    }
-  }
+    this.bus.$on('connection-changed',this.handleConnectionChanged);
+  },
+  destroyed(){}
 }
 </script>
 
@@ -161,16 +210,16 @@ export default {
   margin-right: auto;
   /* width: 100%; */
 }
-
 #peersTable td, #peersTable th {
   border: 1px solid #ddd;
   padding: 8px;
 }
-
-#peersTable tr:nth-child(even){background-color: #f2f2f2;}
-
-#peersTable tr:hover {background-color: #ddd;}
-
+#peersTable tr:nth-child(even){
+  background-color: #f2f2f2;
+}
+#peersTable tr:hover {
+  background-color: #ddd;
+}
 #peersTable th {
   padding-top: 12px;
   padding-bottom: 12px;
