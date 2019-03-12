@@ -1,14 +1,21 @@
 <launch>
 	<!-- Frame definition for robot base -->
-	<include file="$(find securbot_pkg)/launch/includes/frames/$(env SECURBOT_BASE)_frame.launch" />
+	<include file="$(find securbot_pkg)/launch/includes/frames/$(env SECURBOT_BASE)_frames.launch" />
+
+	<!-- Robot base -->
+	<remap from="/odom" to="/rtabmap/odom" />
+	<include file="$(find securbot_pkg)/launch/includes/bases/$(env SECURBOT_BASE)_base.launch" />
 
 	<!-- RGBD camera -->
 	<include file="$(find securbot_pkg)/launch/includes/sensors/$(env SECURBOT_CAMERA).launch" />
 
+	<!-- LIDAR -->
+	<include file="$(find securbot_pkg)/launch/includes/sensors/$(env SECURBOT_LIDAR).launch" />
+
 	<!-- RTAB-Map -->
-	<include files="$(find rtabmap_ros)/launch/rtabmap.launch">
+	<include file="$(find rtabmap_ros)/launch/rtabmap.launch">
 		<arg name="rtabmapviz" default="false" />
 		<arg name="frame_id" default="base_footprint" />
-		<arg name="approx_sync" default="false" />
+		<arg name="subscribe_scan" default="true" />
 	</include>
 </launch>
