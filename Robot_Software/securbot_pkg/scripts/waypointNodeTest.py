@@ -1,3 +1,4 @@
+#TODO: Try to understand how to not have this line below without having an error
 #coding=utf-8
 
 #!/usr/bin/python
@@ -32,27 +33,41 @@ import rospy
 from std_msgs.msg import String
 from rtabmap_ros.srv import SetGoal
 
-#Using service to talk to SPLAM
-def splamNodeTestClient(waypoint):
-    rospy.loginfo("Sending waypoint from Electron to SPLAM")
-    rospy.loginfo("   " + waypoint)
+#TODO: Might use json module to send response through Electron node toward web client (topic anticipated : 'toElectron')
+#import json
+
+#For test usage
+import random
+
+#Using service SetGoal to talk to SPLAM
+def waypointTestClient(waypointString):
+    rospy.loginfo("Sending waypoint from Electron to rtab-map/SPLAM...")
+    rospy.loginfo("Waypoint to send : " + waypointString)
+    #Test service to use
     rospy.wait_for_service('splamNodeTest')
     try:
+	#Create handler function acting as function set_goal(node_id, node_label)
         handleSplamNodeTest = rospy.ServiceProxy('splamNodeTest', SetGoal)
-        resp = splamNodeTestServer(waypoint) # request : Set either node_id(int32)
-                                             #           or node_label(string)
-        return resp
+        #Send random data as node_id and actual waypoint string received as node_label just for test purposes
+	resp = handleSplamNodeTest( random.randrange(1, 2**31-1) , waypointString.strip()) 
+                                            						   
+	#TODO : Figure out how to use SetGoal service response data toward web client? (SetGoalResponse() instance manipulation)
+	return resp
+
     except rospy.ServiceException, e:
-        print("Service call splamNodeTestServer failed : %s"%e)
+        print("Service call splamNodeTest failed : %s"%e)
 
 #Subscribing and listening to Electron Node
-def splamNodeTestClientCallback(data):
-    rospy.loginfo(rospy.get_caller_id() + " heard    %s   ", data.data)
-    splamNodeTestClient(data.data)
+def waypointTestClientCallback(msg):
+    rospy.loginfo(rospy.get_caller_id() + " heard    %s   ", msg.data)
+    #Calling the service as a client to SetGoal server
+    waypointTestClient(msg.data)
 
 def waypointListener():
+    #Node name defined as waypointNodeTest
     rospy.init_node('waypointNodeTest', anonymous=True)
-    rospy.Subscriber("fromElectron", String, splamNodeTestClientCallback)
+    #Subscribing to topic 'fromElectron' with callback
+    rospy.Subscriber("fromElectron", String, waypointTestClientCallback)
     rospy.spin()
 
 if __name__ == '__main__':
