@@ -72,6 +72,42 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TWUXFMJM
 
+[Parameter1]
+Name=Project_Designer4
+Value= 
+
+[Parameter2]
+Name=Project_Designer3
+Value= 
+
+[Parameter3]
+Name=Project_Designer2
+Value=Philippe Marcoux
+
+[Parameter4]
+Name=Project_Designer1
+Value=Olivier Belval
+
+[Parameter5]
+Name=Project_Date
+Value=13/03/2019
+
+[Parameter6]
+Name=Project_Revision
+Value=1
+
+[Parameter7]
+Name=Project_Group
+Value=SecurBot
+
+[Parameter8]
+Name=Project_Global
+Value=SecurBot
+
+[Parameter9]
+Name=Project_Name
+Value=BatteryBoard
+
 [Configuration1]
 Name=Default Configuration
 ParameterCount=0
