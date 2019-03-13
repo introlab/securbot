@@ -1,6 +1,6 @@
 <template>
-  <div id="joystick">
-    <canvas ref="canvas" :width="width" :height="height"
+  <div id="joystick" class="inner-joystick-container">
+    <canvas ref="canvas" class="full"
     @mousedown="onMouseDown" @mouseup="onMouseUp"
     @mousemove="onMouseMove" @mouseout="onMouseOut"/>
   </div>
@@ -17,15 +17,18 @@ export default {
       loopIntervalId: null,
       positionChangeIntervalId: null,
       canvas: null,
-      context: null,      
+      context: null,  
+      radiusRatio:0.6,
+      joystickElement:null,  
       isMouseDown: false,
-      canvasRefreshRate: 60.0, //Hz
-      operatorCommandInterval: 100, //ms
+      canvasRefreshRate: 1.0, //Hz
+      operatorCommandInterval: 1000, //ms
     }
   },
   methods: {
     init() {
       this.loopIntervalId = setInterval(function() {
+        this.setCanvasSize();
         this.findCenterCanvas();
         this.drawCanvas();
       }.bind(this), 1000 / this.canvasRefreshRate);
@@ -108,6 +111,8 @@ export default {
 
       let radius = this.getCanvasRadius();
 
+      console.log("X: " + centerX + " | Y: " + centerY + " | radius: " + radius)
+
       //Draw the background circle
       this.context.fillStyle = '#87CEEB';
       this.context.beginPath();
@@ -169,6 +174,10 @@ export default {
       this.context.lineTo(rightTriangleStartX - pointOffset, centerY + halfPointOffset);
       this.context.fill();
     },
+    setCanvasSize(){
+      this.canvas.width = this.joystickElement.clientWidth;
+      this.canvas.height = this.joystickElement.clientHeight;
+    },
     getCenterX() {
       return this.canvas.width / 2;
     },
@@ -176,7 +185,7 @@ export default {
       return this.canvas.height / 2;
     },
     getCanvasRadius() {
-      return Math.min(this.canvas.width, this.canvas.height) / 2;
+      return this.radiusRatio*Math.min(this.canvas.width, this.canvas.height) / 2;
     },
     getJoystickRadius() {
       return this.getCanvasRadius() / 4;
@@ -190,6 +199,7 @@ export default {
     },
   },
   mounted() {
+    this.joystickElement = document.getElementById('joystick');
     this.canvas = this.$refs.canvas;
     this.context= this.canvas.getContext('2d');
     this.init();    
@@ -202,5 +212,9 @@ export default {
 </script>
 
 <style>
-
+.inner-joystick-container{
+  padding:10px;
+  height: 100%;
+  width: 100%;
+}
 </style>

@@ -18,8 +18,8 @@
 <script>
 // Import component(s)
 import Vue from 'vue'
-import VideoBox from './VideoBox.vue'
-import Joystick from "../Joystick.vue"
+import VideoBox from '../operator/VideoBox.vue'
+import Joystick from "../widget/Joystick.vue"
 
 // Export
 export default {

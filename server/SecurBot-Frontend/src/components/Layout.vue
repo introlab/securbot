@@ -2,39 +2,43 @@
   <div id="operator-layout">
     <div id="nav-bar">
   <!-- As a link -->
-      <b-navbar toggleable="sm" variant="dark" type="primary">
+      <b-navbar toggleable="sm" variant="success" type="dark" >
         <b-navbar-brand href="#">SecureBot</b-navbar-brand>
 
         <b-navbar-toggle target="nav_collapse" />
 
         <b-collapse is-nav id="nav_collapse">
-          <b-navbar-nav>
-            <b-nav-item href="#">Teleoperation</b-nav-item>
-            <b-nav-item href="#">Patrol Planner</b-nav-item>
-            <b-nav-item href="#">Logs</b-nav-item>
+          <b-navbar-nav pills>
+            <b-nav-item active>Teleoperation</b-nav-item>
+            <b-nav-item>Patrol Planner</b-nav-item>
+            <b-nav-item>Logs</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
     </div>
 
-    <b-jumbotron head="SecureBot Vue.js Application" id="layout" :fluid="fluidState" :container-fluid="fluidState" bg-variant="gray-dark" border-variant="gray">
+    <b-jumbotron id="layout" :fluid="fluidState" :container-fluid="fluidState" bg-variant="dark">
       <b-row :v-show="showTeleop" class="teleop-layout">
-            <b-col sm="9">
-              <div class="self-video-container">
-                <video-box VideoId="self-video-stream" :show="showSelf"/>
+        <!--<demo-container/>-->
+        <b-col sm="8">
+          <div class="video-container">
+            <video-box VideoId="self-video-stream" :show="showSelf"/>
+          </div>
+        </b-col>
+        <b-col sm="4">
+          <b-row class="robot-video-row">
+            <div class="video-container">
+              <video-box VideoId="robot-video-stream" :show="showRobot"/>
+            </div>
+          </b-row>
+          <b-row class="joystick-row">
+            <div class="outer-joystick-container">
+              <div class="joystick-container">
+                <joystick :absolute-max-x="1" :absolute-max-y="1" :bus="teleopBus"/>
               </div>
-            </b-col>
-            <b-col sm="3">
-              <b-row class="joystick-element">
-                <div class="outer-joystick-container">
-                  <div class="inner-joystick-container">
-                  </div>
-                </div>
-                <!--<joystick width="200px" height="200px" :absolute-max-x="1" :absolute-max-y="1" :bus="teleopBus"/>-->
-              </b-row>
-              <b-row class="connection-element">
-              </b-row>
-            </b-col>
+            </div>
+          </b-row>
+        </b-col>
       </b-row>
     </b-jumbotron>
   </div>
@@ -44,6 +48,8 @@
 import VideoBox from "./operator/VideoBox.vue";
 import Joystick from "./widget/Joystick.vue";
 import Connection from "./widget/Connection.vue";
+
+import DemoContainer from "./demo/DemoContainer.vue"
 
 import Vue from 'vue'
 
@@ -56,18 +62,22 @@ export default {
       showTeleop:true,
       showWaypoint:false,
       showSelf:true,
+      showRobot:true,
       peerId:null,
       selfEasyrtcid:null,
       selfStreamElement:null,
-      peerStreamElement:null,
+      robotStreamElement:null,
       localStream:null,
       teleopBus: new Vue(),
+      testPeerTable:[{peerName:"Robot1",peerID:"aogiyudlf"},
+                {peerName:"Robot2",peerID:"fqw98rasd"}],
     }
   },
   components: {
     VideoBox,
     Joystick,
     Connection,
+    DemoContainer,
   },
   methods:{
     connect() {
@@ -144,14 +154,21 @@ export default {
       acceptor=true;
     },
     onJoystickPositionChange(){
-      //to implement
       console.log("Joystick position sent");
+    },
+    log(event){
+      console.log("Event!")
+      console.log(event);
     },
   },
   mounted() {
     this.selfStreamElement = document.getElementById("self-video-stream");
-    //this.robotStreamElement = document.getElementById("robot-video-stream");
+    this.robotStreamElement = document.getElementById("robot-video-stream");
+
+    this.teleopBus.$on('peer-connection', this.log);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
+
+
     this.connect();
   },
   destroyed() {
@@ -176,7 +193,7 @@ export default {
 .waypoint-layout{
   height: 700px;
 }
-.self-video-container{
+.video-container{
   width: 100%;
   height: 100%;
   margin: auto;
@@ -188,19 +205,49 @@ export default {
 .half-row{
   height: 50%;
 }
-.outer-joystick-container{
+.robot-video-row{
+  height: 50%;
   width: 100%;
+  position: relative;
+  margin: 0px;
+  margin-bottom: 20px;
+}
+.joystick-row{
+  position: relative;
+  margin-top: auto;
+  height: 30%;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.outer-joystick-container{
+  position: relative;
   padding-top: 100%;
+  width: 100%;
+  height: 50%;
 }
-.inner-joystick-container{
+.joystick-container{
   position: absolute;
-  top: 0;
-  left: 0;
   bottom: 0;
-  right: 0;
-  background-color: red;
+  left: 0;
+  width: 100%;
+  height : 100%;
+  border: 2px solid dimgray;
+  border-radius: 50px;
 }
-.connection-element{
-  height: 70%;
+.connection-row{
+  position: relative;
+  width: 100%;
+  margin: 0px;
+  margin-top: 20px;
+}
+.full{
+  height: 100%;
+  width: 100%;
+}
+.half{
+  height: 50%;
+  width: 50%;
 }
 </style>

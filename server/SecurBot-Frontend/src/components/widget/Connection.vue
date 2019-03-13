@@ -1,10 +1,7 @@
 <template>
   <div id="connection">
-    <h1>connection</h1>
-    <!--img src="/static/logo.png" alt="LOGO"-->
     <div id="connectionDiv">
-        <pre>My ID : </pre>
-        <pre id="whoAmI">{{selfId}}</pre>
+        <pre id="whoAmI">I am : {{selfId}}</pre>
         <table id="peersTable">
           <thead>
             <th>Robot</th>
@@ -203,12 +200,17 @@ export default {
 </script>
 
 <style>
+#connection{
+  margin-left: auto;
+  margin-right: auto;
+}
+/*
 #peersTable {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
-  /* width: 100%; */
+  width: 100%;
 }
 #peersTable td, #peersTable th {
   border: 1px solid #ddd;
@@ -227,4 +229,5 @@ export default {
   background-color: #4CAF50;
   color: white;
 }
+*/
 </style>

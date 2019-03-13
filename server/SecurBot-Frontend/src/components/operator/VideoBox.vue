@@ -2,7 +2,7 @@
   <!-- Video stream box -->
   <div id="VideoStream" class="video-container">
     <div class="inner-video-container">
-      <video :id="VideoId" class="video-size" :height="maxHeight" v-show="show"/>
+      <video :id="VideoId" class="video-size" v-show="show"/>
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@
 // Export
 export default {
   name: 'video-box',
-  props: ['VideoId','maxHeight','show']
+  props: ['VideoId','show']
 };
 </script>
 
@@ -27,7 +27,8 @@ export default {
   height: 100%;
   margin: auto;
   position: relative;
-  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);*/
+  background-color: black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);
 }
 .inner-video-container{
   width: 100%;
@@ -36,7 +37,7 @@ export default {
   position: relative;
 }
 .video-size{
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    height: 100% !important;
 }
 </style>
