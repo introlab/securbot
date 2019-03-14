@@ -1,19 +1,21 @@
 <template>
-  <div id="patrol-container">
-    <div class="list-container">
+  <b-row class='waypoint-layout'>
+    <b-col md="4">    <!--class="list-container"-->
       <div class="patrol-btn-container">
-          <div class="title">Patrol Point :</div>
-          <button class="btn btn-confirm" v-on:click=sendPatrol()>Confirm</button>
-          <button class="btn btn-cancel" v-on:click=clearWaypointList()>Reset</button>
+          <div class="title">Patrol :</div>
+          <button class="btn btn-confirm" v-on:click="sendPatrol()">Confirm</button>
+          <button class="btn btn-cancel" v-on:click="clearWaypointList()">Reset</button>
       </div>
-      <table id="waypoint-table" class="waypoint-list"></table>
-    </div>
-    <div class="map-container">
+      <div class="waypoint-list-container">
+        <table id="waypoint-table" class="waypoint-list"></table>
+      </div>
+    </b-col>
+    <b-col md="8" style="padding:0">    <!--class="map-container"-->
       <video-box :VideoId="mapId" :show="showMap" class="map-video"/>
       <canvas ref="canvas" class="map-canvas"
       @mousedown="onMouseDown"/>
-    </div>  
-  </div>
+    </b-col>  
+  </b-row >
 </template>
 
 <script>
@@ -22,7 +24,7 @@
     Integrate bootstrap and adapt CSS
     Find images to use for some control
 */
-import VideoBox from '../VideoComponent/VideoBox.vue'
+import VideoBox from './VideoBox.vue'
 
 export default {
   name: 'waypoint',
@@ -247,13 +249,14 @@ export default {
   height: 100%;
 }
 .patrol-btn-container{
-  height: 45px;
+  height: 10%;
   padding: 2px;
   align-content: center
 }
 .title{
   width: 75%;
   height: 100%;
+  font-size: 20pt;
   float: left;
   text-align: left;
 }
@@ -272,6 +275,7 @@ export default {
   left: 0;
   z-index: 10;
 }
+/*
 .list-container{
   width: 19%;
   height: 100%;
@@ -279,15 +283,18 @@ export default {
   float: left;
   border: 1px solid #ddd;
 }
+*/
+/*
 .map-container{
   width: 80%;
   height: 100%;
   position: relative;
   float: right;
 }
+*/
 .btn{
-  width: 60px;
-  height: 20px;
+  width: 25%;
+  height: 50%;
   float: right;
 }
 .btn-confirm{
@@ -306,7 +313,13 @@ export default {
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
+.waypoint-list-container{
+  width: 100%;
+  max-height: 40%;
+  overflow: auto;
+}
 .waypoint-list{
+  width: 100%;
   border-collapse: collapse;
   border-right: 1px solid #ddd;
   border-left: 1px solid #ddd;

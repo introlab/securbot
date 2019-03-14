@@ -1,31 +1,39 @@
 <template>
   <div id="operator-layout">
     <div id="nav-bar">
-  <!-- As a link -->
+
       <b-navbar toggleable="sm" variant="success" type="dark" >
         <b-navbar-brand href="#">SecureBot</b-navbar-brand>
 
         <b-navbar-toggle target="nav_collapse" />
 
         <b-collapse is-nav id="nav_collapse">
-          <b-navbar-nav pills>
+          <b-navbar-nav tabs>
             <b-nav-item active>Teleoperation</b-nav-item>
             <b-nav-item>Patrol Planner</b-nav-item>
             <b-nav-item>Logs</b-nav-item>
           </b-navbar-nav>
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item-dropdown text="Connect to Robot" right>
+              <div class="connexion-container">
+                <connection :selfId="selfEasyrtcid" :peersTable="testPeerTable" :bus="teleopBus"/>
+              </div>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
         </b-collapse>
+
       </b-navbar>
     </div>
 
-    <b-jumbotron id="layout" :fluid="fluidState" :container-fluid="fluidState" bg-variant="dark">
-      <b-row :v-show="showTeleop" class="teleop-layout">
-        <!--<demo-container/>-->
-        <b-col sm="8">
+<!-- The jumbotron will be tranformed in a page (component with layout) in the future -->
+    <b-jumbotron id="layout1" :fluid="fluidState" :container-fluid="fluidState" bg-variant="light">
+      <b-row class="teleop-layout">
+        <b-col lg="8" md="7" sm="6" style="max-height:100%">
           <div class="video-container">
             <video-box VideoId="self-video-stream" :show="showSelf"/>
           </div>
         </b-col>
-        <b-col sm="4">
+        <b-col lg="4" md="5" sm="6" style="max-height:100%">
           <b-row class="robot-video-row">
             <div class="video-container">
               <video-box VideoId="robot-video-stream" :show="showRobot"/>
@@ -41,15 +49,22 @@
         </b-col>
       </b-row>
     </b-jumbotron>
+
+<!-- The jumbotron will be tranformed in a page (component with layout) in the future -->
+<!-- To Note on this jumbotron: The way it is currently done is weird, the component that is call in it 
+      have all of its layout already done inside of it. It should not be like that and need to changed. -->
+    <b-jumbotron id="layout2" :fluid="fluidState" :container-fluid="fluidState" bg-variant="light">
+        <waypoint mapId='map' showMap='true' :bus='teleopBus'/>
+    </b-jumbotron>
+
   </div>
 </template>
 
 <script>
 import VideoBox from "./operator/VideoBox.vue";
+import Waypoint from "./operator/Waypoint.vue";
 import Joystick from "./widget/Joystick.vue";
 import Connection from "./widget/Connection.vue";
-
-import DemoContainer from "./demo/DemoContainer.vue"
 
 import Vue from 'vue'
 
@@ -59,13 +74,13 @@ export default {
   data(){
     return{
       fluidState:true,
-      showTeleop:true,
-      showWaypoint:false,
       showSelf:true,
       showRobot:true,
       peerId:null,
+      isConnected:null,
       selfEasyrtcid:null,
       selfStreamElement:null,
+      self2StreamElement:null,
       robotStreamElement:null,
       localStream:null,
       teleopBus: new Vue(),
@@ -77,7 +92,7 @@ export default {
     VideoBox,
     Joystick,
     Connection,
-    DemoContainer,
+    Waypoint,
   },
   methods:{
     connect() {
@@ -97,11 +112,21 @@ export default {
         function(){
             this.localStream = easyrtc.getLocalStream();
             easyrtc.setVideoObjectSrc(this.selfStreamElement, this.localStream);
+            easyrtc.setVideoObjectSrc(this.self2StreamElement, this.localStream);
             easyrtc.connect("easyrtc.securbot", this.loginSuccess, this.loginFailure);
             console.log("Stream set, you are connected...");
         }.bind(this), this.loginFailure);
     },
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
+      //console.log(occupants);
+      this.testPeerTable = [];
+      if(occupants !== null){
+        for(var occupant in occupants){
+          var peer = {peerName:occupant,peerID:occupant};
+          this.testPeerTable.push(peer);
+        }
+      }
+      /*
       this.peerId = null;
       for(var easyrtcId in occupants)
       {
@@ -115,26 +140,43 @@ export default {
           console.warn("Only one occupant is accepted for the moment...");
         }
       }
-      
+      */
     },
     performCall(occupantId){
+      console.log("Calling the chosen occupant : " + occupantId);
       easyrtc.hangupAll();
+
       var acceptedCB = function(accepted, easyrtcid) {
+        console.log("Call was : " + accepted + " from " + easyrtcid)
+        /*
         if( !accepted ){
           console.warn("Call refused...");
+          this.teleopBus.$emit('connection-changed',"failed");
+          this.peerId = null;
         }
-      };
+        else{
+          console.warn("Call accepted...");
+        }
+        */
+      }.bind(this);
+
       var successCB = function() {
         console.warn("Call accepted...");
-      };
-      var failureCB = function() {
-        
-        console.warn("Call failed...");
-      };
+        this.teleopBus.$emit('connection-changed',"connected");
+        this.peerId = occupantId;
+      }.bind(this);
+
+      var failureCB = function(errCode, errMessage) {
+        console.warn("Call failed : " + errCode + " | " + errMessage);
+        this.teleopBus.$emit('connection-changed',"failed");
+        this.peerId = null;
+      }.bind(this);
+
       easyrtc.call(occupantId, successCB, failureCB, acceptedCB);
     },
     loginSuccess(easyrtcid) {
       console.warn("I am " + easyrtc.idToName(easyrtcid));
+      this.selfEasyrtcid = easyrtcid;
     },
     loginFailure(errorCode, message) {
       easyrtc.showError(errorCode, message);
@@ -147,22 +189,35 @@ export default {
       easyrtc.setVideoObjectSrc(this.robotStreamElement, this.peerId);
     },
     acceptCall(easyrtcid, acceptor){
+      console.log("You've been called...");
       if(easyrtc.getConnectionCount() > 0 ) 
       {
           easyrtc.hangupAll();
       }
-      acceptor=true;
+      acceptor(true);
     },
     onJoystickPositionChange(){
-      console.log("Joystick position sent");
+      //console.log("Joystick position sent");
     },
     log(event){
-      console.log("Event!")
-      console.log(event);
+      console.log("This is the connection event : " + event);
+      if(this.peerId == event){
+        easyrtc.hangupAll();
+        console.log("Disconnection Accepted...");
+        this.teleopBus.$emit('connection-changed',"disconnected");
+        this.peerId = null;
+      }
+      else if(this.peerId === null){
+        this.performCall(event);
+      }
+      else{
+        console.warn("The is an issue in the connection state handling");
+      }
     },
   },
   mounted() {
     this.selfStreamElement = document.getElementById("self-video-stream");
+    this.self2StreamElement = document.getElementById("map");
     this.robotStreamElement = document.getElementById("robot-video-stream");
 
     this.teleopBus.$on('peer-connection', this.log);
@@ -181,17 +236,28 @@ export default {
 </script>
 
 <style>
-#jumbo-content{
-  height: 100%;
+.jumbotron{
+  margin-bottom: 0;
+}
+.col{
+  max-height: 100%;
+}
+.navbar{
+  height:64px;
 }
 .b-navbar{
   margin-bottom: 0px;
 }
+.connexion-container{
+  padding: 4px 8px;
+}
 .teleop-layout{
-  height:700px;
+  height:calc(100vh - 192px);
 }
 .waypoint-layout{
   height: 700px;
+  width: 100%;
+  margin: auto;
 }
 .video-container{
   width: 100%;
@@ -214,18 +280,16 @@ export default {
 }
 .joystick-row{
   position: relative;
-  margin-top: auto;
-  height: 30%;
-  width: 100%;
+  margin: auto;
+  height: 50%;
   max-width: 300px;
-  margin-left: auto;
-  margin-right: auto;
 }
 .outer-joystick-container{
   position: relative;
   padding-top: 100%;
+  margin: auto;
   width: 100%;
-  height: 50%;
+  height: 0;
 }
 .joystick-container{
   position: absolute;
@@ -234,7 +298,8 @@ export default {
   width: 100%;
   height : 100%;
   border: 2px solid dimgray;
-  border-radius: 50px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);
 }
 .connection-row{
   position: relative;

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Waypoint from './Waypoint.vue'
+import Waypoint from '../operator/Waypoint.vue'
 import Vue from 'vue'
 
 export default {

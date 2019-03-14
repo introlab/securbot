@@ -18,7 +18,7 @@ export default {
       positionChangeIntervalId: null,
       canvas: null,
       context: null,  
-      radiusRatio:0.6,
+      radiusRatio:0.75,
       joystickElement:null,  
       isMouseDown: false,
       canvasRefreshRate: 1.0, //Hz
@@ -110,8 +110,6 @@ export default {
       let centerY = this.getCenterY();
 
       let radius = this.getCanvasRadius();
-
-      console.log("X: " + centerX + " | Y: " + centerY + " | radius: " + radius)
 
       //Draw the background circle
       this.context.fillStyle = '#87CEEB';

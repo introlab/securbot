@@ -1,19 +1,19 @@
 <template>
   <div id="connection">
-    <div id="connectionDiv">
-        <pre id="whoAmI">I am : {{selfId}}</pre>
-        <table id="peersTable">
-          <thead>
-            <th>Robot</th>
-            <th>ID</th>
-            <th>Connection</th>
+    <div id="connection-container">
+        <h4 id="who-am-i">I am : {{selfId}}</h4>
+        <table id="peers-table">
+          <thead class="peer-header">
+            <th class="peer-cell">List of robot:</th>
+            <!--<th>ID</th>-->
+            <th class="peer-cell"></th>
           </thead>
-          <tbody id="peersTableBody">
-            <tr v-for="peer in peersTable" v-bind:key="peer.peerID">
-              <td>{{peer.peerName}}</td>
-              <td>{{peer.peerID}}</td>
-              <td>
-                <button 
+          <tbody id="peers-table-body">
+            <tr class="peers-table-row" v-for="peer in peersTable" v-bind:key="peer.peerID">
+              <td class="peer-cell">{{peer.peerName}}</td>
+              <!--<td>{{peer.peerID}}</td>-->
+              <td class="peer-cell content-left">
+                <button class="peer-btn"
                   v-bind:id="peer.peerID" 
                   v-on:click="handlePeerConnection(peer.peerID)">
                   Connect
@@ -121,6 +121,7 @@ export default {
     },
     //Handle the answer of the connection-changed event
     handleConnectionChanged(state){
+      console.log("Got event for connection : " + state);
       switch(state){
         case 'connected':
           console.log('Connected!');
@@ -164,7 +165,7 @@ export default {
     //Ask to be disconnect from the current connected peer (should be from and not to in name)
     disconnectToPeer(peerId){
       //Emit event
-      this.$emit('peer-connection', peerId);
+      this.bus.$emit('peer-connection', peerId);
     },
     //Button function to handle the connection/disconnection to a peer
     handlePeerConnection(peerId){
@@ -204,30 +205,38 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-/*
-#peersTable {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+#who-am-i{
+  border-bottom: 1px solid lightgray;
+}
+#peers-table{
+  width:100%;
   border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  /*border: 1px solid #ddd;*/
 }
-#peersTable td, #peersTable th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-#peersTable tr:nth-child(even){
+.peers-table-row:nth-child(even) {
   background-color: #f2f2f2;
 }
-#peersTable tr:hover {
-  background-color: #ddd;
-}
-#peersTable th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
+/*
+.peers-table-row:hover {
+  background-color: rgb(177, 177, 177);
 }
 */
+.peer-header{
+  /*background-color: #4CAF50;
+  color: white;*/
+  margin-bottom: 10px;
+}
+.peer-btn{
+  border-radius: 5px;
+  border: 1px solid gold;
+}
+.peer-cell{
+  min-width: 150px;
+  min-height: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.content-left{
+  text-align: right;
+}
 </style>
