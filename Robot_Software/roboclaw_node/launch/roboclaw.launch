@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="dev" default="/dev/ttyACM1"/>
+    <arg name="dev" default="/dev/ttyACM0"/>
     <arg name="baud" default="38400"/>
     <arg name="address" default="128"/>
     <arg name="max_speed" default="2.0"/>

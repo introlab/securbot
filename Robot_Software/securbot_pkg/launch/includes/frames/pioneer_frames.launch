@@ -1,4 +1,4 @@
 <launch>
-    <node pkg="tf" type="static_transform_publisher" name="camera_transform" args="0.16 0 0.18 0 0 0 base_footprint camera_link 50" />
-    <node pkg="tf" type="static_transform_publisher" name="lidar_transform" args="0 0 0.46 0 0 0 base_footprint laser 50" />
+    <node pkg="tf" type="static_transform_publisher" name="camera_transform" args="0.15 0 0.12 0 0 0 base_footprint camera_link 50" />
+    <node pkg="tf" type="static_transform_publisher" name="lidar_transform" args="-0.075 0 0.185 0 0 0 base_footprint laser 50" />
 </launch>
