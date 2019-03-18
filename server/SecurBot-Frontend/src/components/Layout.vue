@@ -24,47 +24,20 @@
 
       </b-navbar>
     </div>
-
-<!-- The jumbotron will be tranformed in a page (component with layout) in the future -->
-    <b-jumbotron id="layout1" :fluid="fluidState" :container-fluid="fluidState" bg-variant="light">
-      <b-row class="teleop-layout">
-        <b-col lg="8" md="7" sm="6" style="max-height:100%">
-          <div class="video-container">
-            <video-box VideoId="self-video-stream" :show="showSelf"/>
-          </div>
-        </b-col>
-        <b-col lg="4" md="5" sm="6" style="max-height:100%">
-          <b-row class="robot-video-row">
-            <div class="video-container">
-              <video-box VideoId="robot-video-stream" :show="showRobot"/>
-            </div>
-          </b-row>
-          <b-row class="joystick-row">
-            <div class="outer-joystick-container">
-              <div class="joystick-container">
-                <joystick :absolute-max-x="1" :absolute-max-y="1" :bus="teleopBus"/>
-              </div>
-            </div>
-          </b-row>
-        </b-col>
-      </b-row>
-    </b-jumbotron>
-
-<!-- The jumbotron will be tranformed in a page (component with layout) in the future -->
-<!-- To Note on this jumbotron: The way it is currently done is weird, the component that is call in it 
-      have all of its layout already done inside of it. It should not be like that and need to changed. -->
-    <b-jumbotron id="layout2" :fluid="fluidState" :container-fluid="fluidState" bg-variant="light">
-        <waypoint mapId='map' showMap='true' :bus='teleopBus'/>
-    </b-jumbotron>
-
+    <div class='page-container'>
+      <patrol-page :bus="teleopBus"/>
+    </div>
+    <div class='page-container'>
+      <teleop-page :bus="teleopBus" v-show="false"/>
+    </div>
   </div>
 </template>
 
 <script>
-import VideoBox from "./operator/VideoBox.vue";
-import Waypoint from "./operator/Waypoint.vue";
-import Joystick from "./widget/Joystick.vue";
 import Connection from "./widget/Connection.vue";
+
+import TeleopPage from "./pages/Teleop.vue";
+import PatrolPage from "./pages/Patrol.vue";
 
 import Vue from 'vue'
 
@@ -89,10 +62,9 @@ export default {
     }
   },
   components: {
-    VideoBox,
-    Joystick,
     Connection,
-    Waypoint,
+    TeleopPage,
+    PatrolPage,
   },
   methods:{
     connect() {
@@ -236,6 +208,7 @@ export default {
 </script>
 
 <style>
+/* Changes to the bootstrap CSS */
 .jumbotron{
   margin-bottom: 0;
 }
@@ -248,58 +221,13 @@ export default {
 .b-navbar{
   margin-bottom: 0px;
 }
-.connexion-container{
-  padding: 4px 8px;
-}
-.teleop-layout{
+/* Pages classes */
+.page-container{
   height:calc(100vh - 192px);
 }
-.waypoint-layout{
-  height: 700px;
-  width: 100%;
-  margin: auto;
-}
-.video-container{
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  position: relative;
-}
-.full-row{
-  height: 100%;
-}
-.half-row{
-  height: 50%;
-}
-.robot-video-row{
-  height: 50%;
-  width: 100%;
-  position: relative;
-  margin: 0px;
-  margin-bottom: 20px;
-}
-.joystick-row{
-  position: relative;
-  margin: auto;
-  height: 50%;
-  max-width: 300px;
-}
-.outer-joystick-container{
-  position: relative;
-  padding-top: 100%;
-  margin: auto;
-  width: 100%;
-  height: 0;
-}
-.joystick-container{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height : 100%;
-  border: 2px solid dimgray;
-  border-radius: 50%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);
+/* Connexion widget classes */
+.connexion-container{
+  padding: 4px 8px;
 }
 .connection-row{
   position: relative;
@@ -307,6 +235,7 @@ export default {
   margin: 0px;
   margin-top: 20px;
 }
+/* Class for size */
 .full{
   height: 100%;
   width: 100%;
@@ -314,5 +243,14 @@ export default {
 .half{
   height: 50%;
   width: 50%;
+}
+.full-height{
+  height: 100%;
+}
+.half-height{
+  height: 50%;
+}
+.restrict-full-height{
+  max-height:100%
 }
 </style>

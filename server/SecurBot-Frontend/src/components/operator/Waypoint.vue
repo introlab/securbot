@@ -1,6 +1,6 @@
 <template>
-  <b-row class='waypoint-layout'>
-    <b-col md="4">    <!--class="list-container"-->
+  <b-row class='restrict-full-height'>
+    <b-col md="4" class="restrict-full-height">    <!--class="list-container"-->
       <div class="patrol-btn-container">
           <div class="title">Patrol :</div>
           <button class="btn btn-confirm" v-on:click="sendPatrol()">Confirm</button>
@@ -10,10 +10,12 @@
         <table id="waypoint-table" class="waypoint-list"></table>
       </div>
     </b-col>
-    <b-col md="8" style="padding:0">    <!--class="map-container"-->
-      <video-box :VideoId="mapId" :show="showMap" class="map-video"/>
-      <canvas ref="canvas" class="map-canvas"
-      @mousedown="onMouseDown"/>
+    <b-col md="8" style="padding:0" class="restrict-full-height">    <!--class="map-container"-->
+      <div style="heigth:100%;width:100%;margin:auto">
+        <video-box :VideoId="mapId" :show="showMap" class="map-video"/>
+        <canvas ref="canvas" class="map-canvas"
+        @mousedown="onMouseDown"/>
+      </div>
     </b-col>  
   </b-row >
 </template>
