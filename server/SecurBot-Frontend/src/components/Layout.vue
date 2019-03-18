@@ -1,21 +1,21 @@
 <template>
-  <div id="operator-layout">
-    <div id="nav-bar">
+  <div id="operator-layout" class='vh-100'>
+    <div id="nav-bar" class="position-relative">
 
       <b-navbar toggleable="sm" variant="success" type="dark" >
-        <b-navbar-brand href="#">SecureBot</b-navbar-brand>
+        <b-navbar-brand to="/">SecureBot</b-navbar-brand>
 
         <b-navbar-toggle target="nav_collapse" />
 
         <b-collapse is-nav id="nav_collapse">
           <b-navbar-nav tabs>
-            <b-nav-item active>Teleoperation</b-nav-item>
-            <b-nav-item>Patrol Planner</b-nav-item>
-            <b-nav-item>Logs</b-nav-item>
+            <b-nav-item to="teleop">Teleoperation</b-nav-item>
+            <b-nav-item to="patrol">Patrol Planner</b-nav-item>
+            <b-nav-item to="logs">Logs</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown text="Connect to Robot" right>
-              <div class="connexion-container">
+              <div class="connexion-container"> <!--Paddings-->
                 <connection :selfId="selfEasyrtcid" :peersTable="testPeerTable" :bus="teleopBus"/>
               </div>
             </b-nav-item-dropdown>
@@ -24,11 +24,9 @@
 
       </b-navbar>
     </div>
-    <div class='page-container'>
-      <patrol-page :bus="teleopBus"/>
-    </div>
-    <div class='page-container'>
-      <teleop-page :bus="teleopBus" v-show="false"/>
+
+    <div style="height:calc(100% - 64px)">
+      <router-view :bus="teleopBus"/>
     </div>
   </div>
 </template>
@@ -83,7 +81,7 @@ export default {
       easyrtc.initMediaSource(
         function(){
             this.localStream = easyrtc.getLocalStream();
-            easyrtc.setVideoObjectSrc(this.selfStreamElement, this.localStream);
+            //easyrtc.setVideoObjectSrc(this.selfStreamElement, this.localStream);
             easyrtc.setVideoObjectSrc(this.self2StreamElement, this.localStream);
             easyrtc.connect("easyrtc.securbot", this.loginSuccess, this.loginFailure);
             console.log("Stream set, you are connected...");
@@ -212,6 +210,9 @@ export default {
 .jumbotron{
   margin-bottom: 0;
 }
+.container-fluid{
+  height: 100%
+}
 .col{
   max-height: 100%;
 }
@@ -222,9 +223,9 @@ export default {
   margin-bottom: 0px;
 }
 /* Pages classes */
-.page-container{
-  height:calc(100vh - 192px);
-}
+/* .page-container{
+  height:calc(100vh - 64px);
+} */
 /* Connexion widget classes */
 .connexion-container{
   padding: 4px 8px;

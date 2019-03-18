@@ -1,6 +1,7 @@
 # securbot-frontend
 
 > Vue.js application for the UI of SecurBot
+> To see the current issues, look at [ISSUES.md](ISSUES.md)
 
 ## Build Setup
 

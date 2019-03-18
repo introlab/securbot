@@ -1,12 +1,12 @@
 <template>
-  <b-jumbotron id="teleop-layout" :fluid="true" :container-fluid="true" bg-variant="light">
+  <b-jumbotron id="teleop-layout" class="h-100 " :fluid="true" :container-fluid="true" bg-variant="light">
     <b-row class="teleop-row">
-      <b-col lg="8" md="7" sm="6" class="restrict-full-height">
+      <b-col lg="8" md="7" sm="6" class="mh-100">
         <div class="video-container">
           <video-box VideoId="self-video-stream" :show="showSelf"/>
         </div>
       </b-col>
-      <b-col lg="4" md="5" sm="6" class="restrict-full-height">
+      <b-col lg="4" md="5" sm="6" class="mh-100">
         <b-row class="robot-video-row">
           <div class="video-container">
             <video-box VideoId="robot-video-stream" :show="showRobot"/>
@@ -53,6 +53,10 @@ export default {
   margin: auto;
   position: relative;
 }
+.teleop-row{
+  height: 100%;
+  max-height: calc(100vh - 64px - 128px);
+}
 .robot-video-row{
   height: 50%;
   width: 100%;
@@ -63,8 +67,8 @@ export default {
 .joystick-row{
   position: relative;
   margin: auto;
-  height: 50%;
-  max-width: 300px;
+  height: calc(50% - 20px);
+  max-width: 250px;
 }
 .outer-joystick-container{
   position: relative;

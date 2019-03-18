@@ -1,49 +1,28 @@
 <template>
-  <b-row class='restrict-full-height'>
-    <b-col md="4" class="restrict-full-height">    <!--class="list-container"-->
-      <div class="patrol-btn-container">
-          <div class="title">Patrol :</div>
-          <button class="btn btn-confirm" v-on:click="sendPatrol()">Confirm</button>
-          <button class="btn btn-cancel" v-on:click="clearWaypointList()">Reset</button>
-      </div>
-      <div class="waypoint-list-container">
-        <table id="waypoint-table" class="waypoint-list"></table>
-      </div>
-    </b-col>
-    <b-col md="8" style="padding:0" class="restrict-full-height">    <!--class="map-container"-->
-      <div style="heigth:100%;width:100%;margin:auto">
-        <video-box :VideoId="mapId" :show="showMap" class="map-video"/>
-        <canvas ref="canvas" class="map-canvas"
-        @mousedown="onMouseDown"/>
-      </div>
-    </b-col>  
-  </b-row >
+  <div class="h-100 w-100 position-relative">
+    <video-box VideoId="map" :show="true" class="map-video"/>
+    <canvas ref="canvas" class="map-canvas"
+    @mousedown="onMouseDown"/>
+  </div>
 </template>
 
 <script>
-/*
-  TO DO:
-    Integrate bootstrap and adapt CSS
-    Find images to use for some control
-*/
 import VideoBox from './VideoBox.vue'
 
 export default {
-  name: 'waypoint',
-  props: ['mapId','showMap', 'bus'],
-  components: {
+  name:'patrol-map',
+  props:['waypointList'],
+  components:{
     VideoBox
   },
   data(){
     return{
       videoElement: null,
       canvas: null,
-      loopIntervalId: null,
-      enable: true,
-      CanvasRefreshRate: 60.0, //Hz
       context: null,
-      waypointList: [],
-      index: null,
+      CanvasRefreshRate: 1.0, //Hz
+      loopIntervalId:null,
+      enable:true,
     }
   },
   methods: {
@@ -59,7 +38,6 @@ export default {
     //Setup for waypoint list
     addWaypoint(wp) {
       this.waypointList.push(wp);
-      this.addWaypointToList(wp);
     },
     //Draw the canvas and the waypoints
     drawCanvas() {
@@ -120,14 +98,7 @@ export default {
         scale: scale
       }
     },
-    //Clear the list and empty the html table
-    clearWaypointList(){
-      this.waypointList = [];
-      var table = document.getElementById("waypoint-table");
-      table.innerHTML =  "";
-      this.setTableHeader();
-    },
-    //Set html table header
+    //Set html table header - NOT USED, NEED TO BE REMOVE
     setTableHeader(){
       var table = document.getElementById("waypoint-table");
       var header = table.createTHead();
@@ -155,7 +126,7 @@ export default {
       cell4.innerHTML = "Yaw";
       cell5.innerHTML = "Remove";
     },
-    //Add waypoint to html table
+    //Add waypoint to html table - NOT USED, NEED TO BE REMOVE
     addWaypointToList(wp){
       //Get table
       var table = document.getElementById("waypoint-table");
@@ -180,23 +151,6 @@ export default {
       cell3.innerHTML = wp.y.toFixed(1);
       cell4.innerHTML = wp.yaw.toFixed(1);
       cell5.appendChild(removeBtn);
-    },
-    //Remove waypoint from html table
-    removeWaypointFromList(index){
-      this.waypointList.splice(index-1,1);
-      var table = document.getElementById("waypoint-table");
-      var lengthTable = table.rows.length;
-      var lengthWaypoints = this.waypointList.length;
-      for(var i = index; i < lengthTable; i++)
-      {
-        var row = table.deleteRow(index);
-      };
-      
-      for(var i = index-1; i < lengthWaypoints; i++)
-      { 
-        var wp = this.waypointList[i];
-        this.addWaypointToList(wp);
-      };   
     },
     //Get the right coordinate from canvas for the waypoint given 
     getCanvasCoordinatesFromVideo(x, y) {
@@ -225,60 +179,37 @@ export default {
         coord.y >= 0 &&
         coord.y < this.videoElement.videoHeight; 
     },
-    //Send the waypoint list for patrol scheduling
-    sendPatrol(){
-      this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
-    }
   },
   //On component mounted
   mounted() {
-    this.videoElement = document.getElementById(this.mapId);
+    this.videoElement = document.getElementById('map');
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();
-    this.setTableHeader();
+    //this.setTableHeader();
   },
   //On component destroyed
   destroyed() {
     clearInterval(this.loopIntervalId);
   }
-};
+}
 </script>
 
 <style>
-#patrol-container{
+.map-video {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
-.patrol-btn-container{
-  height: 10%;
-  padding: 2px;
-  align-content: center
-}
-.title{
-  width: 75%;
+.map-canvas {
+  width: 100%;
   height: 100%;
-  font-size: 20pt;
-  float: left;
-  text-align: left;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }
-
-/*
-.list-container{
-  width: 19%;
-  height: 100%;
-  position: relative;
-  float: left;
-  border: 1px solid #ddd;
-}
-*/
-/*
-.map-container{
-  width: 80%;
-  height: 100%;
-  position: relative;
-  float: right;
-}
-*/
-
 </style>
+

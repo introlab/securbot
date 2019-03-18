@@ -1,5 +1,5 @@
 # Read Me if you need a bit of help to start developing.
-
+# This is not up to date...
 ![Alt text](src/static/logo.png)
 
 ## Project setup and run
