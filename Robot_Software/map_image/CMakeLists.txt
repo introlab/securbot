@@ -9,7 +9,6 @@ project(map_image_generator)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
-  framework
   geometry_msgs
   image_transport
   nav_msgs
@@ -113,7 +112,7 @@ find_package(OpenCV REQUIRED)
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES map_image_generator
-#  CATKIN_DEPENDS cv_bridge framework geometry_msgs image_transport nav_msgs roscpp sensor_msgs std_msgs tf
+#  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport nav_msgs roscpp sensor_msgs std_msgs tf
 #  DEPENDS system_lib
 )
 
@@ -128,7 +127,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(map_image_generator 
+add_executable(map_image_generator
   include/map_image_generator/drawers/GlobalPathImageDrawer.h
   include/map_image_generator/drawers/GoalImageDrawer.h
   include/map_image_generator/drawers/ImageDrawer.h

@@ -21,16 +21,16 @@ function get_video_id() {
     return new Promise((resolve, reject) => {
         easyrtc.getVideoSourceList(list => {
             var videoSource = list.find(source => {
-		console.log(source.label);
-		return source.label.toString().trim() === 'virtual_kinect'
+                return source.label.toString().trim() === 'virtual_map'
             })
 
             if (videoSource == undefined) {
-		console.log("Kinect camera not found")
-            	reject()
-	    }
+                console.log("Map video not found")
+                reject()
+            }
 
-	    resolve(videoSource.id)
+            console.log("Found map stream")
+            resolve(videoSource.id)
         })
     })
 }
