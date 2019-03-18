@@ -59,7 +59,7 @@ class EncoderOdom:
             d_theta = (dist_right - dist_left) / self.BASE_WIDTH
             r = dist / d_theta
             self.cur_x += r * (sin(d_theta + self.cur_theta) - sin(self.cur_theta))
-            self.cur_y -= r * (cos(d_theta + self.cur_theta) - cos(self.cur_theta))
+            self.cur_y += r * (cos(d_theta + self.cur_theta) - cos(self.cur_theta))
             self.cur_theta = self.normalize_angle(self.cur_theta + d_theta)
 
         if abs(d_time) < 0.000001:
@@ -109,7 +109,7 @@ class EncoderOdom:
         odom.pose.covariance[28] = 99999
         odom.pose.covariance[35] = 0.009
 
-        odom.child_frame_id = 'base_link'
+        odom.child_frame_id = 'base_footprint'
         odom.twist.twist.linear.x = vx
         odom.twist.twist.linear.y = 0
         odom.twist.twist.angular.z = vth
