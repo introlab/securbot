@@ -16,6 +16,13 @@
 	<include file="$(find rtabmap_ros)/launch/rtabmap.launch">
 		<arg name="rtabmapviz" default="false" />
 		<arg name="frame_id" default="base_footprint" />
+		<arg name="odom_frame_id" default="odom" />
 		<arg name="subscribe_scan" default="true" />
+		<arg name="args" default="--Reg/Force3DoF true --RGBD/NeighborLinkRefining true --Reg/Strategy 1 --RGBD/OptimizeMaxError 0 --Optimizer/Strategy 0" />
+		<arg name="visual_odometry" default="false" />
+		<arg name="odom_tf_angular_variance" default="0.05"/>
+  		<arg name="odom_tf_linear_variance"  default="0.01"/>
+		<arg name="rgbd_sync" default="true" />
+		<arg name="approx_rgbd_sync" default="false"/>
 	</include>
 </launch>
