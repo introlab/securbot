@@ -71,7 +71,7 @@ class EncoderOdom:
 
         return vel_x, vel_theta
 
-    def update_publish(self, enc_left, enc_right):
+    def update_publish(self, enc_right, enc_left):
         # 2106 per 0.1 seconds is max speed, error in the 16th bit is 32768
         # TODO lets find a better way to deal with this error
         if abs(enc_left - self.last_enc_left) > 20000:
