@@ -1,7 +1,7 @@
 <template>
   <div class="h-100 w-100 position-relative">
-    <video-box VideoId="map" :show="true" class="map-video"/>
-    <canvas ref="canvas" class="map-canvas"
+    <video-box VideoId="map" :show="true" class="w-100 h-100 position-absolute" style="top:0;left:0;"/>
+    <canvas ref="canvas" class="w-100 h-100 position-absolute" style="top:0;left:0;z-index:10;"
     @mousedown="onMouseDown"/>
   </div>
 </template>
@@ -20,7 +20,7 @@ export default {
       videoElement: null,
       canvas: null,
       context: null,
-      CanvasRefreshRate: 1.0, //Hz
+      CanvasRefreshRate: 60.0, //Hz
       loopIntervalId:null,
       enable:true,
     }
@@ -196,20 +196,5 @@ export default {
 </script>
 
 <style>
-.map-video {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.map-canvas {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
 </style>
 

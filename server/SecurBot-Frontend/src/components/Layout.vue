@@ -1,30 +1,29 @@
 <template>
   <div id="operator-layout" class='vh-100'>
     <div id="nav-bar" class="position-relative">
-
-      <b-navbar toggleable="sm" variant="success" type="dark" >
-        <b-navbar-brand to="/">SecureBot</b-navbar-brand>
-
+      <b-navbar toggleable="md" class="navbar-dark mb-0 bg-green-sb">
+        <b-navbar-brand class="p-0">
+          <div class="h-100" style="width:240px">
+            <img src="../assets/SecurBotLogo.png" alt="SecurBot" class="logo mh-100 mw-100 align-middle"/>
+          </div>
+        </b-navbar-brand>
         <b-navbar-toggle target="nav_collapse" />
-
         <b-collapse is-nav id="nav_collapse">
-          <b-navbar-nav tabs>
-            <b-nav-item to="teleop">Teleoperation</b-nav-item>
+          <b-navbar-nav>
+            <b-nav-item to="teleop" active>Teleoperation</b-nav-item>
             <b-nav-item to="patrol">Patrol Planner</b-nav-item>
             <b-nav-item to="logs">Logs</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown text="Connect to Robot" right>
-              <div class="connexion-container"> <!--Paddings-->
+              <div class="px-2 py-1">
                 <connection :selfId="selfEasyrtcid" :peersTable="testPeerTable" :bus="teleopBus"/>
               </div>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
-
       </b-navbar>
     </div>
-
     <div style="height:calc(100% - 64px)">
       <router-view :bus="teleopBus"/>
     </div>
@@ -77,7 +76,6 @@ export default {
       easyrtc.setStreamAcceptor(this.acceptPeerVideo);
       easyrtc.setOnStreamClosed(this.closePeerVideo);
       easyrtc.setAcceptChecker(this.acceptCall);
-      easyrtc.setSocketUrl(":8080");
       easyrtc.initMediaSource(
         function(){
             this.localStream = easyrtc.getLocalStream();
@@ -213,45 +211,20 @@ export default {
 .container-fluid{
   height: 100%
 }
-.col{
-  max-height: 100%;
-}
 .navbar{
-  height:64px;
+  min-height:64px;
 }
-.b-navbar{
-  margin-bottom: 0px;
+/*Custom CSS element (SecurBot)*/
+.shadow-sb{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);
 }
-/* Pages classes */
-/* .page-container{
-  height:calc(100vh - 64px);
-} */
-/* Connexion widget classes */
-.connexion-container{
-  padding: 4px 8px;
+.bg-black-sb{
+  background-color: black;
 }
-.connection-row{
-  position: relative;
-  width: 100%;
-  margin: 0px;
-  margin-top: 20px;
+.bg-green-sb{
+  background-color:#00A759
 }
-/* Class for size */
-.full{
-  height: 100%;
-  width: 100%;
-}
-.half{
-  height: 50%;
-  width: 50%;
-}
-.full-height{
-  height: 100%;
-}
-.half-height{
-  height: 50%;
-}
-.restrict-full-height{
-  max-height:100%
+.b-collapse-sb{
+  border-collapse: collapse;
 }
 </style>

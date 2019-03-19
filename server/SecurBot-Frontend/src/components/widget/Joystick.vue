@@ -1,6 +1,6 @@
 <template>
-  <div id="joystick" class="inner-joystick-container">
-    <canvas ref="canvas" class="full"
+  <div id="joystick" class="h-100 w-100 p-2">
+    <canvas ref="canvas" class="h-100 m-100"
     @mousedown="onMouseDown" @mouseup="onMouseUp"
     @mousemove="onMouseMove" @mouseout="onMouseOut"/>
   </div>
@@ -17,12 +17,13 @@ export default {
       loopIntervalId: null,
       positionChangeIntervalId: null,
       canvas: null,
-      context: null,  
+      context: null, 
+      enable:false, 
       radiusRatio:0.75,
       joystickElement:null,  
       isMouseDown: false,
-      canvasRefreshRate: 1.0, //Hz
-      operatorCommandInterval: 1000, //ms
+      canvasRefreshRate: 60.0, //Hz
+      operatorCommandInterval: 100, //ms
     }
   },
   methods: {
@@ -32,10 +33,11 @@ export default {
         this.findCenterCanvas();
         this.drawCanvas();
       }.bind(this), 1000 / this.canvasRefreshRate);
-      
-      this.positionChangeIntervalId = setInterval(function() {
+      if(this.enable){
+        this.positionChangeIntervalId = setInterval(function() {
         this.emitJoystickPosition();
-      }.bind(this), this.operatorCommandInterval);
+        }.bind(this), this.operatorCommandInterval);
+      }
     },
     findCenterCanvas() {
       if (this.x === null || this.y === null || !this.isMouseDown) {

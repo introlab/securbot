@@ -1,27 +1,42 @@
 <template>
-  <div id="connection">
-    <div id="connection-container">
-        <h4 id="who-am-i">I am : {{selfId}}</h4>
-        <table id="peers-table">
-          <thead class="peer-header">
-            <th class="peer-cell">List of robot:</th>
-            <!--<th>ID</th>-->
-            <th class="peer-cell"></th>
+  <div id="connection" class="mx-auto" style="min-width:320px">
+    <div id="connection-container" class="rounded-lg" style="border: 1px solid lightgray;">
+
+        <h4 id="who-am-i" class="text-muted ml-1">I am : {{selfId}}</h4>
+        <h5 class="ml-1">List of Robots:</h5>
+        <div class="list-group">
+          <button type="button" class="list-group-item-action list-group-item d-flex justify-content-between align-items-center peer-item" style="min"
+                  v-for="peer in peersTable" v-bind:key="peer.peerID"
+                  @click="handlePeerConnection(peer.peerID)">
+                  {{peer.peerName}}
+                  <span v-if="peer.peerID == isConnectedToPeerId && waitingForConnectionState" class="spinner-border spinner-border-sm text-warning"></span>
+                  <span v-else-if="peer.peerID == isConnectedToPeerId" class="badge badge-success">Connected</span>
+                  <span v-else class="badge badge-secondary">Not Connected</span>
+          </button >
+        </div>
+        <!--
+        <table id="peers-table" class="table table-striped table-borderless mb-0">
+
+          <thead class="mb-2">
+            <th class="peer-header" scope="col" colspan="2">List of Robots:</th>
           </thead>
-          <tbody id="peers-table-body">
+
+          <tbody>
             <tr class="peers-table-row" v-for="peer in peersTable" v-bind:key="peer.peerID">
-              <td class="peer-cell">{{peer.peerName}}</td>
-              <!--<td>{{peer.peerID}}</td>-->
-              <td class="peer-cell content-left">
-                <button class="peer-btn"
+              <td class="peer-cell align-middle">{{peer.peerName}}</td>
+              <td>{{peer.peerID}}</td>
+              <td class="peer-cell align-middle text-right">
+                <button type="button" class="btn btn-outline-success"
                   v-bind:id="peer.peerID" 
                   v-on:click="handlePeerConnection(peer.peerID)">
-                  Connect
+                  Connected
                 </button>
               </td>
             </tr>
           </tbody>
+
         </table>
+        -->
     </div>
   </div>
 </template>
@@ -32,6 +47,7 @@ export default {
   props: ["selfId","peersTable", "bus"],
   data(){
     return {
+      fields:['List of robots',''],
       whoAmIElement: null,
       peersTableElement: null,
       peersTableBodyElement: null,
@@ -102,7 +118,7 @@ export default {
     getPeerObjectById(peerId){
       return this.peersInfos.find(function(peerObject){ return peerObject.id == peerId})
     },
-    //Switch the state (text in innerHTML) of the peer button
+    //Switch the state (text in innerHTML) of the peer button - NOT USED
     switchPeerConnectionButtonHtmlState(peerId, state){
       if(peerId == null){
         console.warn("The Id is null...");
@@ -112,9 +128,11 @@ export default {
       var peerButtonElement = document.getElementById(peerId)
       if(state == "Connected"){
         peerButtonElement.innerHTML = "Disconnect";
+        peerButtonElement.className = "btn btn-outline-success";
       }
       else if (state == "Disconnected"){
         peerButtonElement.innerHTML = "Connect";
+        peerButtonElement.className = "btn btn-outline-danger";
       }
       else
         console.log("Error switchPeerConnectionButtonHtmlState")
@@ -127,7 +145,7 @@ export default {
           console.log('Connected!');
           this.waitingForConnectionState = false;
           this.isConnected = true;
-          this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Connected");
+          //this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Connected");
           break;
         case 'failed':
           //Popup : Connection Failed...
@@ -138,7 +156,7 @@ export default {
         case 'disconnected':
           console.log('Disconnected!');
           this.isConnected = false;
-          this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Disconnected");
+          //this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Disconnected");
           this.isConnectedToPeerId = null;
           break;
         case 'lost':
@@ -201,42 +219,8 @@ export default {
 </script>
 
 <style>
-#connection{
-  margin-left: auto;
-  margin-right: auto;
-}
-#who-am-i{
-  border-bottom: 1px solid lightgray;
-}
-#peers-table{
-  width:100%;
-  border-collapse: collapse;
-  /*border: 1px solid #ddd;*/
-}
-.peers-table-row:nth-child(even) {
-  background-color: #f2f2f2;
-}
-/*
-.peers-table-row:hover {
-  background-color: rgb(177, 177, 177);
-}
-*/
-.peer-header{
-  /*background-color: #4CAF50;
-  color: white;*/
-  margin-bottom: 10px;
-}
-.peer-btn{
-  border-radius: 5px;
-  border: 1px solid gold;
-}
-.peer-cell{
-  min-width: 150px;
+.peer-item{
+  min-width: 300px;
   min-height: 30px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-.content-left{
-  text-align: right;
 }
 </style>
