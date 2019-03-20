@@ -26,6 +26,22 @@
 
 
 <script>
+/*
+* Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>
+* File :  Layout.vue
+* Desc :  Vue SFC used as a page for teleoperation of the robots. This component
+*         manages the layout for the teleoperation page. It uses 2 VideoBox components
+*         and 1 joystick component. The bigger VideoBox is used to show the map and 
+*         the smaller the video feed from the camera on the robot. The joystick is used
+*         to send command to the robot for manual control.  
+*         It communicates with parent component through the bus in props.
+*
+* Dependencies : 
+*       -VideoBox.vue
+*       -Joystick.vue
+*       -Bootstrap-Vue
+*
+*/
 import VideoBox from "../widget/VideoBox.vue";
 import Joystick from "../widget/Joystick.vue";
 

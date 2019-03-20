@@ -7,6 +7,24 @@
 </template>
 
 <script>
+/*
+* Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>,
+*             Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>
+* File :  PatrolMap.vue
+* Desc :  Vue SFC used as a widget to set waypoint on a map. This component
+*         uses the VideoBox component to show the robot map (that is sent from
+*         the robot in a video feed format) and put a canvas on top of it to 
+*         detect user clicks. When a click is detected the x and y position 
+*         is use to set a waypoint in the array given in props (push). The
+*         canvas then read the array and draw waypoint on the map where the 
+*         user clicked previously. 
+*
+* Dependencies : 
+*       -VideoBox.vue
+*       -Bootstrap-Vue
+*
+*/
+
 import VideoBox from './VideoBox.vue'
 
 export default {
@@ -26,7 +44,7 @@ export default {
     }
   },
   methods: {
-    //Initialisation of canvas input
+    //Initialisation of canvas refrash rate
     init() {
       this.loopIntervalId = setInterval(function() {
         if (this.enable) {
@@ -35,16 +53,16 @@ export default {
         }
       }.bind(this), 1000 / this.CanvasRefreshRate);
     },
-    //Setup for waypoint list
+    //Add waypoint to the list
     addWaypoint(wp) {
       this.waypointList.push(wp);
     },
-    //Draw the canvas and the waypoints
+    //Clean canvas and redraw the waypoints
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawWaypoints()
     },
-    //Draw waypoints
+    //Draw waypoints on canvas
     drawWaypoints(){
       this.waypointList.forEach(function(wp){
         let wpColor = "#00FF00";
@@ -60,7 +78,7 @@ export default {
         
       }.bind(this));
     },    
-    //Get position from canvas on click
+    //Get position/coordinate of video on click
     getVideoCoordinatesFromEvent(event) {
       let offsetAndScale = this.getVideoOffsetAndScale();
 
@@ -152,7 +170,7 @@ export default {
       cell4.innerHTML = wp.yaw.toFixed(1);
       cell5.appendChild(removeBtn);
     },
-    //Get the right coordinate from canvas for the waypoint given 
+    //Make correction to the coordinates from canvas for the waypoint given 
     getCanvasCoordinatesFromVideo(x, y) {
       let offsetAndScale = this.getVideoOffsetAndScale();
 
@@ -161,7 +179,7 @@ export default {
         y: y * offsetAndScale.scale + offsetAndScale.offsetY
       };
     }, 
-    //On mouse event
+    //On mouse down event, verify validity of click
     onMouseDown(event) {
       if (event.button === 0) {
         let coord = this.getVideoCoordinatesFromEvent(event);
@@ -180,7 +198,7 @@ export default {
         coord.y < this.videoElement.videoHeight; 
     },
   },
-  //On component mounted
+  //On component mounted, Get html elements and initialize
   mounted() {
     this.videoElement = document.getElementById('map');
     this.canvas = this.$refs.canvas;
@@ -188,7 +206,7 @@ export default {
     this.init();
     //this.setTableHeader();
   },
-  //On component destroyed
+  //On component destroyed, clear refresh rate of canvas
   destroyed() {
     clearInterval(this.loopIntervalId);
   }

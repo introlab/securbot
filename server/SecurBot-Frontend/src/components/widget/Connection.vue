@@ -5,7 +5,7 @@
         <h4 id="who-am-i" class="text-muted ml-1">I am : {{selfId}}</h4>
         <h5 class="ml-1">List of Robots:</h5>
         <div class="list-group">
-          <button type="button" class="list-group-item-action list-group-item d-flex justify-content-between align-items-center peer-item" style="min"
+          <button type="button" class="list-group-item-action list-group-item d-flex justify-content-between align-items-center peer-item"
                   v-for="peer in peersTable" v-bind:key="peer.peerID"
                   @click="handlePeerConnection(peer.peerID)">
                   {{peer.peerName}}
@@ -42,6 +42,25 @@
 </template>
 
 <script>
+/*
+* Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>,
+*             Anthony Parris <anthony.parris@usherbrooke.ca>,
+* File :  Connection.vue
+* Desc :  Vue SFC used as a widget that shows the element in the array
+*         given in props in a html list. All list element are buttons
+*         that, when clicked, request a connection/emit an event on the
+*         bus (given in props). It manages the different state on the
+*         connection and change a badge to give visual feedback to the 
+*         user on it. The array given should contains the name and the id 
+*         of the easyRTC peers that are in the connected room. The component
+*         calling this one should manage the easyRTC part and the connection,
+*         this component only show peers and manage the connection selection.
+*
+* Dependencies : 
+*       -Bootstrap-Vue
+*
+*/
+
 export default {
   name: 'connection',
   props: ["selfId","peersTable", "bus"],
@@ -58,7 +77,7 @@ export default {
     }
   },
   methods: {
-    //NOT USED
+    //NOT USED - TO BE REMOVED
     addPeerConnectionTable(peer) {
       //Adding a row for new peer
       var index = this.peersTableBodyElement.rows.length;
@@ -86,7 +105,7 @@ export default {
       //Add peer infos in array
       this.peersInfos.push({name : peer.peerName, id : peer.peerID});
     },
-    //NOT USED
+    //NOT USED - TO BE REMOVED
     removeTopPeerConnectionTable() {
       var peersTableElement = document.getElementById("peersTable");
       if(peersTableElement.rows.length > 0){
@@ -98,27 +117,27 @@ export default {
         console.log("Warning removeTopPeerConnectionTable : peersTableElement.length is " + peersTableElement.length);
       }
     },
-    //NOT USED
+    //NOT USED - TO BE REMOVED
     removeAllPeersConnectionTable() {
       do{
           var currentPeer = this.removeTopPeerConnectionTable();
       } while(currentPeer != undefined)
     },
-    //NOT USED
+    //NOT USED - TO BE REMOVED
     clearPeerTables(){
       this.peersInfos = [];
       this.peersTableBodyElement = "";
       this.setPeerTableHeaders();
     },
-    //NOT USED
+    //NOT USED - TO BE REMOVED
     getPeerObjectByName(peerName){
       return this.peersInfos.find(function(peerObject){ return peerObject.name == peerName})
     },
-    //NOT USED
+    //NOT USED - TO BE REMOVED
     getPeerObjectById(peerId){
       return this.peersInfos.find(function(peerObject){ return peerObject.id == peerId})
     },
-    //Switch the state (text in innerHTML) of the peer button - NOT USED
+    //Switch the state (text in innerHTML) of the peer button - NOT USED - TO BE REMOVED
     switchPeerConnectionButtonHtmlState(peerId, state){
       if(peerId == null){
         console.warn("The Id is null...");
@@ -160,7 +179,7 @@ export default {
           this.isConnectedToPeerId = null;
           break;
         case 'lost':
-          //This is Id might not be available anymore... Might get a error...
+          //This Id might not be available anymore... Might get a error...
           //Popup : The connection was lost...
           console.log('Connection lost...');
           this.isConnectedToPeerId = null;
@@ -206,6 +225,7 @@ export default {
       }
     },
   },
+  //On component mounted, get html elements, set bus event - HTML ELEMENTS MIGHT NOT BE USEFULL ANYMORE...
   mounted(){
     //Get HTML elements
     this.whoAmIElement = document.getElementById("whoAmI")
@@ -214,11 +234,13 @@ export default {
 
     this.bus.$on('connection-changed',this.handleConnectionChanged);
   },
+  //On component destroyed, not use for now
   destroyed(){}
 }
 </script>
 
 <style>
+/* Size for list item */
 .peer-item{
   min-width: 300px;
   min-height: 30px;

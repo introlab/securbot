@@ -22,6 +22,25 @@
 
 
 <script>
+/*
+* Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>,
+*             Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>
+* File :  Patrol.vue
+* Desc :  Vue SFC used as a page for patrol planner. This component manages
+*         the layout for the patrol planner page. It uses 1 PatrolMap component
+*         and 1 WaypointTable component. The PatrolMap shows the map for the robot
+*         and allows users to click on the map to set waypoint, those waypoint are
+*         then showed in the WaypointTable that allows to remove any undesired points.
+*         The page also contains a box with 2 buttons and a title. The buttons are
+*         used to send the current waypoint list or clean it (remove every points).
+*         It communicates with parent component through the bus in props.
+*
+* Dependencies : 
+*       -PatrolMap.vue
+*       -WaypointTable.map
+*       -Bootstrap-Vue
+*
+*/
 import PatrolMap from "../widget/PatrolMap.vue";
 import WaypointTable from "../widget/WaypointTable.vue";
 
@@ -42,7 +61,7 @@ export default {
     sendPatrol(){
       this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
     },
-    //Clear the list and empty the html table
+    //Clear the waypoint list
     clearWaypointList(){
       this.waypointList = [];
     },

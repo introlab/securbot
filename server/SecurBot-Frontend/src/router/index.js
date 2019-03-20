@@ -4,11 +4,15 @@ import Router from 'vue-router'
 import Layout from '@/components/Layout.vue'
 import Teleop from '@/components/pages/Teleop.vue'
 import Patrol from '@/components/pages/Patrol.vue'
-import Logs from '@/components/pages/Logs.vue'
+import Events from '@/components/pages/Events.vue'
 
 Vue.use(Router)
 
 /*
+* Author(s) : Edouard Legare <edouard.legare@usherbrooke.ca>
+* File : index.js
+* Desc : Routing file use by the router to show desired path.
+*
 >>Current routing<<
 The routing only start at the router link
 
@@ -26,7 +30,7 @@ The routing only start at the router link
               │
               ├─>Patrol Page
               │
-              └─>Log Page
+              └─>Events Page
 */
 
 export default new Router({
@@ -53,7 +57,7 @@ export default new Router({
         {
           path: "logs",
           name: "SecurBot Event Logging",
-          component: Logs,
+          component: Events,
           props: true
         },        
       ]

@@ -8,11 +8,20 @@
 </template>
 
 <script>
-
-// Description of the component :
-// Needs an id for the html video element and a bool for the visibility of the element
-// To set the video stream you need the html element (document.getElementById("VideoId"))
-// Use easyrtc.setVideoObjectSrc(videoElement, stream) to set the stream
+/*
+* Author(s): Edouard Legare <edouard.legare@usherbrooke.ca>
+* File :  VideoBox.vue
+* Desc :  Vue SFC that makes a box containing a video element that will fit
+*         the size given by the element in which it called (in the caller 
+*         component). It keeps the aspect ratio of the video and adapt the
+*         the rest of the box (black bars) to fit. It takes 2 props, an id
+*         for the video element so a feed can be set to it and a boolean show
+*         to show or hid the video. It is used as a widget.
+*
+* Dependencies : 
+*       -Bootstrap-Vue
+*
+*/
 
 // Export
 export default {

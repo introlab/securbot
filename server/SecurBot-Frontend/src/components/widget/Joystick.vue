@@ -7,6 +7,27 @@
 </template>
 
 <script>
+/*
+* Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>,
+*             Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>,
+* File :  Joystick.vue
+* Desc :  Vue SFC used as a widget that draws an joystick that the user
+*         can use to send teleoperation control to the robot that it is
+*         connected to. Takes 2 absolute values in props to set the max
+*         value of a command and a bus to send the event (new command).
+*         The width and height are not really used anymore in term of
+*         props since the joystick size is now dynamic.
+*
+* Dependencies : 
+*       -Bootstrap-Vue
+*
+* Note :  The original file was given by [redacted] and modify afterward.
+*         Aka, we are not the original author(s), but were given the right
+*         to use and modify the file.
+*
+*/
+
+
 export default {
   name: 'joystick',
   props: ['width', 'height', 'absoluteMaxX', 'absoluteMaxY', 'bus'],
