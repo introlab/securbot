@@ -1,0 +1,3 @@
+<launch>
+	<include file="$(find roboclaw_node)/launch/roboclaw.launch" />
+</launch>
