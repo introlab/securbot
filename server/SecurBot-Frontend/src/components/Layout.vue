@@ -59,6 +59,7 @@ export default {
   name: 'layout',
   data(){
     return{
+      // Rename variables
       fluidState:true,
       showSelf:true,
       showRobot:true,
