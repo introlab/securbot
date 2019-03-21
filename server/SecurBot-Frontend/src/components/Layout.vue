@@ -1,23 +1,43 @@
 <template>
-  <div id="operator-layout" class='vh-100'>
-    <div id="nav-bar" class="position-relative">
-      <b-navbar toggleable="md" class="navbar-dark mb-0 bg-green-sb">
+  <div
+    id="operator-layout"
+    class="vh-100">
+    <div
+      id="nav-bar"
+      class="position-relative">
+      <b-navbar
+        toggleable="md"
+        class="navbar-dark mb-0 bg-green-sb">
         <b-navbar-brand class="p-0">
-          <div class="h-100" style="width:240px">
-            <img src="../assets/SecurBotLogo.png" alt="SecurBot" class="logo mh-100 mw-100 align-middle"/>
+          <div
+            class="h-100"
+            style="width:240px">
+            <img
+              src="../assets/SecurBotLogo.png"
+              alt="SecurBot"
+              class="logo mh-100 mw-100 align-middle">
           </div>
         </b-navbar-brand>
         <b-navbar-toggle target="nav_collapse" />
-        <b-collapse is-nav id="nav_collapse">
+        <b-collapse
+          id="nav_collapse"
+          is-nav>
           <b-navbar-nav>
-            <b-nav-item to="teleop" active>Teleoperation</b-nav-item>
+            <b-nav-item
+              to="teleop"
+              active>Teleoperation</b-nav-item>
             <b-nav-item to="patrol">Patrol Planner</b-nav-item>
             <b-nav-item to="logs">Logs</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
-            <b-nav-item-dropdown text="Connect to Robot" right>
+            <b-nav-item-dropdown
+              text="Connect to Robot"
+              right>
               <div class="px-2 py-1">
-                <connection :selfId="selfEasyrtcid" :peersTable="testPeerTable" :bus="teleopBus"/>
+                <connection
+                  :self-id="selfEasyrtcid"
+                  :peers-table="testPeerTable"
+                  :bus="teleopBus"/>
               </div>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -25,7 +45,9 @@
       </b-navbar>
     </div>
     <div style="height:calc(100% - 64px)">
-      <router-view :bus="teleopBus"/>
+      <router-view
+        :bus="teleopBus"
+        :router="routeBus"/>
     </div>
   </div>
 </template>
@@ -35,55 +57,83 @@
 * Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>
 * File :  Layout.vue
 * Desc :  Vue SFC that is the main routing point. All the routing is done by
-*         this component (layout = parent, other pages = children). It has a 
-*         navigation bar for the routing that also contains the connection 
+*         this component (layout = parent, other pages = children). It has a
+*         navigation bar for the routing that also contains the connection
 *         component in a drop-down menu (simplify the connection process for
 *         the user) and set the page height (currently the viewport height
 *         minus the height the navbar). This component is the one managing
 *         all the easyRTC necessary for the application. It communicates with
 *         the children component with a bus.
 *
-* Dependencies : 
+* Dependencies :
 *       -Connection.vue
 *       -Vue (node-module)
 *       -Bootstrap-Vue
 *
 */
+/* global easyrtc */
 
-import Connection from "./widget/Connection.vue";
-
-import Vue from 'vue'
+import Vue from 'vue';
+import Connection from './widget/Connection';
 
 export default {
 
   name: 'layout',
-  data(){
-    return{
-      // Rename variables
-      fluidState:true,
-      showSelf:true,
-      showRobot:true,
-      peerId:null,
-      isConnected:null,
-      selfEasyrtcid:null,
-      selfStreamElement:null,
-      self2StreamElement:null,
-      robotStreamElement:null,
-      localStream:null,
-      teleopBus: new Vue(),
-      testPeerTable:[{peerName:"Robot1",peerID:"aogiyudlf"},
-                {peerName:"Robot2",peerID:"fqw98rasd"}],
-    }
-  },
   components: {
     Connection,
   },
-  methods:{
+  data() {
+    return {
+      // Rename variables
+      fluidState: true,
+      showSelf: true,
+      showRobot: true,
+      peerId: null,
+      isConnected: null,
+      isInit: false,
+      selfEasyrtcid: null,
+      selfStreamElement: null,
+      self2StreamElement: null,
+      robotStreamElement: null,
+      localStream: null,
+      robotStream: null,
+      teleopBus: new Vue(),
+      routeBus: new Vue(),
+      testPeerTable: [{ peerName: 'Robot1', peerID: 'aogiyudlf' },
+        { peerName: 'Robot2', peerID: 'fqw98rasd' }],
+    };
+  },
+  /*
+    mounted() : On component mounted, use to get and initialise
+      To Do:
+        -(SEC-365) - Make a function that gets the html elements and call it here.
+  */
+  mounted() {
+    this.selfStreamElement = document.getElementById('self-video-stream');
+    this.self2StreamElement = document.getElementById('map');
+    this.robotStreamElement = document.getElementById('robot-video-stream');
+
+    this.teleopBus.$on('peer-connection', this.log);
+    this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
+    this.routeBus.$on('mounted', this.onComponentMounted);
+    this.routeBus.$on('destroyed', this.onComponentDestroyed);
+
+    this.connect();
+  },
+  // On component destroy, hangup and disconnect
+  destroyed() {
+    if (this.operatorEasyrtcId !== null) {
+      this.isInit = false;
+      easyrtc.hangupAll();
+      easyrtc.disconnect();
+    }
+  },
+  methods: {
     /*
       General: most of the function here are for the easyRTC client
       To Do :
         -(SEC-346) Add the on router change function (event)
-        -(SEC-365) Add function to set the remote feeds to video element on router change for the CURRENT page. 
+        -(SEC-365) Add function to set the remote feeds to video element on router change for the CURRENT page.
                    Aka, only set the feed for the html element in the current viewed page, ignore the other.
         -(SEC-365) Add function to clear the remote feeds from video element on router change
         -(SEC-344) Clean code and make it fits standards
@@ -97,7 +147,7 @@ export default {
     */
     connect() {
       easyrtc.enableDebug(false);
-      console.log("Initializing.");
+      console.log('Initializing.');
       easyrtc.enableVideo(true);
       easyrtc.enableAudio(false);
       easyrtc.enableVideoReceive(true);
@@ -108,13 +158,16 @@ export default {
       easyrtc.setOnStreamClosed(this.closePeerVideo);
       easyrtc.setAcceptChecker(this.acceptCall);
       easyrtc.initMediaSource(
-        function(){
-            this.localStream = easyrtc.getLocalStream();
-            easyrtc.setVideoObjectSrc(this.selfStreamElement, this.localStream);
-            //easyrtc.setVideoObjectSrc(this.self2StreamElement, this.localStream);
-            easyrtc.connect("easyrtc.securbot", this.loginSuccess, this.loginFailure);
-            console.log("Stream set, you are connected...");
-        }.bind(this), this.loginFailure);
+        () => {
+          this.localStream = easyrtc.getLocalStream();
+          // easyrtc.setVideoObjectSrc(this.selfStreamElement, this.localStream);
+          // easyrtc.setVideoObjectSrc(this.self2StreamElement, this.localStream);
+          easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+          this.isInit = true;
+          // The next line needs to be changed
+          this.onComponentMounted();
+          console.log('Stream set, you are connected...');
+        }, this.loginFailure);
     },
     /*
       handleRoomOccupantChange(roomName, occupants, isPrimary) : Callback for the setRoomOccupantListener easyRTC function
@@ -124,67 +177,53 @@ export default {
           -(SEC-365) Get occupants name and id for peer list
     */
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
-      //console.log(occupants);
+      // console.log(occupants);
       this.testPeerTable = [];
-      if(occupants !== null){
-        for(var occupant in occupants){
-          var peer = {peerName:occupant,peerID:occupant};
+      if (occupants !== null) {
+        for (const occupant in occupants) {
+          const peer = { peerName: occupant, peerID: occupant };
           this.testPeerTable.push(peer);
         }
       }
-      /*
-      this.peerId = null;
-      for(var easyrtcId in occupants)
-      {
-        if(this.peerId === null)
-        {
-          this.peerId = easyrtcId;
-          this.performCall(this.peerId);
-        }
-        else
-        {
-          console.warn("Only one occupant is accepted for the moment...");
-        }
-      }
-      */
     },
-    /* 
+    /*
       performCall(occupantId): function used to call someone in the room with its id
         To Do:
           -Clean function
           -(SEC-365) Create callback functions use by call outside of this function.
           -(SEC-304) Manage with event the different outcome
     */
-    performCall(occupantId){
-      console.log("Calling the chosen occupant : " + occupantId);
+    performCall(occupantId) {
+      console.log(`Calling the chosen occupant : ${  occupantId}`);
       easyrtc.hangupAll();
 
-      //This should be defined outside
-      var acceptedCB = function(accepted, easyrtcid) {
-        console.log("Call was : " + accepted + " from " + easyrtcid)
-        /*
-        if( !accepted ){
-          console.warn("Call refused...");
-          this.teleopBus.$emit('connection-changed',"failed");
+      // This should be defined outside
+      // eslint-disable-next-line func-names
+      const acceptedCB = function (accepted, easyrtcid) {
+        // console.log(`Call was : ${  accepted  } from ${  easyrtcid }`);
+        if (!accepted) {
+          console.warn('Call refused...');
+          this.teleopBus.$emit('connection-changed', 'failed');
           this.peerId = null;
+        } 
+        else {
+          console.warn('Call accepted...');
         }
-        else{
-          console.warn("Call accepted...");
-        }
-        */
       }.bind(this);
 
-      //This should be defined outside
-      var successCB = function() {
-        console.warn("Call accepted...");
-        this.teleopBus.$emit('connection-changed',"connected");
+      // This should be defined outside
+      // eslint-disable-next-line func-names
+      const successCB = function () {
+        console.warn('Call accepted...');
+        this.teleopBus.$emit('connection-changed', 'connected');
         this.peerId = occupantId;
       }.bind(this);
 
-      //This should be defined outside
-      var failureCB = function(errCode, errMessage) {
-        console.warn("Call failed : " + errCode + " | " + errMessage);
-        this.teleopBus.$emit('connection-changed',"failed");
+      // This should be defined outside
+      // eslint-disable-next-line func-names
+      const failureCB = function (errCode, errMessage) {
+        console.warn(`Call failed : ${errCode} | ${errMessage}`);
+        this.teleopBus.$emit('connection-changed', 'failed');
         this.peerId = null;
       }.bind(this);
 
@@ -195,12 +234,12 @@ export default {
         Desc: When connection to room is successful, save self id
     */
     loginSuccess(easyrtcid) {
-      console.warn("I am " + easyrtc.idToName(easyrtcid));
+      console.warn(`I am ${easyrtc.idToName(easyrtcid)}`);
       this.selfEasyrtcid = easyrtcid;
     },
     /*
       loginFailure(errorCode, message): Callback for connect failure to the room
-        Desc: When connection to room is successful, save self id 
+        Desc: When connection to room is successful, save self id
     */
     loginFailure(errorCode, message) {
       easyrtc.showError(errorCode, message);
@@ -212,16 +251,18 @@ export default {
           -(SEC-365) Get the remote feeds from occupants
           -(SEC-365) Set feed(s) for the current page (Call the set feeds function)
     */
-    acceptPeerVideo(easyrtcid, stream){
-      easyrtc.setVideoObjectSrc(this.robotStreamElement, stream);
+    acceptPeerVideo(easyrtcid, stream) {
+      this.robotStream = stream;
+      this.onComponentMounted();
     },
     /*
-      acceptPeerVideo(easyrtcid, stream): Callback for setOnStreamClosed() function
-        Desc: Use to clear the last frame of a video feed that closed for reason out of our control (other client responsible)
+      closePeerVideo(easyrtcid): Callback for setOnStreamClosed() function
+        Desc: Use to clear the last frame of a video feed that closed for reason
+              out of our control (other client responsible)
     */
-    closePeerVideo(easyrtcid){
+    closePeerVideo(easyrtcid) {
       this.peerId = null;
-      easyrtc.setVideoObjectSrc(this.robotStreamElement, this.peerId);
+      easyrtc.setVideoObjectSrc(this.robotStreamElement, '');
     },
     /*
       acceptCall(easyrtcid, acceptor): callback for setAcceptChecker() function
@@ -229,11 +270,10 @@ export default {
         To Do:
           -(SEC-304) Always refused, cannot be called as an operator
     */
-    acceptCall(easyrtcid, acceptor){
+    acceptCall(easyrtcid, acceptor) {
       console.log("You've been called...");
-      if(easyrtc.getConnectionCount() > 0 ) 
-      {
-          easyrtc.hangupAll();
+      if (easyrtc.getConnectionCount() > 0 ) {
+        easyrtc.hangupAll();
       }
       acceptor(true);
     },
@@ -243,55 +283,64 @@ export default {
         To Do:
           -(SEC-364) Call the data sending function and give it the string
     */
-    onJoystickPositionChange(){
-      //console.log("Joystick position sent");
+    onJoystickPositionChange() {
+      // console.log("Joystick position sent");
     },
     /*
       log(event) : on event "peer-connection", this function is called
-      Desc: Receive an id and perform the call on this id if not already connected. 
+      Desc: Receive an id and perform the call on this id if not already connected.
             If connected and the id is the one of the connected peer, disconnect for it.
       To Do:
         -Rename the function and the parameter
     */
-    log(event){
-      console.log("This is the connection event : " + event);
-      if(this.peerId == event){
+    log(event) {
+      console.log(`This is the connection event : ${  event}`);
+      if (this.peerId === event) {
         easyrtc.hangupAll();
-        console.log("Disconnection Accepted...");
-        this.teleopBus.$emit('connection-changed',"disconnected");
+        console.log('Disconnection Accepted...');
+        this.teleopBus.$emit('connection-changed', 'disconnected');
         this.peerId = null;
-      }
-      else if(this.peerId === null){
+      } else if (this.peerId === null) {
         this.performCall(event);
-      }
-      else{
-        console.warn("The is an issue in the connection state handling");
+      } else {
+        console.warn('The is an issue in the connection state handling');
       }
     },
+    // The next 2 function needs to changed, they could be a lot smarter.
+    // It seems that we have to go with event handling to manage the routing.
+    onComponentMounted() {
+      if (this.isInit) {
+        this.selfStreamElement = document.getElementById('self-video-stream');
+        this.self2StreamElement = document.getElementById('map');
+        this.robotStreamElement = document.getElementById('robot-video-stream');
+
+        if (this.selfStreamElement && this.localStream) {
+          easyrtc.setVideoObjectSrc(this.selfStreamElement, this.localStream);
+        }
+        if (this.self2StreamElement && this.localStream) {
+          easyrtc.setVideoObjectSrc(this.self2StreamElement, this.localStream);
+        }
+        if (this.robotStreamElement && this.robotStream) {
+          easyrtc.setVideoObjectSrc(this.robotStreamElement, this.robotStream);
+        }
+      }
+    },
+    onComponentDestroyed() {
+      if (this.selfStreamElement) {
+        easyrtc.setVideoObjectSrc(this.selfStreamElement, '');
+      }
+      if (this.self2StreamElement) {
+        easyrtc.setVideoObjectSrc(this.self2StreamElement, '');
+      }
+      if (this.robotStreamElement) {
+        easyrtc.setVideoObjectSrc(this.robotStreamElement, '');
+      }
+
+      this.selfStreamElement = document.getElementById('self-video-stream');
+      this.self2StreamElement = document.getElementById('map');
+      this.robotStreamElement = document.getElementById('robot-video-stream');
+    },
   },
-  /*
-    mounted() : On component mounted, use to get and initialise
-      To Do:
-        -(SEC-365) - Make a function that gets the html elements and call it here.
-  */
-  mounted() {
-    this.selfStreamElement = document.getElementById("self-video-stream");
-    this.self2StreamElement = document.getElementById("map");
-    this.robotStreamElement = document.getElementById("robot-video-stream");
-
-    this.teleopBus.$on('peer-connection', this.log);
-    this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
-
-
-    this.connect();
-  },
-  //On component destroy, hangup and disconnect
-  destroyed() {
-    if (this.operatorEasyrtcId !== null) {
-      easyrtc.hangupAll();
-      easyrtc.disconnect();
-    }
-  }
 };
 </script>
 

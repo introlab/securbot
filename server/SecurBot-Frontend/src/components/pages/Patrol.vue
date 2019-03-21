@@ -46,7 +46,7 @@ import WaypointTable from "../widget/WaypointTable.vue";
 
 export default {
   name:'patrol-page',
-  props:['bus'],
+  props:['bus','router'],
   components:{
     PatrolMap,
     WaypointTable,
@@ -55,6 +55,14 @@ export default {
     return{
       waypointList:[],
     }
+  },
+  mounted(){
+    console.log("Patrol have been mounted");
+    this.router.$emit('mounted');
+  },
+  destroyed(){
+    console.log("Patrol have been destroyed");
+    this.router.$emit('destroyed');
   },
   methods:{
     //Send the waypoint list for patrol scheduling

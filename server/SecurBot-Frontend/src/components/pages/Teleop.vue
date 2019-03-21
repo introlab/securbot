@@ -47,10 +47,18 @@ import Joystick from "../widget/Joystick.vue";
 
 export default {
   name:'teleop-page',
-  props:['bus'],
+  props:['bus','router'],
   components:{
     VideoBox,
     Joystick
+  },
+  mounted(){
+    console.log("Teleop have been mounted");
+    this.router.$emit('mounted');
+  },
+  destroyed(){
+    console.log("Teleop have been destroyed");
+    this.router.$emit('destroyed');
   },
   data(){
     return{
