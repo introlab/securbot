@@ -20,13 +20,15 @@ easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
 function get_video_id() {
     return new Promise((resolve, reject) => {
         easyrtc.getVideoSourceList(list => {
+
             var videoSource = list.find(source => {
                 return source.label.toString().trim() === 'virtual_map'
             })
 
             if (videoSource == undefined) {
                 console.log("Map video not found")
-                reject()
+                reject("Desired video stream not found")
+                return
             }
 
             console.log("Found map stream")
