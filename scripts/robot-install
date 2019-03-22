@@ -44,7 +44,8 @@ apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD
 # Install
 apt-get update
 # Add the required ros packages here
-apt-get -y install ros-kinetic-desktop-full v4l-utils libv4l-dev nodejs
+apt-get -y install ros-kinetic-desktop-full v4l-utils libv4l-dev nodejs \
+    ros-kinetic-rtabmap-ros
 
 # Initialize rosdep
 rosdep init
