@@ -32,6 +32,9 @@ add-apt-repository universe
 add-apt-repository multiverse
 add-apt-repository restricted
 
+# Adding nodejs 11 source
+curl -sL https://deb.nodesource.com/setup_11.x | bash -
+
 # Adding source
 echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
 
@@ -41,7 +44,7 @@ apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD
 # Install
 apt-get update
 # Add the required ros packages here
-apt-get -y install ros-kinetic-desktop-full v4l-utils libv4l-dev
+apt-get -y install ros-kinetic-desktop-full v4l-utils libv4l-dev nodejs
 
 # Initialize rosdep
 rosdep init
@@ -56,8 +59,8 @@ source $KINETIC_PATH/setup.bash
 
 # Setting up ROS workspace
 echo "Setting up workspace at $CATK_WS"
-mkdir -p $CATK_WS $CATK_WS/src $CATK_WS/build
-rm -rf src/*
+mkdir -p $CATK_WS $CATK_WS/build
+rm -rf $CATK_WS/src
 
 # Copying the project files
 ln -fs $BASEDIR/../Robot_Software $CATK_WS/src
@@ -81,5 +84,11 @@ chown -R $OPERATOR:$ROBOT_GROUP $CATK_WS
 #chown -R :$ROBOT_GROUP $KINETIC_PATH
 chown -R $OPERATOR ~/.ros
 chmod -R ug+rw $CATK_WS
+
+# Adding ros group to the no passwd sudo
+if ! grep -Fxq "%$ROBOT_GROUP ALL=(ALL:ALL) NOPASSWD:ALL" /etc/sudoers
+then
+    echo "%$ROBOT_GROUP ALL=(ALL:ALL) NOPASSWD:ALL" | sh -c 'cat >> /etc/sudoers'
+fi
 
 echo "Login again or source ~/.bashrc to set your environment variables"
