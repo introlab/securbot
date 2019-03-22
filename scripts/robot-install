@@ -11,8 +11,6 @@
 CATK_WS=/opt/securbot/catkin_ws
 ROBOT_GROUP=ros
 
-
-
 KINETIC_PATH=/opt/ros/kinetic   # Path use by apt when installing kinetic
 
 # Check for ubuntu version
@@ -62,7 +60,7 @@ mkdir -p $CATK_WS $CATK_WS/src $CATK_WS/build
 rm -rf src/*
 
 # Copying the project files
-cp -a $BASEDIR/../Robot_Software/. $CATK_WS/src
+ln -fs $BASEDIR/../Robot_Software $CATK_WS/src
 
 # Catkin Make
 catkin_make --directory $CATK_WS
@@ -79,9 +77,9 @@ groupadd $ROBOT_GROUP
 usermod -g $ROBOT_GROUP $OPERATOR
 
 # Owning directories
-chown -R :$ROBOT_GROUP $CATK_WS
+chown -R $OPERATOR:$ROBOT_GROUP $CATK_WS
 #chown -R :$ROBOT_GROUP $KINETIC_PATH
 chown -R $OPERATOR ~/.ros
-chmod -R g+rw $CATK_WS
+chmod -R ug+rw $CATK_WS
 
 echo "Login again or source ~/.bashrc to set your environment variables"
