@@ -17,16 +17,16 @@ easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
     easyrtc.setVideoObjectSrc(document.getElementById('caller'), "");
 });
 
-function get_video_id() {
+function get_video_id(label) {
     return new Promise((resolve, reject) => {
         easyrtc.getVideoSourceList(list => {
 
             var videoSource = list.find(source => {
-                return source.label.toString().trim() === 'virtual_map'
+                return source.label.toString().trim() === label.trim()
             })
 
             if (videoSource == undefined) {
-                console.log("Map video not found")
+                console.log(`[${label}] video not found`)
                 reject("Desired video stream not found")
                 return
             }
@@ -43,8 +43,22 @@ function dataCallback(easyrtcid, msgType, msgData, targeting) {
 }
 
 
-function my_init() {
-    easyrtc.setSocketUrl('http://excalibur1:8080');
+function fetchParameters() {
+
+    return new Promise((resolve, reject) => {
+        ipc.once('parameters_response', (event, params) => {
+            resolve(params)
+        })
+
+        ipc.send('parameters_request')
+    })
+}
+
+async function my_init() {
+
+    var parameters = await fetchParameters()
+
+    easyrtc.setSocketUrl(parameters.webRtcServerUrl);
     easyrtc.setRoomOccupantListener( loggedInListener);
     var connectSuccess = function(myId) {
         console.log("My easyrtcid is " + myId);
@@ -53,7 +67,7 @@ function my_init() {
         console.log(errText);
     }
 
-    get_video_id().then(videoId => {
+    get_video_id(parameters.videoDeviceLabel).then(videoId => {
         easyrtc.setVideoSource(videoId)
         easyrtc.enableDataChannels(true)
         easyrtc.enableAudio(false)
@@ -101,3 +115,6 @@ function performCall(easyrtcid) {
        }
    );
 }
+
+
+window.onload = () => { my_init() }
