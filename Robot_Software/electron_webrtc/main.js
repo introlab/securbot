@@ -6,6 +6,7 @@ const std_msgs = rosnodejs.require('std_msgs').msg
 
 const path = require('path')
 
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -20,6 +21,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({ width: 800,
                             height: 600,
+                            show: false,
                             webPreferences: {nodeIntegration: false,
                                              preload: path.join(__dirname, 'ipcInit.js')}})
 
@@ -73,11 +75,30 @@ function startApp() {
 // code. You can also put them in separate files and require them here.
 
 function startNode() {
-  rosnodejs.initNode('/electron_node').then( (rosnode) => {
-    let subscriber = rosnode.subscribe('toElectron', std_msgs.String, (data) => {
+  rosnodejs.initNode('/electron_webrtc').then( async (nodeHandle) => {
+
+    try {
+      var webRtcServerUrl = await nodeHandle.getParam('/electron_webrtc/webrtc_server_url')
+      var videoDeviceLabel = await nodeHandle.getParam('/electron_webrtc/video_device_label')
+    } catch (e) {
+      console.error('Failed to retreive parameters')
+      app.quit()
+    }
+    var parameters = { videoDeviceLabel, webRtcServerUrl }
+    console.log(parameters);
+
+    if (win)
+        win.webContents.send('parameters_response', parameters)
+
+    ipcMain.on('parameters_request', (event) => {
+      event.sender.send('parameters_response', parameters)
+    })
+
+    let subscriber = nodeHandle.subscribe('toElectron', std_msgs.String, (data) => {
       hub.emit('data', data)
     })
-    let publisher = rosnode.advertise('fromElectron', std_msgs.String)
+
+    let publisher = nodeHandle.advertise('fromElectron', std_msgs.String)
     publisher.publish({ data: 'Hello!' })
     hub.on('msg', data => {
         console.log(data)
