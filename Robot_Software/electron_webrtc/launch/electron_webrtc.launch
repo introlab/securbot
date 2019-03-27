@@ -1,0 +1,10 @@
+<!--
+
+	Electron ros node
+
+-->
+
+<launch>
+    <node pkg="electron_webrtc" type="start_node.bash" name="electron_webrtc">
+    </node>
+</launch>
