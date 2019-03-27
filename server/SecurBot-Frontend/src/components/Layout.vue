@@ -181,6 +181,7 @@ export default {
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
       this.testPeerTable = [];
       if (occupants !== null) {
+        // eslint-disable-next-line guard-for-in
         for (const occupant in occupants) {
           const peer = { peerName: occupant, peerID: occupant };
           this.testPeerTable.push(peer);
