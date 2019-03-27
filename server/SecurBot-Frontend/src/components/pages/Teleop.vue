@@ -68,8 +68,8 @@
 *       -Bootstrap-Vue
 *
 */
-import VideoBox from '../widget/VideoBox.vue';
-import Joystick from '../widget/Joystick.vue';
+import VideoBox from '../widget/VideoBox';
+import Joystick from '../widget/Joystick';
 
 export default {
   name: 'teleop-page',

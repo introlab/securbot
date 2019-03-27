@@ -122,10 +122,10 @@ export default {
       let scale = 1;
       if ((this.videoElement.offsetHeight * videoRatio) > this.videoElement.offsetWidth) {
         scale = this.videoElement.offsetWidth / this.videoElement.videoWidth;
-        offsetY = ((this.videoElement.offsetHeight - this.videoElement.videoHeight) * scale) / 2;
+        offsetY = (this.videoElement.offsetHeight - (this.videoElement.videoHeight * scale)) / 2;
       } else {
         scale = this.videoElement.offsetHeight / this.videoElement.videoHeight;
-        offsetX = ((this.videoElement.offsetWidth - this.videoElement.videoWidth) * scale) / 2;
+        offsetX = (this.videoElement.offsetWidth - (this.videoElement.videoWidth * scale)) / 2;
       }
       return {
         offsetX,

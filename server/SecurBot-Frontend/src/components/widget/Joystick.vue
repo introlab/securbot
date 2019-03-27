@@ -116,13 +116,13 @@ export default {
       const centerY = this.getCenterY();
       const deltaX = this.x - centerX;
       const deltaY = this.y - centerY;
-      const radius = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      const radius = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
       const maxRadius = this.getCanvasRadius() - this.getJoystickRadius();
 
       if (radius > maxRadius) {
         const ratio = maxRadius / radius;
-        this.x = deltaX * ratio + centerX;
-        this.y = deltaY * ratio + centerY;
+        this.x = (deltaX * ratio) + centerX;
+        this.y = (deltaY * ratio) + centerY;
       }
       this.emitJoystickPosition();
     },
@@ -173,7 +173,7 @@ export default {
 
 
       // draw the up triangle
-      const upTriangleStartY = centerY - 3 * radius / 4;
+      const upTriangleStartY = centerY - ((3 * radius) / 4);
 
       this.context.fillStyle = '#4682B4';
       this.context.beginPath();
@@ -183,7 +183,7 @@ export default {
       this.context.fill();
 
       // draw the down triangle
-      const downTriangleStartY = centerY + 3 * radius / 4;
+      const downTriangleStartY = centerY + ((3 * radius) / 4);
 
       this.context.beginPath();
       this.context.moveTo(centerX, downTriangleStartY);
@@ -192,7 +192,7 @@ export default {
       this.context.fill();
 
       // draw the left triangle
-      const leftTriangleStartX = centerX - 3 * radius / 4;
+      const leftTriangleStartX = centerX - ((3 * radius) / 4);
 
       this.context.beginPath();
       this.context.moveTo(leftTriangleStartX, centerY);
@@ -201,7 +201,7 @@ export default {
       this.context.fill();
 
       // draw the right triangle
-      const rightTriangleStartX = centerX + 3 * radius / 4;
+      const rightTriangleStartX = centerX + ((3 * radius) / 4);
 
       this.context.beginPath();
       this.context.moveTo(rightTriangleStartX, centerY);
@@ -220,15 +220,17 @@ export default {
       return this.canvas.height / 2;
     },
     getCanvasRadius() {
-      return this.radiusRatio * Math.min(this.canvas.width, this.canvas.height) / 2;
+      return (this.radiusRatio * Math.min(this.canvas.width, this.canvas.height)) / 2;
     },
     getJoystickRadius() {
       return this.getCanvasRadius() / 4;
     },
     emitJoystickPosition() {
       const event = {
-        x: (this.x - this.getCenterX()) * this.absoluteMaxX / (this.getCanvasRadius() - this.getJoystickRadius()),
-        y: (this.y - this.getCenterY()) * this.absoluteMaxY / (this.getCanvasRadius() - this.getJoystickRadius()),
+        x: ((this.x - this.getCenterX()) * this.absoluteMaxX) /
+        (this.getCanvasRadius() - this.getJoystickRadius()),
+        y: ((this.y - this.getCenterY()) * this.absoluteMaxY) /
+        (this.getCanvasRadius() - this.getJoystickRadius()),
       };
       this.bus.$emit('joystick-position-change', event);
     },

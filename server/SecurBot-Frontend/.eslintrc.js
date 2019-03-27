@@ -48,5 +48,6 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'vue/name-property-casing': ["error", "kebab-case"],
+    'no-console':"off",
   }
 }

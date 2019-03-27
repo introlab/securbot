@@ -61,8 +61,8 @@
 *       -Bootstrap-Vue
 *
 */
-import PatrolMap from '../widget/PatrolMap.vue';
-import WaypointTable from '../widget/WaypointTable.vue';
+import PatrolMap from '../widget/PatrolMap';
+import WaypointTable from '../widget/WaypointTable';
 
 export default {
   name: 'patrol-page',

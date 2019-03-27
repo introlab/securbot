@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Layout from '@/components/Layout.vue';
-import Teleop from '@/components/pages/Teleop.vue';
-import Patrol from '@/components/pages/Patrol.vue';
-import Events from '@/components/pages/Events.vue';
+import Layout from '@/components/Layout';
+import Teleop from '@/components/pages/Teleop';
+import Patrol from '@/components/pages/Patrol';
+import Events from '@/components/pages/Events';
 
 Vue.use(Router);
 
