@@ -37,6 +37,7 @@ from rtabmap_ros.srv import SetGoal
 #import json
 
 #Using service SetGoal to talk to rtab-map/SPLAM
+#TODO: 
 def rtabMapClient(goalString):
     rospy.loginfo("Sending goal from Electron to rtab-map/SPLAM...")
     rospy.loginfo("Goal to send : " + goalString)
