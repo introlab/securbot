@@ -194,7 +194,7 @@ export default {
           -(SEC-304) Manage with event the different outcome
     */
     performCall(occupantId) {
-      console.log(`Calling the chosen occupant : ${  occupantId}`);
+      console.log(`Calling the chosen occupant : ${occupantId}`);
       easyrtc.hangupAll();
 
       // This should be defined outside
@@ -205,8 +205,7 @@ export default {
           console.warn('Call refused...');
           this.teleopBus.$emit('connection-changed', 'failed');
           this.peerId = null;
-        } 
-        else {
+        } else {
           console.warn('Call accepted...');
         }
       }.bind(this);
@@ -272,7 +271,7 @@ export default {
     */
     acceptCall(easyrtcid, acceptor) {
       console.log("You've been called...");
-      if (easyrtc.getConnectionCount() > 0 ) {
+      if (easyrtc.getConnectionCount() > 0) {
         easyrtc.hangupAll();
       }
       acceptor(true);
@@ -294,7 +293,7 @@ export default {
         -Rename the function and the parameter
     */
     log(event) {
-      console.log(`This is the connection event : ${  event}`);
+      console.log(`This is the connection event : ${event}`);
       if (this.peerId === event) {
         easyrtc.hangupAll();
         console.log('Disconnection Accepted...');

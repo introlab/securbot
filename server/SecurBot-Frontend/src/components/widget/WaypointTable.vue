@@ -1,7 +1,9 @@
 <template>
   <div class="w-100 h-100">
     <div class="mh-100 overflow-auto">
-      <table id="waypoint-table" class="table table-borderless table-striped border-left border-right">
+      <table
+        id="waypoint-table"
+        class="table table-borderless table-striped border-left border-right">
         <thead class="text-white bg-green-sb">
           <th class="w-25">X</th>
           <th class="w-25">Y</th>
@@ -10,16 +12,23 @@
         </thead>
         <tbody>
           <!-- Ignore this "problem" -Edouard -->
-          <tr class="border-bottom" v-for="(waypoint,index) of waypointList">
-            <td class="w-25">{{waypoint.x.toFixed(1)}}</td>
-            <td class="w-25">{{waypoint.y.toFixed(1)}}</td>
-            <td class="w-25">{{waypoint.yaw.toFixed(1)}}</td>
+          <tr
+            v-for="(waypoint,index) of waypointList"
+            class="border-bottom">
+            <td class="w-25">{{ waypoint.x.toFixed(1) }}</td>
+            <td class="w-25">{{ waypoint.y.toFixed(1) }}</td>
+            <td class="w-25">{{ waypoint.yaw.toFixed(1) }}</td>
             <td class="w-25">
-                <button type="button" class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                  v-bind:id="'removeBtn'+index" 
-                  v-on:click="removeWaypointFromList(index)">
-                  <img src="~/open-iconic/svg/trash.svg" alt="" style="width:12px;height:12px;">
-                </button>
+              <button
+                :id="'removeBtn'+index"
+                type="button"
+                class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
+                @click="removeWaypointFromList(index)">
+                <img
+                  src="~/open-iconic/svg/trash.svg"
+                  alt=""
+                  style="width:12px;height:12px;">
+              </button>
             </td>
           </tr>
         </tbody>
@@ -39,39 +48,25 @@
 *         are in and, at the same time, delete the corresponding waypoint in
 *         the array.
 *
-* Dependencies : 
+* Dependencies :
 *       -Bootstrap-Vue
 *
 */
 
 export default {
-  name:"waypoint-table",
-  props:["waypointList"],
-  data(){
-    return{
-    }
+  name: 'waypoint-table',
+  props: ['waypointList'],
+  data() {
+    return {
+    };
   },
-  methods:{
-    //Remove waypoint from html table - ONLY FIRST LINE USE, TO FIX
-    removeWaypointFromList(index){
-      this.waypointList.splice(index,1);
-      /*
-      var table = document.getElementById("waypoint-table");
-      var lengthTable = table.rows.length;
-      var lengthWaypoints = this.waypointList.length;
-      for(var i = index; i < lengthTable; i++)
-      {
-        var row = table.deleteRow(index);
-      };
-      
-      for(var i = index-1; i < lengthWaypoints; i++)
-      { 
-        var wp = this.waypointList[i];
-        this.addWaypointToList(wp);
-      };  */ 
+  methods: {
+    // Remove waypoint from html table - ONLY FIRST LINE USE, TO FIX
+    removeWaypointFromList(index) {
+      this.waypointList.splice(index, 1);
     },
-  }
-}
+  },
+};
 </script>
 
 <style>

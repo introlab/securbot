@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-import Layout from '@/components/Layout.vue'
-import Teleop from '@/components/pages/Teleop.vue'
-import Patrol from '@/components/pages/Patrol.vue'
-import Events from '@/components/pages/Events.vue'
+import Layout from '@/components/Layout.vue';
+import Teleop from '@/components/pages/Teleop.vue';
+import Patrol from '@/components/pages/Patrol.vue';
+import Events from '@/components/pages/Events.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 /*
 * Author(s) : Edouard Legare <edouard.legare@usherbrooke.ca>
@@ -39,28 +39,28 @@ export default new Router({
       path: '/',
       component: Layout,
       redirect: {
-        name: "SecurBot Teleoperation"
+        name: 'SecurBot Teleoperation',
       },
-      children:[
+      children: [
         {
-          path: "teleop",
-          name: "SecurBot Teleoperation",
+          path: 'teleop',
+          name: 'SecurBot Teleoperation',
           component: Teleop,
-          props: true
+          props: true,
         },
         {
-          path: "patrol",
-          name: "SecurBot Patrol Planner",
+          path: 'patrol',
+          name: 'SecurBot Patrol Planner',
           component: Patrol,
-          props: true
+          props: true,
         },
         {
-          path: "logs",
-          name: "SecurBot Event Logging",
+          path: 'logs',
+          name: 'SecurBot Event Logging',
           component: Events,
-          props: true
-        },        
-      ]
-    }
-  ]
-})
+          props: true,
+        },
+      ],
+    },
+  ],
+});
