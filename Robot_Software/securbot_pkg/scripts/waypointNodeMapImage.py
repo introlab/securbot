@@ -39,47 +39,53 @@ from geometry_msgs.msg import PoseStamped
 
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
-waypointPublisher = rospy.Publisher('/map_image_generator/goal', String, queue_size=10)
+waypointPublisher = rospy.Publisher('/map_image_generator/goal', PoseStamped, queue_size=10)
 
 
 #Formatter function from json string to PoseStamped
 def jsonStringToPoseStamped(waypointJsonStr):
     rospy.loginfo("Formatting JSON waypoint string to PoseStamped...")
-    jsonBuffer = json.loads(waypointJsonStr) 
+    rospy.loginfo("JSON to format : "+ waypointJsonStr)
+    jsonBuffer = json.loads(waypointJsonStr)
 
     goal = PoseStamped()
     goal.header.frame_id = "/map"
     goal.header.stamp = rospy.Time.now()
-    
+
     #Formatting position
     goal.pose.position.x = jsonBuffer['x']
     goal.pose.position.y = jsonBuffer['y']
     goal.pose.position.z = 0
-   
+
     #Formatting orientation
     roll = 0
     pitch = 0
     yaw = jsonBuffer['yaw']
-    quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
-    goal.pose.orientation = quaternion
-    
+    quaternion = quaternion_from_euler(roll, pitch, yaw)
+    goal.pose.orientation.x = quaternion[0]
+    goal.pose.orientation.y = quaternion[1]
+    goal.pose.orientation.z = quaternion[2]
+    goal.pose.orientation.w = quaternion[3]
+
+    rospy.loginfo(goal)
+
     return goal
 
 #Publishing waypoint string message formatted as json toward map image node
 def waypointToSplamCallback(waypointJsonStr):
     rospy.loginfo(rospy.get_caller_id() + " heard    %s   ", waypointJsonStr.data)
-	
+
     #Format JSON to PoseStamped
-    newPoseStamped = jsonStringToPoseStamped(waypointJsonStr)
+    newPoseStamped = jsonStringToPoseStamped(waypointJsonStr.data)
 
     #Publishing
-    waypointPublisher.publish(newPoseStamped)        
+    waypointPublisher.publish(newPoseStamped)
 
 def waypointListener():
     #Node name defined as waypointNode
     rospy.init_node('waypointNode', anonymous=True)
     #Subscribing to topic 'fromElectron' with callback
-    rospy.Subscriber("fromElectron", String, waypointToSplamCallback) 
+    rospy.Subscriber("fromElectron", String, waypointToSplamCallback)
     rospy.spin()
 
 if __name__ == '__main__':
