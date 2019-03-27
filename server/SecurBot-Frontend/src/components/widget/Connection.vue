@@ -17,7 +17,8 @@
           v-for="peer in peersTable"
           :key="peer.peerID"
           type="button"
-          class="list-group-item-action list-group-item d-flex justify-content-between align-items-center peer-item"
+          class="list-group-item-action list-group-item d-flex justify-content-between
+          align-items-center peer-item"
           @click="handlePeerConnection(peer.peerID)">
           {{ peer.peerName }}
           <span
@@ -31,29 +32,6 @@
             class="badge badge-secondary">Not Connected</span>
         </button >
       </div>
-      <!--
-        <table id="peers-table" class="table table-striped table-borderless mb-0">
-
-          <thead class="mb-2">
-            <th class="peer-header" scope="col" colspan="2">List of Robots:</th>
-          </thead>
-
-          <tbody>
-            <tr class="peers-table-row" v-for="peer in peersTable" v-bind:key="peer.peerID">
-              <td class="peer-cell align-middle">{{peer.peerName}}</td>
-              <td>{{peer.peerID}}</td>
-              <td class="peer-cell align-middle text-right">
-                <button type="button" class="btn btn-outline-success"
-                  v-bind:id="peer.peerID"
-                  v-on:click="handlePeerConnection(peer.peerID)">
-                  Connected
-                </button>
-              </td>
-            </tr>
-          </tbody>
-
-        </table>
-        -->
     </div>
   </div>
 </template>
@@ -84,86 +62,19 @@ export default {
   data() {
     return {
       fields: ['List of robots', ''],
-      whoAmIElement: null,
-      peersTableElement: null,
-      peersTableBodyElement: null,
       isConnected: false,
       isConnectedToPeerId: null,
       waitingForConnectionState: false,
       peersInfos: [],
     };
   },
-  // On component mounted, get html elements, set bus event - HTML ELEMENTS MIGHT NOT BE USEFULL ANYMORE...
+  // On component mounted, get html elements, set bus event
   mounted() {
-    // Get HTML elements
-    this.whoAmIElement = document.getElementById('whoAmI');
-    this.peersTableElement = document.getElementById('peersTable');
-    this.peersTableBodyElement = document.getElementById('peersTableBody');
-
     this.bus.$on('connection-changed', this.handleConnectionChanged);
   },
   // On component destroyed, not use for now
   destroyed() {},
   methods: {
-    // NOT USED - TO BE REMOVED
-    addPeerConnectionTable(peer) {
-      // Adding a row for new peer
-      const index = this.peersTableBodyElement.rows.length;
-      const row = this.peersTableBodyElement.insertRow(index);
-
-      // Preparing new row for new peer
-      const nameCell = row.insertCell(0);
-      const idCell = row.insertCell(1);
-      const connectionButtonCell = row.insertCell(2);
-
-      // Write peer info in table
-      nameCell.innerHTML = peer.peerName;
-      idCell.innerHTML = peer.peerID;
-
-      // Add peer's new connection button in the row
-      const newConnectionButtonElement = document.createElement('button');
-      newConnectionButtonElement.innerHTML = 'Connect';
-      newConnectionButtonElement.id = peer.peerID;
-
-      // TODO : add properly an event click listener to activate handlePeerConnection(peerId)
-      newConnectionButtonElement.onclick = function () { this.handlePeerConnection(peer.peerId); }.bind(this);
-
-      connectionButtonCell.appendChild(newConnectionButtonElement);
-
-      // Add peer infos in array
-      this.peersInfos.push({ name: peer.peerName, id: peer.peerID });
-    },
-    // NOT USED - TO BE REMOVED
-    removeTopPeerConnectionTable() {
-      const peersTableElement = document.getElementById('peersTable');
-      if (peersTableElement.rows.length > 0) {
-        peersTableElement.deleteRow(0);
-        return this.peersInfos.shift();
-      }
-
-      console.log("Warning removeTopPeerConnectionTable : Can't erase more rows ");
-      console.log(`Warning removeTopPeerConnectionTable : peersTableElement.length is ${peersTableElement.length}`);
-    },
-    // NOT USED - TO BE REMOVED
-    removeAllPeersConnectionTable() {
-      do {
-        var currentPeer = this.removeTopPeerConnectionTable();
-      } while (currentPeer != undefined);
-    },
-    // NOT USED - TO BE REMOVED
-    clearPeerTables() {
-      this.peersInfos = [];
-      this.peersTableBodyElement = '';
-      this.setPeerTableHeaders();
-    },
-    // NOT USED - TO BE REMOVED
-    getPeerObjectByName(peerName) {
-      return this.peersInfos.find(peerObject => peerObject.name == peerName);
-    },
-    // NOT USED - TO BE REMOVED
-    getPeerObjectById(peerId) {
-      return this.peersInfos.find(peerObject => peerObject.id == peerId);
-    },
     // Switch the state (text in innerHTML) of the peer button - NOT USED - TO BE REMOVED
     switchPeerConnectionButtonHtmlState(peerId, state) {
       if (peerId == null) {
@@ -172,10 +83,10 @@ export default {
       }
 
       const peerButtonElement = document.getElementById(peerId);
-      if (state == 'Connected') {
+      if (state === 'Connected') {
         peerButtonElement.innerHTML = 'Disconnect';
         peerButtonElement.className = 'btn btn-outline-success';
-      } else if (state == 'Disconnected') {
+      } else if (state === 'Disconnected') {
         peerButtonElement.innerHTML = 'Connect';
         peerButtonElement.className = 'btn btn-outline-danger';
       } else { console.log('Error switchPeerConnectionButtonHtmlState'); }
@@ -230,7 +141,7 @@ export default {
     },
     // Button function to handle the connection/disconnection to a peer
     handlePeerConnection(peerId) {
-      if (this.isConnected && peerId == this.isConnectedToPeerId) {
+      if (this.isConnected && peerId === this.isConnectedToPeerId) {
         console.log('Disconnecting...');
         this.disconnectToPeer(this.isConnectedToPeerId);
       } else if (this.isConnected) {

@@ -133,8 +133,9 @@ export default {
       General: most of the function here are for the easyRTC client
       To Do :
         -(SEC-346) Add the on router change function (event)
-        -(SEC-365) Add function to set the remote feeds to video element on router change for the CURRENT page.
-                   Aka, only set the feed for the html element in the current viewed page, ignore the other.
+        -(SEC-365) Add function to set the remote feeds to video element on router change
+        for the CURRENT page.
+        --Aka, only set the feed for the html element in the current viewed page, ignore the other.
         -(SEC-365) Add function to clear the remote feeds from video element on router change
         -(SEC-344) Clean code and make it fits standards
     */
@@ -170,14 +171,14 @@ export default {
         }, this.loginFailure);
     },
     /*
-      handleRoomOccupantChange(roomName, occupants, isPrimary) : Callback for the setRoomOccupantListener easyRTC function
+      handleRoomOccupantChange(roomName, occupants, isPrimary):
+      Callback for the setRoomOccupantListener easyRTC function
         Desc : Trigger on occupants change in the room, give easyRTC id of all occupant
         To Do:
           -Clean function
           -(SEC-365) Get occupants name and id for peer list
     */
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
-      // console.log(occupants);
       this.testPeerTable = [];
       if (occupants !== null) {
         for (const occupant in occupants) {

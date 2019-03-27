@@ -32,7 +32,7 @@
 *
 */
 
-import VideoBox from './VideoBox.vue';
+import VideoBox from './VideoBox';
 
 export default {
   name: 'patrol-map',
@@ -122,10 +122,10 @@ export default {
       let scale = 1;
       if ((this.videoElement.offsetHeight * videoRatio) > this.videoElement.offsetWidth) {
         scale = this.videoElement.offsetWidth / this.videoElement.videoWidth;
-        offsetY = (this.videoElement.offsetHeight - this.videoElement.videoHeight * scale) / 2;
+        offsetY = ((this.videoElement.offsetHeight - this.videoElement.videoHeight) * scale) / 2;
       } else {
         scale = this.videoElement.offsetHeight / this.videoElement.videoHeight;
-        offsetX = (this.videoElement.offsetWidth - this.videoElement.videoWidth * scale) / 2;
+        offsetX = ((this.videoElement.offsetWidth - this.videoElement.videoWidth) * scale) / 2;
       }
       return {
         offsetX,
@@ -133,67 +133,13 @@ export default {
         scale,
       };
     },
-    // Set html table header - NOT USED, NEED TO BE REMOVE
-    setTableHeader() {
-      const table = document.getElementById('waypoint-table');
-      const header = table.createTHead();
-
-      // Create elements
-      const row = header.insertRow(0);
-      row.className = 'table-header';
-      const cell1 = row.insertCell(0);
-      const cell2 = row.insertCell(1);
-      const cell3 = row.insertCell(2);
-      const cell4 = row.insertCell(3);
-      const cell5 = row.insertCell(4);
-
-      // Give class to the cells
-      cell1.className = 'waypoint-cell';
-      cell2.className = 'waypoint-cell';
-      cell3.className = 'waypoint-cell';
-      cell4.className = 'waypoint-cell';
-      cell5.className = 'waypoint-cell';
-
-      // Set value of cells
-      cell1.innerHTML = '#';
-      cell2.innerHTML = 'X';
-      cell3.innerHTML = 'Y';
-      cell4.innerHTML = 'Yaw';
-      cell5.innerHTML = 'Remove';
-    },
-    // Add waypoint to html table - NOT USED, NEED TO BE REMOVE
-    addWaypointToList(wp) {
-      // Get table
-      const table = document.getElementById('waypoint-table');
-      const lengthTable = table.rows.length;
-      // Create remove button
-      const removeBtn = document.createElement('button');
-      removeBtn.id = `removeBtn-${lengthTable}`;
-      removeBtn.className = 'removeBtn';
-      removeBtn.onclick = function () { this.removeWaypointFromList(lengthTable); }.bind(this);
-      // Create and set row
-      const row = table.insertRow(lengthTable);
-      row.className = 'table-row';
-      // Add a cells in row
-      const cell1 = row.insertCell(0);
-      const cell2 = row.insertCell(1);
-      const cell3 = row.insertCell(2);
-      const cell4 = row.insertCell(3);
-      const cell5 = row.insertCell(4);
-      // Set the cells content
-      cell1.innerHTML = lengthTable;
-      cell2.innerHTML = wp.x.toFixed(1);
-      cell3.innerHTML = wp.y.toFixed(1);
-      cell4.innerHTML = wp.yaw.toFixed(1);
-      cell5.appendChild(removeBtn);
-    },
     // Make correction to the coordinates from canvas for the waypoint given
     getCanvasCoordinatesFromVideo(x, y) {
       const offsetAndScale = this.getVideoOffsetAndScale();
 
       return {
-        x: x * offsetAndScale.scale + offsetAndScale.offsetX,
-        y: y * offsetAndScale.scale + offsetAndScale.offsetY,
+        x: (x * offsetAndScale.scale) + offsetAndScale.offsetX,
+        y: (y * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
     // On mouse down event, verify validity of click
