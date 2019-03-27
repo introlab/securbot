@@ -31,45 +31,55 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import rospy
 from std_msgs.msg import String
-from rtabmap_ros.srv import SetGoal
 
 #Electron node will publish waypoint string message as json
 import json
 
-#TODO: Figure out if SetGoal is really used in the end (see MapImage and move_base)
-#Using service SetGoal to talk to rtab-map/SPLAM 
-def rtabMapClient(waypointJsonStr):
-    rospy.loginfo("Sending goal from Electron to rtab-map/SPLAM...")
-    rospy.loginfo("Goal to send : " + waypointJsonStr)
-    
-    #SETGOAL (Not tested yet) 
-    #Service to use
-    #rospy.wait_for_service('set_goal')
-    #try:
-	#Create handler function acting as function set_goal(node_id, node_label)
-        #handleSetGoal = rospy.ServiceProxy('set_goal', SetGoal)
-        
-	#Send node_id or node_label
-	#Format and conditions?
-	#setGoalResponse = handleSetGoal( ,) 
-                                            						   
-	#TODO : Figure out how to use SetGoal service response data toward web client? (SetGoalResponse() instance manipulation)
-	#return setGoalResponse
-    #except rospy.ServiceException, e:
-        #print("Service call splamNodeTest failed : %s"%e)
+from geometry_msgs.msg import PoseStamped
 
-#Callback function passing waypoint message toward client function
-#Passing waypoint string message formatted as json
-def rtabMapClientCallback(waypointJsonStr):
+from tf.transformations import euler_from_quaternion, quaternion_from_euler
+
+waypointPublisher = rospy.Publisher('/map_image_generator/goal', String, queue_size=10)
+
+
+#Formatter function from json string to PoseStamped
+def jsonStringToPoseStamped(waypointJsonStr):
+    rospy.loginfo("Formatting JSON waypoint string to PoseStamped...")
+    jsonBuffer = json.loads(waypointJsonStr) 
+
+    goal = PoseStamped()
+    goal.header.frame_id = "/map"
+    goal.header.stamp = rospy.Time.now()
+    
+    #Formatting position
+    goal.pose.position.x = jsonBuffer['x']
+    goal.pose.position.y = jsonBuffer['y']
+    goal.pose.position.z = 0
+   
+    #Formatting orientation
+    roll = 0
+    pitch = 0
+    yaw = jsonBuffer['yaw']
+    quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+    goal.pose.orientation = quaternion
+    
+    return goal
+
+#Publishing waypoint string message formatted as json toward map image node
+def waypointToSplamCallback(waypointJsonStr):
     rospy.loginfo(rospy.get_caller_id() + " heard    %s   ", waypointJsonStr.data)
-    #Calling the service as a client to SetGoal server
-    rtabMapClient(waypointJsonStr.data)
+	
+    #Format JSON to PoseStamped
+    newPoseStamped = jsonStringToPoseStamped(waypointJsonStr)
+
+    #Publishing
+    waypointPublisher.publish(newPoseStamped)        
 
 def waypointListener():
     #Node name defined as waypointNode
     rospy.init_node('waypointNode', anonymous=True)
     #Subscribing to topic 'fromElectron' with callback
-    rospy.Subscriber("fromElectron", String, rtabMapClientCallback)
+    rospy.Subscriber("fromElectron", String, waypointToSplamCallback) 
     rospy.spin()
 
 if __name__ == '__main__':
