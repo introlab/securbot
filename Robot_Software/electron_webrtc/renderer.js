@@ -20,14 +20,19 @@ easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
 function get_video_id() {
     return new Promise((resolve, reject) => {
         easyrtc.getVideoSourceList(list => {
-            list.forEach(source => {
-            console.log(source.label + 'found')
-            if(source.label === "virtual_kinect") {
-                    resolve(source.id)
-                }
+
+            var videoSource = list.find(source => {
+                return source.label.toString().trim() === 'virtual_map'
             })
-            console.log('No camera found')
-            reject()
+
+            if (videoSource == undefined) {
+                console.log("Map video not found")
+                reject("Desired video stream not found")
+                return
+            }
+
+            console.log("Found map stream")
+            resolve(videoSource.id)
         })
     })
 }
