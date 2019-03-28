@@ -2,7 +2,7 @@
   <div class="h-100 w-100 position-relative">
     <video-box
       :show="true"
-      video-id="map"
+      :video-id="patrolMapId"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;"/>
     <canvas
@@ -39,7 +39,7 @@ export default {
   components: {
     VideoBox,
   },
-  props: ['waypointList'],
+  props: ['waypointList', 'patrolMapId'],
   data() {
     return {
       videoElement: null,
@@ -52,7 +52,7 @@ export default {
   },
   // On component mounted, Get html elements and initialize
   mounted() {
-    this.videoElement = document.getElementById('map');
+    this.videoElement = document.getElementById(this.patrolMapId);
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();

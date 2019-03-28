@@ -34,7 +34,7 @@
         class="mh-100">
         <patrol-map
           :waypoint-list="waypointList"
-          :bus="bus"/>
+          patrol-map-id="patrol-map-stream"/>
       </b-col>
     </b-row>
   </b-jumbotron>

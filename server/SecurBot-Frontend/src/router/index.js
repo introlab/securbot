@@ -5,6 +5,7 @@ import Layout from '@/components/Layout';
 import Teleop from '@/components/pages/Teleop';
 import Patrol from '@/components/pages/Patrol';
 import Events from '@/components/pages/Events';
+import Testing from '@/components/pages/Testing';
 
 Vue.use(Router);
 
@@ -37,6 +38,12 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: {
+        name: 'SecurBot Teleoperation',
+      },
+    },
+    {
+      path: '/operator',
       component: Layout,
       redirect: {
         name: 'SecurBot Teleoperation',
@@ -61,6 +68,10 @@ export default new Router({
           props: true,
         },
       ],
+    },
+    {
+      path: '/testing',
+      component: Testing,
     },
   ],
 });

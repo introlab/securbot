@@ -13,8 +13,8 @@
         class="mh-100">
         <div class="h-100 w-100 m-auto position-relative">
           <video-box
-            :show="showSelf"
-            video-id="self-video-stream"/>
+            :show="showCamera"
+            video-id="camera-stream"/>
         </div>
       </b-col>
       <b-col
@@ -25,8 +25,8 @@
         <b-row class="h-50 w-100 position-relative m-0">
           <div class="h-100 w-100 m-auto position-relative">
             <video-box
-              :show="showRobot"
-              video-id="robot-video-stream"/>
+              :show="showMap"
+              video-id="map-stream"/>
           </div>
         </b-row>
         <b-row
@@ -39,6 +39,7 @@
               class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
               style="top:0;left:0;">
               <joystick
+                :enable="enableJoystick"
                 :absolute-max-x="1"
                 :absolute-max-y="1"
                 :bus="bus"/>
@@ -80,17 +81,28 @@ export default {
   props: ['bus', 'router'],
   data() {
     return {
-      showRobot: true,
-      showSelf: true,
+      showCamera: true,
+      showMap: true,
+      enableJoystick: false,
     };
   },
   mounted() {
     console.log('Teleop have been mounted');
     this.router.$emit('mounted');
+    this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
   },
   destroyed() {
     console.log('Teleop have been destroyed');
     this.router.$emit('destroyed');
+  },
+  methods: {
+    changeJoystickState(state) {
+      if (state === 'enable') {
+        this.enableJoystick = true;
+      } else {
+        this.enableJoystick = false;
+      }
+    },
   },
 
 };
