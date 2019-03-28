@@ -29,63 +29,72 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+#Note definition: Waypoints is, by definition according to SecurBot, a goal to
+#                 reach in the robot's physical environment
+
 import rospy
-from std_msgs.msg import String
 
-#Electron node will publish waypoint string message as json
+#Json Strings formats (from web client) to PoseStamped for RTAB-Map
 import json
-
+from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
 
-from tf.transformations import euler_from_quaternion, quaternion_from_euler
+#Yaws transformation into quaternions
+from tf.transformations import quaternion_from_euler
 
+#Global publisher that can be used
 waypointPublisher = rospy.Publisher('/map_image_generator/goal', PoseStamped, queue_size=10)
 
 
 #Formatter function from json string to PoseStamped
-def jsonStringToPoseStamped(waypointJsonStr):
+def jsonStringToPoseStamped(jsonString):
     rospy.loginfo("Formatting JSON waypoint string to PoseStamped...")
-    rospy.loginfo("JSON to format : "+ waypointJsonStr)
-    jsonBuffer = json.loads(waypointJsonStr)
-
-    goal = PoseStamped()
-    goal.header.frame_id = "/map"
-    goal.header.stamp = rospy.Time.now()
+    rospy.loginfo("JSON to format : "+ jsonString)
+    
+    #Loading json message into buffer
+    jsonBuffer = json.loads(jsonString)
+    
+    #Creating and partially filling a new PoseStamped
+    waypoint = PoseStamped()
+    waypoint.header.frame_id = "/map"
+    waypoint.header.stamp = rospy.Time.now()
 
     #Formatting position
-    goal.pose.position.x = jsonBuffer['x']
-    goal.pose.position.y = jsonBuffer['y']
-    goal.pose.position.z = 0
+    waypoint.pose.position.x = jsonBuffer['x']
+    waypoint.pose.position.y = jsonBuffer['y']
+    waypoint.pose.position.z = 0
 
     #Formatting orientation
     roll = 0
     pitch = 0
     yaw = jsonBuffer['yaw']
     quaternion = quaternion_from_euler(roll, pitch, yaw)
-    goal.pose.orientation.x = quaternion[0]
-    goal.pose.orientation.y = quaternion[1]
-    goal.pose.orientation.z = quaternion[2]
-    goal.pose.orientation.w = quaternion[3]
+    waypoint.pose.orientation.x = quaternion[0]
+    waypoint.pose.orientation.y = quaternion[1]
+    waypoint.pose.orientation.z = quaternion[2]
+    waypoint.pose.orientation.w = quaternion[3]
 
-    rospy.loginfo(goal)
+    rospy.loginfo("Waypoint : ")
+    rospy.loginfo("")
+    rospy.loginfo(waypoint)
 
-    return goal
+    return waypoint
 
-#Publishing waypoint string message formatted as json toward map image node
-def waypointToSplamCallback(waypointJsonStr):
-    rospy.loginfo(rospy.get_caller_id() + " heard    %s   ", waypointJsonStr.data)
+#Publishing waypoint string message formatted as json toward '/map_image_generator/goal' topic
+def waypointToMapImageGeneratorCallback(waypointJsonStr):
+    rospy.loginfo(rospy.get_caller_id() + " heard   %s   ", waypointJsonStr.data)
 
-    #Format JSON to PoseStamped
+    #Format Json String to PoseStamped
     newPoseStamped = jsonStringToPoseStamped(waypointJsonStr.data)
 
     #Publishing
     waypointPublisher.publish(newPoseStamped)
 
 def waypointListener():
-    #Node name defined as waypointNode
-    rospy.init_node('waypointNode', anonymous=True)
+    #Node name defined as waypointDecoder
+    rospy.init_node('waypointDecoder', anonymous=True) #anonymous=True keeps each waypointDecoder nodes unique if there were many
     #Subscribing to topic 'fromElectron' with callback
-    rospy.Subscriber("fromElectron", String, waypointToSplamCallback)
+    rospy.Subscriber("fromElectron", String, waypointToMapImageGeneratorCallback)
     rospy.spin()
 
 if __name__ == '__main__':
