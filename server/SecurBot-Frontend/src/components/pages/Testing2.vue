@@ -1,12 +1,10 @@
 <template>
   <div>
-    <!--
     <div style="height:540px;width:960px;background-color:black;">
       <video-box
         :show="true"
         video-id="local-stream"/>
     </div>
-    -->
     <div style="height:20px;width:960px;background-color:white;"/>
     <div style="height:540px;width:960px;background-color:black;">
       <video-box
@@ -55,7 +53,7 @@ export default {
     mounted() : On component mounted, use to get and initialise
   */
   mounted() {
-    // this.localElement = document.getElementById('local-stream');
+    this.localElement = document.getElementById('local-stream');
     this.remoteElement = document.getElementById('remote-stream');
     this.busBus.$on('peer-connection', this.connectTo);
 
@@ -72,10 +70,10 @@ export default {
     connect() {
       easyrtc.enableDebug(true);
       console.log('Initializing...');
-      easyrtc.enableVideo(false);
+      easyrtc.enableVideo(true);
       easyrtc.enableAudio(false);
-      easyrtc.enableVideoReceive(true);
-      easyrtc.enableAudioReceive(true);
+      easyrtc.enableVideoReceive(false);
+      easyrtc.enableAudioReceive(false);
       easyrtc.enableDataChannels(true);
 
       easyrtc.setDataChannelOpenListener(this.dataOpenListenerCB);
@@ -89,9 +87,14 @@ export default {
 
       easyrtc.setRoomApiField('default', 'type', 'robot_testing');
 
-      easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      // easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
-      // easyrtc.initMediaSource(() => { easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure); }, this.loginFailure);
+      // eslint-disable-next-line no-loop-func
+      easyrtc.initMediaSource(() => {
+        this.localStream = easyrtc.getLocalStream();
+        easyrtc.setVideoObjectSrc(this.localElement, this.localStream);
+        easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      }, this.loginFailure);
       console.log('Connected...');
     },
     handleRoomOccupantChange(roomName, occupants, isPrimary) {

@@ -6,6 +6,7 @@ import Teleop from '@/components/pages/Teleop';
 import Patrol from '@/components/pages/Patrol';
 import Events from '@/components/pages/Events';
 import Testing from '@/components/pages/Testing';
+import Testing2 from '@/components/pages/Testing2';
 
 Vue.use(Router);
 
@@ -72,6 +73,10 @@ export default new Router({
     {
       path: '/testing',
       component: Testing,
+    },
+    {
+      path: '/testing2',
+      component: Testing2,
     },
   ],
 });

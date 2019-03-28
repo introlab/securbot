@@ -137,6 +137,7 @@ export default {
       easyrtc.setDataChannelOpenListener(this.dataOpenListenerCB);
       easyrtc.setDataChannelCloseListener(this.dataCloseListenerCB);
       easyrtc.setPeerListener(this.handleData);
+
       easyrtc.setRoomOccupantListener(this.handleRoomOccupantChange);
       easyrtc.setStreamAcceptor(this.acceptPeerVideo);
       easyrtc.setOnStreamClosed(this.closePeerVideo);
@@ -144,11 +145,18 @@ export default {
 
       easyrtc.setRoomApiField('default', 'type', 'operator');
 
+      this.getHTMLElements();
+      /*
+      easyrtc.initMediaSource(() => {
+        this.localStream = easyrtc.getLocalStream();
+        easyrtc.setVideoObjectSrc(this.cameraStreamElement, this.localStream);
+        easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      }, this.loginFailure);
+      */
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
-
-      this.setHTMLVideoStream();
+      // this.setHTMLVideoStream();
     },
     /*
       handleRoomOccupantChange(roomName, occupants, isPrimary):
@@ -219,9 +227,9 @@ export default {
           -(SEC-365) Get the remote feeds from occupants
           -(SEC-365) Set feed(s) for the current page (Call the set feeds function)
     */
-    acceptPeerVideo(easyrtcid, stream, streamName) {
+    acceptPeerVideo(easyrtcid, stream) {
       console.log('Something Something');
-      console.log(`Id: ${easyrtcid}, Stream Name:${streamName}`);
+      // console.log(`Id: ${easyrtcid}, Stream Name:${streamName}`);
       this.setHTMLVideoStream();
     },
     /*
