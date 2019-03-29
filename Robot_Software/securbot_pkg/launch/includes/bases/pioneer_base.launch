@@ -7,10 +7,10 @@
                 <arg name="smooth_cmd_vel_topic" default="/smooth_cmd_vel"/>
 		<arg name="robot_cmd_vel_topic"   value="robot_cmd_vel"/>
 
-		<!-- nodelet manager -->
+		
 		<node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager_name)" args="manager"/>
 
-		<!-- velocity smoother -->
+		
 		<include file="$(find yocs_velocity_smoother)/launch/velocity_smoother.launch">
 			<arg name="node_name"             value="$(arg node_name)"/>
 		        <arg name="nodelet_manager_name"  value="$(arg nodelet_manager_name)"/>
@@ -18,6 +18,7 @@
 	                <arg name="raw_cmd_vel_topic"     value="$(arg raw_cmd_vel_topic)"/>
 		        <arg name="smooth_cmd_vel_topic"  value="$(arg smooth_cmd_vel_topic)"/>
 		        <arg name="robot_cmd_vel_topic"   value="$(arg robot_cmd_vel_topic)"/>
+			<arg name="odom_topic" value="/rtabmap/odom"/>
 	      </include>
 	</group>
 	<group>
