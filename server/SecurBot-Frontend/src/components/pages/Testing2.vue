@@ -21,6 +21,11 @@
 </template>
 
 <script>
+/*
+  Page to test API by simulating a robot without all the other control.
+  This page gets video feed from computer and sets a data channel.
+  When the simulator are done, this page needs to get remove (from index too)
+*/
 /* global easyrtc */
 
 import Vue from 'vue';
@@ -40,9 +45,9 @@ export default {
       peerId: null,
       isConnected: null,
       selfEasyrtcid: null,
-      localStream: null,
       remoteStream: null,
-      localStreams: ['camera', 'map'],
+      localStreamNames: ['camera', 'map'],
+      localStreams: {},
       localElement: null,
       remoteElement: null,
       testPeerTable: [],
@@ -68,7 +73,7 @@ export default {
   },
   methods: {
     connect() {
-      easyrtc.enableDebug(true);
+      easyrtc.enableDebug(false);
       console.log('Initializing...');
       easyrtc.enableVideo(true);
       easyrtc.enableAudio(false);
@@ -85,16 +90,34 @@ export default {
       easyrtc.setOnStreamClosed(this.closePeerVideo);
       easyrtc.setAcceptChecker(this.acceptCall);
 
-      easyrtc.setRoomApiField('default', 'type', 'robot_testing');
+      easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
 
-      // easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-
+      let temp = false;
       // eslint-disable-next-line no-loop-func
-      easyrtc.initMediaSource(() => {
-        this.localStream = easyrtc.getLocalStream();
-        easyrtc.setVideoObjectSrc(this.localElement, this.localStream);
-        easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-      }, this.loginFailure);
+      easyrtc.getVideoSourceList((videoSources) => {
+        for (let i = 0; i < videoSources.length; i++) {
+          const videoSource = videoSources[i];
+
+          const streamName = videoSource.label;
+
+          easyrtc.setVideoSource(videoSource.id);
+          // eslint-disable-next-line no-loop-func
+          easyrtc.initMediaSource(() => {
+            const stream = easyrtc.getLocalStream(streamName);
+            this.localStreams[streamName] = stream;
+
+            if (streamName === 'map') {
+              easyrtc.setVideoObjectSrc(this.remoteElement, stream);
+            } else if (streamName === 'camera') {
+              easyrtc.setVideoObjectSrc(this.localElement, stream);
+            }
+            if (!temp) {
+              easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+              temp = true;
+            }
+          }, this.loginFailure, streamName);
+        }
+      });
       console.log('Connected...');
     },
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
@@ -102,7 +125,7 @@ export default {
       if (occupants !== null) {
         // eslint-disable-next-line guard-for-in
         for (const occupant in occupants) {
-          const peer = { peerName: occupant, peerID: occupant };
+          const peer = { peerName: occupant, peerId: occupant };
           this.testPeerTable.push(peer);
         }
       }
@@ -152,14 +175,14 @@ export default {
       easyrtc.showError(errorCode, message);
     },
     acceptCall(easyrtcid, acceptor) {
-      acceptor(true);
+      acceptor(true, this.localStreamNames);
     },
-    acceptPeerVideo(easyrtcid, stream) {
+    acceptPeerVideo(easyrtcid, stream, streamName) {
       this.remoteStream = stream;
       easyrtc.setVideoObjectSrc(this.remoteElement, this.remoteStream);
     },
     closePeerVideo(easyrtcid) {
-      this.localStream = null;
+      this.localStreams = [];
       this.remoteStream = null;
       easyrtc.setVideoObjectSrc(this.localElement, '');
       easyrtc.setVideoObjectSrc(this.remoteElement, '');
@@ -169,6 +192,9 @@ export default {
     },
     dataCloseListenerCB(easyrtcid) {
       console.warn(`Data channel close with ${easyrtcid}`);
+    },
+    handleData(data) {
+      console.log(data);
     },
   },
 };

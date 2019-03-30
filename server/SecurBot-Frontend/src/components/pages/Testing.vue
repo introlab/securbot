@@ -23,6 +23,11 @@
 </template>
 
 <script>
+/*
+  Page to test API by simulating an operator without all the other control.
+  This page does not get video or audio, it just sets a data channel.
+  When the simulator are done, this page needs to get remove (from index too)
+*/
 /* global easyrtc */
 
 import Vue from 'vue';
@@ -70,7 +75,7 @@ export default {
   },
   methods: {
     connect() {
-      easyrtc.enableDebug(true);
+      easyrtc.enableDebug(false);
       console.log('Initializing...');
       easyrtc.enableVideo(false);
       easyrtc.enableAudio(false);
@@ -90,8 +95,6 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'robot_testing');
 
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-
-      // easyrtc.initMediaSource(() => { easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure); }, this.loginFailure);
       console.log('Connected...');
     },
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
@@ -99,7 +102,7 @@ export default {
       if (occupants !== null) {
         // eslint-disable-next-line guard-for-in
         for (const occupant in occupants) {
-          const peer = { peerName: occupant, peerID: occupant };
+          const peer = { peerName: occupant, peerId: occupant };
           this.testPeerTable.push(peer);
         }
       }

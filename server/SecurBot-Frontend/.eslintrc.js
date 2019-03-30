@@ -47,6 +47,7 @@ module.exports = {
     }],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
     'vue/name-property-casing': ["error", "kebab-case"],
     'vue/require-prop-types':'off',
     'vue/require-v-for-key':'off',

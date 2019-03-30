@@ -36,7 +36,7 @@
               <div class="px-2 py-1">
                 <connection
                   :self-id="selfEasyrtcid"
-                  :peers-table="testPeerTable"
+                  :peers-table="peerTable"
                   :bus="teleopBus"/>
               </div>
             </b-nav-item-dropdown>
@@ -84,28 +84,23 @@ export default {
   },
   data() {
     return {
-      // Rename variables
       fluidState: true,
       peerId: null,
       isConnected: null,
-      isInit: false,
       isDataChannelAvailable: false,
       selfEasyrtcid: null,
       cameraStreamElement: null,
       mapStreamElement: null,
       patrolMapStreamElement: null,
-      localStream: null,
       cameraStream: null,
       mapStream: null,
+      localStream: null,
       teleopBus: new Vue(),
       routeBus: new Vue(),
-      testPeerTable: [{ peerName: 'Robot1', peerID: 'aogiyudlf' },
-        { peerName: 'Robot2', peerID: 'fqw98rasd' }],
+      peerTable: [],
     };
   },
-  /*
-    mounted() : On component mounted, use to get and initialise
-  */
+  // mounted() : On component mounted, use to get and initialise
   mounted() {
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
@@ -122,9 +117,7 @@ export default {
     }
   },
   methods: {
-    /*
-      connect(): function managing init and connection to the easyrtc server
-    */
+    // connect(): function managing init and connection to the easyrtc server
     connect() {
       easyrtc.enableDebug(false);
       console.log('Initializing...');
@@ -143,58 +136,51 @@ export default {
       easyrtc.setOnStreamClosed(this.closePeerVideo);
       easyrtc.setAcceptChecker(this.acceptCall);
 
-      easyrtc.setRoomApiField('default', 'type', 'operator');
-
-      this.getHTMLElements();
-      /*
-      easyrtc.initMediaSource(() => {
-        this.localStream = easyrtc.getLocalStream();
-        easyrtc.setVideoObjectSrc(this.cameraStreamElement, this.localStream);
-        easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-      }, this.loginFailure);
-      */
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
-      // this.setHTMLVideoStream();
+      this.setHTMLVideoStream();
     },
     /*
       handleRoomOccupantChange(roomName, occupants, isPrimary):
       Callback for the setRoomOccupantListener easyRTC function
         Desc : Trigger on occupants change in the room, give easyRTC id of all occupant
-        To Do:
-          -(SEC-365) Get occupants name and id for peer list
     */
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
-      this.testPeerTable = [];
+      this.peerTable = [];
       if (occupants !== null) {
-        // eslint-disable-next-line guard-for-in
         for (const occupant in occupants) {
-          const peer = { peerName: occupant, peerID: occupant };
-          this.testPeerTable.push(peer);
+          if (occupants[occupant].apiField.type.fieldValue.includes('robot')) {
+            console.log(occupants);
+            console.log(occupant);
+            const peer = { peerName: occupants[occupant].apiField.type.fieldValue,
+              peerId: occupant };
+            this.peerTable.push(peer);
+          }
         }
       }
     },
-    /*
-      performCall(occupantId): function used to call someone in the room with its id
-    */
+    // performCall(occupantId): use to call someone in the room with its id
     performCall(occupantId) {
       easyrtc.hangupAll();
       console.log(`Calling the chosen occupant : ${occupantId}`);
 
       easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted);
     },
+    // callSuccessful(occupantId, mediaType): use to call someone in the room with its id
     callSuccessful(occupantId, mediaType) {
       console.warn(`Call to ${occupantId} was successful, here's the media: ${mediaType}`);
       if (mediaType === 'connection') {
         this.teleopBus.$emit('connection-changed', 'connected');
       }
     },
+    // callFailure(errCode, errMessage): use to call someone in the room with its id
     callFailure(errCode, errMessage) {
       console.warn(`Call failed : ${errCode} | ${errMessage}`);
       this.teleopBus.$emit('connection-changed', 'failed');
       this.peerId = null;
     },
+    // callAccepted(accepted, easyrtcid): use to call someone in the room with its id
     callAccepted(accepted, easyrtcid) {
       console.warn(`Call was ${accepted} from ${easyrtcid}`);
       if (!accepted) {
@@ -206,7 +192,7 @@ export default {
     },
 
     /*
-      loginSuccess(easyrtcid): Callback for connect success to the room
+      loginSuccess(easyrtcid): Callback for successfully connecting to the room
         Desc: When connection to room is successful, save self id
     */
     loginSuccess(easyrtcid) {
@@ -214,7 +200,7 @@ export default {
       this.selfEasyrtcid = easyrtcid;
     },
     /*
-      loginFailure(errorCode, message): Callback for connect failure to the room
+      loginFailure(errorCode, message): Callback for failure to connect to the room
         Desc: When connection to room is successful, save self id
     */
     loginFailure(errorCode, message) {
@@ -223,13 +209,16 @@ export default {
     /*
       acceptPeerVideo(easyrtcid, stream): Callback for setStreamAcceptor() function
         Desc: This function called after a successful call
-        To Do:
-          -(SEC-365) Get the remote feeds from occupants
-          -(SEC-365) Set feed(s) for the current page (Call the set feeds function)
     */
-    acceptPeerVideo(easyrtcid, stream) {
-      console.log('Something Something');
-      // console.log(`Id: ${easyrtcid}, Stream Name:${streamName}`);
+    acceptPeerVideo(easyrtcid, stream, streamName) {
+      console.log(`Stream received info, id : ${easyrtcid}, streamName : ${streamName}`);
+      if (streamName === 'camera') {
+        this.cameraStream = stream;
+      } else if (streamName === 'map') {
+        this.mapStream = stream;
+      } else {
+        console.warn('Unknown stream obtained...');
+      }
       this.setHTMLVideoStream();
     },
     /*
@@ -246,7 +235,12 @@ export default {
         Desc: When called, refuse the call, an operator cannot be called
     */
     acceptCall(easyrtcid, acceptor) {
-      acceptor(false);
+      console.log(`This id called : ${easyrtcid}, i'll only answer to ${this.peerId}`);
+      if (easyrtcid === this.peerId) {
+        acceptor(true);
+      } else {
+        acceptor(false);
+      }
     },
     /*
       onJoystickPositionChange(): on event "joystick-position-change", this function is called
@@ -260,11 +254,12 @@ export default {
       }
     },
     /*
-      log(event) : on event "peer-connection", this function is called
+      connectTo(event) : on event "peer-connection", this function is called
       Desc: Receive an id and perform the call on this id if not already connected.
             If connected and the id is the one of the connected peer, disconnect for it.
     */
     connectTo(easyrtcid) {
+      console.log(`A connection change with ${easyrtcid} was asked...`);
       if (this.peerId === easyrtcid) {
         easyrtc.hangupAll();
         this.teleopBus.$emit('connection-changed', 'disconnected');
@@ -275,37 +270,45 @@ export default {
         console.warn("The is an issue in the connection state handling... This shouldn't happen...");
       }
     },
-    //
+    // dataOpenListenerCB(easyrtcid): Trigger on data channel opening with peer
     dataOpenListenerCB(easyrtcid) {
       console.warn(`Data channel open with ${easyrtcid}`);
       this.isDataChannelAvailable = true;
       this.teleopBus.$emit('on-joystick-state-changed', 'enable');
     },
-    //
+    // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
     dataCloseListenerCB(easyrtcid) {
       console.warn(`Data channel close with ${easyrtcid}`);
       this.isDataChannelAvailable = false;
       this.teleopBus.$emit('on-joystick-state-changed', 'disable');
     },
+    // handleData(data): Handle datas for the data channel
     handleData(data) {
+      if (this.isDataChannelAvailable) {
+        easyrtc.sendDataP2P(this.peerId, 'msg', data);
+      } else {
+        console.warn('No data channel available to send data...');
+      }
       console.log("Someday we'll do something with the data, but not today...");
     },
-    // The next 2 functions need to change ?
+    // setHTMLVideoStream(): set the available video feed(s) to available html element(s)
     setHTMLVideoStream() {
       this.getHTMLElements();
 
-      if (this.isInit) {
-        if (this.cameraStreamElement && this.cameraStream) {
-          easyrtc.setVideoObjectSrc(this.cameraStreamElement, this.cameraStream);
-        }
-        if (this.mapStreamElement && this.mapStream) {
-          easyrtc.setVideoObjectSrc(this.mapStreamElement, this.mapStream);
-        }
-        if (this.patrolMapStreamElement && this.mapStream) {
-          easyrtc.setVideoObjectSrc(this.patrolMapStreamElement, this.mapStream);
-        }
+      if (this.cameraStreamElement && this.cameraStream) {
+        console.log('Setting camera stream...');
+        easyrtc.setVideoObjectSrc(this.cameraStreamElement, this.cameraStream);
+      }
+      if (this.mapStreamElement && this.mapStream) {
+        console.log('Setting map stream...');
+        easyrtc.setVideoObjectSrc(this.mapStreamElement, this.mapStream);
+      }
+      if (this.patrolMapStreamElement && this.mapStream) {
+        console.log('Setting patrol stream...');
+        easyrtc.setVideoObjectSrc(this.patrolMapStreamElement, this.mapStream);
       }
     },
+    // clearHTMLVideoStream(): Clears all feeds in html and reset the feed variables
     clearHTMLVideoStream() {
       if (this.cameraStreamElement) {
         easyrtc.setVideoObjectSrc(this.cameraStreamElement, '');
@@ -321,7 +324,7 @@ export default {
       this.mapStreamElement = null;
       this.patrolMapStreamElement = null;
     },
-    // Get HTML element of VideoBox component
+    // getHTMLElements() : Get HTML element of VideoBox component
     getHTMLElements() {
       this.cameraStreamElement = document.getElementById('camera-stream');
       this.mapStreamElement = document.getElementById('map-stream');
