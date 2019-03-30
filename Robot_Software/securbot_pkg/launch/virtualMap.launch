@@ -30,7 +30,7 @@
 
 
     <!-- Kernel Modules -->
-    <node pkg="securbot_pkg" type="virtualDevices.sh" name="v4l2_map"></node>
+    <node pkg="securbot_pkg" type="virtualDevices.bash" name="v4l2_map"></node>
 
     <!-- Image to video -->
     <node pkg="image_capture" type="virtualcam_node" name="virtualcam_node" output="screen">

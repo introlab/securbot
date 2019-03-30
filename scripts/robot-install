@@ -50,7 +50,7 @@ apt-get update
 # Add the required ros packages here
 apt-get -y install ros-kinetic-desktop-full v4l-utils libv4l-dev nodejs \
     ros-kinetic-rtabmap-ros libnss3 xvfb libgtk2.0-0 libxtst6 libxss1 \
-    libgconf-2-4 libasound2
+    libgconf-2-4 libasound2 linux-generic v4l2loopback-dkms ffmpeg
 
 # Initialize rosdep
 rosdep init
