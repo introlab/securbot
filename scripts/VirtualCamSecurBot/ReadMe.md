@@ -21,4 +21,3 @@
 
 #### To do
    * Set a start file to use a gif instead of a static image.
-   * Camera Name (so it doesn't show as Dummy device).
