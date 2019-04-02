@@ -1,5 +1,4 @@
-/build/
-/config/
 /dist/
+/tests/
 /src/components/demo
 /*.js

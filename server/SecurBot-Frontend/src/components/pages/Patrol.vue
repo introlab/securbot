@@ -1,23 +1,49 @@
 <template>
-    <b-jumbotron id="patrol-layout" class="h-100 w-100" :fluid="true" :container-fluid="true" bg-variant="light">
-      <b-row class="h-100">
-        <b-col md="4" class="mh-100">
-          <div class="align-middle p-1" style="height:10%">
-            <div class="w-75 h-100 text-left float-left" style="font-size: 20pt">Patrol :</div>
-            <button type="button" class="btn btn-success w-25 h-50" v-on:click="sendPatrol()">Confirm</button>
-            <button type="button" class="btn btn-danger w-25 h-50" v-on:click="clearWaypointList()">Reset</button>
+  <b-jumbotron
+    id="patrol-layout"
+    :fluid="true"
+    :container-fluid="true"
+    class="h-100 w-100"
+    bg-variant="light">
+    <b-row class="h-100">
+      <b-col
+        md="4"
+        class="mh-100">
+        <div
+          class="align-middle p-1"
+          style="height:10%">
+          <div
+            class="w-75 h-100 text-left float-left"
+            style="font-size: 20pt">
+            Patrol :
           </div>
-          <div class="h-50">
-            <waypoint-table :waypointList="waypointList"/>
-          </div>
-          <div>
-          </div> 
-        </b-col>
-        <b-col md="8" class="mh-100">
-          <patrol-map :waypointList="waypointList" :bus="bus"/>
-        </b-col>        
-      </b-row>
-    </b-jumbotron>
+          <button
+            type="button"
+            class="btn btn-success w-25 h-50"
+            @click="sendPatrol()">
+            Confirm
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger w-25 h-50"
+            @click="clearWaypointList()">
+            Reset
+          </button>
+        </div>
+        <div class="h-50">
+          <waypoint-table :waypoint-list="waypointList" />
+        </div>
+        <div />
+      </b-col>
+      <b-col
+        md="8"
+        class="mh-100">
+        <patrol-map
+          :waypoint-list="waypointList"
+          patrol-map-id="patrol-map-stream" />
+      </b-col>
+    </b-row>
+  </b-jumbotron>
 </template>
 
 
@@ -35,49 +61,48 @@
 *         used to send the current waypoint list or clean it (remove every points).
 *         It communicates with parent component through the bus in props.
 *
-* Dependencies : 
+* Dependencies :
 *       -PatrolMap.vue
 *       -WaypointTable.map
 *       -Bootstrap-Vue
 *
 */
-import PatrolMap from "../widget/PatrolMap.vue";
-import WaypointTable from "../widget/WaypointTable.vue";
+import PatrolMap from '../widget/PatrolMap';
+import WaypointTable from '../widget/WaypointTable';
 
 export default {
-  name:'patrol-page',
-  props:['bus','router'],
-  components:{
+  name: 'patrol-page',
+  components: {
     PatrolMap,
     WaypointTable,
   },
-  data(){
-    return{
-      waypointList:[],
-    }
+  props: ['bus', 'router'],
+  data() {
+    return {
+      waypointList: [],
+    };
   },
-  mounted(){
-    console.log("Patrol have been mounted");
+  mounted() {
+    console.log('Patrol have been mounted');
     this.router.$emit('mounted');
   },
-  destroyed(){
-    console.log("Patrol have been destroyed");
+  destroyed() {
+    console.log('Patrol have been destroyed');
     this.router.$emit('destroyed');
   },
-  methods:{
-    //Send the waypoint list for patrol scheduling
-    sendPatrol(){
+  methods: {
+    // Send the waypoint list for patrol scheduling
+    sendPatrol() {
       this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
     },
-    //Clear the waypoint list
-    clearWaypointList(){
+    // Clear the waypoint list
+    clearWaypointList() {
       this.waypointList = [];
     },
-  }
-}
+  },
+};
 </script>
 
 <style>
 
 </style>
-
