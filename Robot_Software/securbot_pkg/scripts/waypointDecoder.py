@@ -19,9 +19,6 @@ waypointPublisher = rospy.Publisher('/map_image_generator/goal', PoseStamped, qu
 
 #Formatter function from json string to PoseStamped
 def jsonStringToPoseStamped(jsonString):
-    rospy.loginfo("Formatting JSON waypoint string to PoseStamped...")
-    rospy.loginfo("JSON to format : "+ jsonString)
-    
     #Loading json message into buffer
     jsonBuffer = json.loads(jsonString)
     
@@ -44,10 +41,6 @@ def jsonStringToPoseStamped(jsonString):
     waypoint.pose.orientation.y = quaternion[1]
     waypoint.pose.orientation.z = quaternion[2]
     waypoint.pose.orientation.w = quaternion[3]
-
-    rospy.loginfo("Waypoint : ")
-    rospy.loginfo("")
-    rospy.loginfo(waypoint)
 
     return waypoint
 
