@@ -58,6 +58,7 @@ async function my_init() {
 
     var parameters = await fetchParameters()
 
+    console.log('Attempting to connect to : ' + parameters.webRtcServerUrl);
     easyrtc.setSocketUrl(parameters.webRtcServerUrl);
     easyrtc.setRoomOccupantListener( loggedInListener);
     var connectSuccess = function(myId) {
