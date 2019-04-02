@@ -7,17 +7,17 @@
         video-id="local-stream"/>
     </div>
     -->
-    <div style="height:20px;width:960px;background-color:white;"/>
+    <div style="height:20px;width:960px;background-color:white;" />
     <div style="height:540px;width:960px;background-color:black;">
       <video-box
         :show="true"
-        video-id="remote-stream"/>
+        video-id="remote-stream" />
     </div>
     <div>
       <connection
         :self-id="selfEasyrtcid"
         :peers-table="testPeerTable"
-        :bus="busBus"/>
+        :bus="busBus" />
     </div>
   </div>
 </template>
@@ -177,4 +177,3 @@ export default {
 <style>
 
 </style>
-

@@ -3,11 +3,11 @@
   <div
     id="VideoStream"
     class="w-100 h-100 m-auto position-relative bg-black-sb shadow-sb">
-    <div class="w-100 h-100 position-relative d-inline-block">
+    <div class="w-100 h-100 position-relative">
       <video
         v-show="show"
-        :id="VideoId"
-        class="mw-100 h-100"/>
+        :id="videoId"
+        class="w-100 h-100" />
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@
 // Export
 export default {
   name: 'video-box',
-  props: ['VideoId', 'show'],
+  props: ['videoId', 'show'],
 };
 </script>
 

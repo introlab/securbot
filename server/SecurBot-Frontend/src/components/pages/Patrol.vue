@@ -14,27 +14,33 @@
           style="height:10%">
           <div
             class="w-75 h-100 text-left float-left"
-            style="font-size: 20pt">Patrol :</div>
+            style="font-size: 20pt">
+            Patrol :
+          </div>
           <button
             type="button"
             class="btn btn-success w-25 h-50"
-            @click="sendPatrol()">Confirm</button>
+            @click="sendPatrol()">
+            Confirm
+          </button>
           <button
             type="button"
             class="btn btn-danger w-25 h-50"
-            @click="clearWaypointList()">Reset</button>
+            @click="clearWaypointList()">
+            Reset
+          </button>
         </div>
         <div class="h-50">
-          <waypoint-table :waypoint-list="waypointList"/>
+          <waypoint-table :waypoint-list="waypointList" />
         </div>
-        <div/>
+        <div />
       </b-col>
       <b-col
         md="8"
         class="mh-100">
         <patrol-map
           :waypoint-list="waypointList"
-          patrol-map-id="patrol-map-stream"/>
+          patrol-map-id="patrol-map-stream" />
       </b-col>
     </b-row>
   </b-jumbotron>
@@ -100,4 +106,3 @@ export default {
 <style>
 
 </style>
-

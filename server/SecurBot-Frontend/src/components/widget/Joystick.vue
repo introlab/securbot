@@ -8,7 +8,7 @@
       @mousedown="onMouseDown"
       @mouseup="onMouseUp"
       @mousemove="onMouseMove"
-      @mouseout="onMouseOut"/>
+      @mouseout="onMouseOut" />
   </div>
 </template>
 
@@ -229,10 +229,10 @@ export default {
     },
     emitJoystickPosition() {
       const event = {
-        x: ((this.x - this.getCenterX()) * this.absoluteMaxX) /
-        (this.getCanvasRadius() - this.getJoystickRadius()),
-        y: ((this.y - this.getCenterY()) * this.absoluteMaxY) /
-        (this.getCanvasRadius() - this.getJoystickRadius()),
+        x: ((this.x - this.getCenterX()) * this.absoluteMaxX)
+        / (this.getCanvasRadius() - this.getJoystickRadius()),
+        y: ((this.y - this.getCenterY()) * this.absoluteMaxY)
+        / (this.getCanvasRadius() - this.getJoystickRadius()),
       };
       this.bus.$emit('joystick-position-change', event);
     },

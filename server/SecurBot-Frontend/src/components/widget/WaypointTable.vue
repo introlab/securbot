@@ -5,19 +5,33 @@
         id="waypoint-table"
         class="table table-borderless table-striped border-left border-right">
         <thead class="text-white bg-green-sb">
-          <th class="w-25">X</th>
-          <th class="w-25">Y</th>
-          <th class="w-25">Yaw</th>
-          <th class="w-25">Remove</th>
+          <th class="w-25">
+            X
+          </th>
+          <th class="w-25">
+            Y
+          </th>
+          <th class="w-25">
+            Yaw
+          </th>
+          <th class="w-25">
+            Remove
+          </th>
         </thead>
         <tbody>
           <!-- Ignore this "problem" -Edouard -->
           <tr
             v-for="(waypoint,index) of waypointList"
             class="border-bottom">
-            <td class="w-25">{{ waypoint.x.toFixed(1) }}</td>
-            <td class="w-25">{{ waypoint.y.toFixed(1) }}</td>
-            <td class="w-25">{{ waypoint.yaw.toFixed(1) }}</td>
+            <td class="w-25">
+              {{ waypoint.x.toFixed(1) }}
+            </td>
+            <td class="w-25">
+              {{ waypoint.y.toFixed(1) }}
+            </td>
+            <td class="w-25">
+              {{ waypoint.yaw.toFixed(1) }}
+            </td>
             <td class="w-25">
               <button
                 :id="'removeBtn'+index"

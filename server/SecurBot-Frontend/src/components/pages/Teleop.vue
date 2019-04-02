@@ -14,7 +14,7 @@
         <div class="h-100 w-100 m-auto position-relative">
           <video-box
             :show="showCamera"
-            video-id="camera-stream"/>
+            video-id="camera-stream" />
         </div>
       </b-col>
       <b-col
@@ -26,7 +26,7 @@
           <div class="h-100 w-100 m-auto position-relative">
             <video-box
               :show="showMap"
-              video-id="map-stream"/>
+              video-id="map-stream" />
           </div>
         </b-row>
         <b-row
@@ -42,7 +42,7 @@
                 :enable="enableJoystick"
                 :absolute-max-x="1"
                 :absolute-max-y="1"
-                :bus="bus"/>
+                :bus="bus" />
             </div>
           </div>
         </b-row>
@@ -110,4 +110,3 @@ export default {
 
 <style>
 </style>
-

@@ -25,9 +25,15 @@
           <b-navbar-nav>
             <b-nav-item
               to="teleop"
-              active>Teleoperation</b-nav-item>
-            <b-nav-item to="patrol">Patrol Planner</b-nav-item>
-            <b-nav-item to="logs">Logs</b-nav-item>
+              active>
+              Teleoperation
+            </b-nav-item>
+            <b-nav-item to="patrol">
+              Patrol Planner
+            </b-nav-item>
+            <b-nav-item to="logs">
+              Logs
+            </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown
@@ -37,7 +43,7 @@
                 <connection
                   :self-id="selfEasyrtcid"
                   :peers-table="peerTable"
-                  :bus="teleopBus"/>
+                  :bus="teleopBus" />
               </div>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -47,7 +53,7 @@
     <div style="height:calc(100% - 64px)">
       <router-view
         :bus="teleopBus"
-        :router="routeBus"/>
+        :router="routeBus" />
     </div>
   </div>
 </template>
@@ -136,6 +142,11 @@ export default {
       easyrtc.setOnStreamClosed(this.closePeerVideo);
       easyrtc.setAcceptChecker(this.acceptCall);
 
+      easyrtc.setRoomApiField('default', 'type', 'operator');
+
+      // Uncomment next line to use the dev server
+      // easyrtc.setSocketUrl(':8085');
+
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
@@ -151,10 +162,10 @@ export default {
       if (occupants !== null) {
         for (const occupant in occupants) {
           if (occupants[occupant].apiField.type.fieldValue.includes('robot')) {
-            console.log(occupants);
-            console.log(occupant);
-            const peer = { peerName: occupants[occupant].apiField.type.fieldValue,
-              peerId: occupant };
+            const peer = {
+              peerName: occupants[occupant].apiField.type.fieldValue,
+              peerId: occupant,
+            };
             this.peerTable.push(peer);
           }
         }
@@ -243,17 +254,6 @@ export default {
       }
     },
     /*
-      onJoystickPositionChange(): on event "joystick-position-change", this function is called
-        Desc: Send the JSON string received through the data channel.
-    */
-    onJoystickPositionChange(data) {
-      if (this.isDataChannelAvailable) {
-        easyrtc.sendDataP2P(this.peerId, data);
-      } else {
-        console.warn('You should not be able to send data...');
-      }
-    },
-    /*
       connectTo(event) : on event "peer-connection", this function is called
       Desc: Receive an id and perform the call on this id if not already connected.
             If connected and the id is the one of the connected peer, disconnect for it.
@@ -275,6 +275,12 @@ export default {
       console.warn(`Data channel open with ${easyrtcid}`);
       this.isDataChannelAvailable = true;
       this.teleopBus.$emit('on-joystick-state-changed', 'enable');
+
+      // This request the stream from the robot so the operator doesn't have to have
+      // a local stream to get the feed from the robot. It also allows to get both stream
+      // from robot, which might have been a problem previously. They can be somewhere else.
+      this.requestFeedFromPeer('camera');
+      this.requestFeedFromPeer('map');
     },
     // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
     dataCloseListenerCB(easyrtcid) {
@@ -282,14 +288,31 @@ export default {
       this.isDataChannelAvailable = false;
       this.teleopBus.$emit('on-joystick-state-changed', 'disable');
     },
-    // handleData(data): Handle datas for the data channel
-    handleData(data) {
-      if (this.isDataChannelAvailable) {
-        easyrtc.sendDataP2P(this.peerId, 'msg', data);
+    /*
+      onJoystickPositionChange(): on event "joystick-position-change", this function is called
+        Desc: Send the JSON string received through the data channel.
+    */
+    onJoystickPositionChange(data) {
+      this.sendData(this.peerId, 'joystick-position', data);
+    },
+    requestFeedFromPeer(feed) {
+      this.sendData(this.peerId, 'request-feed', feed);
+    },
+    // sendData(peer, type, data): Send data through the data channel
+    sendData(peer, type, data) {
+      if (this.isDataChannelAvailable && peer) {
+        easyrtc.sendDataP2P(peer, type, data);
       } else {
-        console.warn('No data channel available to send data...');
+        console.warn('No data channel or peer available to send data...');
       }
-      console.log("Someday we'll do something with the data, but not today...");
+    },
+    // handleData(data): Handle datas coming through the data channel
+    handleData(easyrtcid, type, data) {
+      if (easyrtcid === this.peerId) {
+        console.log(`Received ${data} of type ${type}...`);
+      } else {
+        console.log('Received data from someone else than the peer, ignoring it...');
+      }
     },
     // setHTMLVideoStream(): set the available video feed(s) to available html element(s)
     setHTMLVideoStream() {

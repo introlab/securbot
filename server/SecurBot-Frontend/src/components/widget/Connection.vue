@@ -9,8 +9,12 @@
       style="border: 1px solid lightgray;">
       <h4
         id="who-am-i"
-        class="text-muted ml-1">I am : {{ selfId }}</h4>
-      <h5 class="ml-1">List of Robots:</h5>
+        class="text-muted ml-1">
+        I am : {{ selfId }}
+      </h4>
+      <h5 class="ml-1">
+        List of Robots:
+      </h5>
       <div class="list-group">
         <button
           v-for="peer in peersTable"
@@ -22,14 +26,14 @@
           {{ peer.peerName }}
           <span
             v-if="peer.peerId == isConnectedToPeerId && waitingForConnectionState"
-            class="spinner-border spinner-border-sm text-warning"/>
+            class="spinner-border spinner-border-sm text-warning" />
           <span
             v-else-if="peer.peerId == isConnectedToPeerId"
             class="badge badge-success">Connected</span>
           <span
             v-else
             class="badge badge-secondary">Not Connected</span>
-        </button >
+        </button>
       </div>
     </div>
   </div>

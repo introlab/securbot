@@ -3,19 +3,19 @@
     <div style="height:540px;width:960px;background-color:black;">
       <video-box
         :show="true"
-        video-id="local-stream"/>
+        video-id="local-stream" />
     </div>
-    <div style="height:20px;width:960px;background-color:white;"/>
+    <div style="height:20px;width:960px;background-color:white;" />
     <div style="height:540px;width:960px;background-color:black;">
       <video-box
         :show="true"
-        video-id="remote-stream"/>
+        video-id="remote-stream" />
     </div>
     <div>
       <connection
         :self-id="selfEasyrtcid"
         :peers-table="testPeerTable"
-        :bus="busBus"/>
+        :bus="busBus" />
     </div>
   </div>
 </template>
@@ -91,6 +91,9 @@ export default {
       easyrtc.setAcceptChecker(this.acceptCall);
 
       easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
+
+      // Uncomment next line to use the dev server
+      // easyrtc.setSocketUrl(':8085');
 
       let temp = false;
       // eslint-disable-next-line no-loop-func
@@ -175,7 +178,8 @@ export default {
       easyrtc.showError(errorCode, message);
     },
     acceptCall(easyrtcid, acceptor) {
-      acceptor(true, this.localStreamNames);
+      this.peerId = easyrtcid;
+      acceptor(true);
     },
     acceptPeerVideo(easyrtcid, stream, streamName) {
       this.remoteStream = stream;
@@ -193,8 +197,14 @@ export default {
     dataCloseListenerCB(easyrtcid) {
       console.warn(`Data channel close with ${easyrtcid}`);
     },
-    handleData(data) {
-      console.log(data);
+    handleData(easyrtcid, type, data) {
+      if (easyrtcid === this.peerId && type === 'request-feed') {
+        easyrtc.addStreamToCall(easyrtcid, data);
+      } else if (easyrtcid === this.peerId) {
+        console.log(`Received ${data} of type ${type}...`);
+      } else {
+        console.log('Received data from someone else than the peer, ignoring it...');
+      }
     },
   },
 };
@@ -203,4 +213,3 @@ export default {
 <style>
 
 </style>
-
