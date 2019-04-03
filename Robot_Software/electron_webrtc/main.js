@@ -104,6 +104,12 @@ function startNode() {
         console.log(data)
         publisher.publish({ data: data })
     })
+
+    // Navigation goal topic
+    let goalPublisher = nodeHandle.advertise('operatorNavGoal', std_msgs.String)
+    ipcMain.on('goal', (event, goalJsonString) => {
+        goalPublisher.publish({ data: goalJsonString })
+    })
   })
 }
 

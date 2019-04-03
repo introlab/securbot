@@ -42,6 +42,11 @@ function dataCallback(easyrtcid, msgType, msgData, targeting) {
     ipc.send('msg', msgData)
 }
 
+function goalReceivedCallback(sourceId, msgType, goalJsonString) {
+    console.log("Received new nav goal: " + goalJsonString)
+    ipc.send('goal', goalJsonString)
+}
+
 
 function fetchParameters() {
 
@@ -73,6 +78,7 @@ async function my_init() {
         easyrtc.enableDataChannels(true)
         easyrtc.enableAudio(false)
         easyrtc.setPeerListener(dataCallback, 'msg')
+        easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
 
         easyrtc.initMediaSource(
               function(){        // success callback
@@ -80,7 +86,8 @@ async function my_init() {
                   easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
                   easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
               },
-              connectFailure
+              connectFailure,
+              "map"
         );
     })
  }
