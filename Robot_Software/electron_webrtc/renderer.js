@@ -31,7 +31,7 @@ function get_video_id(label) {
                 return
             }
 
-            console.log("Found map stream")
+            console.log(`Found [${label}] stream`)
             resolve(videoSource.id)
         })
     })
@@ -58,7 +58,7 @@ async function my_init() {
 
     var parameters = await fetchParameters()
 
-    console.log('Attempting to connect to : ' + parameters.webRtcServerUrl);
+    easyrtc.setRoomApiField('default', 'type', 'robot');
     easyrtc.setSocketUrl(parameters.webRtcServerUrl);
     easyrtc.setRoomOccupantListener( loggedInListener);
     var connectSuccess = function(myId) {
