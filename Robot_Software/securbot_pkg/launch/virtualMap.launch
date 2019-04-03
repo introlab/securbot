@@ -14,7 +14,7 @@
     <arg name="output_map_image_topic" default="/map_image_generator/image"/>
 
     <arg name="input_map_image_goal_topic" default="/map_image_generator/goal"/>
-    <arg name="output_goal_topic" default="/rtabmap/goal"/>
+    <arg name="output_goal_topic" default="/move_base_simple/goal"/>
 
     <arg name="input_map_labels_topic" default="/rtabmap/labels"/>
     <arg name="output_map_image_labels_topic" default="/map_image_generator/labels"/>
