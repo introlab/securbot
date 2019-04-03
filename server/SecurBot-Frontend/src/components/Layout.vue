@@ -23,9 +23,7 @@
           id="nav_collapse"
           is-nav>
           <b-navbar-nav>
-            <b-nav-item
-              to="teleop"
-              active>
+            <b-nav-item to="teleop">
               Teleoperation
             </b-nav-item>
             <b-nav-item to="patrol">
@@ -110,6 +108,7 @@ export default {
   mounted() {
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
+    this.teleopBus.$on('send-patrol', this.sendGoal);
     this.routeBus.$on('mounted', this.setHTMLVideoStream);
     this.routeBus.$on('destroyed', this.clearHTMLVideoStream);
 
@@ -145,7 +144,7 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'operator');
 
       // Uncomment next line to use the dev server
-      // easyrtc.setSocketUrl(':8085');
+      easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
 
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
@@ -294,6 +293,12 @@ export default {
     */
     onJoystickPositionChange(data) {
       this.sendData(this.peerId, 'joystick-position', data);
+    },
+    /**
+     * Sends a navigation waypoint to the robot in a JSON string
+     */
+    sendGoal(goalJsonString) {
+      this.sendData(this.peerId, 'nav-goal', goalJsonString);
     },
     requestFeedFromPeer(feed) {
       this.sendData(this.peerId, 'request-feed', feed);
