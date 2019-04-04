@@ -1,0 +1,3 @@
+<launch>
+	<include file="$(find node)/launch/base_name.launch" />
+</launch>
