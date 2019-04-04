@@ -1,6 +1,5 @@
 <launch>
     <!--
-        Frame definition for robot base
         Using the turtlebot bringup for now
     -->
     <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
