@@ -4,3 +4,5 @@ global_costmap:
   update_frequency: 1.0
   publish_frequency: 1.0
   static_map: true
+
+  observation_sources: laser_scan_sensor
