@@ -22,13 +22,76 @@
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath1444">
+      <g
+         id="use1446"
+         inkscape:label="Clip">
+        <circle
+           id="circle827"
+           cx="14.001974"
+           cy="282.99802"
+           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           r="2.0858285" />
+        <circle
+           id="circle829"
+           cx="46.066147"
+           cy="282.93387"
+           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           r="2.1500003" />
+        <circle
+           id="circle831"
+           cx="46.066147"
+           cy="250.93385"
+           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           r="2.1500003" />
+        <circle
+           id="circle833"
+           cx="14.066146"
+           cy="250.93385"
+           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           r="2.1500003" />
+        <circle
+           id="circle835"
+           cx="30.0926"
+           cy="266.61932"
+           style="fill:none;stroke:#ff0000;stroke-width:0.11576565;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           r="17.442118" />
+      </g>
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath874">
       <use
          x="0"
          y="0"
-         xlink:href="#g1440"
-         id="use1446"
+         xlink:href="#g870"
+         id="use876"
          width="100%"
-         height="100%" />
+         height="100%"
+         transform="translate(-7.2642461,17.376588)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4612">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g4608"
+         id="use4614"
+         width="100%"
+         height="100%"
+         transform="translate(-0.03445917)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4612-9">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g4608-4"
+         id="use4614-1"
+         width="100%"
+         height="100%"
+         transform="translate(-57.349293,-0.03168106)" />
     </clipPath>
   </defs>
   <sodipodi:namedview
@@ -38,17 +101,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.64991555"
-     inkscape:cx="-8.9208608"
-     inkscape:cy="157.09587"
+     inkscape:zoom="2"
+     inkscape:cx="148.35866"
+     inkscape:cy="97.115651"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="958"
-     inkscape:window-height="1008"
-     inkscape:window-x="953"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata837">
     <rdf:RDF>
@@ -57,7 +120,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -66,42 +129,92 @@
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       id="g1442"
-       clip-path="url(#clipPath1444)">
-      <g
-         inkscape:label="Clip"
-         id="g1440">
-        <circle
-           r="2.0858285"
-           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           cy="282.99802"
-           cx="14.001974"
-           id="path10" />
-        <circle
-           r="2.1500003"
-           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           cy="282.93387"
-           cx="46.066147"
-           id="path10-3" />
-        <circle
-           r="2.1500003"
-           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           cy="250.93385"
-           cx="46.066147"
-           id="path10-9" />
-        <circle
-           r="2.1500003"
-           style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           cy="250.93385"
-           cx="14.066146"
-           id="path10-1" />
-        <circle
-           r="17.442118"
-           style="fill:none;stroke:#ff0000;stroke-width:0.11576565;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           cy="266.61932"
-           cx="30.0926"
-           id="path10-15" />
-      </g>
+       style="stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none"
+       id="g870"
+       inkscape:label="Clip"
+       transform="translate(7.2642461,-17.376588)">
+      <circle
+         r="2.0858285"
+         style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cy="282.99802"
+         cx="14.001974"
+         id="path10" />
+      <circle
+         r="2.1500003"
+         style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cy="282.93387"
+         cx="46.066147"
+         id="path10-3" />
+      <circle
+         r="2.1500003"
+         style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cy="250.93385"
+         cx="46.066147"
+         id="path10-9" />
+      <circle
+         r="2.1500003"
+         style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cy="250.93385"
+         cx="14.066146"
+         id="path10-1" />
+      <circle
+         r="17.442118"
+         style="fill:none;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cy="266.61932"
+         cx="30.0926"
+         id="path10-15" />
+    </g>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect878"
+       width="74.804947"
+       height="67.324951"
+       x="0.066145837"
+       y="229.6089" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect880"
+       width="39.84856"
+       height="39.848564"
+       x="17.532419"
+       y="229.5748" />
+    <g
+       id="g4608"
+       inkscape:label="Clip"
+       style="stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="translate(0.03445917)">
+      <circle
+         r="2.1500003"
+         style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cy="276.34384"
+         cx="8.5161457"
+         id="path10-9-7" />
+      <rect
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect880-5"
+         width="17.496626"
+         height="20.826626"
+         x="0.031686667"
+         y="269.39169" />
+    </g>
+    <g
+       id="g4608-4"
+       inkscape:label="Clip"
+       transform="translate(57.349293,0.03168106)"
+       style="stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none">
+      <circle
+         r="2.1500003"
+         style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         cy="276.34384"
+         cx="8.5161457"
+         id="path10-9-7-0" />
+      <rect
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.13229167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect880-5-9"
+         width="17.496626"
+         height="20.826626"
+         x="0.031686667"
+         y="269.39169" />
     </g>
   </g>
 </svg>
