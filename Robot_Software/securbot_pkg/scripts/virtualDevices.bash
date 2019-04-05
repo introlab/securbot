@@ -11,4 +11,5 @@ else
 fi
 
 $PREFIX modprobe -r v4l2loopback
-$PREFIX modprobe v4l2loopback video_nr=1,2,3 card_label="virtual_kinect","virtual_map","fake_video"
+$PREFIX modprobe v4l2loopback video_nr=4,5,6 card_label="virtual_kinect","virtual_map","fake_video"
+$PREFIX chmod a+rw /dev/video4 /dev/video5 /dev/video6

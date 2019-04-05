@@ -3,16 +3,14 @@
     <include file="$(find securbot_pkg)/launch/robot_bringup.launch" />
 
     <!-- RTAB-Map in localization mode -->
-    <include file="$(find securbot_pkg)/launch/localization.launch" />
+    <include file="$(find securbot_pkg)/launch/mapping.launch" />
 
     <!-- Move_Base navigation -->
-    <include files="$(find securbot_pkg)/launch/navigation.launch" />
+    <include file="$(find securbot_pkg)/launch/navigation.launch" />
 
     <!-- Virtual Map -->
     <include file="$(find securbot_pkg)/launch/virtualMap.launch" />
 
-    <!-- Electron Webrtc -->
-    <include file="$(find electron_webrtc)/launch/electron_webrtc.launch" />
 
     <!-- Waypoint Decode -->
     <include file="$(find securbot_pkg)/launch/waypointDecoder.launch" />

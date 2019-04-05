@@ -84,7 +84,7 @@ source $CATK_WS/devel/setup.sh
 
 # Creating ros usergroup
 groupadd $ROBOT_GROUP
-usermod -g $ROBOT_GROUP $OPERATOR
+usermod -a -G video $ROBOT_GROUP $OPERATOR
 
 # Owning directories
 chown -R $OPERATOR:$ROBOT_GROUP $CATK_WS
