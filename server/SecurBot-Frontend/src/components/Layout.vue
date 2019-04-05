@@ -26,8 +26,10 @@
             <b-nav-item
               to="teleop"
               active>Teleoperation</b-nav-item>
-            <b-nav-item to="patrol">Patrol Planner</b-nav-item>
-            <b-nav-item to="logs">Logs</b-nav-item>
+            <b-nav-item
+              to="patrol">Patrol Planner</b-nav-item>
+            <b-nav-item
+              to="logs">Logs</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown

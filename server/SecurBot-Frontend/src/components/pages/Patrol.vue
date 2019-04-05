@@ -27,6 +27,12 @@
         <div class="h-50">
           <waypoint-table :waypoint-list="waypointList"/>
         </div>
+        <div style="height:50%">
+          <save-load
+            :waypoint-list="waypointList"
+            :patrol-list="patrolList"
+            :bus="bus"/>
+        </div>
         <div/>
       </b-col>
       <b-col
@@ -58,40 +64,54 @@
 * Dependencies :
 *       -PatrolMap.vue
 *       -WaypointTable.map
+        -SaveLoad.vue
 *       -Bootstrap-Vue
 *
 */
 import PatrolMap from '../widget/PatrolMap';
 import WaypointTable from '../widget/WaypointTable';
+import SaveLoad from '../widget/SaveLoad';
 
 export default {
   name: 'patrol-page',
   components: {
     PatrolMap,
     WaypointTable,
+    SaveLoad,
   },
   props: ['bus', 'router'],
   data() {
     return {
       waypointList: [],
+      patrolList: [],
     };
   },
   mounted() {
     console.log('Patrol have been mounted');
     this.router.$emit('mounted');
+    this.getSavedPatrols();
   },
   destroyed() {
     console.log('Patrol have been destroyed');
     this.router.$emit('destroyed');
   },
   methods: {
+    getSavedPatrols() {
+      this.patrolList = JSON.parse('[{"Name":"juju","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]');
+    },
     // Send the waypoint list for patrol scheduling
     sendPatrol() {
       this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
     },
+    sendPatrolList() {
+      this.bus.$emit('send-patrol-list', JSON.stringify(this.patrolList));
+    },
     // Clear the waypoint list
     clearWaypointList() {
       this.waypointList = [];
+    },
+    clearPatrolList() {
+      this.patrolList = [];
     },
   },
 };
