@@ -208,109 +208,41 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TBSNSOJW
 
-[GeneratedDocument1]
-DocumentPath=Project Outputs for PowerTree\Design Rule Check - PowerTree.html
-DItemRevisionGUID=
-
-[GeneratedDocument2]
-DocumentPath=Project Outputs for PowerTree\PowerTree.DRR
-DItemRevisionGUID=
-
-[GeneratedDocument3]
-DocumentPath=Project Outputs for PowerTree\PowerTree.EXTREP
-DItemRevisionGUID=
-
-[GeneratedDocument4]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GBL
-DItemRevisionGUID=
-
-[GeneratedDocument5]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GBO
-DItemRevisionGUID=
-
-[GeneratedDocument6]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GBP
-DItemRevisionGUID=
-
-[GeneratedDocument7]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GBS
-DItemRevisionGUID=
-
-[GeneratedDocument8]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GKO
-DItemRevisionGUID=
-
-[GeneratedDocument9]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GM1
-DItemRevisionGUID=
-
-[GeneratedDocument10]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GTL
-DItemRevisionGUID=
-
-[GeneratedDocument11]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GTO
-DItemRevisionGUID=
-
-[GeneratedDocument12]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GTP
-DItemRevisionGUID=
-
-[GeneratedDocument13]
-DocumentPath=Project Outputs for PowerTree\PowerTree.GTS
-DItemRevisionGUID=
-
-[GeneratedDocument14]
-DocumentPath=Project Outputs for PowerTree\PowerTree.LDP
-DItemRevisionGUID=
-
-[GeneratedDocument15]
-DocumentPath=Project Outputs for PowerTree\PowerTree.REP
-DItemRevisionGUID=
-
-[GeneratedDocument16]
-DocumentPath=Project Outputs for PowerTree\PowerTree.RUL
-DItemRevisionGUID=
-
-[GeneratedDocument17]
-DocumentPath=Project Outputs for PowerTree\PowerTree.TXT
-DItemRevisionGUID=
-
 [Parameter1]
-Name=Project_Group
-Value=SecurBot
+Name=Project_Date
+Value=12/03/2019
 
 [Parameter2]
-Name=Project_Revision
-Value=1
-
-[Parameter3]
-Name=Project_Name
-Value=PowerTree
-
-[Parameter4]
-Name=Project_Global
-Value=SecurBot
-
-[Parameter5]
-Name=Project_Designer4
-Value= 
-
-[Parameter6]
-Name=Project_Designer3
-Value= 
-
-[Parameter7]
-Name=Project_Designer2
-Value=Philippe Marcoux
-
-[Parameter8]
 Name=Project_Designer1
 Value=Olivier Belval
 
+[Parameter3]
+Name=Project_Designer2
+Value=Philippe Marcoux
+
+[Parameter4]
+Name=Project_Designer3
+Value=
+
+[Parameter5]
+Name=Project_Designer4
+Value=
+
+[Parameter6]
+Name=Project_Global
+Value=SecurBot
+
+[Parameter7]
+Name=Project_Group
+Value=SecurBot
+
+[Parameter8]
+Name=Project_Name
+Value=PowerTree
+
 [Parameter9]
-Name=Project_Date
-Value=12/03/2019
+Name=Project_Revision
+Value=1
 
 [Configuration1]
 Name=Default Configuration
@@ -492,12 +424,6 @@ OutputDocumentPath18=
 OutputVariantName18=
 OutputDefault18=0
 PageOptions18=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
-OutputType19=Logic Analyser Print
-OutputName19=Logic Analyser Prints
-OutputDocumentPath19=
-OutputVariantName19=
-OutputDefault19=0
-PageOptions19=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
 
 [OutputGroup4]
 Name=Assembly Outputs
@@ -524,7 +450,7 @@ OutputDefault3=0
 [OutputGroup5]
 Name=Fabrication Outputs
 Description=
-TargetPrinter=Hewlett-Packard HP LaserJet CP1525nw
+TargetPrinter=HP ENVY 5000 series [E18F89]
 PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|PrintWhat=1
 OutputType1=NC Drill
 OutputName1=NC Drill Files
@@ -614,7 +540,7 @@ Configuration12_Item1=AddToAllLayerClasses.Set= |AddToAllPlots.Set=SerializeLaye
 [OutputGroup6]
 Name=Report Outputs
 Description=
-TargetPrinter=Hewlett-Packard HP LaserJet CP1525nw
+TargetPrinter=HP ENVY 5000 series [E18F89]
 PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|PrintWhat=1
 OutputType1=Script
 OutputName1=Script Output
