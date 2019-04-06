@@ -11,18 +11,22 @@
         class="mh-100">
         <div
           class="align-middle p-1"
-          style="height:10%">
+          style="height:5%">
           <div
-            class="w-75 h-100 text-left float-left"
-            style="font-size: 20pt">Patrol :</div>
-          <button
-            type="button"
-            class="btn btn-success w-25 h-50"
-            @click="sendPatrol()">Confirm</button>
-          <button
-            type="button"
-            class="btn btn-danger w-25 h-50"
-            @click="clearWaypointList()">Reset</button>
+            class="w-50 h-100 text-left float-left"
+            style="font-size: 2vh">Patrol :</div>
+          <div class="w-50 h-100 float-right">
+            <button
+              type="button"
+              class="btn btn-success w-50 h-100  float-left"
+              style="font-size: 2vh; align-items:center; padding: 0px"
+              @click="sendPatrol()">Send</button>
+            <button
+              type="button"
+              class="btn btn-danger w-50 h-100 float-right"
+              style="font-size: 2vh; align-items:center; padding:0px"
+              @click="clearWaypointList()">Reset</button>
+          </div>
         </div>
         <div class="h-50">
           <waypoint-table :waypoint-list="waypointList"/>
@@ -97,7 +101,7 @@ export default {
   },
   methods: {
     getSavedPatrols() {
-      this.patrolList = JSON.parse('[{"Name":"juju","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]');
+      this.patrolList = JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]');
     },
     // Send the waypoint list for patrol scheduling
     sendPatrol() {

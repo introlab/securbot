@@ -1,10 +1,22 @@
 <template>
   <div class="h-100 w-100 position-relative">
-    <div class="h-25 w-100 position-relative">
+    <div
+      class="w-100 position-relative"
+      style="height:10%; margin-bottom: 5px">
       <button
         type="button"
-        class="h-100 w-50"
-        @click="addPatrolToPatrolList()">Add patrol</button>
+        class="btn btn-success h-100"
+        style="width:30%; font-size: 1.5vmax; align-items: center; padding: 0px"
+        @click="addPatrolToPatrolList()">Save patrol</button>
+      <div
+        class="h-100 position-relative text-right float-right"
+        style="width:70%; font-size: 1.5vh">
+        <input
+          id = "nameTextBox"
+          v-model="newPatrolName"
+          :placeholder="[[ placehold ]]"
+          class="h-100 w-100">
+      </div>
     </div>
     <div class="h-75 overflow-auto position-relative">
       <table
@@ -64,12 +76,13 @@
 *       
 */
 
-
 export default {
   name: 'save-load',
   props: ['waypointList', 'patrolList'],
   data() {
     return {
+      newPatrolName: '',
+      placehold: 'Patrol name',
     };
   },
   methods: {
@@ -78,12 +91,17 @@ export default {
     },
     addPatrolToPatrolList() {
       const patrol = [];
-      patrol.Name = 'popo';
-      patrol.waypoints = Array.from(this.waypointList);
-      this.patrolList.push(patrol);
-      console.log(this.patrolList);
+      if (this.newPatrolName === '') {
+        this.placehold = 'Enter name';
+      } else {
+        patrol.Name = this.newPatrolName;
+        patrol.waypoints = Array.from(this.waypointList);
+        this.patrolList.push(patrol);
+        this.newPatrolName = '';
+        this.placehold = 'Patrol name   ';
+        console.log(this.patrolList);
+      }
     },
-    
     selectPatrolFromList(index) {
       if (this.waypointList !== []) {
         console.log('overwrite plan');
