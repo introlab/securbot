@@ -9,7 +9,7 @@
     <arg name="input_occupancy_grid_topic" default="/rtabmap/grid_map/"/>
     <arg name="input_global_path_topic" default="/move_base/GlobalPlanner/plan"/>
     <arg name="input_goal_topic" default="/move_base_simple/goal"/>
-    <arg name="input_laser_scan_topic" default="/kinect2/scan"/>
+    <arg name="input_laser_scan_topic" default="/scan"/>
 
     <arg name="output_map_image_topic" default="/map_image_generator/image"/>
 
