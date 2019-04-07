@@ -144,7 +144,11 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'operator');
 
       // Uncomment next line to use the dev server
+<<<<<<< HEAD
       easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
+=======
+       easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
+>>>>>>> dev
 
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
