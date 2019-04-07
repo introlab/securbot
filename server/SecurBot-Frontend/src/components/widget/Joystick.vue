@@ -8,7 +8,7 @@
       @mousedown="onMouseDown"
       @mouseup="onMouseUp"
       @mousemove="onMouseMove"
-      @mouseout="onMouseOut"/>
+      @mouseout="onMouseOut" />
   </div>
 </template>
 
@@ -20,23 +20,20 @@
 * Desc :  Vue SFC used as a widget that draws an joystick that the user
 *         can use to send teleoperation control to the robot that it is
 *         connected to. Takes 2 absolute values in props to set the max
-*         value of a command and a bus to send the event (new command).
-*         The width and height are not really used anymore in term of
-*         props since the joystick size is now dynamic.
+*         value of a command and a bus to send the event (new joystick value).
 *
 * Dependencies :
 *       -Bootstrap-Vue
 *
-* Note :  The original file was given by [redacted] and modify afterward.
-*         Aka, we are not the original author(s), but were given the right
-*         to use and modify the file.
+* Note :  The original file comes from a project called SOSCIP and we modified
+*         it to fit this project.
 *
 */
 
 
 export default {
   name: 'joystick',
-  props: ['width', 'height', 'absoluteMaxX', 'absoluteMaxY', 'bus'],
+  props: ['enable', 'absoluteMaxX', 'absoluteMaxY', 'bus'],
   data() {
     return {
       x: null,
@@ -45,7 +42,6 @@ export default {
       positionChangeIntervalId: null,
       canvas: null,
       context: null,
-      enable: false,
       radiusRatio: 0.75,
       joystickElement: null,
       isMouseDown: false,
@@ -93,7 +89,9 @@ export default {
         this.x = this.getCenterX();
         this.y = this.getCenterY();
         this.isMouseDown = false;
-        this.emitJoystickPosition();
+        if (this.enable) {
+          this.emitJoystickPosition();
+        }
       }
     },
     onMouseMove(event) {
@@ -105,7 +103,9 @@ export default {
       this.x = this.getCenterX();
       this.y = this.getCenterY();
       this.isMouseDown = false;
-      this.emitJoystickPosition();
+      if (this.enable) {
+        this.emitJoystickPosition();
+      }
     },
     updateJoystickPositionFromMouseEvent(event) {
       const rect = this.canvas.getBoundingClientRect();
@@ -124,7 +124,9 @@ export default {
         this.x = (deltaX * ratio) + centerX;
         this.y = (deltaY * ratio) + centerY;
       }
-      this.emitJoystickPosition();
+      if (this.enable) {
+        this.emitJoystickPosition();
+      }
     },
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -227,10 +229,10 @@ export default {
     },
     emitJoystickPosition() {
       const event = {
-        x: ((this.x - this.getCenterX()) * this.absoluteMaxX) /
-        (this.getCanvasRadius() - this.getJoystickRadius()),
-        y: ((this.y - this.getCenterY()) * this.absoluteMaxY) /
-        (this.getCanvasRadius() - this.getJoystickRadius()),
+        x: ((this.x - this.getCenterX()) * this.absoluteMaxX)
+        / (this.getCanvasRadius() - this.getJoystickRadius()),
+        y: ((this.y - this.getCenterY()) * this.absoluteMaxY)
+        / (this.getCanvasRadius() - this.getJoystickRadius()),
       };
       this.bus.$emit('joystick-position-change', event);
     },

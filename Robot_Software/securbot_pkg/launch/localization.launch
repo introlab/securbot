@@ -1,0 +1,33 @@
+<launch>
+	<!-- Frame definition for robot base -->
+	<include file="$(find securbot_pkg)/launch/includes/frames/$(env SECURBOT_BASE)_frames.launch" />
+
+	<!-- Robot base -->
+	<remap from="/odom" to="/rtabmap/odom" />
+	<include file="$(find securbot_pkg)/launch/includes/bases/$(env SECURBOT_BASE)_base.launch" />
+
+	<!-- RGBD camera -->
+	<include file="$(find securbot_pkg)/launch/includes/sensors/$(env SECURBOT_CAMERA).launch" />
+
+	<!-- LIDAR -->
+	<include file="$(find securbot_pkg)/launch/includes/sensors/$(env SECURBOT_LIDAR).launch" />
+
+	<!-- RTAB-Map -->
+	<include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+		<arg name="rtabmapviz" default="false" />
+		<arg name="frame_id" default="base_footprint" />
+		<arg name="odom_frame_id" default="odom" />
+		<arg name="subscribe_scan" default="true" />
+		<arg name="args" default="--Reg/Force3DoF true --RGBD/NeighborLinkRefining true --Reg/Strategy 1 --RGBD/OptimizeMaxError 0 --Optimizer/Strategy 0 --Mem/IncrementalMemory false --Mem/InitWMWithAllNodes true" />
+		<arg name="visual_odometry" default="false" />
+		<arg name="odom_tf_angular_variance" default="0.05"/>
+		<arg name="odom_tf_linear_variance"  default="0.01"/>
+		<arg name="rgbd_sync" default="true" />
+		<arg name="approx_rgbd_sync" default="false"/>
+	</include>
+	<node pkg="nodelet" type="nodelet" name="obstacles_detection" args="standalone rtabmap_ros/obstacles_detection" output="screen">
+		<param name="frame_id" value="base_footprint"/>
+		<remap from="cloud" to="/pointcloud"/>
+		<remap from="obstacles" to="/obstacles"/>
+	</node>
+</launch>

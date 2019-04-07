@@ -2,14 +2,14 @@
   <div class="h-100 w-100 position-relative">
     <video-box
       :show="true"
-      video-id="map"
+      :video-id="patrolMapId"
       class="w-100 h-100 position-absolute"
-      style="top:0;left:0;"/>
+      style="top:0;left:0;" />
     <canvas
       ref="canvas"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;z-index:10;"
-      @mousedown="onMouseDown"/>
+      @mousedown="onMouseDown" />
   </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
   components: {
     VideoBox,
   },
-  props: ['waypointList'],
+  props: ['waypointList', 'patrolMapId'],
   data() {
     return {
       videoElement: null,
@@ -52,11 +52,10 @@ export default {
   },
   // On component mounted, Get html elements and initialize
   mounted() {
-    this.videoElement = document.getElementById('map');
+    this.videoElement = document.getElementById(this.patrolMapId);
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();
-    // this.setTableHeader();
   },
   // On component destroyed, clear refresh rate of canvas
   destroyed() {
@@ -155,10 +154,10 @@ export default {
     },
     // Check is the click was inbound
     isClickValid(coord) {
-      return coord.x >= 0 &&
-        coord.x < this.videoElement.videoWidth &&
-        coord.y >= 0 &&
-        coord.y < this.videoElement.videoHeight;
+      return coord.x >= 0
+        && coord.x < this.videoElement.videoWidth
+        && coord.y >= 0
+        && coord.y < this.videoElement.videoHeight;
     },
   },
 };
@@ -166,4 +165,3 @@ export default {
 
 <style>
 </style>
-

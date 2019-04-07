@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="h-50">
-          <waypoint-table :waypoint-list="waypointList"/>
+          <waypoint-table :waypoint-list="waypointList" />
         </div>
         <div style="height:50%">
           <save-load
@@ -44,7 +44,7 @@
         class="mh-100">
         <patrol-map
           :waypoint-list="waypointList"
-          :bus="bus"/>
+          patrol-map-id="patrol-map-stream" />
       </b-col>
     </b-row>
   </b-jumbotron>
@@ -124,4 +124,3 @@ export default {
 <style>
 
 </style>
-

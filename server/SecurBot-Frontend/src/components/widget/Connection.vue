@@ -7,30 +7,33 @@
       id="connection-container"
       class="rounded-lg"
       style="border: 1px solid lightgray;">
-
       <h4
         id="who-am-i"
-        class="text-muted ml-1">I am : {{ selfId }}</h4>
-      <h5 class="ml-1">List of Robots:</h5>
+        class="text-muted ml-1">
+        I am : {{ selfId }}
+      </h4>
+      <h5 class="ml-1">
+        List of Robots:
+      </h5>
       <div class="list-group">
         <button
           v-for="peer in peersTable"
-          :key="peer.peerID"
+          :key="peer.peerId"
           type="button"
           class="list-group-item-action list-group-item d-flex justify-content-between
           align-items-center peer-item"
-          @click="handlePeerConnection(peer.peerID)">
+          @click="handlePeerConnection(peer.peerId)">
           {{ peer.peerName }}
           <span
-            v-if="peer.peerID == isConnectedToPeerId && waitingForConnectionState"
-            class="spinner-border spinner-border-sm text-warning"/>
+            v-if="peer.peerId == isConnectedToPeerId && waitingForConnectionState"
+            class="spinner-border spinner-border-sm text-warning" />
           <span
-            v-else-if="peer.peerID == isConnectedToPeerId"
+            v-else-if="peer.peerId == isConnectedToPeerId"
             class="badge badge-success">Connected</span>
           <span
             v-else
             class="badge badge-secondary">Not Connected</span>
-        </button >
+        </button>
       </div>
     </div>
   </div>
@@ -75,22 +78,6 @@ export default {
   // On component destroyed, not use for now
   destroyed() {},
   methods: {
-    // Switch the state (text in innerHTML) of the peer button - NOT USED - TO BE REMOVED
-    switchPeerConnectionButtonHtmlState(peerId, state) {
-      if (peerId == null) {
-        console.warn('The Id is null...');
-        return;
-      }
-
-      const peerButtonElement = document.getElementById(peerId);
-      if (state === 'Connected') {
-        peerButtonElement.innerHTML = 'Disconnect';
-        peerButtonElement.className = 'btn btn-outline-success';
-      } else if (state === 'Disconnected') {
-        peerButtonElement.innerHTML = 'Connect';
-        peerButtonElement.className = 'btn btn-outline-danger';
-      } else { console.log('Error switchPeerConnectionButtonHtmlState'); }
-    },
     // Handle the answer of the connection-changed event
     handleConnectionChanged(state) {
       console.log(`Got event for connection : ${state}`);
@@ -125,28 +112,26 @@ export default {
           console.log(`Something Something : ${state}`);
       }
     },
-    // Ask to be connected to a peer
+    // Ask to be connected to a peer by emitting an event
     connectToPeer(peerId) {
-      // Emit event
       console.log(`Connecting to : ${peerId}`);
       this.isConnectedToPeerId = peerId;
       this.waitingForConnectionState = true;
       this.bus.$emit('peer-connection', peerId);
       console.log('Connecting...');
     },
-    // Ask to be disconnect from the current connected peer (should be from and not to in name)
-    disconnectToPeer(peerId) {
-      // Emit event
+    // Ask to be disconnect from the current connected peer by emitting an event
+    disconnectFromPeer(peerId) {
       this.bus.$emit('peer-connection', peerId);
     },
     // Button function to handle the connection/disconnection to a peer
     handlePeerConnection(peerId) {
       if (this.isConnected && peerId === this.isConnectedToPeerId) {
         console.log('Disconnecting...');
-        this.disconnectToPeer(this.isConnectedToPeerId);
+        this.disconnectFromPeer(this.isConnectedToPeerId);
       } else if (this.isConnected) {
         // Add popup message saying : "You are already connected to this.isConnectedToPeerId,
-        // disconnect from it to connect to connect to an other robot"
+        // disconnect from it to connect to an other robot"
         console.log('Already connected to someone...');
       } else if (this.waitingForConnectionState) {
         // Popup saying : "Currently trying to connect to this.isConnectedToPeerId,
