@@ -10,28 +10,26 @@
         md="4"
         class="mh-100">
         <div
-          class="align-middle "
-          style="height:5%; padding:0; margin-bottom:4px">
+          class="position-relative"
+          style="height:5%; padding:0; margin:2px">
           <div
             class="w-50 h-100 text-left float-left"
-            style="font-size: 2vh; vertical-align:middle">Patrol :</div>
-          <div class="w-50 h-100 float-right">
-            <button
-              type="button"
-              class="btn btn-success w-50 h-100  float-left"
-              style="font-size: 2vmin; align-items:center;vertical-align: middle; padding: 0px"
-              @click="sendPatrol()">Send</button>
-            <button
-              type="button"
-              class="btn btn-danger w-50 h-100 float-right"
-              style="font-size: 2vmin; align-items:center; padding:0px"
-              @click="clearWaypointList()">Reset</button>
-          </div>
+            style="font-size: 2.5vh; vertical-align:middle">Patrol :</div>      
+          <button
+            type="button"
+            class="btn btn-success w-25 h-100 float-left" 
+            style="font-size: 2vmin; align-items:center;vertical-align: middle; margin-left:-2px; padding: 0px"
+            @click="sendPatrol()">Send</button>
+          <button
+            type="button"
+            class="btn btn-danger w-25 h-100 float-right"
+            style="font-size: 2vmin; align-items:center; position:absolute;padding:0px; margin-left:2px"
+            @click="clearWaypointList()">Reset</button> 
         </div>
         <div class="h-50">
           <waypoint-table :waypoint-list="waypointList" />
         </div>
-        <div style="height:50%">
+        <div style="height:45%">
           <save-load
             :waypoint-list="waypointList"
             :patrol-list="patrolList"

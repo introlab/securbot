@@ -2,15 +2,15 @@
   <div class="h-100 w-100 position-relative">
     <div
       class="w-100 position-relative"
-      style="height:10%; margin-bottom: 5px">
+      style="height:12%; margin-bottom:2px; margin-top:2px">
       <button
         type="button"
-        class="btn btn-success h-100"
-        style="width:30%; font-size: 2vmin; align-items: center; padding: 0px"
+        class="btn btn-success h-100 w-25"
+        style="font-size: 2vmin; align-items: center; padding:0px; position:absolute"
         @click="addPatrolToPatrolList()">Save patrol</button>
       <div
-        class="h-100 position-relative text-right float-right"
-        style="width:70%; font-size: 1.5vh">
+        class="h-100 w-75 position-relative text-right float-right"
+        style="font-size: 1.5vh; padding-left:2px; padding-right:2x">
         <input
           id = "nameTextBox"
           v-model="newPatrolName"
@@ -18,12 +18,15 @@
           class="h-100 w-100">
       </div>
     </div>
-    <div class="h-75 overflow-auto position-relative">
+    <div 
+    class="overflow-auto position-relative">
       <table
         id="saved-patrol-table"
-        class="table table-borderless table-striped border-left border-right"
-        style="text-align:center">
-        <thead class="text-white bg-green-sb">
+        class="table table-borderless table-striped border-right"
+        style="height:90%; text-align:center">
+        <thead 
+          class="text-white bg-green-sb"
+          style="padding:0px">
           <th
             class="w-50"
             style="text-align:left">Patrols</th>
@@ -45,7 +48,7 @@
                 class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
                 @click="selectPatrolFromList(index)">
                 <img
-                  src="~/open-iconic/svg/trash.svg"
+                  src="~/open-iconic/svg/check.svg"
                   alt=""
                   style="width:12px;height:12px;">
               </button>
