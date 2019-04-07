@@ -3,7 +3,8 @@
     <div class="mh-100 overflow-auto">
       <table
         id="waypoint-table"
-        class="table table-borderless table-striped border-left border-right">
+        class="table table-borderless table-striped border-left border-right"
+        style="text-align: center">
         <thead class="text-white bg-green-sb">
           <th class="w-25">X</th>
           <th class="w-25">Y</th>
@@ -27,7 +28,7 @@
                 <img
                   src="~/open-iconic/svg/trash.svg"
                   alt=""
-                  style="width:12px;height:12px;">
+                  style="width:12px;height:12px">
               </button>
             </td>
           </tr>

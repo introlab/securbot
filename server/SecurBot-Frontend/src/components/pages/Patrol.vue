@@ -10,21 +10,21 @@
         md="4"
         class="mh-100">
         <div
-          class="align-middle p-1"
-          style="height:5%">
+          class="align-middle "
+          style="height:5%; padding:0; margin-bottom:4px">
           <div
             class="w-50 h-100 text-left float-left"
-            style="font-size: 2vh">Patrol :</div>
+            style="font-size: 2vh; vertical-align:middle">Patrol :</div>
           <div class="w-50 h-100 float-right">
             <button
               type="button"
               class="btn btn-success w-50 h-100  float-left"
-              style="font-size: 2vh; align-items:center; padding: 0px"
+              style="font-size: 2vmin; align-items:center;vertical-align: middle; padding: 0px"
               @click="sendPatrol()">Send</button>
             <button
               type="button"
               class="btn btn-danger w-50 h-100 float-right"
-              style="font-size: 2vh; align-items:center; padding:0px"
+              style="font-size: 2vmin; align-items:center; padding:0px"
               @click="clearWaypointList()">Reset</button>
           </div>
         </div>
