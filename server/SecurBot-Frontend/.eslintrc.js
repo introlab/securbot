@@ -33,6 +33,7 @@ module.exports = {
     'vue/name-property-casing': ["error", "kebab-case"],
     'vue/require-prop-types':'off',
     'vue/require-v-for-key':'off',
+    'vue/valid-v-for':'off',
     'no-unused-vars':'off',
     'no-restricted-syntax':'off',
   },
