@@ -1,10 +1,7 @@
 <launch>
-    <!--remap from="/camera/aligned_depth_to_color/image_raw" to="/camera/depth_registered/image_raw" />
-    <remap from="/camera/color/image_raw" to="/camera/rgb/image_rect_color" />
-    <remap from="/camera/color/camera_info" to="/camera/rgb/camera_info" />
-    <remap from="/camera/depth/color/points" to="/pointcloud" /-->
+    <remap from="/camera/depth/points" to="/pointcloud" />
     
-    <include file="$(find openni_launch)/launch/openni.launch">
-        <arg name="dept_registration" value="true">
+    <include file="$(find freenect_launch)/launch/freenect.launch">
+	<arg name="depth_registration" default="true" />
     </include>
 </launch>
