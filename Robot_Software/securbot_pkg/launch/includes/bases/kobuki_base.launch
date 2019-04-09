@@ -22,15 +22,7 @@
 	      </include>
 	</group>
 	<group>
-		<remap from="/cmd_vel" to="/smooth_cmd_vel"/>
-		<include file="$(find turtlebot_bringup)/launch/includes/robot.launch.xml">
-    			<arg name="base" value="$(arg base)" />
-    			<arg name="stacks" value="$(arg stacks)" />
-    			<arg name="3d_sensor" value="$(arg 3d_sensor)" />
-  		</include>
-  		<include file="$(find turtlebot_bringup)/launch/includes/mobile_base.launch.xml">
-    			<arg name="base" value="$(arg base)" />
-    			<arg name="serialport" value="$(arg serialport)" />
-  		</include>
+		<remap from="/commandes/velocity" to="/smooth_cmd_vel"/>
+		<include file="$(find kobuki_node)/launch/minimal.launch" />
 	</group>
 </launch>

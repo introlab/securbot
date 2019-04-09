@@ -23,6 +23,7 @@
 		<arg name="odom_tf_angular_variance" default="0.05"/>
   		<arg name="odom_tf_linear_variance"  default="0.01"/>
 		<arg name="rgbd_sync" default="true" />
-		<arg name="approx_rgbd_sync" default="false"/>
+		<arg if="$(eval env('camera_type')=='realsense'" name="approx_rgbd_sync" default="false"/>
+		<arg unless="$(eval env('camera_type')=='realsense'" name="approx_rgbd_sync" default="true"/>
 	</include>
 </launch>

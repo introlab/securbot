@@ -1,0 +1,10 @@
+
+
+obstacle_range: 10.0
+raytrace_range: 25.0
+robot_radius: 0.3
+inflation_radius: 0.8
+transform_tolerance: 1
+
+laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+point_cloud_sensor: {sensor_frame: camera_link, data_type: PointCloud2, topic: /pointcloud, marking: true, clearing: true, min_obstacle_height: 0.1, max_obstacle_height: 1.0}
