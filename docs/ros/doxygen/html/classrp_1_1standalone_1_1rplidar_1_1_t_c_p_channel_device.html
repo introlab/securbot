@@ -41,6 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -86,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacerp.html">rp</a></li><li class="navelem"><b>standalone</b></li><li class="navelem"><b>rplidar</b></li><li class="navelem"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html">TCPChannelDevice</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacerp.html">rp</a></li><li class="navelem"><a class="el" href="namespacerp_1_1standalone.html">standalone</a></li><li class="navelem"><a class="el" href="namespacerp_1_1standalone_1_1rplidar.html">rplidar</a></li><li class="navelem"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html">TCPChannelDevice</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -98,6 +99,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">rp::standalone::rplidar::TCPChannelDevice Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="rplidar__driver___t_c_p_8h_source.html">rplidar_driver_TCP.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for rp::standalone::rplidar::TCPChannelDevice:</div>
 <div class="dyncontent">
@@ -110,46 +113,250 @@ Inheritance diagram for rp::standalone::rplidar::TCPChannelDevice:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2d2370fe814a04410cb3ec24baf93bc7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d2370fe814a04410cb3ec24baf93bc7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>bind</b> (const char *ipStr, uint32_t port)</td></tr>
+<tr class="memitem:a90c0c134863e6f39c6a77b49ddf4b0b8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html#a90c0c134863e6f39c6a77b49ddf4b0b8">TCPChannelDevice</a> ()</td></tr>
+<tr class="separator:a90c0c134863e6f39c6a77b49ddf4b0b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d2370fe814a04410cb3ec24baf93bc7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html#a2d2370fe814a04410cb3ec24baf93bc7">bind</a> (const char *ipStr, uint32_t port)</td></tr>
 <tr class="separator:a2d2370fe814a04410cb3ec24baf93bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a079a3d8a7e23d27af1a2b882d28ec9ae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a079a3d8a7e23d27af1a2b882d28ec9ae"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>close</b> ()</td></tr>
+<tr class="memitem:a079a3d8a7e23d27af1a2b882d28ec9ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html#a079a3d8a7e23d27af1a2b882d28ec9ae">close</a> ()</td></tr>
 <tr class="separator:a079a3d8a7e23d27af1a2b882d28ec9ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e19e6580fc063ac47da9d83e1f6c41b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e19e6580fc063ac47da9d83e1f6c41b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>waitfordata</b> (size_t data_count, _u32 timeout=-1, size_t *returned_size=NULL)</td></tr>
+<tr class="memitem:a6e19e6580fc063ac47da9d83e1f6c41b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html#a6e19e6580fc063ac47da9d83e1f6c41b">waitfordata</a> (size_t data_count, <a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a> timeout=-1, size_t *returned_size=NULL)</td></tr>
 <tr class="separator:a6e19e6580fc063ac47da9d83e1f6c41b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0011aa4ec58c6d8470af85615de4236"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa0011aa4ec58c6d8470af85615de4236"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>senddata</b> (const _u8 *data, size_t size)</td></tr>
+<tr class="memitem:aa0011aa4ec58c6d8470af85615de4236"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html#aa0011aa4ec58c6d8470af85615de4236">senddata</a> (const <a class="el" href="rptypes_8h.html#af2b0f13cffd24f6dddf794ae0c7472b4">_u8</a> *<a class="el" href="rplidar__protocol_8h.html#a9e1fb613e68ae873f82dc8162b0e35ce">data</a>, size_t <a class="el" href="rplidar__protocol_8h.html#ab665c54c3bf2394c2925757ac11338c5">size</a>)</td></tr>
 <tr class="separator:aa0011aa4ec58c6d8470af85615de4236"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55fefd61ec193a5b0fb8b37df56f7807"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55fefd61ec193a5b0fb8b37df56f7807"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recvdata</b> (unsigned char *data, size_t size)</td></tr>
+<tr class="memitem:a55fefd61ec193a5b0fb8b37df56f7807"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html#a55fefd61ec193a5b0fb8b37df56f7807">recvdata</a> (unsigned char *<a class="el" href="rplidar__protocol_8h.html#a9e1fb613e68ae873f82dc8162b0e35ce">data</a>, size_t <a class="el" href="rplidar__protocol_8h.html#ab665c54c3bf2394c2925757ac11338c5">size</a>)</td></tr>
 <tr class="separator:a55fefd61ec193a5b0fb8b37df56f7807"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html">rp::standalone::rplidar::ChannelDevice</a></td></tr>
-<tr class="memitem:ab7e0b016bac1c97f4457d42cea918355 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7e0b016bac1c97f4457d42cea918355"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>open</b> ()</td></tr>
+<tr class="memitem:ab7e0b016bac1c97f4457d42cea918355 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#ab7e0b016bac1c97f4457d42cea918355">open</a> ()</td></tr>
 <tr class="separator:ab7e0b016bac1c97f4457d42cea918355 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5bef891cb0ef553b3cab02461a6b153 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5bef891cb0ef553b3cab02461a6b153"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>flush</b> ()</td></tr>
+<tr class="memitem:aa5bef891cb0ef553b3cab02461a6b153 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#aa5bef891cb0ef553b3cab02461a6b153">flush</a> ()</td></tr>
 <tr class="separator:aa5bef891cb0ef553b3cab02461a6b153 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b8e5315ed511d62c6b6f8c6b371190a inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b8e5315ed511d62c6b6f8c6b371190a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setDTR</b> ()</td></tr>
+<tr class="memitem:a0b8e5315ed511d62c6b6f8c6b371190a inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#a0b8e5315ed511d62c6b6f8c6b371190a">setDTR</a> ()</td></tr>
 <tr class="separator:a0b8e5315ed511d62c6b6f8c6b371190a inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab29ffe20ec003656f872c5b5bd494210 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab29ffe20ec003656f872c5b5bd494210"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>clearDTR</b> ()</td></tr>
+<tr class="memitem:ab29ffe20ec003656f872c5b5bd494210 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#ab29ffe20ec003656f872c5b5bd494210">clearDTR</a> ()</td></tr>
 <tr class="separator:ab29ffe20ec003656f872c5b5bd494210 inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad605295ee09e8e2ca5c5e6d561595b7e inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad605295ee09e8e2ca5c5e6d561595b7e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>ReleaseRxTx</b> ()</td></tr>
+<tr class="memitem:ad605295ee09e8e2ca5c5e6d561595b7e inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#ad605295ee09e8e2ca5c5e6d561595b7e">ReleaseRxTx</a> ()</td></tr>
 <tr class="separator:ad605295ee09e8e2ca5c5e6d561595b7e inherit pub_methods_classrp_1_1standalone_1_1rplidar_1_1_channel_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2e920271e402518a442aa72460ec37e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e920271e402518a442aa72460ec37e3"></a>
-<a class="el" href="classrp_1_1net_1_1_stream_socket.html">rp::net::StreamSocket</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_binded_socket</b></td></tr>
+<tr class="memitem:a2e920271e402518a442aa72460ec37e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrp_1_1net_1_1_stream_socket.html">rp::net::StreamSocket</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_t_c_p_channel_device.html#a2e920271e402518a442aa72460ec37e3">_binded_socket</a></td></tr>
 <tr class="separator:a2e920271e402518a442aa72460ec37e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a90c0c134863e6f39c6a77b49ddf4b0b8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">rp::standalone::rplidar::TCPChannelDevice::TCPChannelDevice </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a2d2370fe814a04410cb3ec24baf93bc7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rp::standalone::rplidar::TCPChannelDevice::bind </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>ipStr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>port</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#af90ebbe75f749f505253c1d8b1369032">rp::standalone::rplidar::ChannelDevice</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a079a3d8a7e23d27af1a2b882d28ec9ae"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rp::standalone::rplidar::TCPChannelDevice::close </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#a65da1a86d714df8e3cdcc064755f50b2">rp::standalone::rplidar::ChannelDevice</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a55fefd61ec193a5b0fb8b37df56f7807"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int rp::standalone::rplidar::TCPChannelDevice::recvdata </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#aa3a6074cf08affa8b2945cce3d183ffd">rp::standalone::rplidar::ChannelDevice</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa0011aa4ec58c6d8470af85615de4236"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int rp::standalone::rplidar::TCPChannelDevice::senddata </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="rptypes_8h.html#af2b0f13cffd24f6dddf794ae0c7472b4">_u8</a> *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#a190e5a8b011b8a250b40f2176f4bf87d">rp::standalone::rplidar::ChannelDevice</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6e19e6580fc063ac47da9d83e1f6c41b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rp::standalone::rplidar::TCPChannelDevice::waitfordata </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>data_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a>&#160;</td>
+          <td class="paramname"><em>timeout</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>returned_size</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classrp_1_1standalone_1_1rplidar_1_1_channel_device.html#adbb3b966712019e486c17e36c4c1ef9b">rp::standalone::rplidar::ChannelDevice</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a2e920271e402518a442aa72460ec37e3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrp_1_1net_1_1_stream_socket.html">rp::net::StreamSocket</a>* rp::standalone::rplidar::TCPChannelDevice::_binded_socket</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/securbot/securbot/Robot_Software/rplidar_ros/sdk/src/<a class="el" href="rplidar__driver___t_c_p_8h_source.html">rplidar_driver_TCP.h</a></li>
+<li><a class="el" href="rplidar__driver___t_c_p_8h_source.html">rplidar_driver_TCP.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

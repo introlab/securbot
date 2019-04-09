@@ -41,6 +41,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -86,18 +87,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacerp.html">rp</a></li><li class="navelem"><b>net</b></li><li class="navelem"><a class="el" href="classrp_1_1net_1_1_socket_base.html">SocketBase</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacerp.html">rp</a></li><li class="navelem"><a class="el" href="namespacerp_1_1net.html">net</a></li><li class="navelem"><a class="el" href="classrp_1_1net_1_1_socket_base.html">SocketBase</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classrp_1_1net_1_1_socket_base-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">rp::net::SocketBase Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="socket_8h_source.html">socket.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for rp::net::SocketBase:</div>
 <div class="dyncontent">
@@ -117,43 +121,314 @@ Inheritance diagram for rp::net::SocketBase:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad97e55763c7c6bd6598835073cc9f8ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad97e55763c7c6bd6598835073cc9f8ad"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>socket_family_t</b> { <b>SOCKET_FAMILY_INET</b> = 0, 
-<b>SOCKET_FAMILY_INET6</b> = 1, 
-<b>SOCKET_FAMILY_RAW</b> = 2
+<tr class="memitem:ad97e55763c7c6bd6598835073cc9f8ad"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#ad97e55763c7c6bd6598835073cc9f8ad">socket_family_t</a> { <a class="el" href="classrp_1_1net_1_1_socket_base.html#ad97e55763c7c6bd6598835073cc9f8ada6d5178199fde6cbd30e189db438b1941">SOCKET_FAMILY_INET</a> = 0, 
+<a class="el" href="classrp_1_1net_1_1_socket_base.html#ad97e55763c7c6bd6598835073cc9f8ada523642b3b3149b9c560f535492a4c241">SOCKET_FAMILY_INET6</a> = 1, 
+<a class="el" href="classrp_1_1net_1_1_socket_base.html#ad97e55763c7c6bd6598835073cc9f8ada80446ffa17756d9f0ca28f6bde58cac3">SOCKET_FAMILY_RAW</a> = 2
  }</td></tr>
 <tr class="separator:ad97e55763c7c6bd6598835073cc9f8ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ddba675f2f8de1cf71423239f05e457"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ddba675f2f8de1cf71423239f05e457"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>socket_direction_mask</b> { <b>SOCKET_DIR_RD</b> = 0x1, 
-<b>SOCKET_DIR_WR</b> = 0x2, 
-<b>SOCKET_DIR_BOTH</b> = (SOCKET_DIR_RD | SOCKET_DIR_WR)
+<tr class="memitem:a3ddba675f2f8de1cf71423239f05e457"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457">socket_direction_mask</a> { <a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457abbbbbba4cc3282e310ebee864dc2476c">SOCKET_DIR_RD</a> = 0x1, 
+<a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457ae805579cfe9308eebd279717cc726c6b">SOCKET_DIR_WR</a> = 0x2, 
+<a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457af97e6eb50d600623674f3f58149decd7">SOCKET_DIR_BOTH</a> = (SOCKET_DIR_RD | SOCKET_DIR_WR)
  }</td></tr>
 <tr class="separator:a3ddba675f2f8de1cf71423239f05e457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab39e4c8861a98205e7911ff3ec6a9442"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab39e4c8861a98205e7911ff3ec6a9442"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>DEFAULT_SOCKET_TIMEOUT</b> = 10000
+<tr class="memitem:ab39e4c8861a98205e7911ff3ec6a9442"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="classrp_1_1net_1_1_socket_base.html#ab39e4c8861a98205e7911ff3ec6a9442ace5bb9bd31e53d32d97e1bd8831a7f60">DEFAULT_SOCKET_TIMEOUT</a> = 10000
  }</td></tr>
 <tr class="separator:ab39e4c8861a98205e7911ff3ec6a9442"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0fab170ce70fb550ca9f8542e9ead7e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0fab170ce70fb550ca9f8542e9ead7e4"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>dispose</b> ()=0</td></tr>
+<tr class="memitem:a1a1316ab658875cf7f2a2e0198b63803"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#a1a1316ab658875cf7f2a2e0198b63803">~SocketBase</a> ()</td></tr>
+<tr class="separator:a1a1316ab658875cf7f2a2e0198b63803"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fab170ce70fb550ca9f8542e9ead7e4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#a0fab170ce70fb550ca9f8542e9ead7e4">dispose</a> ()=0</td></tr>
 <tr class="separator:a0fab170ce70fb550ca9f8542e9ead7e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8cf3c8ee2375c8908b77a73cb2eb302"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8cf3c8ee2375c8908b77a73cb2eb302"></a>
-virtual u_result&#160;</td><td class="memItemRight" valign="bottom"><b>bind</b> (const <a class="el" href="classrp_1_1net_1_1_socket_address.html">SocketAddress</a> &amp;)=0</td></tr>
+<tr class="memitem:ac8cf3c8ee2375c8908b77a73cb2eb302"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#ac8cf3c8ee2375c8908b77a73cb2eb302">bind</a> (const <a class="el" href="classrp_1_1net_1_1_socket_address.html">SocketAddress</a> &amp;)=0</td></tr>
 <tr class="separator:ac8cf3c8ee2375c8908b77a73cb2eb302"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e469b97cbb0ed9dea5a1243cf551205"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e469b97cbb0ed9dea5a1243cf551205"></a>
-virtual u_result&#160;</td><td class="memItemRight" valign="bottom"><b>getLocalAddress</b> (<a class="el" href="classrp_1_1net_1_1_socket_address.html">SocketAddress</a> &amp;)=0</td></tr>
+<tr class="memitem:a7e469b97cbb0ed9dea5a1243cf551205"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#a7e469b97cbb0ed9dea5a1243cf551205">getLocalAddress</a> (<a class="el" href="classrp_1_1net_1_1_socket_address.html">SocketAddress</a> &amp;)=0</td></tr>
 <tr class="separator:a7e469b97cbb0ed9dea5a1243cf551205"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf19e0c341481160ede25a47d3f2890d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf19e0c341481160ede25a47d3f2890d"></a>
-virtual u_result&#160;</td><td class="memItemRight" valign="bottom"><b>setTimeout</b> (_u32 timeout, socket_direction_mask msk=SOCKET_DIR_BOTH)=0</td></tr>
+<tr class="memitem:abf19e0c341481160ede25a47d3f2890d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#abf19e0c341481160ede25a47d3f2890d">setTimeout</a> (<a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a> timeout, <a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457">socket_direction_mask</a> msk=<a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457af97e6eb50d600623674f3f58149decd7">SOCKET_DIR_BOTH</a>)=0</td></tr>
 <tr class="separator:abf19e0c341481160ede25a47d3f2890d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3bcd90374493c7dbadd5acf872ab860"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab3bcd90374493c7dbadd5acf872ab860"></a>
-virtual u_result&#160;</td><td class="memItemRight" valign="bottom"><b>waitforSent</b> (_u32 timeout=DEFAULT_SOCKET_TIMEOUT)=0</td></tr>
+<tr class="memitem:ab3bcd90374493c7dbadd5acf872ab860"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#ab3bcd90374493c7dbadd5acf872ab860">waitforSent</a> (<a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a> timeout=<a class="el" href="classrp_1_1net_1_1_socket_base.html#ab39e4c8861a98205e7911ff3ec6a9442ace5bb9bd31e53d32d97e1bd8831a7f60">DEFAULT_SOCKET_TIMEOUT</a>)=0</td></tr>
 <tr class="separator:ab3bcd90374493c7dbadd5acf872ab860"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c60f0cc31b5f22febf55b23d5a161a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c60f0cc31b5f22febf55b23d5a161a4"></a>
-virtual u_result&#160;</td><td class="memItemRight" valign="bottom"><b>waitforData</b> (_u32 timeout=DEFAULT_SOCKET_TIMEOUT)=0</td></tr>
+<tr class="memitem:a8c60f0cc31b5f22febf55b23d5a161a4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#a8c60f0cc31b5f22febf55b23d5a161a4">waitforData</a> (<a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a> timeout=<a class="el" href="classrp_1_1net_1_1_socket_base.html#ab39e4c8861a98205e7911ff3ec6a9442ace5bb9bd31e53d32d97e1bd8831a7f60">DEFAULT_SOCKET_TIMEOUT</a>)=0</td></tr>
 <tr class="separator:a8c60f0cc31b5f22febf55b23d5a161a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a55dfbc506570cf4b94001e6b5f5326f6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrp_1_1net_1_1_socket_base.html#a55dfbc506570cf4b94001e6b5f5326f6">SocketBase</a> ()</td></tr>
+<tr class="separator:a55dfbc506570cf4b94001e6b5f5326f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="ab39e4c8861a98205e7911ff3ec6a9442"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ab39e4c8861a98205e7911ff3ec6a9442ace5bb9bd31e53d32d97e1bd8831a7f60"></a>DEFAULT_SOCKET_TIMEOUT&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="a3ddba675f2f8de1cf71423239f05e457"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457">rp::net::SocketBase::socket_direction_mask</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a3ddba675f2f8de1cf71423239f05e457abbbbbba4cc3282e310ebee864dc2476c"></a>SOCKET_DIR_RD&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a3ddba675f2f8de1cf71423239f05e457ae805579cfe9308eebd279717cc726c6b"></a>SOCKET_DIR_WR&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a3ddba675f2f8de1cf71423239f05e457af97e6eb50d600623674f3f58149decd7"></a>SOCKET_DIR_BOTH&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="ad97e55763c7c6bd6598835073cc9f8ad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classrp_1_1net_1_1_socket_base.html#ad97e55763c7c6bd6598835073cc9f8ad">rp::net::SocketBase::socket_family_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ad97e55763c7c6bd6598835073cc9f8ada6d5178199fde6cbd30e189db438b1941"></a>SOCKET_FAMILY_INET&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad97e55763c7c6bd6598835073cc9f8ada523642b3b3149b9c560f535492a4c241"></a>SOCKET_FAMILY_INET6&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad97e55763c7c6bd6598835073cc9f8ada80446ffa17756d9f0ca28f6bde58cac3"></a>SOCKET_FAMILY_RAW&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a1a1316ab658875cf7f2a2e0198b63803"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual rp::net::SocketBase::~SocketBase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a55dfbc506570cf4b94001e6b5f5326f6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">rp::net::SocketBase::SocketBase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ac8cf3c8ee2375c8908b77a73cb2eb302"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a> rp::net::SocketBase::bind </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrp_1_1net_1_1_socket_address.html">SocketAddress</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a262c6d0bff49b76e1309b4fe4dcce0c0">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a262c6d0bff49b76e1309b4fe4dcce0c0">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a262c6d0bff49b76e1309b4fe4dcce0c0">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a42f6463758ef6e654fad77def824a07d">rp::arch::net::StreamSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a42f6463758ef6e654fad77def824a07d">rp::arch::net::StreamSocketImpl</a>, and <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a42f6463758ef6e654fad77def824a07d">rp::arch::net::StreamSocketImpl</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0fab170ce70fb550ca9f8542e9ead7e4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void rp::net::SocketBase::dispose </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a8f1f55fd73755fbd18cd3f17a8013e2d">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a8f1f55fd73755fbd18cd3f17a8013e2d">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a8f1f55fd73755fbd18cd3f17a8013e2d">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a447da7c7aeef13defa7e026a0bab4890">rp::arch::net::StreamSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a447da7c7aeef13defa7e026a0bab4890">rp::arch::net::StreamSocketImpl</a>, and <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a447da7c7aeef13defa7e026a0bab4890">rp::arch::net::StreamSocketImpl</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7e469b97cbb0ed9dea5a1243cf551205"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a> rp::net::SocketBase::getLocalAddress </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrp_1_1net_1_1_socket_address.html">SocketAddress</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#adabfacdc1de5f925775a707bf0a6832c">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#adabfacdc1de5f925775a707bf0a6832c">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#adabfacdc1de5f925775a707bf0a6832c">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a8eed90d03edad978eff6f3e1591e42c5">rp::arch::net::StreamSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a8eed90d03edad978eff6f3e1591e42c5">rp::arch::net::StreamSocketImpl</a>, and <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#a8eed90d03edad978eff6f3e1591e42c5">rp::arch::net::StreamSocketImpl</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abf19e0c341481160ede25a47d3f2890d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a> rp::net::SocketBase::setTimeout </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a>&#160;</td>
+          <td class="paramname"><em>timeout</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457">socket_direction_mask</a>&#160;</td>
+          <td class="paramname"><em>msk</em> = <code><a class="el" href="classrp_1_1net_1_1_socket_base.html#a3ddba675f2f8de1cf71423239f05e457af97e6eb50d600623674f3f58149decd7">SOCKET_DIR_BOTH</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a7ff5a971f1625e17e68e12c27320adc3">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a7ff5a971f1625e17e68e12c27320adc3">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a7ff5a971f1625e17e68e12c27320adc3">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#abf4fd6b96dffa3eb20ae6f1d1446b238">rp::arch::net::StreamSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#abf4fd6b96dffa3eb20ae6f1d1446b238">rp::arch::net::StreamSocketImpl</a>, and <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#abf4fd6b96dffa3eb20ae6f1d1446b238">rp::arch::net::StreamSocketImpl</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8c60f0cc31b5f22febf55b23d5a161a4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a> rp::net::SocketBase::waitforData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a>&#160;</td>
+          <td class="paramname"><em>timeout</em> = <code><a class="el" href="classrp_1_1net_1_1_socket_base.html#ab39e4c8861a98205e7911ff3ec6a9442ace5bb9bd31e53d32d97e1bd8831a7f60">DEFAULT_SOCKET_TIMEOUT</a></code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a59b5799e641e653c60c236e965eba295">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a59b5799e641e653c60c236e965eba295">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a59b5799e641e653c60c236e965eba295">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#adc0b7d2a4bb909202c2920a298fd8fdc">rp::arch::net::StreamSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#adc0b7d2a4bb909202c2920a298fd8fdc">rp::arch::net::StreamSocketImpl</a>, and <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#adc0b7d2a4bb909202c2920a298fd8fdc">rp::arch::net::StreamSocketImpl</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab3bcd90374493c7dbadd5acf872ab860"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="rptypes_8h.html#aae3c3046a3ac6b72370c3d3c9c9061db">u_result</a> rp::net::SocketBase::waitforSent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="rptypes_8h.html#a07491c35a48354e0e7b56974a04cc3de">_u32</a>&#160;</td>
+          <td class="paramname"><em>timeout</em> = <code><a class="el" href="classrp_1_1net_1_1_socket_base.html#ab39e4c8861a98205e7911ff3ec6a9442ace5bb9bd31e53d32d97e1bd8831a7f60">DEFAULT_SOCKET_TIMEOUT</a></code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a133d423a9c70844b8a1d45d5418e3b0f">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a133d423a9c70844b8a1d45d5418e3b0f">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_d_gram_socket_impl.html#a133d423a9c70844b8a1d45d5418e3b0f">rp::arch::net::DGramSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#aefd1dfbdb0d396d20dc9fcbacc6698e4">rp::arch::net::StreamSocketImpl</a>, <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#aefd1dfbdb0d396d20dc9fcbacc6698e4">rp::arch::net::StreamSocketImpl</a>, and <a class="el" href="classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#aefd1dfbdb0d396d20dc9fcbacc6698e4">rp::arch::net::StreamSocketImpl</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/securbot/securbot/Robot_Software/rplidar_ros/sdk/src/hal/<a class="el" href="socket_8h_source.html">socket.h</a></li>
+<li><a class="el" href="socket_8h_source.html">socket.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['_5f_5finit_5f_5f_2epy',['__init__.py',['../src_2roboclaw__driver_2____init_____8py.html',1,'']]],
   ['s_5fchecksum_5f1',['s_checksum_1',['../struct__rplidar__response__capsule__measurement__nodes__t.html#a281fab87988a5789290d632b69daec3c',1,'_rplidar_response_capsule_measurement_nodes_t::s_checksum_1()'],['../struct__rplidar__response__ultra__capsule__measurement__nodes__t.html#ae22f700efdef4c0cffbc6d1339f6c8d0',1,'_rplidar_response_ultra_capsule_measurement_nodes_t::s_checksum_1()'],['../rplidar__cmd_8h.html#a700febf49d780d01b47eb5334141009d',1,'s_checksum_1():&#160;rplidar_cmd.h']]],
   ['s_5fchecksum_5f2',['s_checksum_2',['../struct__rplidar__response__capsule__measurement__nodes__t.html#a0ccab25757ae34355e445a6e330624d8',1,'_rplidar_response_capsule_measurement_nodes_t::s_checksum_2()'],['../struct__rplidar__response__ultra__capsule__measurement__nodes__t.html#af8c608835f652250d00c1c3804657440',1,'_rplidar_response_ultra_capsule_measurement_nodes_t::s_checksum_2()'],['../rplidar__cmd_8h.html#a35e7484cdd9cc98a595a3512b17f8ec3',1,'s_checksum_2():&#160;rplidar_cmd.h']]],
   ['scan_5fmode',['scan_mode',['../structrp_1_1standalone_1_1rplidar_1_1_rplidar_scan_mode.html#a94b5170f36e12157574904167dc33fe1',1,'rp::standalone::rplidar::RplidarScanMode']]],
@@ -12,8 +13,8 @@ var searchData=
   ['serial_5ffd',['serial_fd',['../classrp_1_1arch_1_1net_1_1raw__serial.html#ab4b56280b1a7d969157db7c94906ce98',1,'rp::arch::net::raw_serial']]],
   ['serial_5frx_5fbuffer_5fsize',['SERIAL_RX_BUFFER_SIZE',['../classrp_1_1arch_1_1net_1_1raw__serial.html#af16817817e9638a2a6e6ecc18c8766c2a41717bdab05d06c9e6c4b21c7fdc56c4',1,'rp::arch::net::raw_serial']]],
   ['serial_5frx_5ftimeout',['SERIAL_RX_TIMEOUT',['../classrp_1_1arch_1_1net_1_1raw__serial.html#af16817817e9638a2a6e6ecc18c8766c2ad8b48eb5b75c709f2fa4e7bd351ff479',1,'rp::arch::net::raw_serial']]],
-  ['serial_5frxtx',['serial_rxtx',['../classrp_1_1hal_1_1serial__rxtx.html#aaf873e1cf2f3159a7adba9670aafc379',1,'rp::hal::serial_rxtx']]],
   ['serial_5frxtx',['serial_rxtx',['../classrp_1_1hal_1_1serial__rxtx.html',1,'rp::hal']]],
+  ['serial_5frxtx',['serial_rxtx',['../classrp_1_1hal_1_1serial__rxtx.html#aaf873e1cf2f3159a7adba9670aafc379',1,'rp::hal::serial_rxtx']]],
   ['serial_5ftx_5fbuffer_5fsize',['SERIAL_TX_BUFFER_SIZE',['../classrp_1_1arch_1_1net_1_1raw__serial.html#af16817817e9638a2a6e6ecc18c8766c2a4b9474c219e7522a80115331d974260d',1,'rp::arch::net::raw_serial']]],
   ['serial_5ftx_5ftimeout',['SERIAL_TX_TIMEOUT',['../classrp_1_1arch_1_1net_1_1raw__serial.html#af16817817e9638a2a6e6ecc18c8766c2a6ac114f1145a70a7aadfb8b36598af0b',1,'rp::arch::net::raw_serial']]],
   ['serialchanneldevice',['SerialChannelDevice',['../classrp_1_1standalone_1_1rplidar_1_1_serial_channel_device.html',1,'rp::standalone::rplidar']]],

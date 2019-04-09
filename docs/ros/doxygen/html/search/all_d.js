@@ -1,16 +1,11 @@
 var searchData=
 [
-  ['serial_5frxtx',['serial_rxtx',['../classrp_1_1hal_1_1serial__rxtx.html',1,'rp::hal']]],
-  ['serialchanneldevice',['SerialChannelDevice',['../classrp_1_1standalone_1_1rplidar_1_1_serial_channel_device.html',1,'rp::standalone::rplidar']]],
-  ['setmotorpwm',['setMotorPWM',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a7fac483d1ad6ce03da8b19ea65be36cc',1,'rp::standalone::rplidar::RPlidarDriver::setMotorPWM()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#a50e286d03cdceafe59dced008155b82d',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::setMotorPWM()']]],
-  ['socketaddress',['SocketAddress',['../classrp_1_1net_1_1_socket_address.html',1,'rp::net']]],
-  ['socketbase',['SocketBase',['../classrp_1_1net_1_1_socket_base.html',1,'rp::net']]],
-  ['startmotor',['startMotor',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a7762d1cfcdd399f5844ab1caf7576893',1,'rp::standalone::rplidar::RPlidarDriver::startMotor()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#a0a353bd7244d4dfadf79aec29569cefb',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::startMotor()']]],
-  ['startscan',['startScan',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a527e3b1e0b76633203f8665d5f7c6b04',1,'rp::standalone::rplidar::RPlidarDriver::startScan()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#ae377c8571a95aab8d496b7c8fd38b777',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::startScan()']]],
-  ['startscanexpress',['startScanExpress',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a11158e973a4069d4ca57e168f59a8a93',1,'rp::standalone::rplidar::RPlidarDriver::startScanExpress()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#a147a1ca349305f80ef682aa33a36ab7e',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::startScanExpress()']]],
-  ['startscannormal',['startScanNormal',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a5388df2f7b6d4c0de496f11524a3dfaa',1,'rp::standalone::rplidar::RPlidarDriver::startScanNormal()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#ae84f08a4c87fe6690a739fcd3d19eb4d',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::startScanNormal()']]],
-  ['stop',['stop',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#aeea54ae64182d29f94db9a6831bc8d74',1,'rp::standalone::rplidar::RPlidarDriver::stop()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#a7b54501f6edc607867eb5233f777d51b',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::stop()']]],
-  ['stopmotor',['stopMotor',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a34edcad805a9b00e7ec485e8599020ee',1,'rp::standalone::rplidar::RPlidarDriver::stopMotor()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#a2f05c871e46f292bd7e63bd6fac802cc',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::stopMotor()']]],
-  ['streamsocket',['StreamSocket',['../classrp_1_1net_1_1_stream_socket.html',1,'rp::net']]],
-  ['streamsocketimpl',['StreamSocketImpl',['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html',1,'rp::arch::net']]]
+  ['_5f_5finit_5f_5f_2epy',['__init__.py',['../nodes_2____init_____8py.html',1,'']]],
+  ['node',['Node',['../classnodes_1_1roboclaw__node_1_1_node.html',1,'nodes::roboclaw_node']]],
+  ['node',['node',['../namespacenodes_1_1roboclaw__node.html#ab4f0e25798bb2db852ccf2590c72148f',1,'nodes::roboclaw_node']]],
+  ['node_2ecpp',['node.cpp',['../node_8cpp.html',1,'']]],
+  ['node_5fhq',['node_hq',['../struct__rplidar__response__hq__capsule__measurement__nodes__t.html#a118497fb7ba74072192c136242fed8d8',1,'_rplidar_response_hq_capsule_measurement_nodes_t::node_hq()'],['../rplidar__cmd_8h.html#afac1d25498e307facf6ef065215e7aca',1,'node_hq():&#160;rplidar_cmd.h']]],
+  ['nodes',['nodes',['../namespacenodes.html',1,'']]],
+  ['normalize_5fangle',['normalize_angle',['../classnodes_1_1roboclaw__node_1_1_encoder_odom.html#aa7e9a7b995b1b2d4c062121534b0007f',1,'nodes::roboclaw_node::EncoderOdom']]],
+  ['roboclaw_5fnode',['roboclaw_node',['../namespacenodes_1_1roboclaw__node.html',1,'nodes']]]
 ];
