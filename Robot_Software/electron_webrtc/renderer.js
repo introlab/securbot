@@ -37,7 +37,7 @@ function get_video_id(label) {
     })
 }
 
-function dataCallback(easyrtcid, msgType, msgData, targeting) {
+function dataCallback(easyrtcid, msgType, msgData) {
     console.log(msgData)
     ipc.send('msg', msgData)
 }
@@ -45,6 +45,11 @@ function dataCallback(easyrtcid, msgType, msgData, targeting) {
 function goalReceivedCallback(sourceId, msgType, goalJsonString) {
     console.log("Received new nav goal: " + goalJsonString)
     ipc.send('goal', goalJsonString)
+}
+
+function teleopCallback(easyrtcid, msgType, msgData) {
+    console.log(msgData);
+    ipc.send('msg', msgData)
 }
 
 
@@ -79,6 +84,7 @@ async function my_init() {
         easyrtc.enableAudio(false)
         easyrtc.setPeerListener(dataCallback, 'msg')
         easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
+        easyrtc.setPeerListener(teleopCallback, 'joystick-position')
 
         easyrtc.initMediaSource(
               function(){        // success callback

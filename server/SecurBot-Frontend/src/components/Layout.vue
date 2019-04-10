@@ -292,7 +292,7 @@ export default {
         Desc: Send the JSON string received through the data channel.
     */
     onJoystickPositionChange(data) {
-      this.sendData(this.peerId, 'joystick-position', data);
+      this.sendData(this.peerId, 'joystick-position', JSON.stringify(data));
     },
     /**
      * Sends a navigation waypoint to the robot in a JSON string
