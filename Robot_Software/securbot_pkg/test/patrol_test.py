@@ -19,7 +19,6 @@ class  PatrolTestSuite(unittest.TestCase):
 
     def mapImageCallBack(self, data):
         self.conversionRequests.append(data)
-        self.mapImageOutput.publish(data)
 
     # Send json string and verify that waypoints are being queried for conversion
     def test_patrol_exec(self):
@@ -34,12 +33,12 @@ class  PatrolTestSuite(unittest.TestCase):
         # Listen for movebase messages
 
         # Send conveterted waypoints
-        for waypoint in conversionRequests:
+        for waypoint in self.conversionRequests:
             self.mapImageOutput.publish(waypoint)
+        time.sleep(1)
 
         # Assert messages being sent to movebase
         self.assertEquals(1,1,'hey')
-
 
 
 if __name__ == '__main__':
