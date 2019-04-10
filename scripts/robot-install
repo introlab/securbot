@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# This script is meant to deploy securbot robot software onto a target platform
+# The target machine must run Ubuntu Xenial 16.04 LTS
+
+# ROS Kinetic installation
+# http://wiki.ros.org/kinetic/Installation/Ubuntu
+
+
+# Install settings
+CATK_WS=/opt/securbot/catkin_ws
+ROBOT_GROUP=ros
+
+KINETIC_PATH=/opt/ros/kinetic   # Path use by apt when installing kinetic
+
+# Check for ubuntu version
+VERSION=`lsb_release -d`
+if [[ ! $VERSION =~ 'Ubuntu 16.04' ]]; then
+    echo "This script is only available on Ubuntu 16.04 Xenial"
+    exit 1
+fi
+
+# script context
+[ -z $OPERATOR ] && export OPERATOR=$USER
+BASEDIR=$(dirname "$0")
+if ! [[ "$BASEDIR" = /* ]]
+then
+    BASEDIR=$PWD/$BASEDIR
+fi
+
+# Script must be run as root
+[ `id -u` -eq 0 ] || exec sudo -E "$0" "$@"
+
+# Adding restricted universe and multiverse repos
+add-apt-repository universe
+add-apt-repository multiverse
+add-apt-repository restricted
+
+# Adding nodejs 11 source
+curl -sL https://deb.nodesource.com/setup_11.x | bash -
+
+# Adding source
+echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+
+# Key setup
+apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+
+# Install
+apt-get update
+# Add the required ros packages here
+apt-get -y install ros-kinetic-desktop-full v4l-utils libv4l-dev nodejs \
+    ros-kinetic-rtabmap-ros libnss3 xvfb libgtk2.0-0 libxtst6 libxss1 \
+    libgconf-2-4 libasound2 linux-generic v4l2loopback-dkms ffmpeg \
+    linux-modules-extra-$(uname -r)
+
+# Initialize rosdep
+rosdep init
+rosdep update
+
+# Setting environment variables
+if ! grep -Fxq "source $KINETIC_PATH/setup.bash" ~/.bashrc
+then
+    echo "source $KINETIC_PATH/setup.bash" >> ~/.bashrc
+fi
+source $KINETIC_PATH/setup.bash
+
+# Setting up ROS workspace
+echo "Setting up workspace at $CATK_WS"
+mkdir -p $CATK_WS $CATK_WS/build
+rm -rf $CATK_WS/src
+
+# Copying the project files
+ln -fs $BASEDIR/../Robot_Software $CATK_WS/src
+
+# Catkin Make
+catkin_make --directory $CATK_WS
+
+# Adding environment variables from the workspace
+if ! grep -Fxq "source $CATK_WS/devel/setup.sh" ~/.bashrc
+then
+    echo "source $CATK_WS/devel/setup.sh" >> ~/.bashrc
+fi
+source $CATK_WS/devel/setup.sh
+
+# Creating ros usergroup
+groupadd $ROBOT_GROUP
+usermod -g $ROBOT_GROUP $OPERATOR
+
+# Owning directories
+chown -R $OPERATOR:$ROBOT_GROUP $CATK_WS
+#chown -R :$ROBOT_GROUP $KINETIC_PATH
+chown -R $OPERATOR ~/.ros
+chmod -R ug+rw $CATK_WS
+
+# Adding ros group to the no passwd sudo
+if ! grep -Fxq "%$ROBOT_GROUP ALL=(ALL:ALL) NOPASSWD:ALL" /etc/sudoers
+then
+    echo "%$ROBOT_GROUP ALL=(ALL:ALL) NOPASSWD:ALL" | sh -c 'cat >> /etc/sudoers'
+fi
+
+echo "Login again or source ~/.bashrc to set your environment variables"

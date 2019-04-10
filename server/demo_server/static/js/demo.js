@@ -37,6 +37,7 @@ function enable(domId) {
 
 
 function connect() {
+    easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080')
     easyrtc.enableDebug(false);
     console.log("Initializing.");
     easyrtc.enableDataChannels(true);

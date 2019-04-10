@@ -7,16 +7,40 @@ const burndown = require('./burndown.js');
 module.exports.saveDashboard = async function (settings){
 
     console.group('Extracting Worklog')
-    var worklogP = await worklog.getWorklog(settings);
+    try {
+        var worklogP = await worklog.getWorklog(settings);
+    } catch (e) {
+        console.log('Failed to retreive worklog');
+        console.error(e);
+        console.groupEnd();
+        console.log('Terminating dashboard export');
+        return;
+    }
     console.groupEnd();
 
     console.group('Starting Dashboard render');
-    await renderDashboard(settings, worklogP);
+    try {
+        await renderDashboard(settings, worklogP);
+    } catch (e) {
+        console.log('Failed to render dashboard');
+        console.error(e);
+        console.groupEnd();
+        console.log('Terminating dashboard export');
+        return;
+    }
     console.groupEnd();
 
     console.group('Starting PDF conversion');
-    pdf.generatePDF(settings.output, settings.outputPDF);
-    await pdf.generateLandscapePDF(settings.output, settings.outputLandscapePDF);
+    try {
+        pdf.generatePDF(settings.output, settings.outputPDF);
+        await pdf.generateLandscapePDF(settings.output, settings.outputLandscapePDF);
+    } catch (e) {
+        console.log('Failed to export to PDF');
+        console.error(e);
+        console.groupEnd();
+        console.log('Terminating dashboard export');
+        return;
+    }
     console.groupEnd();
 
     console.log('Finished Dashboard export');
@@ -34,55 +58,62 @@ async function renderDashboard(settings, worklogP){
             deviceScaleFactor: settings.deviceScalingFactor
         }
     });
-    const page = await browser.newPage();
-    console.log('Chromium started');
 
-    // Load Page
-    console.log('Loading page...');
-    await page.goto(settings.url);
-    console.log('Page loaded');
-
-    // Log into Jira
-    console.log('Filling login ...');
-    await page.type('#login-form-username', settings.user);
-    await page.type('#login-form-password', settings.passwd);
-    await page.click('#login');
-    console.log('Submitting login');
-
-    console.log('Waiting for dashboard ...');
-    await page.waitForNavigation({timeout: 120000});
-
-    console.log('Waiting for Worklogs ...');
-    var worklogFrame = page.frames().find(frame => frame.url().includes('worklog'));
-    await worklogFrame.waitForSelector('#worklogs_main>div>div.main-content', {timeout: 60000});
-
-    // Apply the BigPic extension
-    console.log('Adjusting picture size')
-    await page.evaluate(bigpic)
-
-    // Clearing burndown legend from graph
-    console.log('Adjusting burndown legend');
     try {
-        await page.evaluate(burndown.clearLegend);
+        const page = await browser.newPage();
+        console.log('Chromium started');
+
+        // Load Page
+        console.log('Loading page...');
+        await page.goto(settings.url);
+        console.log('Page loaded');
+
+        // Log into Jira
+        console.log('Filling login ...');
+        await page.type('#login-form-username', settings.user);
+        await page.type('#login-form-password', settings.passwd);
+        await page.click('#login');
+        console.log('Submitting login');
+
+        console.log('Waiting for dashboard ...');
+        await page.waitForNavigation({timeout: 120000});
+
+        console.log('Waiting for Worklogs ...');
+        var worklogFrame = page.frames().find(frame => frame.url().includes('worklog'));
+        await worklogFrame.waitForSelector('#worklogs_main>div>div.main-content', {timeout: 60000});
+
+        // Apply the BigPic extension
+        console.log('Adjusting picture size')
+        await page.evaluate(bigpic)
+
+        // Clearing burndown legend from graph
+        console.log('Adjusting burndown legend');
+        try {
+            await page.evaluate(burndown.clearLegend);
+        } catch (e) {
+            console.log('Failed to adjust burndown legend');
+            console.error(e);
+        }
+
+        // Adding the means to the table
+        console.log('Adding worklog means');
+        try {
+            await page.evaluate(worklog.addMeans, await worklogP);
+        } catch (e) {
+            console.log('Failed to add means')
+            console.error(e);
+        }
+
+        console.log('Acquiring dashboard')
+        var dashboard = await page.$('#dashboard-content');
+
+        console.log('Printing dashboard')
+        var image = await dashboard.screenshot({path: settings.output});
     } catch (e) {
-        console.log('Failed to adjust burndown legend');
-        console.error(e);
+        browser.close();
+        throw e;
     }
 
-    // Adding the means to the table
-    console.log('Adding worklog means');
-    try {
-        await page.evaluate(worklog.addMeans, await worklogP);
-    } catch (e) {
-        console.log('Failed to add means')
-        console.error(e);
-    }
-
-    console.log('Acquiring dashboard')
-    var dashboard = await page.$('#dashboard-content');
-
-    console.log('Printing dashboard')
-    var image = await dashboard.screenshot({path: settings.output});
     browser.close();
 
     return image;
