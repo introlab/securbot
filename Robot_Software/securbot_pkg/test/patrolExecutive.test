@@ -1,5 +1,12 @@
+
 <launch>
-    <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" />
+    <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py">
+        <remap from="fromElectronWaypoints" to="/electron/patrol"/>
+        <remap from="fromElectronInterrupt" to="/electron/patrol_halt"/>
+        <remap from="fromMapImageGenerator" to="toMapImageGenerator"/>
+        <remap from="toElectron" to="datbot"/>
+        <remap from="toMoveBase" to="/move_base/goal"/>
+    </node>
 
     <!-- Test nodes -->
     <test test-name="patrol_test" pkg="securbot_pkg" type="patrol_test.py" />
