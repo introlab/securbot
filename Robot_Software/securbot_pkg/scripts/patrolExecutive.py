@@ -52,6 +52,14 @@ toElectron = rospy.Publisher("toElectron", String, queue_size=20)
 #Global publisher to send waypoints list to move_base
 toMoveBase = rospy.Publisher("toMoveBase", PoseStamped, queue_size=20)
 
+#Used instead into waypointsPatrolList
+class Waypoint:
+    def __init__(self, string, pixelPoseStamped, realPoseStamped, status):
+        self.string = string
+        self.pixelPoseStamped =pixelPoseStamped
+        self.realPoseStamped = realPoseStamped
+        self.status = status
+
 #Format json Strings to Pixel PoseStamped
 def jsonStringToPixelPoseStamped(jsonString):
     #Loading json message into buffer
@@ -136,7 +144,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
     #waiting asynchrous response from map_image_generator
     for wp in waypointsPatrolList:
         #Format Pixel PoseStamped to Real PoseStamped
-        pixelPoseStampedToRealPoseStamped(wp[REAL_POSESTAMPED_INDEX])
+        pixelPoseStampedToRealPoseStamped(wp[PIXEL_POSESTAMPED_INDEX])
 
 #Returns status as a string, used primarly for debugging purposes
 def getStatusString(uInt8Status):
@@ -160,7 +168,7 @@ def getStatusString(uInt8Status):
         return "RECALLED"
     elif uInt8Status == LOST:
         return "LOST"
-    else
+    else:
         return "ERROR/UNKNOWN"
         
 #TODO This receiver takes a PoseStamped
@@ -172,10 +180,11 @@ def getStatusString(uInt8Status):
 #    for status in waypointsStatus.GoalStatus:
 #        statusStr = getStatusString(status)
 #        rospy.loginfo("Waypoint [%s] Status : [%s] ", nthWaypoint, statusStr)
-#        if status ==  :
-#            index = waypointsStatus.index() - 1
-#
-#    TODO : do something if it's last waypoint reached and it's looped
+#       if waypointsPatrolList[nthWaypoint][WAYPOINT_STATUS_INDEX] != statusStr :
+#           
+#           if status == ACTIVE && activeWaypoint != :
+#               activeWaypoint = waypointsPatrolList[nthWaypoint]
+#    TODO : do something if it's last waypoint reached and patrol's looped
     
 def patrolExecutive():
     #Node name defined as patrolExecutive
