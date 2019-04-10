@@ -9,6 +9,10 @@ import rospy
 import json
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
+from move_base_msgs.msg import MoveBaseActionGoal
+import actionlib
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from actionlib_msgs.msg import GoalStatus
 
 #Yaws transformation into quaternions
 from tf.transformations import quaternion_from_euler
@@ -31,6 +35,9 @@ PREEMPTING=6
 RECALLING=7
 RECALLED=8
 LOST=9
+
+
+actionClient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
 
 #Global list of waypoints (2D with 4 columns) in different formats (Strings,
 #Pixel PoseStampeds, Real PoseStampeds), plus their status
@@ -169,7 +176,7 @@ def getStatusString(uInt8Status):
         return "LOST"
     else:
         return "ERROR/UNKNOWN"
-        
+
 #TODO This receiver takes a PoseStamped
 #def waypointsStatusReceiverCallback(waypointsStatus):
 #    rospy.loginfo("Received waypoints status :" )
@@ -180,7 +187,7 @@ def getStatusString(uInt8Status):
 #        statusStr = getStatusString(status)
 #        rospy.loginfo("Waypoint [%s] Status : [%s] ", nthWaypoint, statusStr)
 #       if waypointsPatrolList[nthWaypoint][WAYPOINT_STATUS_INDEX] != statusStr :
-#           
+#
 #           if status == ACTIVE && activeWaypoint != :
 #               activeWaypoint = waypointsPatrolList[nthWaypoint]
 #    TODO : do something if it's last waypoint reached and patrol's looped
