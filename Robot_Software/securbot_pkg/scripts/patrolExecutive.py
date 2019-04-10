@@ -40,10 +40,8 @@ toElectron = rospy.Publisher("toElectron", String, queue_size=20)
 #Global publisher to send waypoints list to move_base
 toMoveBase = rospy.Publisher("toMoveBase", PoseStamped, queue_size=20)
 
-#Format json Strings to Pixel PoseStamped
-def jsonStringToPixelPoseStamped(jsonString):
-    #Loading json message into buffer
-    jsonBuffer = json.loads(jsonString)
+#Format Waypoint to Pixel PoseStamped
+def wayPointToPixelPoseStamped(wayPointObject):
 
     #Creating and partially filling a new PoseStamped
     waypoint = PoseStamped()
@@ -51,14 +49,14 @@ def jsonStringToPixelPoseStamped(jsonString):
     waypoint.header.stamp = rospy.Time.now()
 
     #Formatting position
-    waypoint.pose.position.x = jsonBuffer["x"]
-    waypoint.pose.position.y = jsonBuffer["y"]
+    waypoint.pose.position.x = wayPointObject["x"]
+    waypoint.pose.position.y = wayPointObject["y"]
     waypoint.pose.position.z = 0
 
     #Formatting orientation
     roll = 0
     pitch = 0
-    yaw = jsonBuffer["yaw"]
+    yaw = wayPointObject["yaw"]
     quaternion = quaternion_from_euler(roll, pitch, yaw)
     waypoint.pose.orientation.x = quaternion[0]
     waypoint.pose.orientation.y = quaternion[1]
@@ -90,8 +88,8 @@ def realPoseStampedReceiverCallback(realPoseStamped):
                #Global variable iterating to help send the corresponding waypoint
                #reached
                activeWaypoint = waypointPatrolList[0]
-               
-               for waypoint in waypointsPatrolList: 
+
+               for waypoint in waypointsPatrolList:
                 toMoveBase.publish(waypoint[REAL_POSESTAMP_INDEX])
             break
 
@@ -111,35 +109,36 @@ def waypointsListReceiverCallback(waypointsJsonStr):
     isLooped = json.loads(waypointsJsonStr.data)["loop"]
 
     for wpStr in waypointsStrings:
-        #Format Json String to Pixel PoseStamped
-        pixelPoseStamped = jsonStringToPixelPoseStamped(wpStr)
+        #Format waypoint to Pixel PoseStamped
+        pixelPoseStamped = wayPointToPixelPoseStamped(wpStr)
 
         #Fill global patrol list of waypoints with all formats generated
         #(Except Real PoseStamped that as an asynchrous response, so force to
         #None value)
         waypointsPatrolList.append([wpStr, pixelPoseStamped, None, None])#For now all waypoints status (column 4) are None values
 
+
     #Loop that publish every Pixel PoseStamped to map_image_generator
     #This loop is after to ensure the partol list is ready to be iterate before
     #waiting asynchrous response from map_image_generator
     for wp in waypointsPatrolList:
         #Format Pixel PoseStamped to Real PoseStamped
-        pixelPoseStampedToRealPoseStamped(wp[REAL_POSESTAMPED_INDEX])
+        pixelPoseStampedToRealPoseStamped(wp[PIXEL_POSESTAMPED_INDEX])
 
 
 #TODO This receiver takes a PoseStamped
 #def waypointsStatusReceiverCallback(waypointsStatus):
 #    rospy.loginfo("Received waypoints status :" )
-#    
+#
 #    nthWaypoint = 0
-#    
+#
 #    for status in waypointsStatus.GoalStatus:
 #        nthWaypoint += 1
 #        rospy.loginfo("Waypoint [%s] Status : ", nthWaypoint)
 #        if status ==  :
 #            index = waypointsStatus.index() - 1
 #    return jsonBuffer
-    
+
 def patrolExecutive():
     #Node name defined as patrolExecutive
     rospy.init_node("patrolExecutive", anonymous=True) #anonymous=True keeps each patrolExecutive nodes unique if there were many
@@ -149,13 +148,13 @@ def patrolExecutive():
 
     #Subscribing to topic 'fromElectronWaypoints' with callback
     rospy.Subscriber("fromElectronWaypoints", String, waypointsListReceiverCallback)
-    
+
 
     #TODO Subscribing to topic 'fromElectronInterrupt' with callback
     #rospy.Subscriber("fromElectronInterrupt", String, interruptReceiverCallback)
 
     #TODO Subscribing to topic 'fromMoveBase' with callback
-    #rospy.Subscriber("fromMoveBase", PoseStamped, 
+    #rospy.Subscriber("fromMoveBase", PoseStamped,
     #waypointsStatusReceiverCallback)
 
     rospy.spin()
