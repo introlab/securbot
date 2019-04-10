@@ -1,9 +1,8 @@
 
 <launch>
-    <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py">
+    <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" output="screen">
         <remap from="fromElectronWaypoints" to="/electron/patrol"/>
         <remap from="fromElectronInterrupt" to="/electron/patrol_halt"/>
-        <remap from="fromMapImageGenerator" to="toMapImageGenerator"/>
         <remap from="toElectron" to="datbot"/>
         <remap from="toMoveBase" to="/move_base/goal"/>
     </node>
