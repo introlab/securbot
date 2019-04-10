@@ -112,13 +112,20 @@ def realPoseStampedReceiverCallback(realPoseStamped):
 
             #Checking if it was the last real PoseStamped to add to the list
             if (waypointsPatrolList.index(waypoint) + 1) == len(waypointsPatrolList):
-               #Global variable iterating to help send the corresponding waypoint
-               #reached
-               activeWaypoint = waypointPatrolList[0]
-
-               for waypoint in waypointsPatrolList:
-                toMoveBase.publish(waypoint[REAL_POSESTAMP_INDEX])
+                startPatrolNavigation()
             break
+
+# This funtion starts sending the different waypoint that were converted in the list
+def startPatrolNavigation():
+    rospy.loginfo("Starting navigation")
+
+    #Global variable iterating to help send the corresponding waypoint
+    activeWaypoint = waypointsPatrolList[0]
+
+    goal = MoveBaseGoal()
+    goal.target_pose = activeWaypoint[REAL_POSESTAMPED_INDEX]
+    actionClient.send_goal(goal, sendGoalDoneCallback)
+
 
 #This receiver takes a waypoints list (json as Strings) as a patrol planned for
 #the robot and ensure every format needed for each waypoint are generated
@@ -129,7 +136,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
     rospy.loginfo(rospy.get_caller_id() + "Received json Strings waypoints :   %s   ", waypointsJsonStr.data)
 
     #Clear global patrol list for upcoming new list of waypoints and loop flag
-    waypointsPatrolList = []
+    del waypointsPatrolList[:]
     isLooped = False
 
     waypointsStrings = json.loads(waypointsJsonStr.data)["patrol"]
@@ -151,6 +158,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
     for wp in waypointsPatrolList:
         #Format Pixel PoseStamped to Real PoseStamped
         pixelPoseStampedToRealPoseStamped(wp[PIXEL_POSESTAMPED_INDEX])
+
 
 #Returns status as a string, used primarly for debugging purposes
 def getStatusString(uInt8Status):
@@ -178,11 +186,9 @@ def getStatusString(uInt8Status):
         return "ERROR/UNKNOWN"
 
 def sendGoalDoneCallback(terminalState, result):
-    rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
+    rospy.loginfo("received waypoint terminal state : [%s]", getstatusstring(terminalstate))
     rospy.loginfo("Received waypoint result         : [%s]", result)
     
-    activeWaypointIndex += 1
-
 def patrolExecutive():
     #Node name defined as patrolExecutive
     rospy.init_node("patrolExecutive", anonymous=True) #anonymous=True keeps each patrolExecutive nodes unique if there were many
