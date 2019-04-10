@@ -14,19 +14,22 @@ from geometry_msgs.msg import PoseStamped
 from tf.transformations import quaternion_from_euler
 
 #GLOBAL VARIABLES
-#Index definition
-REAL_POSESTAMPED_INDEX = 3
+#Indexes definitions
+JSON_STRING_WAYPOINT_INDEX = 0
+PIXEL_POSESTAMPED_INDEX = 1
+REAL_POSESTAMPED_INDEX = 2
+WAYPOINT_STATUS_INDEX = 3
 
-#Global list of waypoints (2D with 3 columns) in different formats (Strings, Pixel PoseStampeds, Real PoseStampeds)
+#Global list of waypoints (2D with 4 columns) in different formats (Strings, Pixel PoseStampeds, Real PoseStampeds), plus their status
 waypointsPatrolList = []
 
-#Global current waypoint to reach
-currentWaypoint = None
+#Global active waypoint currently being processed by the action server
+activeWaypoint = None
 
 #Global publisher used to send Pixel PoseStampeds in order to format them into Real PoseStampeds
 toMapImageGenerator = rospy.Publisher('toMapImageGenerator', PoseStamped, queue_size=20)
 
-#Global publisher to send waypoint is reached toward Electron node
+#Global publisher to send status that waypoint is reached toward Electron node
 toElectron = rospy.Publisher('toElectron', String, queue_size=20)
 
 #Global publisher to send waypoints list to move_base
@@ -62,7 +65,6 @@ def jsonStringToPixelPoseStamped(jsonString):
 #Publish Pixel PoseStamped to map_image_generator to format it into Real PoseStamped
 #TODO: Be indepedant of map_image_generator
 def pixelPoseStampedToRealPoseStamped(pixelPoseStamped)
-  #Publishing to map_image_generator so this node can format into real PoseStamped                         
    toMapImageGenerator.publish(pixelPoseStamped) 
    
    rospy.loginfo("Pixel PoseStamped published to map_image_generator.")
@@ -79,9 +81,11 @@ def realPoseStampedReceiverCallback(realPoseStamped)
            
             #Checking if it was the last real PoseStamped to add to the list
             if (waypointsPatrolList.index(waypoint) + 1) == len(waypointsPatrolList)
+               #Global variable iterating to help send the corresponding waypoint reached
+               activeWaypoint = waypointPatrolList[0]
+               
                for waypoint in waypointsPatrolList 
                 toMoveBase.publish(waypoint[REAL_POSESTAMP_INDEX])
-                currentWaypoint
             break
 
 #This receiver takes a waypoints list (json as Strings) as a patrol planned for the robot and ensure every format needed for each waypoint are generated (Strings, Pixel PoseStampeds, Real PoseStampeds). It iterates through them gradually per waypoint reached. 
@@ -97,7 +101,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
         pixelPoseStamped = jsonStringToPixelPoseStamped(waypointString)
 
         #Fill global patrol list of waypoints with all formats generated (Except Real PoseStamped that as an asynchrous response, so force to None value)
-        waypointsPatrolList.append([waypointString, pixelPoseStamped, None])
+        waypointsPatrolList.append([waypointString, pixelPoseStamped, None, None]) #For now all waypoints status (column 4) are None values
 
     #Loop that publish every Pixel PoseStamped to map_image_generator
     #This loop is after to ensure the partol list is ready to be iterate before waiting asynchrous response from map_image_generator
@@ -107,12 +111,17 @@ def waypointsListReceiverCallback(waypointsJsonStr):
 
 
 #This receiver takes a PoseStamped
-def waypointsStatusReceiverCallback(waypointsStatus)
-    for status in waypointsStatus.GoalStatus
-        rospy.loginfo("Waypoints status : ", )
-        if status ==  :
-            index = waypointsStatus.index() - 1
-    return jsonBuffer
+#def waypointsStatusReceiverCallback(waypointsStatus)
+#    rospy.loginfo("Received waypoints status :" )
+#    
+#    nthWaypoint = 0
+#    
+#    for status in waypointsStatus.GoalStatus
+#        nthWaypoint += 1
+#        rospy.loginfo("Waypoint [%s] Status : ", nthWaypoint)
+#        if status ==  :
+#            index = waypointsStatus.index() - 1
+#    return jsonBuffer
     
     
 
