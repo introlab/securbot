@@ -64,31 +64,31 @@ def jsonStringToPixelPoseStamped(jsonString):
 
 #Publish Pixel PoseStamped to map_image_generator to format it into Real PoseStamped
 #TODO: Be indepedant of map_image_generator
-def pixelPoseStampedToRealPoseStamped(pixelPoseStamped)
-   toMapImageGenerator.publish(pixelPoseStamped) 
-   
+def pixelPoseStampedToRealPoseStamped(pixelPoseStamped):
+   toMapImageGenerator.publish(pixelPoseStamped)
+
    rospy.loginfo("Pixel PoseStamped published to map_image_generator.")
    rospy.loginfo("Waiting Real PoseStamped from map_image_generator...")
 
 
 #This receiver takes a Real PoseStamped publish by map_image_generator
-def realPoseStampedReceiverCallback(realPoseStamped)
+def realPoseStampedReceiverCallback(realPoseStamped):
     rospy.loginfo("Received Real PoseStamped.")
-    for waypoint in waypointsPatrolList
+    for waypoint in waypointsPatrolList:
         if waypoint[REAL_POSESTAMPED_INDEX] == None:
             index = waypointsPatrolList.index(waypoint)
             waypointsPatrolList[index][REAL_POSESTAMPED_INDEX] = realPoseStamped
-           
+
             #Checking if it was the last real PoseStamped to add to the list
-            if (waypointsPatrolList.index(waypoint) + 1) == len(waypointsPatrolList)
+            if (waypointsPatrolList.index(waypoint) + 1) == len(waypointsPatrolList):
                #Global variable iterating to help send the corresponding waypoint reached
                activeWaypoint = waypointPatrolList[0]
                
-               for waypoint in waypointsPatrolList 
+               for waypoint in waypointsPatrolList: 
                 toMoveBase.publish(waypoint[REAL_POSESTAMP_INDEX])
             break
 
-#This receiver takes a waypoints list (json as Strings) as a patrol planned for the robot and ensure every format needed for each waypoint are generated (Strings, Pixel PoseStampeds, Real PoseStampeds). It iterates through them gradually per waypoint reached. 
+#This receiver takes a waypoints list (json as Strings) as a patrol planned for the robot and ensure every format needed for each waypoint are generated (Strings, Pixel PoseStampeds, Real PoseStampeds). It iterates through them gradually per waypoint reached.
 def waypointsListReceiverCallback(waypointsJsonStr):
     #Log Strings received before other formats generation
     rospy.loginfo(rospy.get_caller_id() + "Received json Strings waypoints :   %s   ", waypointsJsonStr.data)
@@ -96,7 +96,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
     #Clear global patrol list for upcoming new list of waypoints
     waypointsPatrolList = []
 
-    for waypointString in waypointsJsonStr.data
+    for waypointString in waypointsJsonStr.data:
         #Format Json String to Pixel PoseStamped
         pixelPoseStamped = jsonStringToPixelPoseStamped(waypointString)
 
@@ -105,26 +105,24 @@ def waypointsListReceiverCallback(waypointsJsonStr):
 
     #Loop that publish every Pixel PoseStamped to map_image_generator
     #This loop is after to ensure the partol list is ready to be iterate before waiting asynchrous response from map_image_generator
-    for wp in waypointsPatrolList
+    for wp in waypointsPatrolList:
         #Format Pixel PoseStamped to Real PoseStamped
         pixelPoseStampedToRealPoseStamped(wp[REAL_POSESTAMPED_INDEX])
 
 
 #This receiver takes a PoseStamped
-#def waypointsStatusReceiverCallback(waypointsStatus)
+#def waypointsStatusReceiverCallback(waypointsStatus):
 #    rospy.loginfo("Received waypoints status :" )
 #    
 #    nthWaypoint = 0
 #    
-#    for status in waypointsStatus.GoalStatus
+#    for status in waypointsStatus.GoalStatus:
 #        nthWaypoint += 1
 #        rospy.loginfo("Waypoint [%s] Status : ", nthWaypoint)
 #        if status ==  :
 #            index = waypointsStatus.index() - 1
 #    return jsonBuffer
     
-    
-
 def patrolExecutive():
     #Node name defined as patrolExecutive
     rospy.init_node('patrolExecutive', anonymous=True) #anonymous=True keeps each patrolExecutive nodes unique if there were many
@@ -137,9 +135,9 @@ def patrolExecutive():
 
     #Subscribing to topic 'fromElectronInterrupt' with callback
     rospy.Subscriber("fromElectronInterrupt", String, interruptReceiverCallback)
-    
+
     #Subscribing to topic 'fromMoveBase' with callback
-    rospy.Subscriber("fromMoveBase", PoseStamped, waypointsStatusReceiverCallback)
+    #rospy.Subscriber("fromMoveBase", PoseStamped, waypointsStatusReceiverCallback)
 
     rospy.spin()
 

@@ -1,4 +1,0 @@
-
-<launch>
-    <test test-name="patrol_exec" pkg="securbot_pkg" type="unit_test.py" />
-</launch>
