@@ -22,17 +22,15 @@ class  PatrolTestSuite(unittest.TestCase):
     mapImageOutput = rospy.Publisher('/map_image/output_goal', PoseStamped, queue_size=20)
 
     commandList = []
-    def moveBaseCallBack(data):
+    def callBack(data):
         print(data)
         commandList.append(data)
 
-    moveBaseSub = rospy.Subscriber('/move_base/goal', PoseStamped, moveBaseCallBack)
+    moveBaseSub = rospy.Subscriber('/move_base/goal', PoseStamped, callBack)
 
-
-    def sendPatrol(self):
-        patrolPublisher.publish(fakePatrol)
-        time.sleep(2)
-        print(commandList)
+    def test_patrol_exec(self):
+        # patrolPublisher.publish(fakePatrol)
+        self.assertEquals(len(commandList), 4, 'Move Base received :' + len(commandList) + ' elements')
 
 
 if __name__ == '__main__':
