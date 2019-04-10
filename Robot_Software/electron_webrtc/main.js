@@ -99,9 +99,7 @@ function startNode() {
     })
 
     let publisher = nodeHandle.advertise('fromElectron', std_msgs.String)
-    // publisher.publish({ data: 'Hello!' })
     hub.on('msg', data => {
-        // console.log(data)
         publisher.publish({ data: data })
     })
 

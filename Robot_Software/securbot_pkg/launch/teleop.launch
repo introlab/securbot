@@ -1,4 +1,3 @@
 <launch>
-    <node pkg="securbot_pkg" type="electronTeleop.py" name="teleop" respawn="true">
-    </node>
+    <node pkg="securbot_pkg" type="electronTeleop.py" name="teleop" respawn="true"></node>
 </launch>

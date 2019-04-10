@@ -273,7 +273,7 @@ export default {
     dataOpenListenerCB(easyrtcid) {
       console.warn(`Data channel open with ${easyrtcid}`);
       this.isDataChannelAvailable = true;
-      this.teleopBus.$emit('on-joystick-state-changed', 'enable');
+      // this.teleopBus.$emit('on-joystick-state-changed', 'enable');
 
       // This request the stream from the robot so the operator doesn't have to have
       // a local stream to get the feed from the robot. It also allows to get both stream
@@ -285,7 +285,7 @@ export default {
     dataCloseListenerCB(easyrtcid) {
       console.warn(`Data channel close with ${easyrtcid}`);
       this.isDataChannelAvailable = false;
-      this.teleopBus.$emit('on-joystick-state-changed', 'disable');
+      // this.teleopBus.$emit('on-joystick-state-changed', 'disable');
     },
     /*
       onJoystickPositionChange(): on event "joystick-position-change", this function is called
