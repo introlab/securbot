@@ -14,11 +14,23 @@ from geometry_msgs.msg import PoseStamped
 from tf.transformations import quaternion_from_euler
 
 #GLOBAL VARIABLES
-#Indexes definitions
+#Global indexes definitions
 JSON_STRING_WAYPOINT_INDEX = 0
 PIXEL_POSESTAMPED_INDEX = 1
 REAL_POSESTAMPED_INDEX = 2
 WAYPOINT_STATUS_INDEX = 3
+
+#Global UINT8 waypoints statuses definitions
+PENDING=0
+ACTIVE=1
+PREEMPTED=2
+SUCCEEDED=3
+ABORTED=4
+REJECTED=5
+PREEMPTING=6
+RECALLING=7
+RECALLED=8
+LOST=9
 
 #Global list of waypoints (2D with 4 columns) in different formats (Strings,
 #Pixel PoseStampeds, Real PoseStampeds), plus their status
@@ -126,7 +138,31 @@ def waypointsListReceiverCallback(waypointsJsonStr):
         #Format Pixel PoseStamped to Real PoseStamped
         pixelPoseStampedToRealPoseStamped(wp[REAL_POSESTAMPED_INDEX])
 
-
+#Returns status as a string, used primarly for debugging purposes
+def getStatusString(uInt8Status):
+    if uInt8Status == PENDING:
+        return "PENDING"
+    elif uInt8Status == ACTIVE:
+        return "ACTIVE"
+    elif uInt8Status == PREEMPTED:
+        return "PREEMPTED"
+    elif uInt8Status == SUCCEEDED:
+        return "SUCCEEDED"
+    elif uInt8Status == ABORTED:
+        return "ABORTED"
+    elif uInt8Status == REJECTED:
+        return "REJECTED"
+    elif uInt8Status == PREEMPTING:
+        return "PREEMPTING"
+    elif uInt8Status == RECALLING:
+        return "RECALLING"
+    elif uInt8Status == RECALLED:
+        return "RECALLED"
+    elif uInt8Status == LOST:
+        return "LOST"
+    else
+        return "ERROR/UNKNOWN"
+        
 #TODO This receiver takes a PoseStamped
 #def waypointsStatusReceiverCallback(waypointsStatus):
 #    rospy.loginfo("Received waypoints status :" )
@@ -134,11 +170,12 @@ def waypointsListReceiverCallback(waypointsJsonStr):
 #    nthWaypoint = 0
 #    
 #    for status in waypointsStatus.GoalStatus:
-#        nthWaypoint += 1
-#        rospy.loginfo("Waypoint [%s] Status : ", nthWaypoint)
+#        statusStr = getStatusString(status)
+#        rospy.loginfo("Waypoint [%s] Status : [%s] ", nthWaypoint, statusStr)
 #        if status ==  :
 #            index = waypointsStatus.index() - 1
-#    return jsonBuffer
+#
+#    TODO : do something if it's last waypoint reached and it's looped
     
 def patrolExecutive():
     #Node name defined as patrolExecutive
