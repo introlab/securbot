@@ -1,7 +1,4 @@
 <launch>
-    <!-- Robot sepcific nodes -->
-    <include file="$(find securbot_pkg)/launch/robot_bringup.launch" />
-
     <!-- RTAB-Map in localization mode -->
     <include file="$(find securbot_pkg)/launch/mapping.launch" />
 
