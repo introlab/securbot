@@ -180,7 +180,8 @@ def getStatusString(uInt8Status):
 def sendGoalDoneCallback(terminalState, result):
     rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
     rospy.loginfo("Received waypoint result         : [%s]", result)
-
+    
+    activeWaypointIndex += 1
 
 def patrolExecutive():
     #Node name defined as patrolExecutive
