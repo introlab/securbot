@@ -127,7 +127,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
         pixelPoseStampedToRealPoseStamped(wp[REAL_POSESTAMPED_INDEX])
 
 
-#This receiver takes a PoseStamped
+#TODO This receiver takes a PoseStamped
 #def waypointsStatusReceiverCallback(waypointsStatus):
 #    rospy.loginfo("Received waypoints status :" )
 #    
@@ -149,11 +149,12 @@ def patrolExecutive():
 
     #Subscribing to topic 'fromElectronWaypoints' with callback
     rospy.Subscriber("fromElectronWaypoints", String, waypointsListReceiverCallback)
+    
 
-    #Subscribing to topic 'fromElectronInterrupt' with callback
-    rospy.Subscriber("fromElectronInterrupt", String, interruptReceiverCallback)
+    #TODO Subscribing to topic 'fromElectronInterrupt' with callback
+    #rospy.Subscriber("fromElectronInterrupt", String, interruptReceiverCallback)
 
-    #Subscribing to topic 'fromMoveBase' with callback
+    #TODO Subscribing to topic 'fromMoveBase' with callback
     #rospy.Subscriber("fromMoveBase", PoseStamped, 
     #waypointsStatusReceiverCallback)
 
