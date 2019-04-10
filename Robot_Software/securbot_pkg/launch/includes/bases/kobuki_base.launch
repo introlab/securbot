@@ -22,7 +22,7 @@
 	      </include>
 	</group>
 	<group>
-		<remap from="/cmd_vel" to="/smooth_cmd_vel"/>
-		<include file="$(find roboclaw_node)/launch/roboclaw.launch" />
+		<remap from="/mobile_base/commands/velocity" to="/smooth_cmd_vel"/>
+		<include file="$(find kobuki_node)/launch/minimal.launch" />
 	</group>
 </launch>
