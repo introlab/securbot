@@ -177,20 +177,10 @@ def getStatusString(uInt8Status):
     else:
         return "ERROR/UNKNOWN"
 
-#TODO This receiver takes a PoseStamped
-#def waypointsStatusReceiverCallback(waypointsStatus):
-#    rospy.loginfo("Received waypoints status :" )
-#
-#    nthWaypoint = 0
-#
-#    for status in waypointsStatus.GoalStatus:
-#        statusStr = getStatusString(status)
-#        rospy.loginfo("Waypoint [%s] Status : [%s] ", nthWaypoint, statusStr)
-#       if waypointsPatrolList[nthWaypoint][WAYPOINT_STATUS_INDEX] != statusStr :
-#
-#           if status == ACTIVE && activeWaypoint != :
-#               activeWaypoint = waypointsPatrolList[nthWaypoint]
-#    TODO : do something if it's last waypoint reached and patrol's looped
+def sendGoalDoneCallback(terminalState, result):
+    rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
+    rospy.loginfo("Received waypoint result         : [%s]", result)
+
 
 def patrolExecutive():
     #Node name defined as patrolExecutive
