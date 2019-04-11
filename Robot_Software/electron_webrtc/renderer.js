@@ -42,9 +42,9 @@ function dataCallback(easyrtcid, msgType, msgData, targeting) {
     ipc.send('msg', msgData)
 }
 
-function goalReceivedCallback(sourceId, msgType, goalJsonString) {
-    console.log("Received new nav goal: " + goalJsonString)
-    ipc.send('goal', goalJsonString)
+function patrolReceivedCallback(sourceId, msgType, patrolJsonString) {
+    console.log("Received new patrol plan: " + patrolJsonString)
+    ipc.send('patrol-plan', patrolJsonString)
 }
 
 
@@ -78,7 +78,7 @@ async function my_init() {
         easyrtc.enableDataChannels(true)
         easyrtc.enableAudio(false)
         easyrtc.setPeerListener(dataCallback, 'msg')
-        easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
+        easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan')
 
         easyrtc.initMediaSource(
               function(){        // success callback

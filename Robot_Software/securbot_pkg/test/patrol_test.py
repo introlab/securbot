@@ -14,7 +14,7 @@ class  PatrolTestSuite(unittest.TestCase):
     # Listeners and publishers to interact with patrol
     patrolPublisher = rospy.Publisher('/electron/patrol', String, queue_size=5)
     patrolCanceller = rospy.Publisher('/electron/patrol_halt', String, queue_size=5)
-    mapImageOutput = rospy.Publisher('/map_image/output_goal', PoseStamped, queue_size=20)
+    mapImageOutput = rospy.Publisher('/map_image_generator/output_goal', PoseStamped, queue_size=20)
 
     conversionRequests = []
     move_base_actions = []
@@ -27,22 +27,22 @@ class  PatrolTestSuite(unittest.TestCase):
 
     # Send json string and verify that waypoints are being queried for conversion
     def test_patrol_exec(self):
-        rospy.Subscriber('/map_image/input_goal', PoseStamped, self.mapImageCallBack)
-        time.sleep(1)
+        rospy.Subscriber('/map_image_generator/input_goal', PoseStamped, self.mapImageCallBack)
+        time.sleep(3)
         self.patrolPublisher.publish(fakePatrol)
-        time.sleep(1)
+        time.sleep(3)
         self.assertEquals(len(self.conversionRequests), 4, 'Move Base received :' + str(len(self.conversionRequests)) + ' elements')
 
     # Send conversion responses and make sure they got registered
     def test_waypoint_after_conversion(self):
         # Listen for movebase messages
         rospy.Subscriber('/move_base/goal', MoveBaseActionGoal, self.moveBaseCallBack)
-        time.sleep(1)
+        time.sleep(3)
 
         # Send conveterted waypoints
         for waypoint in self.conversionRequests:
             self.mapImageOutput.publish(waypoint)
-        time.sleep(1)
+        time.sleep(3)
 
         # Assert messages being sent to movebase
         self.assertEquals(len(self.move_base_actions), 1, 'Expecting move_base to receive a goal (got: '+str(len(self.move_base_actions))+')')
