@@ -51,6 +51,11 @@ function teleopCallback(easyrtcid, msgType, msgData) {
     console.log(msgData);
     ipc.send('msg', msgData)
 }
+function teleopCallback(easyrtcid, msgType, msgData) {
+    if(msgData === "map") {
+        easyrtc.addStreamToCall(easyrtcid, msgData);
+    }  
+}
 
 
 function fetchParameters() {
@@ -85,6 +90,7 @@ async function my_init() {
         easyrtc.setPeerListener(dataCallback, 'msg')
         easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
         easyrtc.setPeerListener(teleopCallback, 'joystick-position')
+        easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
 
         easyrtc.initMediaSource(
               function(){        // success callback
