@@ -37,7 +37,7 @@ RECALLED=8
 LOST=9
 
 
-actionClient = actionlib.SimpleActionClient('move_base',MoveBaseAction)
+actionClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 
 #Global list of waypoints (2D with 4 columns) in different formats (Strings,
 #Pixel PoseStampeds, Real PoseStampeds), plus their status
