@@ -154,7 +154,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
     try:
          isLooped = waypointsJsonBuffer["loop"]
     except KeyError:
-        rospy.loginfo("ERROR : KeyError, non-existent or undefined in json string!")
+        rospy.loginfo("ERROR :While accessing value at key [loop] KeyError, non-existent or undefined in json string!")
         rospy.loginfo("Will assume no loops. Will patrol this list once.")
 
     for wpStr in waypointsStrings:
