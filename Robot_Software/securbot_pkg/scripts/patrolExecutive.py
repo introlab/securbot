@@ -53,13 +53,11 @@ isLooped = False
 #Real PoseStampeds
 toMapImageGenerator = rospy.Publisher("toMapImageGenerator", PoseStamped, queue_size=20)
 
+#TODO Send feedback to UI with this publisher
 #Global publisher to send status that waypoint is reached toward Electron node
 toElectron = rospy.Publisher("toElectron", String, queue_size=20)
 
-#Global publisher to send waypoints list to move_base
-toMoveBase = rospy.Publisher("toMoveBase", PoseStamped, queue_size=20)
-
-#Used instead into waypointsPatrolList
+#TODO Used instead into waypointsPatrolList
 class Waypoint:
     def __init__(self, string, pixelPoseStamped, realPoseStamped, status):
         self.string = string
@@ -115,7 +113,7 @@ def realPoseStampedReceiverCallback(realPoseStamped):
                 startPatrolNavigation()
             break
 
-# This funtion starts sending the different waypoint that were converted in the list
+# This function starts sending the different waypoint that were converted in the list
 def startPatrolNavigation():
     rospy.loginfo("Starting navigation")
 
@@ -160,6 +158,21 @@ def waypointsListReceiverCallback(waypointsJsonStr):
         pixelPoseStampedToRealPoseStamped(wp[PIXEL_POSESTAMPED_INDEX])
 
 
+def interruptReceiverCallback(interruptJsonStr):
+    #Log Strings received
+    rospy.loginfo(rospy.get_caller_id() + "Received interrupt :   %s   ", interruptJsonStr.data)
+
+    #Load json String
+    isPatrolInterrupted = json.loads(interruptJsonStr.data)["interrupt"]
+    
+    if isPatrolInterrupted == True:
+        actionClient.cancel_all_goals()
+        rospy.loginfo("Patrol interrupted.")
+    elif isPatrolInterrupted == False:
+        rospy.loginfo("Patrol continuing. No interrupts received.")
+    else:
+        rospyloginfo("ERROR : Interrupt value is not a boolean")
+
 #Returns status as a string, used primarly for debugging purposes
 def getStatusString(uInt8Status):
     if uInt8Status == PENDING:
@@ -200,7 +213,7 @@ def getNextActiveWaypointInList():
             
 #Change name for currentWaypointDoneCallback(terminalState, result)
 def sendGoalDoneCallback(terminalState, result):
-    rospy.loginfo("received waypoint terminal state : [%s]", getstatusstring(terminalstate))
+    rospy.loginfo("Received waypoint terminal state : [%s]", getstatusstring(terminalstate))
     rospy.loginfo("Received waypoint result         : [%s]", result)
 
     #Check if it was the last waypoint to process
@@ -226,13 +239,8 @@ def patrolExecutive():
     #Subscribing to topic 'fromElectronWaypoints' with callback
     rospy.Subscriber("fromElectronWaypoints", String, waypointsListReceiverCallback)
 
-
-    #TODO Subscribing to topic 'fromElectronInterrupt' with callback
-    #rospy.Subscriber("fromElectronInterrupt", String, interruptReceiverCallback)
-
-    #TODO Subscribing to topic 'fromMoveBase' with callback
-    #rospy.Subscriber("fromMoveBase", PoseStamped,
-    #waypointsStatusReceiverCallback)
+    #Subscribing to topic 'fromElectronInterrupt' with callback
+    rospy.Subscriber("fromElectronInterrupt", String, interruptReceiverCallback)
 
     rospy.spin()
 
