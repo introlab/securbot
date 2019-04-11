@@ -136,9 +136,26 @@ def waypointsListReceiverCallback(waypointsJsonStr):
     #Clear global patrol list for upcoming new list of waypoints and loop flag
     del waypointsPatrolList[:]
     isLooped = False
-
-    waypointsStrings = json.loads(waypointsJsonStr.data)["patrol"]
-    isLooped = json.loads(waypointsJsonStr.data)["loop"]
+    
+    try:
+        waypointsJsonBuffer = json.loads(waypointsJsonStr.data)
+    except TypeError:
+        rospy.loginfo("ERROR :At json.loads buffer,TypeError, expected string or buffer!")
+        rospy.loginfo("Ignoring waypoints list received...")
+        return
+    
+    try:
+         waypointsStrings = waypointsJsonBuffer["patrol"]
+    except KeyError:
+        rospy.loginfo("ERROR : While accessing value at key [patrol] KeyError, non-existent or undefined in json string!")
+        rospy.loginfo("Ignoring waypoints list received...")
+        return
+         
+    try:
+         isLooped = waypointsJsonBuffer["loop"]
+    except KeyError:
+        rospy.loginfo("ERROR : KeyError, non-existent or undefined in json string!")
+        rospy.loginfo("Will assume no loops. Will patrol this list once.")
 
     for wpStr in waypointsStrings:
         #Format waypoint to Pixel PoseStamped
@@ -213,7 +230,7 @@ def getNextActiveWaypointInList():
             
 #Change name for currentWaypointDoneCallback(terminalState, result)
 def sendGoalDoneCallback(terminalState, result):
-    rospy.loginfo("Received waypoint terminal state : [%s]", getstatusstring(terminalstate))
+    rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
     rospy.loginfo("Received waypoint result         : [%s]", result)
 
     #Check if it was the last waypoint to process
