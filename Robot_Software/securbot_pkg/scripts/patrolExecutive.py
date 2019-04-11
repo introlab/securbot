@@ -185,10 +185,37 @@ def getStatusString(uInt8Status):
     else:
         return "ERROR/UNKNOWN"
 
+#Sets activeWaypoint(global variable) to a next value in the list waypointPatrolList(also global variable)
+#Returns this new activeWaypoint
+#If this function is called but the iterator is already at the end of the list, it'll return the last element of the list
+def getNextActiveWaypointInList():
+    if waypointsPatrolList.len() >= 1:
+        waypointIter = iter(waypointsPatrolList)
+        while next(waypointIter) != waypointsPatrolList.index(waypointsPatrolList.len()-1): 
+            if waypointIter == activeWaypoint:
+                next(waypointIter)
+                break
+        activeWaypoint = waypointIter
+        return activeWaypoint
+            
+#Change name for currentWaypointDoneCallback(terminalState, result)
 def sendGoalDoneCallback(terminalState, result):
     rospy.loginfo("received waypoint terminal state : [%s]", getstatusstring(terminalstate))
     rospy.loginfo("Received waypoint result         : [%s]", result)
-    
+
+    #Check if it was the last waypoint to process
+    if activeWaypoint == waypointPatrolLst[waypointPatrolList.len()-1]:
+        rospy.loginfo("Patrol done. All waypoints reached.")
+        if isLooped == True:
+            rospy.loginfo("Restarting patrol with same waypoints...")
+            startPatrolNavigation()
+    else:
+        rospy.loginfo("Processing next waypoint...")
+        activeWaypoint = getNextActiveWaypointInList()
+    goal = MoveBaseGoal()
+    goal.target_pose = activeWaypoint[REAL_POSESTAMPED_INDEX]
+    actionClient.send_goal(goal, sendGoalDoneCallback)
+
 def patrolExecutive():
     #Node name defined as patrolExecutive
     rospy.init_node("patrolExecutive", anonymous=True) #anonymous=True keeps each patrolExecutive nodes unique if there were many
