@@ -116,6 +116,10 @@ def realPoseStampedReceiverCallback(realPoseStamped):
 # This function starts sending the different waypoint that were converted in the list
 def startPatrolNavigation():
     global waypointIterator
+
+    #Make sure no goals are active
+    actionClient.cancel_all_goals()
+
     rospy.loginfo("Starting navigation")
 
     waypointIterator = iter(waypointsPatrolList)
@@ -181,6 +185,8 @@ def interruptReceiverCallback(interruptJsonStr):
 
     #Load json String
     isPatrolInterrupted = json.loads(interruptJsonStr.data)["interrupt"]
+
+    assert isinstance(isPatrolInterrupted, bool)
 
     if isPatrolInterrupted:
         actionClient.cancel_all_goals()
