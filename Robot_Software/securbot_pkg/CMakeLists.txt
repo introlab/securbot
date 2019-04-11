@@ -193,5 +193,5 @@ include_directories(
 
 if (CATKIN_ENABLE_TESTING)
     find_package(rostest REQUIRED)
-    add_rostest(test/patrolExecutive.test)
+    add_rostest(launch/patrolExecutive.launch)
 endif()

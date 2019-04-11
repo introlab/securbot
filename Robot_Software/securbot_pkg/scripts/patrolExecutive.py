@@ -43,8 +43,8 @@ actionClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 #Pixel PoseStampeds, Real PoseStampeds), plus their status
 waypointsPatrolList = []
 
-#Global active waypoint currently being processed by the action server
-activeWaypoint = None
+# Global waypoint iterator
+waypointIterator = None
 
 #Global indicating if the patrol received is looped
 isLooped = False
@@ -115,13 +115,13 @@ def realPoseStampedReceiverCallback(realPoseStamped):
 
 # This function starts sending the different waypoint that were converted in the list
 def startPatrolNavigation():
+    global waypointIterator
     rospy.loginfo("Starting navigation")
 
-    #Global variable iterating to help send the corresponding waypoint
-    activeWaypoint = waypointsPatrolList[0]
+    waypointIterator = iter(waypointsPatrolList)
 
     goal = MoveBaseGoal()
-    goal.target_pose = activeWaypoint[REAL_POSESTAMPED_INDEX]
+    goal.target_pose = next(waypointIterator)[REAL_POSESTAMPED_INDEX]
     actionClient.send_goal(goal, sendGoalDoneCallback)
 
 
@@ -182,13 +182,11 @@ def interruptReceiverCallback(interruptJsonStr):
     #Load json String
     isPatrolInterrupted = json.loads(interruptJsonStr.data)["interrupt"]
 
-    if isPatrolInterrupted == True:
+    if isPatrolInterrupted:
         actionClient.cancel_all_goals()
         rospy.loginfo("Patrol interrupted.")
-    elif isPatrolInterrupted == False:
-        rospy.loginfo("Patrol continuing. No interrupts received.")
     else:
-        rospyloginfo("ERROR : Interrupt value is not a boolean")
+        rospy.loginfo("Patrol continuing. No interrupts received.")
 
 #Returns status as a string, used primarly for debugging purposes
 def getStatusString(uInt8Status):
@@ -215,36 +213,22 @@ def getStatusString(uInt8Status):
     else:
         return "ERROR/UNKNOWN"
 
-#Sets activeWaypoint(global variable) to a next value in the list waypointPatrolList(also global variable)
-#Returns this new activeWaypoint
-#If this function is called but the iterator is already at the end of the list, it'll return the last element of the list
-def getNextActiveWaypointInList():
-    if waypointsPatrolList.len() >= 1:
-        waypointIter = iter(waypointsPatrolList)
-        while next(waypointIter) != waypointsPatrolList.index(waypointsPatrolList.len()-1):
-            if waypointIter == activeWaypoint:
-                next(waypointIter)
-                break
-        activeWaypoint = waypointIter
-        return activeWaypoint
-
 #Change name for currentWaypointDoneCallback(terminalState, result)
 def sendGoalDoneCallback(terminalState, result):
+    global waypointIterator
     rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
-    rospy.loginfo("Received waypoint result         : [%s]", result)
 
-    #Check if it was the last waypoint to process
-    if activeWaypoint == waypointPatrolLst[waypointPatrolList.len()-1]:
+    try:
+        goal = MoveBaseGoal()
+        goal.target_pose = next(waypointIterator)[REAL_POSESTAMPED_INDEX]
+        rospy.loginfo("Processing next waypoint...")
+        actionClient.send_goal(goal, sendGoalDoneCallback)
+    except StopIteration:
         rospy.loginfo("Patrol done. All waypoints reached.")
         if isLooped == True:
             rospy.loginfo("Restarting patrol with same waypoints...")
             startPatrolNavigation()
-    else:
-        rospy.loginfo("Processing next waypoint...")
-        activeWaypoint = getNextActiveWaypointInList()
-    goal = MoveBaseGoal()
-    goal.target_pose = activeWaypoint[REAL_POSESTAMPED_INDEX]
-    actionClient.send_goal(goal, sendGoalDoneCallback)
+
 
 def patrolExecutive():
     #Node name defined as patrolExecutive
