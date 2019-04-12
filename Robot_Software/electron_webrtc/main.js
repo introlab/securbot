@@ -79,12 +79,12 @@ function startNode() {
 
     try {
       var webRtcServerUrl = await nodeHandle.getParam('/electron_webrtc/webrtc_server_url')
-      var videoDeviceLabel = await nodeHandle.getParam('/electron_webrtc/video_device_label')
+      // var videoDeviceLabel = await nodeHandle.getParam('/electron_webrtc/video_device_label')
     } catch (e) {
       console.error('Failed to retreive parameters')
       app.quit()
     }
-    var parameters = { videoDeviceLabel, webRtcServerUrl }
+    var parameters = { webRtcServerUrl } // videoDeviceLabel
     console.log(parameters);
 
     if (win)

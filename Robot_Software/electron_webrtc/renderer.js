@@ -1,5 +1,5 @@
 let operatorID = null
-// let streamNames = ['virtual_camera','virtual_map'];
+let virtualDevicesName = ['virtual_camera','virtual_map'];
 
 ipc.on('rosdata', (emitter, data) => {
     console.log(data)
@@ -20,9 +20,11 @@ easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
 
 function get_video_id(label) {
     return new Promise((resolve, reject) => {
-        easyrtc.getVideoSourceList(list => {
+        easyrtc.getVideoSourceList(device => {
 
-            var videoSource = list.find(source => {
+            console.log(`Looking for ${device}...`);
+
+            var videoSource = device.find(source => {
                 return source.label.toString().trim() === label.trim()
             })
 
@@ -78,7 +80,20 @@ async function my_init() {
 
     easyrtc.setRoomApiField('default', 'type', 'robot');
     easyrtc.setSocketUrl(parameters.webRtcServerUrl);
-    easyrtc.setRoomOccupantListener( loggedInListener);
+    easyrtc.setRoomOccupantListener(loggedInListener);
+
+    easyrtc.enableVideo(true)
+    easyrtc.enableAudio(false)
+
+    easyrtc.enableVideoReceive(false);
+    easyrtc.enableAudioReceive(false);
+    easyrtc.enableDataChannels(true);
+
+    easyrtc.setPeerListener(dataCallback, 'msg')
+    easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
+    easyrtc.setPeerListener(teleopCallback, 'joystick-position')
+    easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
+
     var connectSuccess = function(myId) {
         console.log("My easyrtcid is " + myId);
     }
@@ -86,23 +101,21 @@ async function my_init() {
         console.log(errText);
     }
 
-    get_video_id(parameters.videoDeviceLabel).then(videoId => {
+    get_video_id(virtualDevicesName).then(videoId => {
         easyrtc.setVideoSource(videoId)
-        easyrtc.enableDataChannels(true)
-        easyrtc.enableAudio(false)
-        easyrtc.setPeerListener(dataCallback, 'msg')
-        easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
-        easyrtc.setPeerListener(teleopCallback, 'joystick-position')
-        easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
+
+        let streamName = videoId.split('_')[1]
+
+        console.log(streamName)
 
         easyrtc.initMediaSource(
               function(){        // success callback
-                  var selfVideo = document.getElementById("self");
-                  easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
+                  // var selfVideo = document.getElementById("self");
+                  // easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
                   easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
               },
               connectFailure,
-              "camera"
+              streamName
         );
     })
  }
