@@ -1,4 +1,5 @@
 let operatorID = null
+// let streamNames = ['virtual_camera','virtual_map'];
 
 ipc.on('rosdata', (emitter, data) => {
     console.log(data)
@@ -54,9 +55,8 @@ function teleopCallback(easyrtcid, msgType, msgData) {
 function teleopCallback(easyrtcid, msgType, msgData) {
     if(msgData === "map") {
         easyrtc.addStreamToCall(easyrtcid, msgData);
-    }  
+    }
 }
-
 
 function fetchParameters() {
 

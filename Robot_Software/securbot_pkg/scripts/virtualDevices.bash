@@ -14,4 +14,4 @@ fi
 
 $PREFIX modprobe -r v4l2loopback
 $PREFIX modprobe v4l2loopback video_nr=4,5,6 \
-    card_label="virtual_kinect","virtual_map","fake_video" exclusive_caps=1,1,1
+    card_label="virtual_camera","virtual_map","fake_video" exclusive_caps=1,1,1
