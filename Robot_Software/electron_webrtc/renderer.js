@@ -103,26 +103,22 @@ async function my_init() {
 
     let isConnected = false;
 
-    get_video_id(virtualDevicesName).then(videoId => {
-        easyrtc.setVideoSource(videoId)
+    easyrtc.getVideoSourceList((virtualDevicesName) => {
+        for (let i = 0; i < virtualDevicesName.length; i++) {
+            const videoSource = virtualDevicesName[i];
 
-        let streamName = videoId.split('_')[1]
+            const streamName = videoSource.label.split('_');
 
-        console.log(streamName)
-
-        easyrtc.initMediaSource(
-              function(){        // success callback
-                  // var selfVideo = document.getElementById("self");
-                  // easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-                  if(!isConnected){
-                    easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
-                  }
-              },
-              connectFailure,
-              streamName
-        );
-    })
- }
+            easyrtc.setVideoSource(videoSource.id);
+            easyrtc.initMediaSource(() => {
+                if (!isConnected) {
+                    easyrtc.connect('easyrtc.securbot', connectSuccess, connectFailure);
+                    isConnected = true;
+                }
+            }, connectFailure, streamName);
+        }
+    });
+}
 
 
 function loggedInListener(roomName, otherPeers) {
