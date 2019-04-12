@@ -160,7 +160,7 @@ function acceptCall(easyrtcid, acceptor) {
     if(operatorID === null) {
         operatorID = easyrtcid;
         console.log(`Accepting call from ${easyrtcid}`);
-        acceptor(true, streamNames);
+        acceptor(true);
     }
 }
 
