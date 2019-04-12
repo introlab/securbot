@@ -1,5 +1,6 @@
 let operatorID = null
 let virtualDevicesName = ['virtual_camera','virtual_map'];
+let streamNames = [];
 
 ipc.on('rosdata', (emitter, data) => {
     console.log(data)
@@ -106,9 +107,9 @@ async function my_init() {
         get_video_id(deviceName).then(videoId => {
             easyrtc.setVideoSource(videoId)
     
-            let streamName = deviceName.split('_')[1]
+            let streamName = deviceName.split('_')[1];
     
-            console.log(streamName)
+            streamNames.push(streamName);
     
             easyrtc.initMediaSource(
                   function(){        // success callback
@@ -142,6 +143,14 @@ function loggedInListener(roomName, otherPeers) {
         label = document.createTextNode(i);
         button.appendChild(label);
         otherClientDiv.appendChild(button);
+    }
+}
+
+// This should one day accept every operator connection, but for now it only accept the first one to call.
+function acceptCall(easyrtcid, acceptor) {
+    if(operatorID === null) {
+        operatorID = easyrtcid;
+        acceptor(true, streamNames);
     }
 }
 
