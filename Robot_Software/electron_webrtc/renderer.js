@@ -52,10 +52,13 @@ function teleopCallback(easyrtcid, msgType, msgData) {
     console.log(msgData);
     ipc.send('msg', msgData)
 }
-function teleopCallback(easyrtcid, msgType, msgData) {
+
+function streamRequestCallback(easyrtcid, msgType, msgData) {
+    /*
     if(msgData === "map") {
         easyrtc.addStreamToCall(easyrtcid, msgData);
     }
+    */
 }
 
 function fetchParameters() {
