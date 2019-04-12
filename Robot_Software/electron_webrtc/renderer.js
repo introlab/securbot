@@ -104,25 +104,35 @@ async function my_init() {
     }
 
     let isConnected = false;
-    for (deviceName of virtualDevicesName) {
-        get_video_id(deviceName).then(videoId => {
-            easyrtc.setVideoSource(videoId)
     
-            let streamName = deviceName.split('_')[1];
+    easyrtc.getVideoSourceList(device => {
+        for (deviceName of virtualDevicesName) {
+
+            let videoSource = device.find(source => {
+                return source.label.toString().trim() === deviceName.trim()
+            })
+
+            if(videoSource) {
+                console.log(`Found [${videoSource.label}] stream`)
+                easyrtc.setVideoSource(videoSource.id)
+                let streamName = videoSource.label.split('_')[1];
     
-            streamNames.push(streamName);
+                streamNames.push(streamName);
     
-            easyrtc.initMediaSource(
+                easyrtc.initMediaSource(
                   function(){        // success callback
-                      console.log(`Initializing ${streamName}...`);
+                     console.log(`Initializing ${streamName}...`);
+                      if(!isConnected){
+                        easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
+                        isConnected = true;
+                      }
                   },
                   connectFailure,
                   streamName
             );
-        })
-    }
-    console.log('Connecting Now...');
-    easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
+            }
+        }
+    });
  }
 
 
