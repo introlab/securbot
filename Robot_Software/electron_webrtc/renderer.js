@@ -1,5 +1,5 @@
 let operatorID = null
-let virtualDevicesName = ['virtual_camera','virtual_map'];
+let virtualDevicesName = ['virtual_map', 'virtual_camera'];
 let streamNames = [];
 
 ipc.on('rosdata', (emitter, data) => {
@@ -57,6 +57,7 @@ function teleopCallback(easyrtcid, msgType, msgData) {
 }
 
 function streamRequestCallback(easyrtcid, msgType, msgData) {
+    console.log(`Received request of type ${msgType} for ${msgData}`)
     if(msgData === "map" || msgData === "camera") {
         easyrtc.addStreamToCall(easyrtcid, msgData);
     }
