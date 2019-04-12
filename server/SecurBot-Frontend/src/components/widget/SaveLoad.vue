@@ -3,20 +3,20 @@
     <div
       class="w-100 position-relative"
       style="height:12%; margin-bottom:2px; margin-top:2px">
-      <button
-        type="button"
-        class="btn btn-success h-100 w-25"
-        style="font-size: 2vmin; align-items: center; padding:0px; position:absolute"
-        @click="addPatrolToPatrolList()">Save patrol</button>
       <div
-        class="h-100 w-75 position-relative text-right float-right"
-        style="font-size: 1.5vh; padding-left:2px; padding-right:2x">
+        class="h-100 w-75 position-relative text-left float-left"
+        style="font-size: 2.2vh; padding-right:2x">
         <input
-          id = "nameTextBox"
+          id="nameTextBox"
           v-model="newPatrolName"
           :placeholder="[[ placehold ]]"
           class="h-100 w-100">
       </div>
+      <button
+        type="button"
+        class="btn btn-success h-100 w-25 float-right"
+        style="font-size: 1.6vmin; align-items: center; margin-left:-1px; padding: 0px; position:absolute"
+        @click="addPatrolToPatrolList()">Save patrol</button>
     </div>
     <div 
     class="overflow-auto position-relative">
