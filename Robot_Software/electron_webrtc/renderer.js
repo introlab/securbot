@@ -91,7 +91,7 @@ async function my_init() {
     easyrtc.setPeerListener(dataCallback, 'msg')
     easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
     easyrtc.setPeerListener(teleopCallback, 'joystick-position')
-    // easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
+    easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
 
     easyrtc.setAcceptChecker(acceptCall)
 
