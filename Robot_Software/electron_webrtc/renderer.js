@@ -102,7 +102,7 @@ async function my_init() {
                   easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
               },
               connectFailure,
-              "map"
+              "camera"
         );
     })
  }
