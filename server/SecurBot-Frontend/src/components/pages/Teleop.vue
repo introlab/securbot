@@ -31,7 +31,7 @@
         </b-row>
         <b-row
           class="position-relative h-50 m-auto"
-          style="max-width:calc(100vh*0.2)">
+          style="max-width:calc(100vmin*0.25)">
           <div
             class="position-relative m-auto w-100"
             style="padding-top:100%;height:0;">
