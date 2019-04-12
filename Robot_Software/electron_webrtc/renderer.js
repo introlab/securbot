@@ -114,17 +114,15 @@ async function my_init() {
     
             easyrtc.initMediaSource(
                   function(){        // success callback
-                      // var selfVideo = document.getElementById("self");
-                      // easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-                      if(!isConnected){
-                        easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
-                      }
+                      console.log(`Initializing ${streamName}...`);
                   },
                   connectFailure,
                   streamName
             );
         })
     }
+    console.log('Connecting Now...');
+    easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
  }
 
 
