@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Creates the virtual devices required securbot
+# Creates the virtual devices required by securbot
 # Kernel module manipulation requires root access.
 
 # If lauched from ROS, ths script must be ran as root or using sudo through a
