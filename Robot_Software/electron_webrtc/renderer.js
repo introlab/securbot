@@ -101,6 +101,8 @@ async function my_init() {
         console.log(errText);
     }
 
+    let isConnected = false;
+
     get_video_id(virtualDevicesName).then(videoId => {
         easyrtc.setVideoSource(videoId)
 
@@ -112,7 +114,9 @@ async function my_init() {
               function(){        // success callback
                   // var selfVideo = document.getElementById("self");
                   // easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-                  easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
+                  if(!isConnected){
+                    easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
+                  }
               },
               connectFailure,
               streamName
