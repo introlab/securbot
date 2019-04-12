@@ -278,8 +278,14 @@ export default {
       // This request the stream from the robot so the operator doesn't have to have
       // a local stream to get the feed from the robot. It also allows to get both stream
       // from robot, which might have been a problem previously. They can be somewhere else.
-      // this.requestFeedFromPeer('camera');
-      // this.requestFeedFromPeer('map');
+      if (!this.mapStream) {
+        console.log('Requesting the map stream from peer...');
+        this.requestFeedFromPeer('map');
+      }
+      if (!this.cameraStream) {
+        console.log('Requesting the camera stream from peer...');
+        this.requestFeedFromPeer('camera');
+      }
     },
     // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
     dataCloseListenerCB(easyrtcid) {

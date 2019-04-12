@@ -57,11 +57,9 @@ function teleopCallback(easyrtcid, msgType, msgData) {
 }
 
 function streamRequestCallback(easyrtcid, msgType, msgData) {
-    /*
-    if(msgData === "map") {
+    if(msgData === "map" || msgData === "camera") {
         easyrtc.addStreamToCall(easyrtcid, msgData);
     }
-    */
 }
 
 function fetchParameters() {
@@ -93,7 +91,9 @@ async function my_init() {
     easyrtc.setPeerListener(dataCallback, 'msg')
     easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
     easyrtc.setPeerListener(teleopCallback, 'joystick-position')
-    easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
+    // easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
+
+    easyrtc.setAcceptChecker(acceptCall)
 
     var connectSuccess = function(myId) {
         console.log("My easyrtcid is " + myId);
@@ -150,6 +150,7 @@ function loggedInListener(roomName, otherPeers) {
 function acceptCall(easyrtcid, acceptor) {
     if(operatorID === null) {
         operatorID = easyrtcid;
+        console.log(`Accepting call from ${easyrtcid}`);
         acceptor(true, streamNames);
     }
 }
