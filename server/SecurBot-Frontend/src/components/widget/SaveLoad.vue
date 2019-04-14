@@ -1,30 +1,28 @@
 <template>
   <div class="h-100 w-100 position-relative">
     <div
-      class="w-100 position-relative"
-      style="height:12%; margin-bottom:2px; margin-top:2px">
+      class="btn-toolbar mb-1 h-25 w-100"
+      role="toolbar">
       <button
         type="button"
-        class="btn btn-success h-100 w-25"
-        style="font-size: 2vmin; align-items: center; padding:0px; position:absolute"
+        class="btn btn-success mr-1 h-100 w-25"
         @click="addPatrolToPatrolList()">Save patrol</button>
-      <div
-        class="h-100 w-75 position-relative text-right float-right"
-        style="font-size: 1.5vh; padding-left:2px; padding-right:2x">
+      <div class="input-group">
         <input
-          id = "nameTextBox"
+          id="nameTextBox"
           v-model="newPatrolName"
+          type="text"
           :placeholder="[[ placehold ]]"
-          class="h-100 w-100">
+          class="form-control">
       </div>
     </div>
-    <div 
-    class="overflow-auto position-relative">
+    <div
+      class="overflow-auto position-relative">
       <table
         id="saved-patrol-table"
         class="table table-borderless table-striped border-right"
-        style="height:90%; text-align:center">
-        <thead 
+        style="height:100%; text-align:center">
+        <thead
           class="text-white bg-green-sb"
           style="padding:0px">
           <th

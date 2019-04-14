@@ -29,23 +29,25 @@
               video-id="map-stream" />
           </div>
         </b-row>
-        <b-row
-          class="position-relative h-50 m-auto"
-          style="max-width:calc(100vmin*0.25)">
-          <div
-            class="position-relative m-auto w-100"
-            style="padding-top:100%;height:0;">
+        <div class="h-50 w-100">
+          <b-row
+            class="position-relative h-100 m-auto"
+            style="max-width:calc(100vmin*0.25)">
             <div
-              class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
-              style="top:0;left:0;">
-              <joystick
-                :enable="enableJoystick"
-                :absolute-max-x="1"
-                :absolute-max-y="1"
-                :bus="bus" />
+              class="position-relative m-auto w-100"
+              style="padding-top:100%;height:0;">
+              <div
+                class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
+                style="top:0;left:0;">
+                <joystick
+                  :enable="enableJoystick"
+                  :absolute-max-x="1"
+                  :absolute-max-y="1"
+                  :bus="bus" />
+              </div>
             </div>
-          </div>
-        </b-row>
+          </b-row>
+        </div>
       </b-col>
     </b-row>
   </b-jumbotron>

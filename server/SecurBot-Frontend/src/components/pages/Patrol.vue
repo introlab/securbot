@@ -10,32 +10,32 @@
         md="4"
         class="mh-100">
         <div
-          class="position-relative"
-          style="height:5%; padding:0; margin:2px">
+          class="btn-toolbar justify-content-between m-1"
+          role="toolbar">
           <div
-            class="w-50 h-100 text-left float-left"
-            style="font-size: 2.5vh; vertical-align:middle">Patrol :</div>      
-          <button
-            type="button"
-            class="btn btn-success w-25 h-100 float-left" 
-            style="font-size: 2vmin; align-items:center;vertical-align: middle; margin-left:-2px; padding: 0px"
-            @click="sendPatrol()">Send</button>
-          <button
-            type="button"
-            class="btn btn-danger w-25 h-100 float-right"
-            style="font-size: 2vmin; align-items:center; position:absolute;padding:0px; margin-left:2px"
-            @click="clearWaypointList()">Reset</button> 
+            class="w-50 h-100">Patrol :</div>
+          <div
+            class="button-group h-100 w-50"
+            role="group">
+            <button
+              type="button"
+              class="btn btn-danger h-100 float-right"
+              @click="clearWaypointList()">Reset</button>
+            <button
+              type="button"
+              class="btn btn-success mr-1 h-100 float-right"
+              @click="sendPatrol()">Send</button>
+          </div>
         </div>
         <div class="h-50">
           <waypoint-table :waypoint-list="waypointList" />
         </div>
-        <div style="height:45%">
+        <div style="height:40%">
           <save-load
             :waypoint-list="waypointList"
             :patrol-list="patrolList"
-            :bus="bus"/>
+            :bus="bus" />
         </div>
-        <div/>
       </b-col>
       <b-col
         md="8"
