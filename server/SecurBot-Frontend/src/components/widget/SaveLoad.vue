@@ -18,29 +18,37 @@
         style="font-size: 1.6vmin; align-items: center; margin-left:-1px; padding: 0px; position:absolute"
         @click="addPatrolToPatrolList()">Save patrol</button>
     </div>
-    <div 
-    class="overflow-auto position-relative">
+    <div
+      class="overflow-auto position-relative">
       <table
         id="saved-patrol-table"
         class="table table-borderless table-striped border-right"
         style="height:90%; text-align:center">
-        <thead 
+        <thead
           class="text-white bg-green-sb"
           style="padding:0px">
           <th
             class="w-50"
-            style="text-align:left">Patrols</th>
-          <th class="w-25">Choose</th>
-          <th class="w-25">Remove</th>
+            style="text-align:left">
+            Patrols
+          </th>
+          <th class="w-25">
+            Choose
+          </th>
+          <th class="w-25">
+            Remove
+          </th>
         </thead>
         <tbody>
-          <!-- Ignore this "problem" -Edouard -->
           <tr
             v-for="(patrol,index) of patrolList"
+            :key="patrol.Name"
             class="border-bottom">
             <td
               class="w-25"
-              style="text-align:left">{{ patrol.Name }}</td>
+              style="text-align:left">
+              {{ patrol.Name }}
+            </td>
             <td class="w-25">
               <button
                 :id="'selectBtn'+index"
@@ -75,17 +83,17 @@
 <script>
 /*
 * Author(s):  Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>
-*             
+*
 * File :  SaveLoad.vue
 * Desc :  Complementary module allowing to send a list of patrols (a patrol being a name
 *         and a list of waypoint) to the server and manage the list form the user
 *         interface application.The table contains two colomn of buttons use to delete the row they
-*         are in and resend new version of the modified patrol list. The other button is used to copy
-*         the waypoints of a saved patrol to the current waypoint list.
+*         copy are in and resend new version of the modified patrol list. The other button is used
+*         to the waypoints of a saved patrol to the current waypoint list.
 *
 * Dependencies :
 *       - Bootstrap.vue
-*       
+*
 */
 
 export default {
