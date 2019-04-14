@@ -14,8 +14,6 @@ __author__ = "bwbazemore@uga.edu (Brad Bazemore)"
 
 mutex = Lock()
 
-# TODO need to find some better was of handling OSerror 11 or preventing it, any ideas?
-
 class EncoderOdom:
     def __init__(self, ticks_per_meter, base_width):
         self.TICKS_PER_METER = ticks_per_meter
@@ -112,7 +110,7 @@ class EncoderOdom:
         odom.child_frame_id = 'base_footprint'
         odom.twist.twist.linear.x = vx
         odom.twist.twist.linear.y = 0
-        odom.twist.twist.angular.z = vth
+        odom.twist.twist.angular.z = -vth
         odom.twist.covariance = odom.pose.covariance
 
         self.odom_pub.publish(odom)
