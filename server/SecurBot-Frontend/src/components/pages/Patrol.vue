@@ -14,17 +14,25 @@
           style="height:5%; padding:0; margin:2px">
           <div
             class="w-50 h-100 text-left float-left"
-            style="font-size: 2.5vh; vertical-align:middle">Patrol :</div>
+            style="font-size: 2.5vh; vertical-align:middle">
+            Patrol :
+          </div>
           <button
             type="button"
             class="btn btn-success w-25 h-100 float-left"
-            style="font-size: 2vmin; align-items:center;vertical-align: middle; margin-left:-2px; padding: 0px"
-            @click="sendPatrol()">Send</button>
+            style="font-size: 2vmin;align-items:center;vertical-align:middle;
+                    margin-left:-2px;padding:0px"
+            @click="sendPatrol()">
+            Send
+          </button>
           <button
             type="button"
             class="btn btn-danger w-25 h-100 float-right"
-            style="font-size: 2vmin; align-items:center; position:absolute;padding:0px; margin-left:2px"
-            @click="clearWaypointList()">Reset</button>
+            style="font-size: 2vmin; align-items:center; position:absolute;
+                    padding:0px; margin-left:2px"
+            @click="clearWaypointList()">
+            Reset
+          </button>
         </div>
         <div class="h-50">
           <waypoint-table :waypoint-list="waypointList" />
@@ -33,9 +41,8 @@
           <save-load
             :waypoint-list="waypointList"
             :patrol-list="patrolList"
-            :bus="bus"/>
+            :bus="bus" />
         </div>
-        <div/>
       </b-col>
       <b-col
         md="8"
