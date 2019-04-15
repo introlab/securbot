@@ -7,13 +7,13 @@
         type="button"
         class="btn btn-success mr-1 h-100 w-25"
         @click="addPatrolToPatrolList()">Save patrol</button>
-      <div class="input-group">
+      <div class="input-group h-100">
         <input
           id="nameTextBox"
           v-model="newPatrolName"
           type="text"
           :placeholder="[[ placehold ]]"
-          class="form-control">
+          class="form-control h-100">
       </div>
     </div>
     <div
