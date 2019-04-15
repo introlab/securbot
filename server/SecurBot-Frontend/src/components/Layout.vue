@@ -126,7 +126,7 @@ export default {
     connect() {
       easyrtc.enableDebug(false);
       console.log('Initializing...');
-      easyrtc.enableVideo(false);
+      easyrtc.enableVideo(true);
       easyrtc.enableAudio(false);
       easyrtc.enableVideoReceive(true);
       easyrtc.enableAudioReceive(false);
@@ -146,7 +146,14 @@ export default {
       // Uncomment next line to use the dev server
       easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
 
-      easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      // Uncomment initialisation to use local stream for map (debugging only)
+      easyrtc.initMediaSource(() => {
+        this.mapStream = easyrtc.getLocalStream();
+        easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      }, this.loginFailure);
+
+      // This is the production line, only comment if necessary for debugging
+      // easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
       this.setHTMLVideoStream();
