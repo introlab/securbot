@@ -236,6 +236,8 @@ def sendGoalDoneCallback(terminalState, result):
             startPatrolNavigation()
 
 
+## @fn patrolExecutive()
+#  @brief Main function starting the Patrol Executive Node. Subcription to three topics are made : fromMapimageGenerator, fromElectronWaypoints, fromElectronInterrupt.
 def patrolExecutive():
     #Node name defined as patrolExecutive
     rospy.init_node("patrolExecutive", anonymous=True) #anonymous=True keeps each patrolExecutive nodes unique if there were many
