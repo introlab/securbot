@@ -42,7 +42,7 @@ export default {
       positionChangeIntervalId: null,
       canvas: null,
       context: null,
-      radiusRatio: 0.75,
+      radiusRatio: 0.60,
       joystickElement: null,
       isMouseDown: false,
       canvasRefreshRate: 60.0, // Hz
