@@ -31,7 +31,6 @@ module.exports = {
     'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
     "vue/html-closing-bracket-newline": ["error", {"singleline": "never","multiline": "never"}],
     'vue/name-property-casing': ["error", "kebab-case"],
-    'vue/require-prop-types':'off',
     'no-unused-vars':'off',
     'no-restricted-syntax':'off',
   },
