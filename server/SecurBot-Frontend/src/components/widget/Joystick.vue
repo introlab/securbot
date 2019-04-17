@@ -225,7 +225,7 @@ export default {
       return (this.radiusRatio * Math.min(this.canvas.width, this.canvas.height)) / 2;
     },
     getJoystickRadius() {
-      return this.getCanvasRadius() / 4;
+      return this.getCanvasRadius() / 6;
     },
     emitJoystickPosition() {
       const event = {
