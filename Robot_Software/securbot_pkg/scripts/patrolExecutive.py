@@ -224,6 +224,11 @@ def sendGoalDoneCallback(terminalState, result):
     global waypointIterator
     rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
 
+    #Published toward Electron's node
+    jsonStringBuffer = json.dumps({"waypointState": getStatusString(terminalState))
+    toElectron.publish(jsonStringBuffer)
+    rospy.loginfo("Waypoint's terminal state publish toward Electron's node...")
+
     try:
         goal = MoveBaseGoal()
         goal.target_pose = next(waypointIterator)[REAL_POSESTAMPED_INDEX]
