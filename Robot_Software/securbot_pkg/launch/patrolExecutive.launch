@@ -3,9 +3,9 @@
     <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" output="screen">
         <remap from="fromElectronWaypoints" to="/electron/patrol"/>
         <remap from="fromElectronInterrupt" to="/electron/patrol_halt"/>
+        <remap from="toElectron" to="/electron/patrol_feedback"/>
         <remap from="toMapImageGenerator" to="/map_image_generator/input_goal"/>
         <remap from="fromMapImageGenerator" to="/map_image_generator/output_goal"/>
-        <remap from="toElectron" to="datbot"/>
     </node>
 
     <!-- Test nodes -->

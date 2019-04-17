@@ -225,7 +225,7 @@ def sendGoalDoneCallback(terminalState, result):
     rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
 
     #Published toward Electron's node
-    jsonStringBuffer = json.dumps({"waypointState": getStatusString(terminalState))
+    jsonStringBuffer = json.dumps({"waypointState": getStatusString(terminalState)})
     toElectron.publish(jsonStringBuffer)
     rospy.loginfo("Waypoint's terminal state publish toward Electron's node...")
 

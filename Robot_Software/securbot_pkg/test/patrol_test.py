@@ -25,25 +25,27 @@ class  PatrolTestSuite(unittest.TestCase):
                 auto_start = False)
         self.actionServer.start()
         # Electron interface
-        self.patrolPublisher = rospy.Publisher('/electron/patrol', String, queue_size=5)
-        self.patrolCanceller = rospy.Publisher('/electron/patrol_halt', String, queue_size=5)
+        self.patrolPublisher = rospy.Publisher('/electron/patrol', String, queue_size = 5)
+        self.patrolCanceller = rospy.Publisher('/electron/patrol_halt', String, queue_size = 5)
+        rospy.Subscriber("/electron/patrol_feedback", String, self.waypointDoneCallback)
         # Map Image Mock
         self.conversionRequests = []
-        
-        # Waypoints Status Mock 
+
+        # Waypoints Status Mock
         self.waypointsDoneStatus = []
 
         self.mapImageOutput = rospy.Publisher('/map_image_generator/output_goal',
-                PoseStamped, queue_size=20)
+                PoseStamped, queue_size = 20)
         rospy.Subscriber('/map_image_generator/input_goal', PoseStamped,
                 self.mapImageCallBack)
-        
+        rospy.sleep(1) # waiting for subscribers and publishers to come online
+
     def mapImageCallBack(self, data):
         self.conversionRequests.append(data)
-    
+
     def waypointDoneCallback(self, data):
-        self.waypointsDoneStatus.append(json.loads(data)["waypointState"]) 
-    
+        self.waypointsDoneStatus.append(json.loads(data)["waypointState"])
+
     # Setting up the test environment before every test
     def setUp(self):
         self.conversionRequests = []
@@ -52,18 +54,9 @@ class  PatrolTestSuite(unittest.TestCase):
     #
     # TEST FUNCTIONS
     #
-    
-    # Send json string and verify that waypoints are being queried for conversion
-    def test_patrol_exec(self):
-        rospy.Subscriber('/map_image_generator/input_goal', PoseStamped, self.mapImageCallBack)
-        time.sleep(3)
-        self.patrolPublisher.publish(FAKE_PATROL_1)
-        time.sleep(3)
-        self.assertEquals(len(self.conversionRequests), 4, 'Move Base received :' + str(len(self.conversionRequests)) + ' elements')
-    
+
     # Regular waypoint navigation
     def test_regular_patrol(self):
-        rospy.sleep(1) # waiting for subscribers and publishers to come online
         self.patrolPublisher.publish(FAKE_PATROL_1)
 
         deadline = time.time() + TIMEOUT
@@ -85,29 +78,27 @@ class  PatrolTestSuite(unittest.TestCase):
         self.assertTrue(self.actionServer.is_new_goal_available(),
                 'Expecting move_base to receive a goal')
 
-    # Send waypoint and expect it is cancelled and send feedback to electron's node 
+    # Send waypoint and expect it is cancelled and send feedback to electron's node
     def test_waypoint_is_cancelled(self):
-        self.setUp()
 
-        rospy.Subscriber("datbot", String, waypointDoneCallback)       
         time.sleep(3)
 
-        # Publish fake patrol 
-        patrolPublisher.publish(FAKE_PATROL_2) 
+        # Publish fake patrol
+        self.patrolPublisher.publish(FAKE_PATROL_2)
         time.sleep(3)
-        
+
         # Publish interrupt
-        patrolCanceller.publish(INTERRUPT_TRUE_JSON) 
+        self.patrolCanceller.publish(INTERRUPT_TRUE_JSON)
         time.sleep(3)
 
         # Assert waypoint have been interrupted
-        self.assertTrue(waypointsDoneStatus.len() > 0)
+        self.assertTrue(len(self.waypointsDoneStatus) > 0)
 
-        for status in waypointsDoneStatus:
-            self.assertNotEqual(status, "PENDING") 
-            self.assertNotEqual(status, "ACTIVE") 
-            self.assertNotEqual(status, "SUCCEEDED") 
-            
+        for status in self.waypointsDoneStatus:
+            self.assertNotEqual(status, "PENDING")
+            self.assertNotEqual(status, "ACTIVE")
+            self.assertNotEqual(status, "SUCCEEDED")
+
 if __name__ == '__main__':
     import rostest
     rostest.run(PKG, 'patrol_exec', PatrolTestSuite)
