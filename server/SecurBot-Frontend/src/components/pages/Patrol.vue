@@ -43,7 +43,6 @@
             :patrol-list="patrolList"
             :bus="bus" />
         </div>
-        <div />
       </b-col>
       <b-col
         md="8"

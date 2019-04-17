@@ -1,4 +1,4 @@
-# configcheck
+# Frontend
 
 ## Project setup
 ```

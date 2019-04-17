@@ -11,15 +11,14 @@
         Save patrol
       </button>
       <div
-        class="h-100 w-75 position-relative text-right float-right"
-        style="font-size: 1.5vh; padding-left:2px; padding-right:2x">
+        class="h-100 w-75 position-relative text-left float-left"
+        style="font-size: 2.2vh; padding-right:2x">
         <input
           id="nameTextBox"
           v-model="newPatrolName"
           :placeholder="[[ placehold ]]"
           class="h-100 w-100">
       </div>
-    </div>
     <div
       class="overflow-auto position-relative">
       <table
@@ -42,9 +41,9 @@
           </th>
         </thead>
         <tbody>
-          <!-- Ignore this "problem" -Edouard -->
           <tr
             v-for="(patrol,index) of patrolList"
+            :key="patrol.Name"
             class="border-bottom">
             <td
               class="w-25"

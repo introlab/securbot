@@ -57,32 +57,46 @@
 
 
 <script>
-/*
-* Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>
-* File :  Layout.vue
-* Desc :  Vue SFC used as a page for teleoperation of the robots. This component
-*         manages the layout for the teleoperation page. It uses 2 VideoBox components
-*         and 1 joystick component. The bigger VideoBox is used to show the map and
-*         the smaller the video feed from the camera on the robot. The joystick is used
-*         to send command to the robot for manual control.
-*         It communicates with parent component through the bus in props.
-*
-* Dependencies :
-*       -VideoBox.vue
-*       -Joystick.vue
-*       -Bootstrap-Vue
-*
-*/
+import Vue from 'vue';
+
 import VideoBox from '../widget/VideoBox';
 import Joystick from '../widget/Joystick';
 
+/**
+ * @vuese
+ * @group Pages
+ * @author Edouard Legare <edouard.legare@usherbrooke.ca>
+ * @version 1.0.0
+ *
+ * Description : Component used as a page for teleoperation of the robot. It manages the layout of
+ * its components and communicate with its parent component through a bus given in props. The
+ * components used in this page are 2 VideoBox and 1 Joystick.
+ *
+ * This component have the following dependency : VideoBox.vue Component, Joystick.vue Component
+ * and Bootstrap-Vue for styling.
+ */
 export default {
   name: 'teleop-page',
   components: {
     VideoBox,
     Joystick,
   },
-  props: ['bus', 'router'],
+  props: {
+    /**
+     * Vue bus use to communicate events to the other components
+     */
+    bus: {
+      type: Vue,
+      required: true,
+    },
+    /**
+     * Vue bus use to emit events to the parent component for routing purposes
+     */
+    router: {
+      type: Vue,
+      required: true,
+    },
+  },
   data() {
     return {
       showCamera: true,
@@ -105,14 +119,36 @@ export default {
     });
 
     this.setJoystickStyle();
+    this.init();
   },
   destroyed() {
     console.log('Teleop have been destroyed');
+    /**
+     * Destroyed event
+     * @arg Does not take any parameter
+     */
     this.router.$emit('destroyed');
 
     window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
+    /**
+     * @vuese
+     * Init function for the teleop page
+     * @arg Does not take any parameter
+    */
+    init() {
+      // Triggered when button is clicked
+      // @arg This event doesn't emit any argument
+      this.bus.$emit('mounted');
+      this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
+    },
+    /**
+     * @vuese
+     * Joystick state event callback, used to change the joystick state
+     *
+     * @arg The argument is a boolean representing the state
+    */
     changeJoystickState(state) {
       if (state === 'enable') {
         this.enableJoystick = true;

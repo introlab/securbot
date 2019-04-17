@@ -34,7 +34,7 @@ import VideoBox from '../widget/VideoBox';
 import Connection from '../widget/Connection';
 
 export default {
-  name: 'testing',
+  name: 'testing2',
   components: {
     VideoBox,
     Connection,
