@@ -38,7 +38,7 @@ class  PatrolTestSuite(unittest.TestCase):
     def test_patrol_exec(self):
         rospy.Subscriber('/map_image_generator/input_goal', PoseStamped, self.mapImageCallBack)
         time.sleep(3)
-        self.patrolPublisher.publish(fakePatrol)
+        self.patrolPublisher.publish(fakePatrol1)
         time.sleep(3)
         self.assertEquals(len(self.conversionRequests), 4, 'Move Base received :' + str(len(self.conversionRequests)) + ' elements')
 
@@ -62,7 +62,7 @@ class  PatrolTestSuite(unittest.TestCase):
         time.sleep(3)
 
         # Publish fake patrol 
-        patrolPublisher.publish(fakePatrol) 
+        patrolPublisher.publish(fakePatrol2) 
         time.sleep(3)
         
         # Publish interrupt
