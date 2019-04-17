@@ -4,7 +4,7 @@ PKG = 'securbot_pkg'
 import sys, json, unittest, rospy, time, actionlib
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
-from move_base_msgs.msg import MoveBaseAction
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 FAKE_PATROL_1 = '{ "patrol":[ {"x":1,"y":2,"yaw":3}, {"x":2,"y":1,"yaw":4}, {"x":3,"y":0,"yaw":3}, {"x":4,"y":-1,"yaw":4} ], "loop": false }'
 
@@ -38,7 +38,7 @@ class  PatrolTestSuite(unittest.TestCase):
                 PoseStamped, queue_size = 20)
         rospy.Subscriber('/map_image_generator/input_goal', PoseStamped,
                 self.mapImageCallBack)
-        rospy.sleep(1) # waiting for subscribers and publishers to come online
+        rospy.sleep(0.5) # waiting for subscribers and publishers to come online
 
     def mapImageCallBack(self, data):
         self.conversionRequests.append(data)
@@ -58,6 +58,7 @@ class  PatrolTestSuite(unittest.TestCase):
     # Regular waypoint navigation
     def test_regular_patrol(self):
         self.patrolPublisher.publish(FAKE_PATROL_1)
+        patrolDict = json.loads(FAKE_PATROL_1)
 
         deadline = time.time() + TIMEOUT
         while not rospy.is_shutdown() and len(self.conversionRequests) < 4 and time.time() < deadline:
@@ -68,15 +69,32 @@ class  PatrolTestSuite(unittest.TestCase):
 
         # Send converted waypoints
         for waypoint in self.conversionRequests:
+            # Modifying waypoint to access correct waypoints are registered
+            waypoint.pose.position.x += 1
             self.mapImageOutput.publish(waypoint)
 
-        deadline = time.time() + TIMEOUT
-        while not rospy.is_shutdown() and not self.actionServer.is_new_goal_available() and time.time() < deadline:
-            rospy.sleep(0.1)
 
-        # Assert messages being sent to movebase
-        self.assertTrue(self.actionServer.is_new_goal_available(),
-                'Expecting move_base to receive a goal')
+        for waypoint in patrolDict['patrol']:
+            deadline = time.time() + TIMEOUT
+            while not rospy.is_shutdown() and not self.actionServer.is_new_goal_available() and time.time() < deadline:
+                rospy.sleep(0.1)
+
+            # Assert messages being sent to movebase
+            self.assertTrue(self.actionServer.is_new_goal_available(),
+                    'Expecting move_base to receive a goal')
+
+            # Make sure the waypoint received matches
+            goal = self.actionServer.accept_new_goal()
+            self.actionServer.set_succeeded()
+            self.assertIsInstance(goal, MoveBaseGoal)
+            self.assertEquals(goal.target_pose.pose.position.x, waypoint['x'] + 1)
+
+            # Make sure waypoint completion is reported
+            # TODO find mock library for python
+#            deadline = time.time() + TIMEOUT
+#            while not rospy.is_shutdown() and not  and time.time() < deadline:
+#                rospy.sleep(0.1)
+
 
     # Send waypoint and expect it is cancelled and send feedback to electron's node
     def test_waypoint_is_cancelled(self):
