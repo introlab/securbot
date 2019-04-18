@@ -208,10 +208,6 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KAGXXYKH
 
-[GeneratedDocument1]
-DocumentPath=Project Outputs for BatteryBoard\Design Rule Check - BatteryBoard.html
-DItemRevisionGUID=
-
 [Parameter1]
 Name=Project_Date
 Value=13/03/2019
