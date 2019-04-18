@@ -82,57 +82,65 @@ export default {
     // Clean canvas and redraw the waypoints
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.drawWaypoints();
+      this.drawWaypointList();
+      this.drawWaypoint(this.currentWP);
     },
     // Draw waypoints on canvas
-    drawWaypoints() {
+    drawWaypointList() {
       this.waypointList.forEach((wp) => {
-        const wpColor = '#00FF00';
-        const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
-
-        // Draw the goal circle
-        const wpRadius = 8;
-
-        this.context.beginPath();
-        this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
-        this.context.fillStyle = wpColor;
-        this.context.fill();
-
-        // Draw the arrow
-        const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 12;
-        const headLength = arrowLength / 4;
-        const arrowEnd = {
-          x: coord.x + arrowLength * Math.cos(wp.yaw),
-          y: coord.y + arrowLength * Math.sin(wp.yaw),
-        };
-        const arrowTip1 = {
-          x: arrowEnd.x - headLength * Math.cos(wp.yaw - Math.PI / 4),
-          y: arrowEnd.y - headLength * Math.sin(wp.yaw - Math.PI / 4),
-        };
-        const arrowTip2 = {
-          x: arrowEnd.x - headLength * Math.cos(wp.yaw + Math.PI / 4),
-          y: arrowEnd.y - headLength * Math.sin(wp.yaw + Math.PI / 4),
-        };
-
-        this.context.lineCap = 'round';
-        this.context.lineWidth = Math.max(1, arrowLength / 10);
-        this.context.strokeStyle = wpColor;
-
-        this.context.beginPath();
-        this.context.moveTo(coord.x, coord.y);
-        this.context.lineTo(arrowEnd.x, arrowEnd.y);
-        this.context.stroke();
-
-        this.context.beginPath();
-        this.context.moveTo(arrowEnd.x, arrowEnd.y);
-        this.context.lineTo(arrowTip1.x, arrowTip1.y);
-        this.context.stroke();
-
-        this.context.beginPath();
-        this.context.moveTo(arrowEnd.x, arrowEnd.y);
-        this.context.lineTo(arrowTip2.x, arrowTip2.y);
-        this.context.stroke();
+        this.drawWaypoint(wp);
+        this.drawYawArrow(wp);
       });
+    },
+    drawWaypoint(wp) {
+      const wpColor = '#00FF00';
+      console.log(wp.x);
+      const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
+
+      // Draw the goal circle
+      const wpRadius = 7;
+      this.context.beginPath();
+      this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
+      this.context.fillStyle = wpColor;
+      this.context.fill();
+    },
+    drawYawArrow(wp) {
+      const arrowColor = '#00FF00';
+      const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
+      // Draw the arrow
+      const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 15;
+      const headLength = arrowLength / 4;
+      const arrowEnd = {
+        x: coord.x + arrowLength * Math.cos(wp.yaw),
+        y: coord.y + arrowLength * Math.sin(wp.yaw),
+      };
+      const arrowTip1 = {
+        x: arrowEnd.x - headLength * Math.cos(wp.yaw - Math.PI / 4),
+        y: arrowEnd.y - headLength * Math.sin(wp.yaw - Math.PI / 4),
+      };
+      const arrowTip2 = {
+        x: arrowEnd.x - headLength * Math.cos(wp.yaw + Math.PI / 4),
+        y: arrowEnd.y - headLength * Math.sin(wp.yaw + Math.PI / 4),
+      };
+
+      this.context.lineCap = 'round';
+      this.context.lineWidth = Math.max(1, arrowLength / 10);
+      this.context.strokeStyle = arrowColor;
+
+      this.context.beginPath();
+      this.context.moveTo(coord.x, coord.y);
+      this.context.lineTo(arrowEnd.x, arrowEnd.y);
+      this.context.stroke();
+
+      this.context.beginPath();
+      this.context.moveTo(arrowEnd.x, arrowEnd.y);
+      this.context.lineTo(arrowTip1.x, arrowTip1.y);
+      this.context.stroke();
+
+      this.context.beginPath();
+      this.context.moveTo(arrowEnd.x, arrowEnd.y);
+      this.context.lineTo(arrowTip2.x, arrowTip2.y);
+      this.context.stroke();
     },
     // Get position/coordinate of video on click
     getVideoCoordinatesFromEvent(event) {
@@ -187,7 +195,7 @@ export default {
         if (this.isClickValid(coord)) {
           this.currentWP = coord;
           this.currentWP.yaw = 0;
-          console.log(this.currentWP);
+          this.drawWaypoint(this.currentWP);
         }
       }
     },
