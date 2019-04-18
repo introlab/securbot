@@ -2,6 +2,7 @@
 PKG = 'securbot_pkg'
 
 import sys, json, unittest, rospy, time, actionlib
+from collections import deque
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
@@ -27,12 +28,12 @@ class  PatrolTestSuite(unittest.TestCase):
         # Electron interface
         self.patrolPublisher = rospy.Publisher('/electron/patrol', String, queue_size = 5)
         self.patrolCanceller = rospy.Publisher('/electron/patrol_halt', String, queue_size = 5)
-        rospy.Subscriber("/electron/patrol_feedback", String, self.waypointDoneCallback)
+        rospy.Subscriber('/electron/patrol_feedback', String, self.waypointDoneCallback)
         # Map Image Mock
         self.conversionRequests = []
 
         # Waypoints Status Mock
-        self.waypointsDoneStatus = []
+        self.waypointsDoneStatus = deque()
 
         self.mapImageOutput = rospy.Publisher('/map_image_generator/output_goal',
                 PoseStamped, queue_size = 20)
@@ -43,13 +44,13 @@ class  PatrolTestSuite(unittest.TestCase):
     def mapImageCallBack(self, data):
         self.conversionRequests.append(data)
 
-    def waypointDoneCallback(self, data):
-        self.waypointsDoneStatus.append(json.loads(data)["waypointState"])
+    def waypointDoneCallback(self, message):
+        self.waypointsDoneStatus.append(json.loads(message.data))
 
     # Setting up the test environment before every test
     def setUp(self):
         self.conversionRequests = []
-        self.waypointsDoneStatus = []
+        self.waypointsDoneStatus.clear()
 
     #
     # TEST FUNCTIONS
@@ -72,6 +73,7 @@ class  PatrolTestSuite(unittest.TestCase):
             # Modifying waypoint to access correct waypoints are registered
             waypoint.pose.position.x += 1
             self.mapImageOutput.publish(waypoint)
+        del self.conversionRequests[:]
 
 
         for waypoint in patrolDict['patrol']:
@@ -90,10 +92,12 @@ class  PatrolTestSuite(unittest.TestCase):
             self.assertEquals(goal.target_pose.pose.position.x, waypoint['x'] + 1)
 
             # Make sure waypoint completion is reported
-            # TODO find mock library for python
-#            deadline = time.time() + TIMEOUT
-#            while not rospy.is_shutdown() and not  and time.time() < deadline:
-#                rospy.sleep(0.1)
+            deadline = time.time() + TIMEOUT
+            while not rospy.is_shutdown() and len(self.waypointsDoneStatus) < 1 and time.time() < deadline:
+                rospy.sleep(0.1)
+            self.assertGreater(len(self.waypointsDoneStatus), 0)
+
+            doneStatus = self.waypointsDoneStatus.popleft()
 
 
     # Send waypoint and expect it is cancelled and send feedback to electron's node
