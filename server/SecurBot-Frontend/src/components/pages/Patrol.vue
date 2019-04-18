@@ -20,8 +20,8 @@
           <button
             type="button"
             class="btn btn-success w-25 h-100 float-left"
-            style="font-size: 2vmin;align-items:center;vertical-align:middle;
-                    margin-left:-2px;padding:0px"
+            style="font-size: 2vmin; align-items:center;vertical-align: middle;
+            margin-left:-2px; padding: 0px"
             @click="sendPatrol()">
             Send
           </button>
@@ -29,7 +29,7 @@
             type="button"
             class="btn btn-danger w-25 h-100 float-right"
             style="font-size: 2vmin; align-items:center; position:absolute;
-                    padding:0px; margin-left:2px"
+            padding:0px; margin-left:2px"
             @click="clearWaypointList()">
             Reset
           </button>

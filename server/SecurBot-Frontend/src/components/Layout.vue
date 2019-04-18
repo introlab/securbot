@@ -146,7 +146,6 @@ export default {
       // Uncomment next line to use the dev server
       easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
 
-
       // Uncomment initialisation to use local stream for map (debugging only)
       easyrtc.initMediaSource(() => {
         this.mapStream = easyrtc.getLocalStream();

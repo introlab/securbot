@@ -3,6 +3,13 @@
     <div
       class="w-100 position-relative"
       style="height:12%; margin-bottom:2px; margin-top:2px">
+      <button
+        type="button"
+        class="btn btn-success h-100 w-25"
+        style="font-size: 2vmin; align-items: center; padding:0px; position:absolute"
+        @click="addPatrolToPatrolList()">
+        Save patrol
+      </button>
       <div
         class="h-100 w-75 position-relative text-left float-left"
         style="font-size: 2.2vh; padding-right:2x">
@@ -12,12 +19,6 @@
           :placeholder="[[ placehold ]]"
           class="h-100 w-100">
       </div>
-      <button
-        type="button"
-        class="btn btn-success h-100 w-25 float-right"
-        style="font-size: 1.6vmin; align-items: center; margin-left:-1px; padding: 0px; position:absolute"
-        @click="addPatrolToPatrolList()">Save patrol</button>
-    </div>
     <div
       class="overflow-auto position-relative">
       <table
@@ -88,8 +89,8 @@
 * Desc :  Complementary module allowing to send a list of patrols (a patrol being a name
 *         and a list of waypoint) to the server and manage the list form the user
 *         interface application.The table contains two colomn of buttons use to delete the row they
-*         copy are in and resend new version of the modified patrol list. The other button is used
-*         to the waypoints of a saved patrol to the current waypoint list.
+*         are in and resend new version of the modified patrol list. The other button is used to
+*         copy the waypoints of a saved patrol to the current waypoint list.
 *
 * Dependencies :
 *       - Bootstrap.vue

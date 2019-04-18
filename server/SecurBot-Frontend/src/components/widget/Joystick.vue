@@ -1,7 +1,7 @@
 <template>
   <div
     id="joystick"
-    class="h-100 w-100 p-2">
+    class="h-100 w-100">
     <canvas
       ref="canvas"
       class="h-100 m-100"
@@ -222,7 +222,7 @@ export default {
       return (this.radiusRatio * Math.min(this.canvas.width, this.canvas.height)) / 2;
     },
     getJoystickRadius() {
-      return this.getCanvasRadius() / 4;
+      return this.getCanvasRadius() / 6;
     },
     emitJoystickPosition() {
       const event = {
