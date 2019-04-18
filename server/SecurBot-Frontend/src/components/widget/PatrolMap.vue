@@ -9,7 +9,10 @@
       ref="canvas"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;z-index:10;"
-      @mousedown="onMouseDown" />
+      @mousedown="onMouseDown"
+      @mousemove="onMouseMove"
+      @mouseup="onMouseUp"
+      @mouseout="onMouseOut" />
   </div>
 </template>
 
@@ -46,6 +49,7 @@ export default {
       canvas: null,
       context: null,
       CanvasRefreshRate: 60.0, // Hz
+      currentWP: null,
       loopIntervalId: null,
       enable: true,
     };
@@ -93,6 +97,41 @@ export default {
         this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
         this.context.fillStyle = wpColor;
         this.context.fill();
+
+        // Draw the arrow
+        const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 12;
+        const headLength = arrowLength / 4;
+        const arrowEnd = {
+          x: coord.x + arrowLength * Math.cos(wp.yaw),
+          y: coord.y + arrowLength * Math.sin(wp.yaw),
+        };
+        const arrowTip1 = {
+          x: arrowEnd.x - headLength * Math.cos(wp.yaw - Math.PI / 4),
+          y: arrowEnd.y - headLength * Math.sin(wp.yaw - Math.PI / 4),
+        };
+        const arrowTip2 = {
+          x: arrowEnd.x - headLength * Math.cos(wp.yaw + Math.PI / 4),
+          y: arrowEnd.y - headLength * Math.sin(wp.yaw + Math.PI / 4),
+        };
+
+        this.context.lineCap = 'round';
+        this.context.lineWidth = Math.max(1, arrowLength / 10);
+        this.context.strokeStyle = wpColor;
+
+        this.context.beginPath();
+        this.context.moveTo(coord.x, coord.y);
+        this.context.lineTo(arrowEnd.x, arrowEnd.y);
+        this.context.stroke();
+
+        this.context.beginPath();
+        this.context.moveTo(arrowEnd.x, arrowEnd.y);
+        this.context.lineTo(arrowTip1.x, arrowTip1.y);
+        this.context.stroke();
+
+        this.context.beginPath();
+        this.context.moveTo(arrowEnd.x, arrowEnd.y);
+        this.context.lineTo(arrowTip2.x, arrowTip2.y);
+        this.context.stroke();
       });
     },
     // Get position/coordinate of video on click
@@ -146,13 +185,33 @@ export default {
       if (event.button === 0) {
         const coord = this.getVideoCoordinatesFromEvent(event);
         if (this.isClickValid(coord)) {
-          const date = new Date();
-          const wp = coord;
-          wp.yaw = 0;
-          wp.dateTime = date.getTime();
-          this.addWaypoint(wp);
+          this.currentWP = coord;
+          this.currentWP.yaw = 0;
+          console.log(this.currentWP);
         }
       }
+    },
+    onMouseMove(event) {
+      if (this.currentWP !== null) {
+        console.log('MouseMoved');
+        const mousePosition = this.getVideoCoordinatesFromEvent(event);
+        this.currentWP.yaw = Math.atan2(mousePosition.y - this.currentWP.y,
+          mousePosition.x - this.currentWP.x);
+      }
+    },
+    onMouseUp(event) {
+      if (event.button === 0 && this.currentWP !== null) {
+        // Write waypoint to list of waypoints
+        const date = new Date();
+        console.log('MouseUP');
+        this.currentWP.dateTime = date.getTime();
+        this.addWaypoint(this.currentWP);
+        this.currentWP = null;
+      }
+    },
+    onMouseOut(event) {
+      console.log('MouseOut');
+      this.currentWP = null;
     },
     // Check is the click was inbound
     isClickValid(coord) {
