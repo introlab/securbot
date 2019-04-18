@@ -3,16 +3,19 @@
     <div class="mh-100 overflow-auto">
       <table
         id="waypoint-table"
-        class="table table-borderless table-striped border-left border-right"
+        class="table tabl e-borderless table-striped border-left border-right"
         style="text-align: center">
         <thead class="text-white bg-green-sb">
+          <th class="w-10">
+            #
+          </th>
           <th class="w-25">
             X
           </th>
           <th class="w-25">
             Y
           </th>
-          <th class="w-25">
+          <th class="w-15">
             Yaw
           </th>
           <th class="w-25">
@@ -24,13 +27,16 @@
             <tr
               :key="waypoint.dateTime"
               class="border-bottom">
+              <td class="w-10">
+                {{ (index+1).toFixed(0) }}
+              </td>
               <td class="w-25">
                 {{ waypoint.x.toFixed(1) }}
               </td>
               <td class="w-25">
                 {{ waypoint.y.toFixed(1) }}
               </td>
-              <td class="w-25">
+              <td class="w-15">
                 {{ waypoint.dateTime }}  <!-- waypoint.yaw.toFixed(1) -->
               </td>
               <td class="w-25">

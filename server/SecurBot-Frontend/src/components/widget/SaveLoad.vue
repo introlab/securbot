@@ -19,64 +19,65 @@
           :placeholder="[[ placehold ]]"
           class="h-100 w-100">
       </div>
-    <div
-      class="overflow-auto position-relative">
-      <table
-        id="saved-patrol-table"
-        class="table table-borderless table-striped border-right"
-        style="height:90%; text-align:center">
-        <thead
-          class="text-white bg-green-sb"
-          style="padding:0px">
-          <th
-            class="w-50"
-            style="text-align:left">
-            Patrols
-          </th>
-          <th class="w-25">
-            Choose
-          </th>
-          <th class="w-25">
-            Remove
-          </th>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(patrol,index) of patrolList"
-            :key="patrol.Name"
-            class="border-bottom">
-            <td
-              class="w-25"
+      <div
+        class="overflow-auto position-relative">
+        <table
+          id="saved-patrol-table"
+          class="table table-borderless table-striped border-right"
+          style="height:90%; text-align:center">
+          <thead
+            class="text-white bg-green-sb"
+            style="padding:0px">
+            <th
+              class="w-50"
               style="text-align:left">
-              {{ patrol.Name }}
-            </td>
-            <td class="w-25">
-              <button
-                :id="'selectBtn'+index"
-                type="button"
-                class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
-                @click="selectPatrolFromList(index)">
-                <img
-                  src="~/open-iconic/svg/check.svg"
-                  alt=""
-                  style="width:12px;height:12px;">
-              </button>
-            </td>
-            <td class="w-25">
-              <button
-                :id="'removeBtn'+index"
-                type="button"
-                class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                @click="removePatrolFromList(index)">
-                <img
-                  src="~/open-iconic/svg/trash.svg"
-                  alt=""
-                  style="width:12px;height:12px;">
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              Patrols
+            </th>
+            <th class="w-25">
+              Choose
+            </th>
+            <th class="w-25">
+              Remove
+            </th>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(patrol,index) of patrolList"
+              :key="patrol.Name"
+              class="border-bottom">
+              <td
+                class="w-25"
+                style="text-align:left">
+                {{ patrol.Name }}
+              </td>
+              <td class="w-25">
+                <button
+                  :id="'selectBtn'+index"
+                  type="button"
+                  class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
+                  @click="selectPatrolFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/check.svg"
+                    alt=""
+                    style="width:12px;height:12px;">
+                </button>
+              </td>
+              <td class="w-25">
+                <button
+                  :id="'removeBtn'+index"
+                  type="button"
+                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
+                  @click="removePatrolFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/trash.svg"
+                    alt=""
+                    style="width:12px;height:12px;">
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
