@@ -84,6 +84,7 @@ export default {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawWaypointList();
       this.drawWaypoint(this.currentWP);
+      this.drawYawArrow(this.currentWP);
     },
     // Draw waypoints on canvas
     drawWaypointList() {
@@ -97,7 +98,7 @@ export default {
       console.log(wp.x);
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
-      // Draw the goal circle
+      // Draw the WP circle
       const wpRadius = 7;
       this.context.beginPath();
       this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
@@ -205,6 +206,7 @@ export default {
         const mousePosition = this.getVideoCoordinatesFromEvent(event);
         this.currentWP.yaw = Math.atan2(mousePosition.y - this.currentWP.y,
           mousePosition.x - this.currentWP.x);
+        this.drawYawArrow(this.currentWP);
       }
     },
     onMouseUp(event) {
