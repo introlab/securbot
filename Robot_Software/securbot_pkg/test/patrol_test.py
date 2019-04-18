@@ -75,8 +75,16 @@ class  PatrolTestSuite(unittest.TestCase):
             self.mapImageOutput.publish(waypoint)
         del self.conversionRequests[:]
 
+        # Checking for round start message
+        deadline = time.time() + TIMEOUT
+        while not rospy.is_shutdown() and len(self.waypointsDoneStatus) < 1 and time.time() < deadline:
+            rospy.sleep(0.1)
+        self.assertGreater(len(self.waypointsDoneStatus), 0)
+        startMessage = self.waypointsDoneStatus.popleft()
+        self.assertEquals(startMessage['status'], 'start')
 
-        for waypoint in patrolDict['patrol']:
+
+        for index, waypoint in enumerate(patrolDict['patrol']):
             deadline = time.time() + TIMEOUT
             while not rospy.is_shutdown() and not self.actionServer.is_new_goal_available() and time.time() < deadline:
                 rospy.sleep(0.1)
@@ -98,6 +106,7 @@ class  PatrolTestSuite(unittest.TestCase):
             self.assertGreater(len(self.waypointsDoneStatus), 0)
 
             doneStatus = self.waypointsDoneStatus.popleft()
+            self.assertEquals(doneStatus['goalsReached'], index + 1, 'Waypoint completion feedback failed')
 
 
     # Send waypoint and expect it is cancelled and send feedback to electron's node
