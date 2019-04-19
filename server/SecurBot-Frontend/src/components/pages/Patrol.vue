@@ -8,41 +8,44 @@
     <b-row class="h-100">
       <b-col
         md="4"
-        class="mh-100">
-        <div
-          class="position-relative"
-          style="height:5%; padding:0; margin:2px">
+        class="mh-100 d-flex flex-column">
+        <b-row class="h-50 m-0 mb-1 d-flex flex-column">
           <div
-            class="w-50 h-100 text-left float-left"
-            style="font-size: 2.5vh; vertical-align:middle">
-            Patrol :
+            class="btn-toolbar mb-1 w-100 d-flex flex-row"
+            style="height:40px;"
+            role="toolbar">
+            <h4
+              class="h-100 text-left"
+              style="flex:1;">
+              Patrol :
+            </h4>
+            <button
+              type="button"
+              class="btn btn-success h-100"
+              style="align-items:center; width:90px; min-width:80px;"
+              @click="sendPatrol()">
+              Send
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger h-100 ml-1"
+              style="align-items:center; width:90px; min-width:80px;"
+              @click="clearWaypointList()">
+              Reset
+            </button>
           </div>
-          <button
-            type="button"
-            class="btn btn-success w-25 h-100 float-left"
-            style="font-size: 2vmin; align-items:center;vertical-align: middle;
-            margin-left:-2px; padding: 0px"
-            @click="sendPatrol()">
-            Send
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger w-25 h-100 float-right"
-            style="font-size: 2vmin; align-items:center; position:absolute;
-            padding:0px; margin-left:2px"
-            @click="clearWaypointList()">
-            Reset
-          </button>
-        </div>
-        <div class="h-50">
-          <waypoint-table :waypoint-list="waypointList" />
-        </div>
-        <div style="height:45%">
+          <div style="height: calc(100% - 40px - 0.25rem)">
+            <waypoint-table :waypoint-list="waypointList" />
+          </div>
+        </b-row>
+        <b-row
+          class="m-0 d-flex flex-column"
+          style="flex:1">
           <save-load
             :waypoint-list="waypointList"
             :patrol-list="patrolList"
             :bus="bus" />
-        </div>
+        </b-row>
       </b-col>
       <b-col
         md="8"
@@ -110,7 +113,15 @@ export default {
     },
     // Send the waypoint list for patrol scheduling
     sendPatrol() {
-      this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
+      // For now only send the first waypoint
+      const objective = JSON.stringify(this.waypointList[0]);
+
+      if (objective) {
+        console.log('Sendig objective:');
+        console.log(objective);
+
+        this.bus.$emit('send-patrol', objective);
+      }
     },
     sendPatrolList() {
       this.bus.$emit('send-patrol-list', JSON.stringify(this.patrolList));

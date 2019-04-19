@@ -1,0 +1,6 @@
+<launch>
+    <remap from="path_from" to="path_to" />
+    <include file="$(find sensor)/launch/sensor_name.launch">
+          <arg name="arg_name"           default="default"/>
+    </include>
+</launch>
