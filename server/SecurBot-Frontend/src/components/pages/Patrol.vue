@@ -110,7 +110,15 @@ export default {
     },
     // Send the waypoint list for patrol scheduling
     sendPatrol() {
-      this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
+      // For now only send the first waypoint
+      const objective = JSON.stringify(this.waypointList[0]);
+
+      if (objective) {
+        console.log('Sendig objective:');
+        console.log(objective);
+
+        this.bus.$emit('send-patrol', objective);
+      }
     },
     sendPatrolList() {
       this.bus.$emit('send-patrol-list', JSON.stringify(this.patrolList));
