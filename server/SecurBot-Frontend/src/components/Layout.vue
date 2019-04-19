@@ -126,7 +126,7 @@ export default {
     connect() {
       easyrtc.enableDebug(false);
       console.log('Initializing...');
-      easyrtc.enableVideo(true);
+      easyrtc.enableVideo(false);
       easyrtc.enableAudio(false);
       easyrtc.enableVideoReceive(true);
       easyrtc.enableAudioReceive(false);
@@ -147,13 +147,13 @@ export default {
       easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
 
       // Uncomment initialisation to use local stream for map (debugging only)
-      easyrtc.initMediaSource(() => {
-        this.mapStream = easyrtc.getLocalStream();
-        easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-      }, this.loginFailure);
+      // easyrtc.initMediaSource(() => {
+      //   this.mapStream = easyrtc.getLocalStream();
+      //   easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      // }, this.loginFailure);
 
       // This is the production line, only comment if necessary for debugging
-      // easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
       this.setHTMLVideoStream();
@@ -244,7 +244,6 @@ export default {
               out of our control (other client responsible)
     */
     closePeerVideo(easyrtcid) {
-      this.peerId = null;
       this.clearHTMLVideoStream();
     },
     /*
@@ -296,8 +295,12 @@ export default {
     },
     // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
     dataCloseListenerCB(easyrtcid) {
-      console.warn(`Data channel close with ${easyrtcid}`);
+      console.warn(`Data channel close with ${easyrtcid} : ${this.peerId}`);
       this.isDataChannelAvailable = false;
+      if (easyrtcid === this.peerId) {
+        this.peerId = null;
+        this.teleopBus.$emit('connection-changed', 'disconnect');
+      }
       // this.teleopBus.$emit('on-joystick-state-changed', 'disable');
     },
     /*

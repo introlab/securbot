@@ -6,7 +6,7 @@
       <button
         type="button"
         class="btn btn-success h-100 w-25"
-        style="font-size: 2vmin; align-items: center; padding:0px; position:absolute"
+        style="font-size: 2vmin; align-items: center; padding:0px; position:relative"
         @click="addPatrolToPatrolList()">
         Save patrol
       </button>
@@ -19,6 +19,7 @@
           :placeholder="[[ placehold ]]"
           class="h-100 w-100">
       </div>
+    </div>
     <div
       class="overflow-auto position-relative">
       <table

@@ -93,7 +93,7 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
 
       // Uncomment next line to use the dev server
-      // easyrtc.setSocketUrl(':8085');
+      easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
 
       let temp = false;
       // eslint-disable-next-line no-loop-func
