@@ -1,8 +1,5 @@
 #!/usr/bin/python
 
-# Note definition: Waypoints is, by definition according to SecurBot, a goal to
-#                 reach in the robot's physical environment.
-
 import rospy, json, hashlib, actionlib, time
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
@@ -11,9 +8,13 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from actionlib_msgs.msg import GoalStatus
 from tf.transformations import quaternion_from_euler
 
-PIXEL_POSESTAMPED_INDEX = 1
-REAL_POSESTAMPED_INDEX = 2
+# NOTE DEFINITION: Waypoints is, by definition according to 
+#                  SecurBot, a goal to reach in the robot's physical
+#                  environment.
 
+# Enumerator of unsigned integers representating the status of a 
+# waypoint the same way the action server from actionlib would 
+# represent its statuses.
 class Status(Enum):
     PENDING = 0
     ACTIVE = 1
@@ -26,12 +27,18 @@ class Status(Enum):
     RECALLED = 8
     LOST = 9
 
+# Global indexes used in the waypointsPatrolList to access the 
+# PoseStampeds specific format
+PIXEL_POSESTAMPED_INDEX = 1
+REAL_POSESTAMPED_INDEX = 2
+
+
 # Global action client used to sned waypoints to move_base
 actionClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-i
 
-# Global list of waypoints (2D with 4 columns) in different formats (Strings,
-# Pixel PoseStampeds, Real PoseStampeds), plus their status
+# Global list of waypoints (2D with 4 columns) in different formats
+# (Strings, Pixel PoseStampeds, Real PoseStampeds), plus their 
+# status
 waypointsPatrolList = []
 
 # Global current waypoint index in the waypoints list
@@ -43,17 +50,19 @@ isLooped = False
 # Global patrol ID
 patrolId = ""
 
-# Global publisher used to send Pixel PoseStampeds in order to format them into
-# Real PoseStampeds
+# Global publisher used to send Pixel PoseStampeds in order to 
+# format them into real PoseStampeds
 toMapImageGenerator = rospy.Publisher("toMapImageGenerator", PoseStamped, queue_size=20)
 
-# Global publisher to send status that waypoint is reached toward Electron node
+# Global publisher to send status that waypoint is reached toward 
+# Electron node
 toElectron = rospy.Publisher("toElectron", String, queue_size=20)
 
 ##  Format Waypoint to Pixel PoseStamped
-#   @param waypointObject The waypoint in dictionnary form from the JSON object
+#   @param waypointObject The waypoint in dictionnary form from 
+#          the JSON object
 #   @return PoseStamped representation of the waypoint
-def wayPointToPixelPoseStamped(waypointObject):
+def waypointToPixelPoseStamped(waypointObject):
 
     # Creating and partially filling a new PoseStamped
     waypoint = PoseStamped()
@@ -77,8 +86,10 @@ def wayPointToPixelPoseStamped(waypointObject):
 
     return waypoint
 
-##  Publish Pixel PoseStamped to map_image_generator to format it into Real PoseStamped
-#   @param pixelPoseStamped The waypoint relative to the screen input
+##  Publish Pixel PoseStamped to map_image_generator to format it 
+#   into Real PoseStamped
+#   @param pixelPoseStamped The waypoint relative to the screen 
+#                           input
 def pixelPoseStampedToRealPoseStamped(pixelPoseStamped):
    toMapImageGenerator.publish(pixelPoseStamped)
 
@@ -87,7 +98,8 @@ def pixelPoseStampedToRealPoseStamped(pixelPoseStamped):
 
 
 ##  Callback funtion receiving processed waypoint from map_image
-#   @param realPoseStamped The processed waypoint in dimesions relative to RTAB-MAP
+#   @param realPoseStamped The processed waypoint in dimesions 
+#                          relative to RTAB-MAP
 def realPoseStampedReceiverCallback(realPoseStamped):
     rospy.loginfo("Received Real PoseStamped.")
     for waypoint in waypointsPatrolList:
@@ -95,12 +107,14 @@ def realPoseStampedReceiverCallback(realPoseStamped):
             index = waypointsPatrolList.index(waypoint)
             waypointsPatrolList[index][REAL_POSESTAMPED_INDEX] = realPoseStamped
 
-            # Checking if it was the last real PoseStamped to add to the list
+            # Checking if it was the last real PoseStamped to add 
+            # to the list
             if (waypointsPatrolList.index(waypoint) + 1) == len(waypointsPatrolList):
                 startPatrolNavigation()
             break
 
-##  This function starts sending the different waypoint that were converted in the list
+##  This function starts sending the different waypoint that were 
+#   converted in the list
 def startPatrolNavigation():
     global currentWaypointIndex, waypointsPatrolList, patrolId
 
@@ -117,18 +131,20 @@ def startPatrolNavigation():
 
 
 ##  Callback funtion that handles the reception of new patrol plans.
-#   This function will decode incoming JSON message and convert the waypoints
-#   for them to be sent to move_base sequentially.
+#   This function will decode incoming JSON message and convert the
+#   waypoints for them to be sent to move_base sequentially.
 #   @param waypointsJsonStr The patrol plan in JSON representation
 def waypointsListReceiverCallback(waypointsJsonStr):
     global waypointsPatrolList, isLooped, patrolId
     # Log Strings received before other formats generation
     rospy.loginfo(rospy.get_caller_id() + "Received json Strings waypoints :   %s   ", waypointsJsonStr.data)
 
-    # Clear global patrol list for upcoming new list of waypoints and loop flag
+    # Clear global patrol list for upcoming new list of waypoints 
+    # and loop flag
     del waypointsPatrolList[:]
     isLooped = False
 
+    # Loads and ensure the data type is correct. Otherwise stop processing waypoints list.
     try:
         waypointsJsonBuffer = json.loads(waypointsJsonStr.data)
     except TypeError:
@@ -136,6 +152,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
         rospy.loginfo("Ignoring waypoints list received...")
         return
 
+    # Buffer and ensure the key "patrol" is present. Otherwise stop processing waypoints list.
     try:
          waypoints = waypointsJsonBuffer["patrol"]
     except KeyError:
@@ -143,6 +160,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
         rospy.loginfo("Ignoring waypoints list received...")
         return
 
+    # Buffer and ensure the key "id" is present. Otherwise continue buffering json data.
     try:
         patrolId = waypointsJsonBuffer["id"]
     except KeyError:
@@ -151,6 +169,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
         hasher.update(waypointsJsonStr.data)
         patrolId = hasher.hexdigest()
 
+    # Buffer and ensure the key "loop" is present. Otherwise assume no loops for this patrol.
     try:
          isLooped = waypointsJsonBuffer["loop"]
     except KeyError:
@@ -159,24 +178,30 @@ def waypointsListReceiverCallback(waypointsJsonStr):
 
     for wpStr in waypoints:
         # Format waypoint to Pixel PoseStamped
-        pixelPoseStamped = wayPointToPixelPoseStamped(wpStr)
+        pixelPoseStamped = waypointToPixelPoseStamped(wpStr)
 
-        # Fill global patrol list of waypoints with all formats generated
-        # (Except Real PoseStamped that as an asynchrous response, so force to
-        # None value)
-        waypointsPatrolList.append([wpStr, pixelPoseStamped, None, None])# For now all waypoints status (column 4) are None values
+        # Fill global patrol list of waypoints with all formats 
+        # generated
+        # (Except Real PoseStamped that as an asynchrous response,
+        # so force to None value)
+        # For now all waypoints status (column 4) are None values
+        waypointsPatrolList.append([wpStr, pixelPoseStamped, None, None])
 
 
-    # Loop that publish every Pixel PoseStamped to map_image_generator
-    # This loop is after to ensure the partol list is ready to be iterate before
+    # Loop that publish every Pixel PoseStamped to 
+    # map_image_generator
+    # This loop is after to ensure the partol list is ready to be 
+    # iterate before
     # waiting asynchrous response from map_image_generator
     for wp in waypointsPatrolList:
         # Format Pixel PoseStamped to Real PoseStamped
         pixelPoseStampedToRealPoseStamped(wp[PIXEL_POSESTAMPED_INDEX])
 
-##  Interprets interruption requests. Will stop patrol and send confirmation if
+##  Interprets interruption requests. Will stop patrol and send 
+#   confirmation if
 #   patrol plan is stopped.
-#   @param interruptJsonStr The ROS message containing the JSON string with the interrupt message.
+#   @param interruptJsonStr The ROS message containing the JSON 
+#                           string with the interrupt message.
 def interruptReceiverCallback(interruptJsonStr):
     # Log Strings received
     rospy.loginfo(rospy.get_caller_id() + "Received interrupt :   %s   ", interruptJsonStr.data)
@@ -221,10 +246,13 @@ def getStatusString(uInt8Status):
         return "ERROR/UNKNOWN"
 
 ##  Publishes the advancement of a patrol
-#   @param patrolId The unique id of the patrol in string representation
+#   @param patrolId The unique id of the patrol in string 
+#                   representation
 #   @param status String representation of the event to report
-#   @param acheivedWaypointCount Number of waypoints that have succesfully been reached
-#   @param plannedWaypointCount Number of waypoints in the current patrol
+#   @param acheivedWaypointCount Number of waypoints that have 
+#                                succesfully been reached
+#   @param plannedWaypointCount Number of waypoints in the current 
+#                               patrol
 def publishPatrolFeedBack(patrolId, status, acheivedWaypointCount, plannedWaypointCount):
     assert isinstance(patrolId, str), "patrolId expected <type 'str'> and got "+str(type(patrolId))
     assert isinstance(status, str), "patrolId expected <type 'str'> and got "+str(type(status))
@@ -239,9 +267,10 @@ def publishPatrolFeedBack(patrolId, status, acheivedWaypointCount, plannedWaypoi
             }
     toElectron.publish(json.dumps(feedback))
 
-##  @fn sendGoalDoneCallback(terminalState, result)
-#   @brief Callback function called when an action sent to move_base is done
-#   @param terminalState The state of the action (ie: SUCCEEDED / ABORTED)
+##  Callback function called when an action sent to move_base is 
+#   done
+#   @param terminalState The state of the action 
+#                        (ie: SUCCEEDED / ABORTED)
 #   @param result
 def sendGoalDoneCallback(terminalState, result):
     global waypointsPatrolList, currentWaypointIndex, patrolId
@@ -256,12 +285,15 @@ def sendGoalDoneCallback(terminalState, result):
         return
     else:
         currentWaypointIndex += 1
+        # Check if all waypoints are done
         if currentWaypointIndex >= len(waypointsPatrolList):
             publishPatrolFeedBack(patrolId, "finished", currentWaypointIndex, len(waypointsPatrolList))
             rospy.loginfo("Patrol done. All waypoints reached.")
+            # Check if the patrol has to be restarted
             if isLooped == True:
                 rospy.loginfo("Restarting patrol with same waypoints...")
                 startPatrolNavigation()
+        # Proceed to next waypoint of the patrol
         else:
             publishPatrolFeedBack(patrolId, "waypoint_reached", currentWaypointIndex, len(waypointsPatrolList))
             goal = MoveBaseGoal()
@@ -270,11 +302,15 @@ def sendGoalDoneCallback(terminalState, result):
             actionClient.send_goal(goal, sendGoalDoneCallback)
 
 
-## @fn patrolExecutive()
-#  @brief Main function starting the Patrol Executive Node. Subcription to three topics are made : fromMapimageGenerator, fromElectronWaypoints, fromElectronInterrupt.
+##  Main function starting the Patrol Executive Node. Subcription to
+#   three topics are made : fromMapimageGenerator, 
+#                           fromElectronWaypoints, 
+#                           fromElectronInterrupt.
 def patrolExecutive():
     # Node name defined as patrolExecutive
-    rospy.init_node("patrolExecutive", anonymous=True) # anonymous=True keeps each patrolExecutive nodes unique if there were many
+    rospy.init_node("patrolExecutive", anonymous=True) 
+    # anonymous=True keeps each patrolExecutive nodes unique if 
+    # there were many
 
     # Subscribing to topic 'fromMapImageGenerator' with callback
     rospy.Subscriber("fromMapImageGenerator", PoseStamped, realPoseStampedReceiverCallback)
