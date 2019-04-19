@@ -1,4 +1,5 @@
 controller_frequency: 20.0
+planner_frequency: 5.0
 
 TrajectoryPlannerROS:
   max_vel_x: 0.5
@@ -11,8 +12,12 @@ TrajectoryPlannerROS:
   acc_lim_x: 0.3
 
   pdist_scale: 0.8
-  occdist_scale: 0.005
+  gdist_scale: 1.2
+  occdist_scale: 0.01
 
   holonomic_robot: false
 
   xy_goal_tolerance: 0.3
+
+NavfnROS:
+  allow_unknown: false

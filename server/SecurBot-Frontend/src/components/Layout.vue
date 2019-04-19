@@ -280,26 +280,32 @@ export default {
     dataOpenListenerCB(easyrtcid) {
       console.warn(`Data channel open with ${easyrtcid}`);
       this.isDataChannelAvailable = true;
-      this.teleopBus.$emit('on-joystick-state-changed', 'enable');
+      // this.teleopBus.$emit('on-joystick-state-changed', 'enable');
 
       // This request the stream from the robot so the operator doesn't have to have
       // a local stream to get the feed from the robot. It also allows to get both stream
       // from robot, which might have been a problem previously. They can be somewhere else.
-      this.requestFeedFromPeer('camera');
-      this.requestFeedFromPeer('map');
+      if (!this.mapStream) {
+        console.log('Requesting the map stream from peer...');
+        this.requestFeedFromPeer('map');
+      }
+      if (!this.cameraStream) {
+        console.log('Requesting the camera stream from peer...');
+        this.requestFeedFromPeer('camera');
+      }
     },
     // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
     dataCloseListenerCB(easyrtcid) {
       console.warn(`Data channel close with ${easyrtcid}`);
       this.isDataChannelAvailable = false;
-      this.teleopBus.$emit('on-joystick-state-changed', 'disable');
+      // this.teleopBus.$emit('on-joystick-state-changed', 'disable');
     },
     /*
       onJoystickPositionChange(): on event "joystick-position-change", this function is called
         Desc: Send the JSON string received through the data channel.
     */
     onJoystickPositionChange(data) {
-      this.sendData(this.peerId, 'joystick-position', data);
+      this.sendData(this.peerId, 'joystick-position', JSON.stringify(data));
     },
     /**
      * Sends a navigation waypoint to the robot in a JSON string

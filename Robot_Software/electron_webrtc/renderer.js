@@ -1,4 +1,6 @@
 let operatorID = null
+let virtualDevicesName = ['virtual_map', 'virtual_camera'];
+let streamNames = [];
 
 ipc.on('rosdata', (emitter, data) => {
     console.log(data)
@@ -19,9 +21,11 @@ easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
 
 function get_video_id(label) {
     return new Promise((resolve, reject) => {
-        easyrtc.getVideoSourceList(list => {
+        easyrtc.getVideoSourceList(device => {
 
-            var videoSource = list.find(source => {
+            console.log(`Looking for ${device}...`);
+
+            var videoSource = device.find(source => {
                 return source.label.toString().trim() === label.trim()
             })
 
@@ -37,7 +41,7 @@ function get_video_id(label) {
     })
 }
 
-function dataCallback(easyrtcid, msgType, msgData, targeting) {
+function dataCallback(easyrtcid, msgType, msgData) {
     console.log(msgData)
     ipc.send('msg', msgData)
 }
@@ -47,6 +51,17 @@ function patrolReceivedCallback(sourceId, msgType, patrolJsonString) {
     ipc.send('patrol-plan', patrolJsonString)
 }
 
+function teleopCallback(easyrtcid, msgType, msgData) {
+    console.log(msgData);
+    ipc.send('msg', msgData)
+}
+
+function streamRequestCallback(easyrtcid, msgType, msgData) {
+    console.log(`Received request of type ${msgType} for ${msgData}`)
+    if(msgData === "map" || msgData === "camera") {
+        easyrtc.addStreamToCall(easyrtcid, msgData);
+    }
+}
 
 function fetchParameters() {
 
@@ -65,7 +80,22 @@ async function my_init() {
 
     easyrtc.setRoomApiField('default', 'type', 'robot');
     easyrtc.setSocketUrl(parameters.webRtcServerUrl);
-    easyrtc.setRoomOccupantListener( loggedInListener);
+    easyrtc.setRoomOccupantListener(loggedInListener);
+
+    easyrtc.enableVideo(true)
+    easyrtc.enableAudio(false)
+
+    easyrtc.enableVideoReceive(false);
+    easyrtc.enableAudioReceive(false);
+    easyrtc.enableDataChannels(true);
+
+    easyrtc.setPeerListener(dataCallback, 'msg')
+    easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal')
+    easyrtc.setPeerListener(teleopCallback, 'joystick-position')
+    easyrtc.setPeerListener(streamRequestCallback, 'request-feed')
+
+    easyrtc.setAcceptChecker(acceptCall)
+
     var connectSuccess = function(myId) {
         console.log("My easyrtcid is " + myId);
     }
@@ -73,23 +103,36 @@ async function my_init() {
         console.log(errText);
     }
 
-    get_video_id(parameters.videoDeviceLabel).then(videoId => {
-        easyrtc.setVideoSource(videoId)
-        easyrtc.enableDataChannels(true)
-        easyrtc.enableAudio(false)
-        easyrtc.setPeerListener(dataCallback, 'msg')
-        easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan')
+    let isConnected = false;
 
-        easyrtc.initMediaSource(
-              function(){        // success callback
-                  var selfVideo = document.getElementById("self");
-                  easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-                  easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
-              },
-              connectFailure,
-              "map"
-        );
-    })
+    easyrtc.getVideoSourceList(device => {
+        for (deviceName of virtualDevicesName) {
+
+            let videoSource = device.find(source => {
+                return source.label.toString().trim() === deviceName.trim()
+            })
+
+            if(videoSource) {
+                console.log(`Found [${videoSource.label}] stream`)
+                easyrtc.setVideoSource(videoSource.id)
+                let streamName = videoSource.label.split('_')[1];
+
+                streamNames.push(streamName);
+
+                easyrtc.initMediaSource(
+                  function(){        // success callback
+                     console.log(`Initializing ${streamName}...`);
+                      if(!isConnected){
+                        easyrtc.connect("easyrtc.securbot", connectSuccess, connectFailure);
+                        isConnected = true;
+                      }
+                  },
+                  connectFailure,
+                  streamName
+            );
+            }
+        }
+    });
  }
 
 
@@ -109,6 +152,15 @@ function loggedInListener(roomName, otherPeers) {
         label = document.createTextNode(i);
         button.appendChild(label);
         otherClientDiv.appendChild(button);
+    }
+}
+
+// This should one day accept every operator connection, but for now it only accept the first one to call.
+function acceptCall(easyrtcid, acceptor) {
+    if(operatorID === null) {
+        operatorID = easyrtcid;
+        console.log(`Accepting call from ${easyrtcid}`);
+        acceptor(true);
     }
 }
 
