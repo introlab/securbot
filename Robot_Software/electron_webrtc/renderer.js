@@ -68,9 +68,10 @@ function fetchParameters() {
 function acceptCall(easyrtcid, acceptor) {
   if (operatorID === null) {
     operatorID = easyrtcid;
-    console.log(`Accepting call from ${easyrtcid}`);
+    console.log(`Accepting call from ${easyrtcid}, this operator can control me!`);
     acceptor(true);
   } else {
+    console.log(`Accepting call from ${easyrtcid}, this operator can only view me!`);
     acceptor(true);
   }
 }

@@ -297,7 +297,7 @@ export default {
     dataCloseListenerCB(easyrtcid) {
       console.warn(`Data channel close with ${easyrtcid} : ${this.peerId}`);
       this.isDataChannelAvailable = false;
-      if (easyrtcid === this.peerId) {
+      if (easyrtcid === this.peerId || !this.peerId) {
         this.peerId = null;
         this.teleopBus.$emit('connection-changed', 'disconnect');
       }

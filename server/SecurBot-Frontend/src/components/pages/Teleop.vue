@@ -130,7 +130,6 @@ export default {
     });
 
     this.setJoystickStyle();
-    this.init();
   },
   /**
    * Lifecycle Hook - mounted
