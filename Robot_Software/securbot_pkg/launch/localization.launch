@@ -1,3 +1,7 @@
+<!--
+    Navigates the map without saving to database
+-->
+
 <launch>
 	<!-- Robot -->
 	<include file="$(find securbot_pkg)/launch/includes/securbot_bringup.launch" />
