@@ -1,50 +1,46 @@
 #!/usr/bin/python
 
 # Note definition: Waypoints is, by definition according to SecurBot, a goal to
-#                 reach in the robot's physical environment
+#                 reach in the robot's physical environment.
 
-import rospy
-
-# Json Strings formats (from web client) to PoseStamped for RTAB-Map
-import json, hashlib, actionlib, time
+import rospy, json, hashlib, actionlib, time
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
 from move_base_msgs.msg import MoveBaseActionGoal
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from actionlib_msgs.msg import GoalStatus
-
-# Yaws transformation into quaternions
 from tf.transformations import quaternion_from_euler
 
-# GLOBAL VARIABLES
-# Global indexes definitions
-JSON_STRING_WAYPOINT_INDEX = 0
 PIXEL_POSESTAMPED_INDEX = 1
 REAL_POSESTAMPED_INDEX = 2
-WAYPOINT_STATUS_INDEX = 3
 
-# Global UINT8 waypoints statuses definitions
-PENDING=0
-ACTIVE=1
-PREEMPTED=2
-SUCCEEDED=3
-ABORTED=4
-REJECTED=5
-PREEMPTING=6
-RECALLING=7
-RECALLED=8
-LOST=9
+class Status(Enum):
+    PENDING = 0
+    ACTIVE = 1
+    PREEMPTED = 2
+    SUCCEEDED = 3
+    ABORTED = 4
+    REJECTED = 5
+    PREEMPTING = 6
+    RECALLING = 7
+    RECALLED = 8
+    LOST = 9
 
-
+# Global action client used to sned waypoints to move_base
 actionClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+i
 
 # Global list of waypoints (2D with 4 columns) in different formats (Strings,
 # Pixel PoseStampeds, Real PoseStampeds), plus their status
 waypointsPatrolList = []
-currentGoalIndex = 0
+
+# Global current waypoint index in the waypoints list
+currentWaypointIndex = 0
 
 # Global indicating if the patrol received is looped
 isLooped = False
+
+# Global patrol ID
 patrolId = ""
 
 # Global publisher used to send Pixel PoseStampeds in order to format them into
@@ -53,14 +49,6 @@ toMapImageGenerator = rospy.Publisher("toMapImageGenerator", PoseStamped, queue_
 
 # Global publisher to send status that waypoint is reached toward Electron node
 toElectron = rospy.Publisher("toElectron", String, queue_size=20)
-
-# TODO Used instead into waypointsPatrolList
-class Waypoint:
-    def __init__(self, string, pixelPoseStamped, realPoseStamped, status):
-        self.string = string
-        self.pixelPoseStamped =pixelPoseStamped
-        self.realPoseStamped = realPoseStamped
-        self.status = status
 
 ##  Format Waypoint to Pixel PoseStamped
 #   @param waypointObject The waypoint in dictionnary form from the JSON object
@@ -114,17 +102,17 @@ def realPoseStampedReceiverCallback(realPoseStamped):
 
 ##  This function starts sending the different waypoint that were converted in the list
 def startPatrolNavigation():
-    global currentGoalIndex, waypointsPatrolList, patrolId
+    global currentWaypointIndex, waypointsPatrolList, patrolId
 
     # Make sure no goals are active
     actionClient.cancel_all_goals()
-    currentGoalIndex = 0
+    currentWaypointIndex = 0
 
     rospy.loginfo("Starting navigation")
-    publishPatrolFeedBack(patrolId, "start", currentGoalIndex, len(waypointsPatrolList))
+    publishPatrolFeedBack(patrolId, "start", currentWaypointIndex, len(waypointsPatrolList))
 
     goal = MoveBaseGoal()
-    goal.target_pose = waypointsPatrolList[currentGoalIndex][REAL_POSESTAMPED_INDEX]
+    goal.target_pose = waypointsPatrolList[currentWaypointIndex][REAL_POSESTAMPED_INDEX]
     actionClient.send_goal(goal, sendGoalDoneCallback)
 
 
@@ -200,7 +188,7 @@ def interruptReceiverCallback(interruptJsonStr):
 
     if isPatrolInterrupted:
         actionClient.cancel_all_goals()
-        publishPatrolFeedBack(patrolId, "interrupt", currentGoalIndex, len(waypointsPatrolList))
+        publishPatrolFeedBack(patrolId, "interrupt", currentWaypointIndex, len(waypointsPatrolList))
         rospy.loginfo("Patrol interrupted.")
     else:
         rospy.loginfo("Patrol continuing. No interrupts received.")
@@ -209,25 +197,25 @@ def interruptReceiverCallback(interruptJsonStr):
 #   @param uInt8Status move_base status code
 #   @return String representation of the status
 def getStatusString(uInt8Status):
-    if uInt8Status == PENDING:
+    if uInt8Status == Status.PENDING:
         return "PENDING"
-    elif uInt8Status == ACTIVE:
+    elif uInt8Status == Status.ACTIVE:
         return "ACTIVE"
-    elif uInt8Status == PREEMPTED:
+    elif uInt8Status == Status.PREEMPTED:
         return "PREEMPTED"
-    elif uInt8Status == SUCCEEDED:
+    elif uInt8Status == Status.SUCCEEDED:
         return "SUCCEEDED"
-    elif uInt8Status == ABORTED:
+    elif uInt8Status == Status.ABORTED:
         return "ABORTED"
-    elif uInt8Status == REJECTED:
+    elif uInt8Status == Status.REJECTED:
         return "REJECTED"
-    elif uInt8Status == PREEMPTING:
+    elif uInt8Status == Status.PREEMPTING:
         return "PREEMPTING"
-    elif uInt8Status == RECALLING:
+    elif uInt8Status == Status.RECALLING:
         return "RECALLING"
-    elif uInt8Status == RECALLED:
+    elif uInt8Status == Status.RECALLED:
         return "RECALLED"
-    elif uInt8Status == LOST:
+    elif uInt8Status == Status.LOST:
         return "LOST"
     else:
         return "ERROR/UNKNOWN"
@@ -251,32 +239,33 @@ def publishPatrolFeedBack(patrolId, status, acheivedWaypointCount, plannedWaypoi
             }
     toElectron.publish(json.dumps(feedback))
 
-##  Callback function called when an action sent to move_base is done
+##  @fn sendGoalDoneCallback(terminalState, result)
+#   @brief Callback function called when an action sent to move_base is done
 #   @param terminalState The state of the action (ie: SUCCEEDED / ABORTED)
 #   @param result
 def sendGoalDoneCallback(terminalState, result):
-    global waypointsPatrolList, currentGoalIndex, patrolId
+    global waypointsPatrolList, currentWaypointIndex, patrolId
 
     rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
 
     # Check if goal was successfully achieved
-    if terminalState != SUCCEEDED:
+    if terminalState != Status.SUCCEEDED:
         # Stop patrol if goal could not be reached
         rospy.loginfo("Goal was not reached: terminating patrol")
-        publishPatrolFeedBack(patrolId, "failed", currentGoalIndex, len(waypointsPatrolList))
+        publishPatrolFeedBack(patrolId, "failed", currentWaypointIndex, len(waypointsPatrolList))
         return
     else:
-        currentGoalIndex += 1
-        if currentGoalIndex >= len(waypointsPatrolList):
-            publishPatrolFeedBack(patrolId, "finished", currentGoalIndex, len(waypointsPatrolList))
+        currentWaypointIndex += 1
+        if currentWaypointIndex >= len(waypointsPatrolList):
+            publishPatrolFeedBack(patrolId, "finished", currentWaypointIndex, len(waypointsPatrolList))
             rospy.loginfo("Patrol done. All waypoints reached.")
             if isLooped == True:
                 rospy.loginfo("Restarting patrol with same waypoints...")
                 startPatrolNavigation()
         else:
-            publishPatrolFeedBack(patrolId, "waypoint_reached", currentGoalIndex, len(waypointsPatrolList))
+            publishPatrolFeedBack(patrolId, "waypoint_reached", currentWaypointIndex, len(waypointsPatrolList))
             goal = MoveBaseGoal()
-            goal.target_pose = waypointsPatrolList[currentGoalIndex][REAL_POSESTAMPED_INDEX]
+            goal.target_pose = waypointsPatrolList[currentWaypointIndex][REAL_POSESTAMPED_INDEX]
             rospy.loginfo("Processing next waypoint...")
             actionClient.send_goal(goal, sendGoalDoneCallback)
 
