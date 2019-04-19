@@ -244,7 +244,6 @@ export default {
               out of our control (other client responsible)
     */
     closePeerVideo(easyrtcid) {
-      this.peerId = null;
       this.clearHTMLVideoStream();
     },
     /*
@@ -296,8 +295,12 @@ export default {
     },
     // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
     dataCloseListenerCB(easyrtcid) {
-      console.warn(`Data channel close with ${easyrtcid}`);
+      console.warn(`Data channel close with ${easyrtcid} : ${this.peerId}`);
       this.isDataChannelAvailable = false;
+      if (easyrtcid === this.peerId) {
+        this.peerId = null;
+        this.teleopBus.$emit('connection-changed', 'disconnect');
+      }
       this.teleopBus.$emit('on-joystick-state-changed', 'disable');
     },
     /*
