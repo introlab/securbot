@@ -8,12 +8,8 @@ from geometry_msgs.msg import PoseStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 FAKE_PATROL_1 = '{ "patrol":[ {"x":1,"y":2,"yaw":3}, {"x":2,"y":1,"yaw":4}, {"x":3,"y":0,"yaw":3}, {"x":4,"y":-1,"yaw":4} ], "loop": false }'
-
-FAKE_PATROL_2 = '{ "patrol":[ {"x":1,"y":2,"yaw":3} ], "loop": false }'
-
-TIMEOUT = 2 # seconds
-
 INTERRUPT_TRUE_JSON = json.dumps({"interrupt":True})
+TIMEOUT = 2 # seconds
 
 class  PatrolTestSuite(unittest.TestCase):
     def __init__(self, *args):
@@ -57,7 +53,7 @@ class  PatrolTestSuite(unittest.TestCase):
     # TEST FUNCTIONS
     #
 
-    # Regular waypoint navigation
+    ## Regular waypoint navigation
     def test_regular_patrol(self):
         self.patrolPublisher.publish(FAKE_PATROL_1)
         patrolDict = json.loads(FAKE_PATROL_1)
@@ -69,7 +65,7 @@ class  PatrolTestSuite(unittest.TestCase):
         self.assertEquals(len(self.conversionRequests), 4,
                 'Move Base received :' + str(len(self.conversionRequests)) + ' elements')
 
-        # Send converted waypoints
+        ## Send converted waypoints
         for waypoint in self.conversionRequests:
             # Modifying waypoint to access correct waypoints are registered
             waypoint.pose.position.x += 1
@@ -84,7 +80,7 @@ class  PatrolTestSuite(unittest.TestCase):
         startMessage = self.waypointsDoneStatus.popleft()
         self.assertEquals(startMessage['status'], 'start')
 
-
+        ## Process each waypoint as if it had been navigated to
         for index, waypoint in enumerate(patrolDict['patrol']):
             deadline = time.time() + TIMEOUT
             while not rospy.is_shutdown() and not self.actionServer.is_new_goal_available() and time.time() < deadline:
