@@ -35,18 +35,31 @@
         <b-row
           id="joystick-row"
           class="position-relative h-50 m-auto p-4">
-          <div
-            id="joystick-container"
-            class="position-relative m-auto"
-            :style="joystickStyle">
+          <div class="position-relative h-100 w-100">
             <div
-              class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
-              style="top:0;left:0;">
-              <joystick
-                :enable="enableJoystick"
-                :absolute-max-x="1"
-                :absolute-max-y="1"
-                :bus="bus" />
+              class="position-absolute"
+              style="top:0;right:0;z-index:10;">
+              <toggle-button
+                :value="enableJoystick"
+                :color="switchColor"
+                :sync="true"
+                :labels="true"
+                :disabled="disableJoystick"
+                @change="enableJoystick = $event.value" />
+            </div>
+            <div
+              class="position-relative m-auto"
+              :style="joystickStyle">
+              <div
+                class="position-absolute h-100 w-100 border
+              border-secondary rounded-circle shadow-sb"
+                style="top:0;left:0;">
+                <joystick
+                  :enable="enableJoystick"
+                  :absolute-max-x="1"
+                  :absolute-max-y="1"
+                  :bus="bus" />
+              </div>
             </div>
           </div>
         </b-row>
@@ -57,6 +70,7 @@
 
 
 <script>
+import { ToggleButton } from 'vue-js-toggle-button';
 import Vue from 'vue';
 
 import VideoBox from '../widget/VideoBox';
@@ -80,6 +94,7 @@ export default {
   components: {
     VideoBox,
     Joystick,
+    ToggleButton,
   },
   props: {
     /**
@@ -102,10 +117,16 @@ export default {
       showCamera: true,
       showMap: true,
       enableJoystick: false,
+      disableJoystick: true,
       joystickStyle: {
         width: '100%',
         'padding-top': '100%',
         height: 0,
+      },
+      switchColor: {
+        checked: '#00A759',
+        unchecked: '#808080',
+        disabled: '#E8E8E8',
       },
     };
   },
@@ -151,9 +172,10 @@ export default {
     */
     changeJoystickState(state) {
       if (state === 'enable') {
-        this.enableJoystick = true;
+        this.disableJoystick = false;
       } else {
         this.enableJoystick = false;
+        this.disableJoystick = true;
       }
     },
     setJoystickStyle() {
