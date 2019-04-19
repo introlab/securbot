@@ -122,10 +122,6 @@ export default {
    */
   mounted() {
     console.log('Teleop have been mounted');
-<<<<<<< HEAD
-    this.bus.$emit('mounted');
-    this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
-=======
     this.router.$emit('mounted');
     this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
 
@@ -135,7 +131,6 @@ export default {
 
     this.setJoystickStyle();
     this.init();
->>>>>>> 78f54e90cc21ee3bc97e179abc91cd48accfd80f
   },
   /**
    * Lifecycle Hook - mounted
