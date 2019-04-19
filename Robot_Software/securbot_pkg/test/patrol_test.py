@@ -52,6 +52,7 @@ class  PatrolTestSuite(unittest.TestCase):
         self.conversionRequests = []
         self.waypointsDoneStatus.clear()
 
+
     #
     # TEST FUNCTIONS
     #
@@ -109,26 +110,59 @@ class  PatrolTestSuite(unittest.TestCase):
             self.assertEquals(doneStatus['goalsReached'], index + 1, 'Waypoint completion feedback failed')
 
 
-    # Send waypoint and expect it is cancelled and send feedback to electron's node
+    ## Testing waypoint cancellation after waypoint conversion by map image
     def test_waypoint_is_cancelled(self):
 
-        time.sleep(3)
+        ## Publish patrol plan
+        self.patrolPublisher.publish(FAKE_PATROL_1)
 
-        # Publish fake patrol
-        self.patrolPublisher.publish(FAKE_PATROL_2)
-        time.sleep(3)
+        # Convert waypoints
+        deadline = time.time() + TIMEOUT
+        while not rospy.is_shutdown() and len(self.conversionRequests) < 4 and time.time() < deadline:
+            rospy.sleep(0.1)
+        self.assertEquals(len(self.conversionRequests), 4,
+                'Move Base received :' + str(len(self.conversionRequests)) + ' elements')
+        for waypoint in self.conversionRequests:
+            # Modifying waypoint to access correct waypoints are registered
+            waypoint.pose.position.x += 1
+            self.mapImageOutput.publish(waypoint)
+        del self.conversionRequests[:]
 
-        # Publish interrupt
+        # Checking for round start message
+        deadline = time.time() + TIMEOUT
+        while not rospy.is_shutdown() and len(self.waypointsDoneStatus) < 1 and time.time() < deadline:
+            rospy.sleep(0.1)
+        self.assertGreater(len(self.waypointsDoneStatus), 0)
+        startMessage = self.waypointsDoneStatus.popleft()
+        self.assertEquals(startMessage['status'], 'start')
+
+        # Confirm the first move_base goal is received
+        deadline = time.time() + TIMEOUT
+        while not rospy.is_shutdown() and not self.actionServer.is_new_goal_available() and time.time() < deadline:
+            rospy.sleep(0.1)
+        self.assertTrue(self.actionServer.is_new_goal_available(),
+                'Expecting move_base to receive a goal')
+        # Accept first move_base goal
+        self.actionServer.accept_new_goal()
+
+        ## Publish interrupt
         self.patrolCanceller.publish(INTERRUPT_TRUE_JSON)
-        time.sleep(3)
 
-        # Assert waypoint have been interrupted
-        self.assertTrue(len(self.waypointsDoneStatus) > 0)
+        ## Assert waypoint have been interrupted
+        deadline = time.time() + TIMEOUT
+        while not rospy.is_shutdown() and len(self.waypointsDoneStatus) < 1 and time.time() < deadline:
+            rospy.sleep(0.1)
+        self.assertGreater(len(self.waypointsDoneStatus), 0)
+        startMessage = self.waypointsDoneStatus.popleft()
+        self.assertEquals(startMessage['status'], 'interrupt')
 
-        for status in self.waypointsDoneStatus:
-            self.assertNotEqual(status, "PENDING")
-            self.assertNotEqual(status, "ACTIVE")
-            self.assertNotEqual(status, "SUCCEEDED")
+        ## Assert waypoint cancellation request
+        deadline = time.time() + TIMEOUT
+        while not rospy.is_shutdown() and not self.actionServer.is_preempt_requested() and time.time() < deadline:
+            rospy.sleep(0.1)
+        self.assertTrue(self.actionServer.is_preempt_requested(),
+                'Expecting move_base action cancellation')
+
 
 if __name__ == '__main__':
     import rostest

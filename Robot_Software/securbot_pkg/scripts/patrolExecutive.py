@@ -197,6 +197,7 @@ def interruptReceiverCallback(interruptJsonStr):
 
     if isPatrolInterrupted:
         actionClient.cancel_all_goals()
+        publishPatrolFeedBack(patrolId, "interrupt", currentGoalIndex, len(waypointsPatrolList))
         rospy.loginfo("Patrol interrupted.")
     else:
         rospy.loginfo("Patrol continuing. No interrupts received.")
