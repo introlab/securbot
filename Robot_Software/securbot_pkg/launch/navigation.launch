@@ -1,9 +1,13 @@
+<!--
+    The move_base launch settings to interact with rtab_map
+-->
+
 <launch>
-	<group>
-		<remap from="base_scan" to="/scan"/>
-		<remap from="map" to="/rtabmap/grid_map"/>
-		<remap from="/planner_goal" to="/move_base_simple/goal" />
-		<remap from="/odom" to="/rtabmap/odom"  />
+    <group>
+        <remap from="base_scan" to="/scan"/>
+        <remap from="map" to="/rtabmap/grid_map"/>
+        <remap from="/planner_goal" to="/move_base_simple/goal" />
+        <remap from="/odom" to="/rtabmap/odom"  />
 
 		<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 			<rosparam file="$(find securbot_pkg)/config/$(env SECURBOT_BASE)/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
