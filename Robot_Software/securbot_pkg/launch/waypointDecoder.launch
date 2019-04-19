@@ -6,13 +6,6 @@
 -->
 
 <launch>
-	<!-- Kernel Modules -->
-	<node pkg="securbot_pkg" type="waypointDecoder.py" name="waypointDecoder" respawn="true">
-	
-		<!-- Allows to change topic of subscriber fromElectron --> 
-		<remap from="fromElectron" to="fromElectron"/>
-
-		<!-- Allows to change topic of publisher map_image_generator/goal -->
-		<remap from="map_image_generator/goal" to="map_image_generator/goal"/>	
-	</node>
+    <node pkg="securbot_pkg" type="waypointDecoder.py" name="waypointDecoder" respawn="true">
+    </node>
 </launch>

@@ -23,9 +23,7 @@
           id="nav_collapse"
           is-nav>
           <b-navbar-nav>
-            <b-nav-item
-              to="teleop"
-              active>
+            <b-nav-item to="teleop">
               Teleoperation
             </b-nav-item>
             <b-nav-item to="patrol">
@@ -110,6 +108,7 @@ export default {
   mounted() {
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
+    this.teleopBus.$on('send-patrol', this.sendGoal);
     this.routeBus.$on('mounted', this.setHTMLVideoStream);
     this.routeBus.$on('destroyed', this.clearHTMLVideoStream);
 
@@ -145,8 +144,15 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'operator');
 
       // Uncomment next line to use the dev server
-       easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
+      easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
 
+      // Uncomment initialisation to use local stream for map (debugging only)
+      // easyrtc.initMediaSource(() => {
+      //   this.mapStream = easyrtc.getLocalStream();
+      //   easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      // }, this.loginFailure);
+
+      // This is the production line, only comment if necessary for debugging
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
@@ -279,8 +285,14 @@ export default {
       // This request the stream from the robot so the operator doesn't have to have
       // a local stream to get the feed from the robot. It also allows to get both stream
       // from robot, which might have been a problem previously. They can be somewhere else.
-      this.requestFeedFromPeer('camera');
-      this.requestFeedFromPeer('map');
+      if (!this.mapStream) {
+        console.log('Requesting the map stream from peer...');
+        this.requestFeedFromPeer('map');
+      }
+      if (!this.cameraStream) {
+        console.log('Requesting the camera stream from peer...');
+        this.requestFeedFromPeer('camera');
+      }
     },
     // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
     dataCloseListenerCB(easyrtcid) {
@@ -293,7 +305,13 @@ export default {
         Desc: Send the JSON string received through the data channel.
     */
     onJoystickPositionChange(data) {
-      this.sendData(this.peerId, 'joystick-position', data);
+      this.sendData(this.peerId, 'joystick-position', JSON.stringify(data));
+    },
+    /**
+     * Sends a navigation waypoint to the robot in a JSON string
+     */
+    sendGoal(goalJsonString) {
+      this.sendData(this.peerId, 'nav-goal', goalJsonString);
     },
     requestFeedFromPeer(feed) {
       this.sendData(this.peerId, 'request-feed', feed);

@@ -20,32 +20,33 @@
           </th>
         </thead>
         <tbody>
-          <!-- Ignore this "problem" -Edouard -->
-          <tr
-            v-for="(waypoint,index) of waypointList"
-            class="border-bottom">
-            <td class="w-25">
-              {{ waypoint.x.toFixed(1) }}
-            </td>
-            <td class="w-25">
-              {{ waypoint.y.toFixed(1) }}
-            </td>
-            <td class="w-25">
-              {{ waypoint.yaw.toFixed(1) }}
-            </td>
-            <td class="w-25">
-              <button
-                :id="'removeBtn'+index"
-                type="button"
-                class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                @click="removeWaypointFromList(index)">
-                <img
-                  src="~/open-iconic/svg/trash.svg"
-                  alt=""
-                  style="width:12px;height:12px">
-              </button>
-            </td>
-          </tr>
+          <template v-for="(waypoint, index) of waypointList">
+            <tr
+              :key="waypoint.dateTime"
+              class="border-bottom">
+              <td class="w-25">
+                {{ waypoint.x.toFixed(1) }}
+              </td>
+              <td class="w-25">
+                {{ waypoint.y.toFixed(1) }}
+              </td>
+              <td class="w-25">
+                {{ waypoint.dateTime }}  <!-- waypoint.yaw.toFixed(1) -->
+              </td>
+              <td class="w-25">
+                <button
+                  :id="'removeBtn'+index"
+                  type="button"
+                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
+                  @click="removeWaypointFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/trash.svg"
+                    alt=""
+                    style="width:12px;height:12px">
+                </button>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>

@@ -5,9 +5,14 @@
       role="toolbar">
       <button
         type="button"
-        class="btn btn-success mr-1 h-100 w-25"
-        @click="addPatrolToPatrolList()">Save patrol</button>
-      <div class="input-group h-100">
+        class="btn btn-success h-100 w-25"
+        style="font-size: 2vmin; align-items: center; padding:0px; position:absolute"
+        @click="addPatrolToPatrolList()">
+        Save patrol
+      </button>
+      <div
+        class="h-100 w-75 position-relative text-left float-left"
+        style="font-size: 2.2vh; padding-right:2x">
         <input
           id="nameTextBox"
           v-model="newPatrolName"
@@ -15,57 +20,65 @@
           :placeholder="[[ placehold ]]"
           class="form-control h-100">
       </div>
-    </div>
-    <div
-      class="overflow-auto position-relative">
-      <table
-        id="saved-patrol-table"
-        class="table table-borderless table-striped border-right"
-        style="height:100%; text-align:center">
-        <thead
-          class="text-white bg-green-sb"
-          style="padding:0px">
-          <th
-            class="w-50"
-            style="text-align:left">Patrols</th>
-          <th class="w-25">Choose</th>
-          <th class="w-25">Remove</th>
-        </thead>
-        <tbody>
-          <!-- Ignore this "problem" -Edouard -->
-          <tr
-            v-for="(patrol,index) of patrolList"
-            class="border-bottom">
-            <td
-              class="w-25"
-              style="text-align:left">{{ patrol.Name }}</td>
-            <td class="w-25">
-              <button
-                :id="'selectBtn'+index"
-                type="button"
-                class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
-                @click="selectPatrolFromList(index)">
-                <img
-                  src="~/open-iconic/svg/check.svg"
-                  alt=""
-                  style="width:12px;height:12px;">
-              </button>
-            </td>
-            <td class="w-25">
-              <button
-                :id="'removeBtn'+index"
-                type="button"
-                class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                @click="removePatrolFromList(index)">
-                <img
-                  src="~/open-iconic/svg/trash.svg"
-                  alt=""
-                  style="width:12px;height:12px;">
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div
+        class="overflow-auto position-relative">
+        <table
+          id="saved-patrol-table"
+          class="table table-borderless table-striped border-right"
+          style="height:90%; text-align:center">
+          <thead
+            class="text-white bg-green-sb"
+            style="padding:0px">
+            <th
+              class="w-50"
+              style="text-align:left">
+              Patrols
+            </th>
+            <th class="w-25">
+              Choose
+            </th>
+            <th class="w-25">
+              Remove
+            </th>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(patrol,index) of patrolList"
+              :key="patrol.Name"
+              class="border-bottom">
+              <td
+                class="w-25"
+                style="text-align:left">
+                {{ patrol.Name }}
+              </td>
+              <td class="w-25">
+                <button
+                  :id="'selectBtn'+index"
+                  type="button"
+                  class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
+                  @click="selectPatrolFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/check.svg"
+                    alt=""
+                    style="width:12px;height:12px;">
+                </button>
+              </td>
+              <td class="w-25">
+                <button
+                  :id="'removeBtn'+index"
+                  type="button"
+                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
+                  @click="removePatrolFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/trash.svg"
+                    alt=""
+                    style="width:12px;height:12px;">
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -73,17 +86,17 @@
 <script>
 /*
 * Author(s):  Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>
-*             
+*
 * File :  SaveLoad.vue
 * Desc :  Complementary module allowing to send a list of patrols (a patrol being a name
 *         and a list of waypoint) to the server and manage the list form the user
 *         interface application.The table contains two colomn of buttons use to delete the row they
-*         are in and resend new version of the modified patrol list. The other button is used to copy
-*         the waypoints of a saved patrol to the current waypoint list.
+*         are in and resend new version of the modified patrol list. The other button is used to
+*         copy the waypoints of a saved patrol to the current waypoint list.
 *
 * Dependencies :
 *       - Bootstrap.vue
-*       
+*
 */
 
 export default {

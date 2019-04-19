@@ -1,60 +1,38 @@
 #! /usr/bin/python
 
 import rospy
+import json
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 
 vel_msg = Twist()
 
-def commandCallback(msg):
-	print(msg.data)
-	runCommand(msg.data)
+publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+
+def teleopListener():
+        rospy.init_node('electron_teleop', anonymous=True)
+        rospy.Subscriber('/fromElectron', String, teleopCallback)
+
+        rospy.spin()
+
+def teleopCallback(msg):
+        print(msg.data)
+        j = json.loads(msg.data)
+        print(j)
+        runCommand(j)
 
 def runCommand(data):
-	print(data)
-	if data == 'forward':
-		vel_msg.linear.x = 0.2
-		vel_msg.linear.y = 0.0
-		vel_msg.linear.z = 0.0
-		vel_msg.angular.x = 0.0
-		vel_msg.angular.y = 0.0
-		vel_msg.angular.z = 0.0
-	elif data == 'left':
-                vel_msg.linear.x = 0.0
-                vel_msg.linear.y = 0.0
-                vel_msg.linear.z = 0.0
-                vel_msg.angular.x = 0.0
-                vel_msg.angular.y = 0.0
-                vel_msg.angular.z = 0.8
-	elif data == 'right':
-                vel_msg.linear.x = 0.0
-                vel_msg.linear.y = 0.0
-                vel_msg.linear.z = 0.0
-                vel_msg.angular.x = 0.0
-                vel_msg.angular.y = 0.0
-                vel_msg.angular.z = -0.8
-	elif data == 'backward':
-		vel_msg.linear.x = -0.2
-                vel_msg.linear.y = 0.0
-                vel_msg.linear.z = 0.0
-                vel_msg.angular.x = 0.0
-                vel_msg.angular.y = 0.0
-                vel_msg.angular.z = 0.0
-	else:
-                vel_msg.linear.x = 0.0
-                vel_msg.linear.y = 0.0
-                vel_msg.linear.z = 0.0
-                vel_msg.angular.x = 0.0
-                vel_msg.angular.y = 0.0
-                vel_msg.angular.z = 0.0
+        print(data)
+        vel_msg.linear.x = -data['y']
+        vel_msg.linear.y = 0.0
+        vel_msg.linear.z = 0.0
+        vel_msg.angular.x = 0.0
+        vel_msg.angular.y = 0.0
+        vel_msg.angular.z = -data['x']
 
-publisher = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
-subscriber = rospy.Subscriber('/fromElectron', String, commandCallback)
+        publisher.publish(vel_msg)
 
-rospy.init_node('electron_teleop')
-rate = rospy.Rate(10)
 
-print('Ready for battle')
-while not rospy.is_shutdown():
-	publisher.publish(vel_msg)
-	rate.sleep()
+if __name__ == '__main__':
+        print('Ready for battle')
+        teleopListener()

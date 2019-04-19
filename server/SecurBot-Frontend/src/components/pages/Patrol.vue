@@ -13,19 +13,26 @@
           class="btn-toolbar justify-content-between m-1"
           role="toolbar">
           <div
-            class="w-50 h-100">Patrol :</div>
-          <div
-            class="button-group h-100 w-50"
-            role="group">
-            <button
-              type="button"
-              class="btn btn-danger h-100 float-right"
-              @click="clearWaypointList()">Reset</button>
-            <button
-              type="button"
-              class="btn btn-success mr-1 h-100 float-right"
-              @click="sendPatrol()">Send</button>
+            class="w-50 h-100 text-left float-left"
+            style="font-size: 2.5vh; vertical-align:middle">
+            Patrol :
           </div>
+          <button
+            type="button"
+            class="btn btn-success w-25 h-100 float-left"
+            style="font-size: 2vmin; align-items:center;vertical-align: middle;
+            margin-left:-2px; padding: 0px"
+            @click="sendPatrol()">
+            Send
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger w-25 h-100 float-right"
+            style="font-size: 2vmin; align-items:center; position:absolute;
+            padding:0px; margin-left:2px"
+            @click="clearWaypointList()">
+            Reset
+          </button>
         </div>
         <div class="h-50">
           <waypoint-table :waypoint-list="waypointList" />
@@ -103,7 +110,15 @@ export default {
     },
     // Send the waypoint list for patrol scheduling
     sendPatrol() {
-      this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
+      // For now only send the first waypoint
+      const objective = JSON.stringify(this.waypointList[0]);
+
+      if (objective) {
+        console.log('Sendig objective:');
+        console.log(objective);
+
+        this.bus.$emit('send-patrol', objective);
+      }
     },
     sendPatrolList() {
       this.bus.$emit('send-patrol-list', JSON.stringify(this.patrolList));
