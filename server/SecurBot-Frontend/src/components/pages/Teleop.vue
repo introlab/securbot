@@ -30,23 +30,37 @@
           </div>
         </b-row>
         <div class="h-50 w-100">
-          <b-row
-            class="position-relative h-100 m-auto"
-            style="max-width:calc(100vmin*0.25)">
+          <div class="position-relative h-100 w-100">
             <div
-              class="position-relative m-auto w-100"
-              style="padding-top:100%;height:0;">
-              <div
-                class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
-                style="top:0;left:0;">
-                <joystick
-                  :enable="enableJoystick"
-                  :absolute-max-x="1"
-                  :absolute-max-y="1"
-                  :bus="bus" />
-              </div>
+              class="position-absolute mt-4 mr-2"
+              style="top:0;right:0;z-index:10;">
+              <toggle-button
+                :value="enableJoystick"
+                color="#00A759"
+                :sync="true"
+                :labels="true"
+                :disabled="disableJoystick"
+                @change="enableJoystick = $event.value" />
             </div>
-          </b-row>
+            <b-row
+              class="position-relative h-100 m-auto"
+              style="max-width:calc(100vmin*0.25)">
+              <div
+                class="position-relative m-auto w-100"
+                style="padding-top:100%;height:0;">
+                <div
+                  class="position-absolute h-100 w-100 border
+                border-secondary rounded-circle shadow-sb"
+                  style="top:0;left:0;">
+                  <joystick
+                    :enable="enableJoystick"
+                    :absolute-max-x="1"
+                    :absolute-max-y="1"
+                    :bus="bus" />
+                </div>
+              </div>
+            </b-row>
+          </div>
         </div>
       </b-col>
     </b-row>
@@ -71,6 +85,7 @@
 *       -Bootstrap-Vue
 *
 */
+import { ToggleButton } from 'vue-js-toggle-button';
 import VideoBox from '../widget/VideoBox';
 import Joystick from '../widget/Joystick';
 
@@ -79,6 +94,7 @@ export default {
   components: {
     VideoBox,
     Joystick,
+    ToggleButton,
   },
   props: ['bus', 'router'],
   data() {
@@ -86,6 +102,7 @@ export default {
       showCamera: true,
       showMap: true,
       enableJoystick: false,
+      disableJoystick: true,
     };
   },
   mounted() {
@@ -100,9 +117,10 @@ export default {
   methods: {
     changeJoystickState(state) {
       if (state === 'enable') {
-        this.enableJoystick = true;
+        this.disableJoystick = false;
       } else {
         this.enableJoystick = false;
+        this.disableJoystick = true;
       }
     },
   },
