@@ -21,7 +21,7 @@ waypointPublisher = rospy.Publisher('/map_image_generator/goal', PoseStamped, qu
 def jsonStringToPoseStamped(jsonString):
     #Loading json message into buffer
     jsonBuffer = json.loads(jsonString)
-    
+
     #Creating and partially filling a new PoseStamped
     waypoint = PoseStamped()
     waypoint.header.frame_id = "/map"
@@ -58,7 +58,7 @@ def waypointListener():
     #Node name defined as waypointDecoder
     rospy.init_node('waypointDecoder', anonymous=True) #anonymous=True keeps each waypointDecoder nodes unique if there were many
     #Subscribing to topic 'fromElectron' with callback
-    rospy.Subscriber("fromElectron", String, waypointToMapImageGeneratorCallback)
+    rospy.Subscriber("/operatorNavGoal", String, waypointToMapImageGeneratorCallback)
     rospy.spin()
 
 if __name__ == '__main__':

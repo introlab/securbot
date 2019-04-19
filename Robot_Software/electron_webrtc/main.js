@@ -84,33 +84,36 @@ function startNode() {
     let webRtcServerUrl;
     let videoDeviceLabel;
     try {
-      webRtcServerUrl = await nodeHandle.getParam('/electron_webrtc/webrtc_server_url');
-      videoDeviceLabel = await nodeHandle.getParam('/electron_webrtc/video_device_label');
+      var webRtcServerUrl = await nodeHandle.getParam('/electron_webrtc/webrtc_server_url')
+      // var videoDeviceLabel = await nodeHandle.getParam('/electron_webrtc/video_device_label')
     } catch (e) {
       console.error('Failed to retreive parameters');
       app.quit();
     }
-    const parameters = { videoDeviceLabel, webRtcServerUrl };
+    var parameters = { webRtcServerUrl } // videoDeviceLabel
     console.log(parameters);
 
     if (win) { win.webContents.send('parameters_response', parameters); }
 
     ipcMain.on('parameters_request', (event) => {
-      event.sender.send('parameters_response', parameters);
-    });
+      event.sender.send('parameters_response', parameters)
+    })
 
-    // Subscriber is never calles : "const subscriber ="
-    nodeHandle.subscribe('toElectron', std_msgs.String, (data) => {
-      hub.emit('data', data);
-    });
+    let subscriber = nodeHandle.subscribe('toElectron', std_msgs.String, (data) => {
+      hub.emit('data', data)
+    })
 
-    const publisher = nodeHandle.advertise('fromElectron', std_msgs.String);
-    publisher.publish({ data: 'Hello!' });
-    hub.on('msg', (data) => {
-      console.log(data);
-      publisher.publish({ data });
-    });
-  });
+    let publisher = nodeHandle.advertise('fromElectron', std_msgs.String)
+    hub.on('msg', data => {
+        publisher.publish({ data: data })
+    })
+
+    // Navigation goal topic
+    let goalPublisher = nodeHandle.advertise('operatorNavGoal', std_msgs.String)
+    ipcMain.on('goal', (event, goalJsonString) => {
+        goalPublisher.publish({ data: goalJsonString })
+    })
+  })
 }
 
 startApp();

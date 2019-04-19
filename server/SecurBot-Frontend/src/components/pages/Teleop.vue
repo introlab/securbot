@@ -6,6 +6,7 @@
     class="h-100 "
     bg-variant="light">
     <b-row class="h-100">
+      <!-- Camera Video -->
       <b-col
         lg="8"
         md="7"
@@ -22,6 +23,7 @@
         md="5"
         sm="6"
         class="mh-100">
+        <!-- Map Video -->
         <b-row class="h-50 w-100 position-relative m-0">
           <div class="h-100 w-100 m-auto position-relative">
             <video-box
@@ -29,12 +31,14 @@
               video-id="map-stream" />
           </div>
         </b-row>
+        <!-- Joystick -->
         <b-row
-          class="position-relative h-50 m-auto"
-          style="max-width:calc(100vh*0.2)">
+          id="joystick-row"
+          class="position-relative h-50 m-auto p-4">
           <div
-            class="position-relative m-auto w-100"
-            style="padding-top:100%;height:0;">
+            id="joystick-container"
+            class="position-relative m-auto"
+            :style="joystickStyle">
             <div
               class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
               style="top:0;left:0;">
@@ -103,6 +107,11 @@ export default {
       showCamera: true,
       showMap: true,
       enableJoystick: false,
+      joystickStyle: {
+        width: '100%',
+        'padding-top': '100%',
+        height: 0,
+      },
     };
   },
   /**
@@ -113,8 +122,20 @@ export default {
    */
   mounted() {
     console.log('Teleop have been mounted');
+<<<<<<< HEAD
     this.bus.$emit('mounted');
     this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
+=======
+    this.router.$emit('mounted');
+    this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
+
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.setJoystickStyle);
+    });
+
+    this.setJoystickStyle();
+    this.init();
+>>>>>>> 78f54e90cc21ee3bc97e179abc91cd48accfd80f
   },
   /**
    * Lifecycle Hook - mounted
@@ -125,6 +146,8 @@ export default {
   destroyed() {
     console.log('Teleop have been destroyed');
     this.router.$emit('destroyed');
+
+    window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
     /**
@@ -141,8 +164,21 @@ export default {
         this.enableJoystick = false;
       }
     },
-  },
+    setJoystickStyle() {
+      let ratio = 1;
+      const e = document.getElementById('joystick-row');
+      if (e) {
+        ratio = ((e.clientHeight / e.clientWidth) < 1)
+          ? `${(((e.clientHeight / e.clientWidth) * 100) - 5)}%` : '95%';
+        this.joystickStyle = {
+          width: ratio,
+          'padding-top': ratio,
+          height: 0,
 
+        };
+      }
+    },
+  },
 };
 </script>
 

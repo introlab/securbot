@@ -146,8 +146,10 @@ export default {
       if (event.button === 0) {
         const coord = this.getVideoCoordinatesFromEvent(event);
         if (this.isClickValid(coord)) {
+          const date = new Date();
           const wp = coord;
           wp.yaw = 0;
+          wp.dateTime = date.getTime();
           this.addWaypoint(wp);
         }
       }
