@@ -31,7 +31,7 @@
                 {{ waypoint.y.toFixed(1) }}
               </td>
               <td class="w-25">
-                {{ waypoint.dateTime }}  <!-- waypoint.yaw.toFixed(1) -->
+                {{ waypoint.yaw.toFixed(1) }}
               </td>
               <td class="w-25">
                 <button

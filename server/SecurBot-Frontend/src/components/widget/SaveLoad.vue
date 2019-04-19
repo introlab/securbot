@@ -1,18 +1,19 @@
 <template>
-  <div class="h-100 w-100 position-relative">
+  <div class="h-100 w-100 d-flex flex-column">
     <div
-      class="btn-toolbar mb-1 h-25 w-100"
+      class="btn-toolbar mb-1 w-100 d-flex flex-row-reverse"
+      style="height:40px;"
       role="toolbar">
       <button
         type="button"
-        class="btn btn-success h-100 w-25"
-        style="font-size: 2vmin; align-items: center; padding:0px; position:absolute"
+        class="btn btn-success h-100"
+        style="align-items: center; width:125px; min-width:125px;"
         @click="addPatrolToPatrolList()">
         Save patrol
       </button>
       <div
-        class="h-100 w-75 position-relative text-left float-left"
-        style="font-size: 2.2vh; padding-right:2x">
+        class="h-100 w-auto text-left mr-1"
+        style="flex:1;">
         <input
           id="nameTextBox"
           v-model="newPatrolName"
@@ -20,15 +21,18 @@
           :placeholder="[[ placehold ]]"
           class="form-control h-100">
       </div>
-      <div
-        class="overflow-auto position-relative">
+    </div>
+    <!-- Table -->
+    <div
+      class="w-100"
+      style="height: calc(100% - 40px - 0.25rem)">
+      <div class="mh-100 overflow-auto">
         <table
           id="saved-patrol-table"
-          class="table table-borderless table-striped border-right"
-          style="height:90%; text-align:center">
+          class="table table-borderless table-striped border-right border-left"
+          style="text-align: center">
           <thead
-            class="text-white bg-green-sb"
-            style="padding:0px">
+            class="text-white bg-green-sb">
             <th
               class="w-50"
               style="text-align:left">
@@ -47,7 +51,7 @@
               :key="patrol.Name"
               class="border-bottom">
               <td
-                class="w-25"
+                class="w-50"
                 style="text-align:left">
                 {{ patrol.Name }}
               </td>
@@ -80,6 +84,29 @@
         </table>
       </div>
     </div>
+    <!--div
+        class="btn-toolbar mb-1 w-100 d-flex flex-row-reverse"
+        style="height:40px;"
+        role="toolbar">
+        <button
+          type="button"
+          class="btn btn-success h-100"
+          style="align-items: center; width:125px; min-width:125px;"
+          @click="addPatrolToPatrolList()">
+          Save patrol
+        </button>
+        <div
+          class="h-100 w-auto text-left mr-1"
+          style="flex:1;">
+          <input
+            id="nameTextBox"
+            v-model="newPatrolName"
+            type="text"
+            :placeholder="[[ placehold ]]"
+            class="form-control h-100">
+        </div>
+      </div>
+    </div-->
   </div>
 </template>
 
