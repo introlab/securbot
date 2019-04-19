@@ -76,25 +76,6 @@ function acceptCall(easyrtcid, acceptor) {
   }
 }
 
-function getVideoSource(label) {
-  return new Promise((resolve, reject) => {
-    easyrtc.getVideoSourceList((device) => {
-      console.log(`Looking for ${device}...`);
-
-      const videoSource = device.find(source => source.label.toString().trim() === label.trim());
-
-      if (videoSource === undefined) {
-        console.log(`[${label}] video not found`);
-        reject(new Error('The desired video stream cannot be found...'));
-        return;
-      }
-
-      console.log(`Found [${label}] stream`);
-      resolve(videoSource.id);
-    });
-  });
-}
-
 async function myInit() {
   const parameters = await fetchParameters();
 
