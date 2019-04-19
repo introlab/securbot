@@ -82,7 +82,7 @@ export default {
     },
     // Draw waypoints on canvas
     drawWaypoints() {
-      this.waypointList.forEach((wp) => {
+      for (const [index, wp] of this.waypointList.entries()) {
         const wpColor = '#00FF00';
         const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
@@ -93,7 +93,8 @@ export default {
         this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
         this.context.fillStyle = wpColor;
         this.context.fill();
-      });
+        this.context.strokeText(index + 1, coord.x, coord.y);
+      }
     },
     // Get position/coordinate of video on click
     getVideoCoordinatesFromEvent(event) {
