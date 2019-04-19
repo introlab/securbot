@@ -34,7 +34,7 @@
               Reset
             </button>
           </div>
-          <div style="flex:1;">
+          <div style="height: calc(100% - 40px - 0.25rem)">
             <waypoint-table :waypoint-list="waypointList" />
           </div>
         </b-row>
