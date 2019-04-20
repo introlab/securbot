@@ -102,6 +102,7 @@ export default {
       teleopBus: new Vue(),
       routeBus: new Vue(),
       peerTable: [],
+      joystickState: 'disable',
     };
   },
   // mounted() : On component mounted, use to get and initialise
@@ -279,7 +280,8 @@ export default {
     dataOpenListenerCB(easyrtcid) {
       console.warn(`Data channel open with ${easyrtcid}`);
       this.isDataChannelAvailable = true;
-      // this.teleopBus.$emit('on-joystick-state-changed', 'enable');
+      this.joystickState = 'enable';
+      this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
 
       // This request the stream from the robot so the operator doesn't have to have
       // a local stream to get the feed from the robot. It also allows to get both stream
@@ -301,7 +303,8 @@ export default {
         this.teleopBus.$emit('connection-changed', 'disconnected');
         this.clearHTMLVideoStream();
       }
-      // this.teleopBus.$emit('on-joystick-state-changed', 'disable');
+      this.joystickState = 'disable';
+      this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
     },
     /*
       onJoystickPositionChange(): on event "joystick-position-change", this function is called
@@ -335,8 +338,17 @@ export default {
         console.log('Received data from someone else than the peer, ignoring it...');
       }
     },
+    //
+    verifyJoystickState() {
+      if (this.isDataChannelAvailable) {
+        this.joystickState = 'enable';
+        this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
+      }
+    },
     // setHTMLVideoStream(): set the available video feed(s) to available html element(s)
     setHTMLVideoStream() {
+      this.verifyJoystickState();
+
       this.getHTMLElements();
 
       if (this.cameraStreamElement && this.cameraStream) {

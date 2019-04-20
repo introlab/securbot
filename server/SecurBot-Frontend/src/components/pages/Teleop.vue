@@ -32,15 +32,26 @@
           </div>
         </b-row>
         <!-- Joystick -->
+        <div
+          class="position-absolute"
+          style="top:55%;right:25px;z-index:10;">
+          <toggle-button
+            :value="enableJoystick"
+            :color="switchColor"
+            :sync="true"
+            :labels="true"
+            :disabled="disableJoystick"
+            @change="enableJoystick = $event.value" />
+        </div>
         <b-row
           id="joystick-row"
           class="position-relative h-50 m-auto p-4">
           <div
-            id="joystick-container"
             class="position-relative m-auto"
             :style="joystickStyle">
             <div
-              class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
+              class="position-absolute h-100 w-100 border
+              border-secondary rounded-circle shadow-sb"
               style="top:0;left:0;">
               <joystick
                 :enable="enableJoystick"
@@ -81,6 +92,7 @@
  * @version 1.0.0
  */
 
+import { ToggleButton } from 'vue-js-toggle-button';
 import Vue from 'vue';
 
 import VideoBox from '../widget/VideoBox';
@@ -91,6 +103,7 @@ export default {
   components: {
     VideoBox,
     Joystick,
+    ToggleButton,
   },
   props: {
     bus: {
@@ -107,10 +120,16 @@ export default {
       showCamera: true,
       showMap: true,
       enableJoystick: false,
+      disableJoystick: true,
       joystickStyle: {
         width: '100%',
         'padding-top': '100%',
         height: 0,
+      },
+      switchColor: {
+        checked: '#00A759',
+        unchecked: '#808080',
+        disabled: '#E8E8E8',
       },
     };
   },
@@ -122,8 +141,8 @@ export default {
    */
   mounted() {
     console.log('Teleop have been mounted');
-    this.router.$emit('mounted');
     this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
+    this.router.$emit('mounted');
 
     this.$nextTick(() => {
       window.addEventListener('resize', this.setJoystickStyle);
@@ -153,9 +172,10 @@ export default {
      */
     changeJoystickState(state) {
       if (state === 'enable') {
-        this.enableJoystick = true;
+        this.disableJoystick = false;
       } else {
         this.enableJoystick = false;
+        this.disableJoystick = true;
       }
     },
     setJoystickStyle() {

@@ -1,84 +1,112 @@
 <template>
-  <div class="h-100 w-100 position-relative">
+  <div class="h-100 w-100 d-flex flex-column">
     <div
-      class="w-100 position-relative"
-      style="height:12%; margin-bottom:2px; margin-top:2px">
+      class="btn-toolbar mb-1 w-100 d-flex flex-row-reverse"
+      style="height:40px;"
+      role="toolbar">
       <button
         type="button"
-        class="btn btn-success h-100 w-25"
-        style="font-size: 2vmin; align-items: center; padding:0px; position:relative"
+        class="btn btn-success h-100"
+        style="align-items: center; width:125px; min-width:125px;"
         @click="addPatrolToPatrolList()">
         Save patrol
       </button>
       <div
-        class="h-100 w-75 position-relative text-left float-left"
-        style="font-size: 2.2vh; padding-right:2x">
+        class="h-100 w-auto text-left mr-1"
+        style="flex:1;">
         <input
           id="nameTextBox"
           v-model="newPatrolName"
+          type="text"
           :placeholder="[[ placehold ]]"
-          class="h-100 w-100">
+          class="form-control h-100">
       </div>
     </div>
+    <!-- Table -->
     <div
-      class="overflow-auto position-relative">
-      <table
-        id="saved-patrol-table"
-        class="table table-borderless table-striped border-right"
-        style="height:90%; text-align:center">
-        <thead
-          class="text-white bg-green-sb"
-          style="padding:0px">
-          <th
-            class="w-50"
-            style="text-align:left">
-            Patrols
-          </th>
-          <th class="w-25">
-            Choose
-          </th>
-          <th class="w-25">
-            Remove
-          </th>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(patrol,index) of patrolList"
-            :key="patrol.Name"
-            class="border-bottom">
-            <td
-              class="w-25"
+      class="w-100"
+      style="height: calc(100% - 40px - 0.25rem)">
+      <div class="mh-100 overflow-auto">
+        <table
+          id="saved-patrol-table"
+          class="table table-borderless table-striped border-right border-left"
+          style="text-align: center">
+          <thead
+            class="text-white bg-green-sb">
+            <th
+              class="w-50"
               style="text-align:left">
-              {{ patrol.Name }}
-            </td>
-            <td class="w-25">
-              <button
-                :id="'selectBtn'+index"
-                type="button"
-                class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
-                @click="selectPatrolFromList(index)">
-                <img
-                  src="~/open-iconic/svg/check.svg"
-                  alt=""
-                  style="width:12px;height:12px;">
-              </button>
-            </td>
-            <td class="w-25">
-              <button
-                :id="'removeBtn'+index"
-                type="button"
-                class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                @click="removePatrolFromList(index)">
-                <img
-                  src="~/open-iconic/svg/trash.svg"
-                  alt=""
-                  style="width:12px;height:12px;">
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              Patrols
+            </th>
+            <th class="w-25">
+              Choose
+            </th>
+            <th class="w-25">
+              Remove
+            </th>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(patrol,index) of patrolList"
+              :key="patrol.Name"
+              class="border-bottom">
+              <td
+                class="w-50"
+                style="text-align:left">
+                {{ patrol.Name }}
+              </td>
+              <td class="w-25">
+                <button
+                  :id="'selectBtn'+index"
+                  type="button"
+                  class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
+                  @click="selectPatrolFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/check.svg"
+                    alt=""
+                    style="width:12px;height:12px;">
+                </button>
+              </td>
+              <td class="w-25">
+                <button
+                  :id="'removeBtn'+index"
+                  type="button"
+                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
+                  @click="removePatrolFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/trash.svg"
+                    alt=""
+                    style="width:12px;height:12px;">
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+    <!--div
+        class="btn-toolbar mb-1 w-100 d-flex flex-row-reverse"
+        style="height:40px;"
+        role="toolbar">
+        <button
+          type="button"
+          class="btn btn-success h-100"
+          style="align-items: center; width:125px; min-width:125px;"
+          @click="addPatrolToPatrolList()">
+          Save patrol
+        </button>
+        <div
+          class="h-100 w-auto text-left mr-1"
+          style="flex:1;">
+          <input
+            id="nameTextBox"
+            v-model="newPatrolName"
+            type="text"
+            :placeholder="[[ placehold ]]"
+            class="form-control h-100">
+        </div>
+      </div>
+    </div-->
   </div>
 </template>
 
