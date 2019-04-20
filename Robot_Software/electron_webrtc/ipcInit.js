@@ -1,3 +1,9 @@
+/**
+ * Initialisation of the ipc
+ * @module ipcInit
+ * @author Cedric Godin <>
+ */
+
 const { ipcRenderer } = require('electron');
 
 process.once('loaded', () => {

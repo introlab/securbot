@@ -4,7 +4,7 @@ module.exports = {
   recurseDepth: 10,
   source: {
     include: ['main.js', 'ipcInit.js', 'renderer.js'],
-    exclude: [],
+    exclude: ['jsdoc.conf.js'],
     includePattern: '.+\\.js(doc|x)?$',
     excludePattern: '(^|\\/|\\\\)_',
   },
