@@ -1,32 +1,94 @@
 #include <stdio.h>
+#include <string.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_system.h"
-#include "esp_spi_flash.h"
+
+#include "driver/gpio.h"
+#include "driver/uart.h"
+
+
+#define BLINK_PIN 13
+#define BUF_SIZE 256
+
+
+typedef union {
+    float value;
+    uint8_t bytes[sizeof(float)];
+} test_packet_t;
+
+
+void esp32_init();
+
+void task_blink();
+void task_handle_uart_events();
+
+TaskHandle_t blink_task_handle;
+QueueHandle_t uart0_queue;
+
+uart_event_t uart_event;
+uint8_t recv_buf[BUF_SIZE];
+test_packet_t test_packet;
 
 
 void app_main()
 {
+    esp32_init();
+    xTaskCreate(task_blink, "Blink", 1024, NULL, 10, &blink_task_handle);
+    xTaskCreate(task_handle_uart_events, "UART Events", 2048, NULL, 10, NULL);
+}
+
+
+void esp32_init()
+{
     printf("Hello world!\n");
 
-    /* Print chip information */
-    esp_chip_info_t chip_info;
-    esp_chip_info(&chip_info);
-    printf("This is ESP32 chip with %d CPU cores, WiFi%s%s, ",
-            chip_info.cores,
-            (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
-            (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
+    // Init GPIO for blinking LED
+    gpio_pad_select_gpio(BLINK_PIN);
+    gpio_set_direction(BLINK_PIN, GPIO_MODE_OUTPUT);
 
-    printf("silicon revision %d, ", chip_info.revision);
+    // Install UART0 driver with event queue
+    uart_driver_install(UART_NUM_0, 2*BUF_SIZE, 2*BUF_SIZE, 10, &uart0_queue, 0);
+}
 
-    printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
-            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
-    for (int i = 10; i >= 0; i--) {
-        printf("Restarting in %d seconds...\n", i);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+void task_blink()
+{
+    gpio_set_level(BLINK_PIN, 0);
+
+    while(1)
+    {
+        if(ulTaskNotifyTake(pdFALSE, portMAX_DELAY))
+        {
+            gpio_set_level(BLINK_PIN, 1);
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+
+            gpio_set_level(BLINK_PIN, 0);
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+        }
     }
-    printf("Restarting now.\n");
-    fflush(stdout);
-    esp_restart();
+}
+
+
+void task_handle_uart_events()
+{
+    while(1){
+        if(xQueueReceive(uart0_queue, &uart_event, portMAX_DELAY))
+        {
+            bzero(recv_buf, BUF_SIZE);
+            switch (uart_event.type)
+            {
+                case UART_DATA:
+                    xTaskNotifyGive(blink_task_handle);
+                    uart_read_bytes(UART_NUM_0, recv_buf, uart_event.size, portMAX_DELAY);
+                    memcpy(test_packet.bytes, recv_buf, sizeof(test_packet_t));
+                    printf("%f\n", test_packet.value);
+                    break;
+            
+                default:
+                    printf("Unhandled UART event type: %d\n", uart_event.type);
+                    break;
+            }
+        }
+    }
 }
