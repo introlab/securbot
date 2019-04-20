@@ -5,14 +5,17 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "npx jsdoc -c jsdoc.config.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.1"
+    "eslint-plugin-import": "^2.17.1",
+    "jsdoc": "^3.5.5",
+    "minami": "^1.2.3"
   },
   "dependencies": {
     "electron": "=3.0.13",

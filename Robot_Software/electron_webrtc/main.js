@@ -1,26 +1,48 @@
+/**
+ * This is the main script of the application.
+ * @module Main
+ * @author Edouard Denomme <>
+ * @author Cedric Godin <>
+ * @author Edouard Legare <>
+ */
+
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const events = require('events');
-
 const rosnodejs = require('rosnodejs');
-
 // eslint-disable-next-line camelcase
 const std_msgs = rosnodejs.require('std_msgs').msg;
-
 const path = require('path');
 
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+/**
+ * Keep a global reference of the window object so it doesn't automatically.
+ * @type {BrowserWindow}
+ */
 let win;
 
-// Event emitter for ROS Node to app communication
+/**
+ * Hub event emitter.
+ * @type {events.EventEmitter}
+ */
 const hub = new events.EventEmitter();
+
+/**
+ * Event emitter for ROS Node to app communication.
+ * @event msg
+ * @type {String}
+ */
 ipcMain.on('msg', (event, arg) => {
   hub.emit('msg', arg);
 });
 
+/**
+ * Create the window, loads the html into it and set events.
+ * @function createWindow
+ */
 function createWindow() {
-  // Create the browser window.
+  /**
+   * Create the browser window.
+   */
   win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -31,18 +53,31 @@ function createWindow() {
     },
   });
 
-  // and load the index.html of the app.
+  /**
+   * Loads the html into the browser.
+   */
   win.loadFile('index.html');
 
-  // Open the DevTools.
+  /**
+   *  Open the DevTools.
+   */
   win.webContents.openDevTools();
 
-  // Send data from ROS data hub
+  /**
+   * Send data from ROS data hub.
+   * @method
+   * @param {String} data - data being send
+   * @listens hub.rosdata
+   */
   hub.on('rosdata', (data) => {
     win.webContents.send('rosdata', data);
   });
 
-  // Emitted when the window is closed.
+  /**
+   * Emitted when the window is closed, remove listener and remove the window.
+   * @method
+   * @listens win.onclosed
+   */
   win.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
@@ -52,33 +87,42 @@ function createWindow() {
   });
 }
 
+/**
+ * Start the electron application
+ * @function startApp
+ */
 function startApp() {
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
+  /**
+   * Create the window on event.
+   * @listens app.ready
+   */
   app.on('ready', createWindow);
 
-  // Quit when all windows are closed.
+  /**
+   * Quit when all windows are closed.
+   * @listens app.window.all.onclosed
+   */
   app.on('window-all-closed', () => {
-    // On macOS it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
       app.quit();
     }
   });
 
+  /**
+   * Create the window when activated
+   * @listens app.activate
+   */
   app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (win === null) {
       createWindow();
     }
   });
 }
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
+/**
+ * Start all the necessary ROS nodes
+ * @function startNode
+ */
 function startNode() {
   rosnodejs.initNode('/electron_webrtc').then(async (nodeHandle) => {
     let webRtcServerUrl;
