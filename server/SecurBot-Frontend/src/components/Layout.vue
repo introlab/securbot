@@ -109,7 +109,7 @@ export default {
   mounted() {
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
-    this.teleopBus.$on('send-patrol', this.sendGoal);
+    this.teleopBus.$on('send-patrol', this.sendPatrol);
     this.routeBus.$on('mounted', this.setHTMLVideoStream);
     this.routeBus.$on('destroyed', this.clearHTMLVideoStream);
 
@@ -316,8 +316,8 @@ export default {
     /**
      * Sends a navigation waypoint to the robot in a JSON string
      */
-    sendGoal(goalJsonString) {
-      this.sendData(this.peerId, 'nav-goal', goalJsonString);
+    sendPatrol(goalJsonString) {
+      this.sendData(this.peerId, 'patrol-plan', goalJsonString);
     },
     requestFeedFromPeer(feed) {
       this.sendData(this.peerId, 'request-feed', feed);

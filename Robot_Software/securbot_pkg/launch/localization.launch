@@ -3,11 +3,11 @@
 -->
 
 <launch>
-	<!-- Robot -->
-	<include file="$(find securbot_pkg)/launch/includes/securbot_bringup.launch" />
+    <!-- Robot -->
+    <include file="$(find securbot_pkg)/launch/includes/securbot_bringup.launch" />
 
-	<!-- RTAB-Map -->
-	<include file="$(find securbot_pkg)/launch/includes/rtabmap_bringup.launch">
-		<arg name="localization" value="true" />
-	</include>
+    <!-- RTAB-Map -->
+    <include file="$(find securbot_pkg)/launch/includes/rtabmap_bringup.launch">
+        <arg name="localization" value="true" />
+    </include>
 </launch>
