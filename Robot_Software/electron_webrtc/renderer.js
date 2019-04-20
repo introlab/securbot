@@ -46,9 +46,9 @@ function dataCallback(easyrtcid, msgType, msgData) {
     ipc.send('msg', msgData)
 }
 
-function goalReceivedCallback(sourceId, msgType, goalJsonString) {
-    console.log("Received new nav goal: " + goalJsonString)
-    ipc.send('goal', goalJsonString)
+function patrolReceivedCallback(sourceId, msgType, patrolJsonString) {
+    console.log("Received new patrol plan: " + patrolJsonString)
+    ipc.send('patrol-plan', patrolJsonString)
 }
 
 function teleopCallback(easyrtcid, msgType, msgData) {
@@ -104,7 +104,7 @@ async function my_init() {
     }
 
     let isConnected = false;
-    
+
     easyrtc.getVideoSourceList(device => {
         for (deviceName of virtualDevicesName) {
 
@@ -116,9 +116,9 @@ async function my_init() {
                 console.log(`Found [${videoSource.label}] stream`)
                 easyrtc.setVideoSource(videoSource.id)
                 let streamName = videoSource.label.split('_')[1];
-    
+
                 streamNames.push(streamName);
-    
+
                 easyrtc.initMediaSource(
                   function(){        // success callback
                      console.log(`Initializing ${streamName}...`);

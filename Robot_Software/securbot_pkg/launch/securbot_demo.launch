@@ -1,9 +1,11 @@
 <launch>
-    <!-- Robot sepcific nodes -->
-    <include file="$(find securbot_pkg)/launch/robot_bringup.launch" />
+    <!-- Robot -->
+	<include file="$(find securbot_pkg)/launch/includes/securbot_bringup.launch" />
 
-    <!-- RTAB-Map in localization mode -->
-    <include file="$(find securbot_pkg)/launch/mapping.launch" />
+	<!-- RTAB-Map -->
+	<include file="$(find securbot_pkg)/launch/includes/rtabmap_bringup.launch">
+		<arg name="localization" value="false" />
+	</include>
 
     <!-- Move_Base navigation -->
     <include file="$(find securbot_pkg)/launch/navigation.launch" />
@@ -15,5 +17,5 @@
     <include file="$(find electron_webrtc)/launch/electron_webrtc.launch" />
 
     <!-- Waypoint Decode -->
-    <include file="$(find securbot_pkg)/launch/waypointDecoder.launch" />
+    <include file="$(find securbot_pkg)/launch/patrolExecutive.launch" />
 </launch>

@@ -103,10 +103,10 @@ function startNode() {
         publisher.publish({ data: data })
     })
 
-    // Navigation goal topic
-    let goalPublisher = nodeHandle.advertise('operatorNavGoal', std_msgs.String)
-    ipcMain.on('goal', (event, goalJsonString) => {
-        goalPublisher.publish({ data: goalJsonString })
+    // Navigation patrol topic
+    let patrolPublisher = nodeHandle.advertise('/electron/patrol', std_msgs.String)
+    ipcMain.on('patrol-plan', (event, patrolJsonString) => {
+        patrolPublisher.publish({ data: patrolJsonString })
     })
   })
 }

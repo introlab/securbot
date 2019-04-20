@@ -1,6 +1,0 @@
-<launch>
-    <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" />
-
-    <!-- Test nodes -->
-    <test test-name="patrol_test" pkg="securbot_pkg" type="patrol_test.py" />
-</launch>

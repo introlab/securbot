@@ -111,16 +111,15 @@ export default {
     getSavedPatrols() {
       this.patrolList = JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]');
     },
-    // Send the waypoint list for patrol scheduling
+    // Send the waypoint list for patrol execution on the robot
     sendPatrol() {
-      // For now only send the first waypoint
-      const objective = JSON.stringify(this.waypointList[0]);
+      const patrolPlan = JSON.stringify({ patrol: this.waypointList, loop: false });
 
-      if (objective) {
-        console.log('Sendig objective:');
-        console.log(objective);
+      if (patrolPlan) {
+        console.log('Sendig patrolPlan:');
+        console.log(patrolPlan);
 
-        this.bus.$emit('send-patrol', objective);
+        this.bus.$emit('send-patrol', patrolPlan);
       }
     },
     sendPatrolList() {
