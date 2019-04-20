@@ -25,7 +25,7 @@
 * Dependencies :
 *       -Bootstrap-Vue
 *
-* Note :  The original file comes from a project called SOSCIP and we modified
+* Note :  The original file comes from a project called SOSCIP that we modified
 *         it to fit this project.
 *
 */
@@ -61,16 +61,16 @@ export default {
   },
   methods: {
     init() {
+      // Timer refreshing the canvas
       this.loopIntervalId = setInterval(() => {
         this.setCanvasSize();
         this.findCenterCanvas();
         this.drawCanvas();
       }, 1000 / this.canvasRefreshRate);
-      if (this.enable) {
-        this.positionChangeIntervalId = setInterval(() => {
-          this.emitJoystickPosition();
-        }, this.operatorCommandInterval);
-      }
+      // Timer sending joystick position
+      this.positionChangeIntervalId = setInterval(() => {
+        this.emitJoystickPosition();
+      }, this.operatorCommandInterval);
     },
     findCenterCanvas() {
       if (this.x === null || this.y === null || !this.isMouseDown) {
@@ -123,9 +123,6 @@ export default {
         const ratio = maxRadius / radius;
         this.x = (deltaX * ratio) + centerX;
         this.y = (deltaY * ratio) + centerY;
-      }
-      if (this.enable) {
-        this.emitJoystickPosition();
       }
     },
     drawCanvas() {
@@ -234,7 +231,9 @@ export default {
         y: ((this.y - this.getCenterY()) * this.absoluteMaxY)
         / (this.getCanvasRadius() - this.getJoystickRadius()),
       };
-      this.bus.$emit('joystick-position-change', event);
+      if (this.enable) {
+        this.bus.$emit('joystick-position-change', event);
+      }
     },
   },
 };
