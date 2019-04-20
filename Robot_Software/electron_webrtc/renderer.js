@@ -1,5 +1,7 @@
-/* global ipc, easyrtc, document, window */
+/* global easyrtc, ipc, window, document */
 let operatorID = null;
+const virtualDevicesName = ['virtual_map', 'virtual_camera'];
+const streamNames = [];
 
 ipc.on('rosdata', (emitter, data) => {
   console.log(data);
@@ -12,37 +14,30 @@ easyrtc.setStreamAcceptor((callerEasyrtcid, stream) => {
   easyrtc.setVideoObjectSrc(video, stream);
 });
 
-easyrtc.setOnStreamClosed((callerEasyrtcid) => {
-  if (callerEasyrtcid === operatorID) {
-    operatorID = null;
-  }
-});
-
-function getVideoId(label) {
-  return new Promise((resolve, reject) => {
-    easyrtc.getVideoSourceList((list) => {
-      const videoSource = list.find(source => source.label.toString().trim() === label.trim());
-
-      if (videoSource === undefined) {
-        console.log(`[${label}] video not found`);
-        reject(new Error('Desired video stream not found'));
-        return;
-      }
-
-      console.log('Found map stream');
-      resolve(videoSource.id);
-    });
-  });
-}
-
 function dataCallback(easyrtcid, msgType, msgData) {
   console.log(msgData);
   ipc.send('msg', msgData);
 }
 
+function goalReceivedCallback(sourceId, msgType, goalJsonString) {
+  console.log(`Received new nav goal: ${goalJsonString}`);
+  ipc.send('goal', goalJsonString);
+}
+
+function teleopCallback(easyrtcid, msgType, msgData) {
+  console.log(msgData);
+  ipc.send('msg', msgData);
+}
+
+function streamRequestCallback(easyrtcid, msgType, msgData) {
+  console.log(`Received request of type ${msgType} for ${msgData}`);
+  if (msgData === 'map' || msgData === 'camera') {
+    easyrtc.addStreamToCall(easyrtcid, msgData);
+  }
+}
 
 function fetchParameters() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     ipc.once('parameters_response', (event, params) => {
       resolve(params);
     });
@@ -51,11 +46,56 @@ function fetchParameters() {
   });
 }
 
-async function mInit() {
+// function loggedInListener(roomName, otherPeers) {
+//   const otherClientDiv = document.getElementById('otherClients');
+//   while (otherClientDiv.hasChildNodes()) {
+//     otherClientDiv.removeChild(otherClientDiv.lastChild);
+//   }
+//   for (const i in otherPeers) {
+//     const button = document.createElement('button');
+//     button.onclick = (function (easyrtcid) {
+//       return function () {
+//         performCall(easyrtcid);
+//       };
+//     }(i));
+
+//     label = document.createTextNode(i);
+//     button.appendChild(label);
+//     otherClientDiv.appendChild(button);
+//   }
+// }
+
+function acceptCall(easyrtcid, acceptor) {
+  if (operatorID === null) {
+    operatorID = easyrtcid;
+    console.log(`Accepting call from ${easyrtcid}, this operator can control me!`);
+    acceptor(true);
+  } else {
+    console.log(`Accepting call from ${easyrtcid}, this operator can only view me!`);
+    acceptor(true);
+  }
+}
+
+async function myInit() {
   const parameters = await fetchParameters();
 
-  console.log(`Attempting to connect to : ${parameters.webRtcServerUrl}`);
+  easyrtc.setRoomApiField('default', 'type', 'robot');
   easyrtc.setSocketUrl(parameters.webRtcServerUrl);
+
+  easyrtc.enableVideo(true);
+  easyrtc.enableAudio(false);
+
+  easyrtc.enableVideoReceive(false);
+  easyrtc.enableAudioReceive(false);
+  easyrtc.enableDataChannels(true);
+
+  easyrtc.setPeerListener(dataCallback, 'msg');
+  easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal');
+  easyrtc.setPeerListener(teleopCallback, 'joystick-position');
+  easyrtc.setPeerListener(streamRequestCallback, 'request-feed');
+
+  easyrtc.setAcceptChecker(acceptCall);
+
   const connectSuccess = (myId) => {
     console.log(`My easyrtcid is ${myId}`);
   };
@@ -63,21 +103,33 @@ async function mInit() {
     console.log(errText);
   };
 
-  getVideoId(parameters.videoDeviceLabel).then((videoId) => {
-    easyrtc.setVideoSource(videoId);
-    easyrtc.enableDataChannels(true);
-    easyrtc.enableAudio(false);
-    easyrtc.setPeerListener(dataCallback, 'msg');
+  let isConnected = false;
 
-    easyrtc.initMediaSource(
-      () => { // success callback
-        const selfVideo = document.getElementById('self');
-        easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
-        easyrtc.connect('easyrtc.securbot', connectSuccess, connectFailure);
-      },
-      connectFailure,
-    );
+  easyrtc.getVideoSourceList((device) => {
+    for (const deviceName of virtualDevicesName) {
+      // eslint-disable-next-line max-len
+      const videoSource = device.find(source => source.label.toString().trim() === deviceName.trim());
+
+      if (videoSource) {
+        console.log(`Found [${videoSource.label}] stream`);
+        easyrtc.setVideoSource(videoSource.id);
+        const streamName = videoSource.label.split('_')[1];
+
+        streamNames.push(streamName);
+
+        // eslint-disable-next-line no-loop-func
+        easyrtc.initMediaSource(() => { // success callback
+          console.log(`Initializing ${streamName}...`);
+          if (!isConnected) {
+            easyrtc.connect('easyrtc.securbot', connectSuccess, connectFailure);
+            isConnected = true;
+          }
+        },
+        connectFailure,
+        streamName);
+      }
+    }
   });
 }
 
-window.onload = () => { mInit(); };
+window.onload = () => { myInit(); };

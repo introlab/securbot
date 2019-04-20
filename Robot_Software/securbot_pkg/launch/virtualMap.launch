@@ -6,15 +6,15 @@
 -->
 
 <launch>
-    <arg name="input_occupancy_grid_topic" default="/map"/>
+    <arg name="input_occupancy_grid_topic" default="/rtabmap/grid_map/"/>
     <arg name="input_global_path_topic" default="/move_base/GlobalPlanner/plan"/>
     <arg name="input_goal_topic" default="/move_base_simple/goal"/>
-    <arg name="input_laser_scan_topic" default="/kinect2/scan"/>
+    <arg name="input_laser_scan_topic" default="/scan"/>
 
     <arg name="output_map_image_topic" default="/map_image_generator/image"/>
 
     <arg name="input_map_image_goal_topic" default="/map_image_generator/goal"/>
-    <arg name="output_goal_topic" default="/rtabmap/goal"/>
+    <arg name="output_goal_topic" default="/move_base_simple/goal"/>
 
     <arg name="input_map_labels_topic" default="/rtabmap/labels"/>
     <arg name="output_map_image_labels_topic" default="/map_image_generator/labels"/>
@@ -35,7 +35,7 @@
     <!-- Image to video -->
     <node pkg="image_capture" type="virtualcam_node" name="virtualcam_node" output="screen">
         <param name="image_topic" value="/map_image_generator/image"/>
-        <param name="virtual_dev" value="/dev/video2" />
+        <param name="virtual_dev" value="/dev/video5" />
         <param name="image_width" type="int" value="1000"/>
         <param name="image_height" type="int" value="1000"/>
     </node>

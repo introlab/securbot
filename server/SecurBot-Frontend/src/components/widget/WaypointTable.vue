@@ -3,48 +3,56 @@
     <div class="mh-100 overflow-auto">
       <table
         id="waypoint-table"
-        class="table table-borderless table-striped border-left border-right">
+        class="table tabl e-borderless table-striped border-left border-right"
+        style="text-align: center">
         <thead class="text-white bg-green-sb">
-          <th class="w-25">
+          <th style="width:20%">
+            #
+          </th>
+          <th style="width:20%">
             X
           </th>
-          <th class="w-25">
+          <th style="width:20%">
             Y
           </th>
-          <th class="w-25">
+          <th style="width:20%">
             Yaw
           </th>
-          <th class="w-25">
+          <th style="width:20%">
             Remove
           </th>
         </thead>
         <tbody>
-          <!-- Ignore this "problem" -Edouard -->
-          <tr
-            v-for="(waypoint,index) of waypointList"
-            class="border-bottom">
-            <td class="w-25">
-              {{ waypoint.x.toFixed(1) }}
-            </td>
-            <td class="w-25">
-              {{ waypoint.y.toFixed(1) }}
-            </td>
-            <td class="w-25">
-              {{ waypoint.yaw.toFixed(1) }}
-            </td>
-            <td class="w-25">
-              <button
-                :id="'removeBtn'+index"
-                type="button"
-                class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                @click="removeWaypointFromList(index)">
-                <img
-                  src="~/open-iconic/svg/trash.svg"
-                  alt=""
-                  style="width:12px;height:12px;">
-              </button>
-            </td>
-          </tr>
+          <template v-for="(waypoint, index) of waypointList">
+            <tr
+              :key="waypoint.dateTime"
+              class="border-bottom">
+              <td style="width:20%">
+                {{ (index+1).toFixed(0) }}
+              </td>
+              <td style="width:20%">
+                {{ waypoint.x.toFixed(1) }}
+              </td>
+              <td style="width:20%">
+                {{ waypoint.y.toFixed(1) }}
+              </td>
+              <td style="width:20%">
+                {{ waypoint.yaw.toFixed(1) }}
+              </td>
+              <td style="width:20%">
+                <button
+                  :id="'removeBtn'+index"
+                  type="button"
+                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
+                  @click="removeWaypointFromList(index)">
+                  <img
+                    src="~/open-iconic/svg/trash.svg"
+                    alt=""
+                    style="width:12px;height:12px">
+                </button>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>

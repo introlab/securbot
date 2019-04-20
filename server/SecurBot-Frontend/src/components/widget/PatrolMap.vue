@@ -9,7 +9,10 @@
       ref="canvas"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;z-index:10;"
-      @mousedown="onMouseDown" />
+      @mousedown="onMouseDown"
+      @mousemove="onMouseMove"
+      @mouseup="onMouseUp"
+      @mouseout="onMouseOut" />
   </div>
 </template>
 
@@ -46,6 +49,7 @@ export default {
       canvas: null,
       context: null,
       CanvasRefreshRate: 60.0, // Hz
+      isMouseDown: false,
       loopIntervalId: null,
       enable: true,
     };
@@ -71,29 +75,70 @@ export default {
         }
       }, 1000 / this.CanvasRefreshRate);
     },
-    // Add waypoint to the list
-    addWaypoint(wp) {
-      this.waypointList.push(wp);
-    },
     // Clean canvas and redraw the waypoints
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.drawWaypoints();
+      this.drawWaypointList();
     },
     // Draw waypoints on canvas
-    drawWaypoints() {
-      this.waypointList.forEach((wp) => {
-        const wpColor = '#00FF00';
-        const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
+    drawWaypointList() {
+      for (const [index, wp] of this.waypointList.entries()) {
+        this.drawWaypoint(wp, index);
+        this.drawYawArrow(wp);
+      }
+    },
+    drawWaypoint(wp, index) {
+      const wpColor = '#00FF00';
+      const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
-        // Draw the goal circle
-        const wpRadius = 8;
+      // Draw the WP circle
+      const wpRadius = 7;
+      this.context.beginPath();
+      this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
+      this.context.fillStyle = wpColor;
+      this.context.fill();
 
-        this.context.beginPath();
-        this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
-        this.context.fillStyle = wpColor;
-        this.context.fill();
-      });
+      this.context.font = '20px serif';
+      this.context.fillStyle = '#000000';
+      this.context.fillText(index + 1, coord.x + 8, coord.y + 8, 25);
+    },
+    drawYawArrow(wp) {
+      const arrowColor = '#00FF00';
+      const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
+      // Draw the arrow
+      const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 15;
+      const headLength = arrowLength / 4;
+      const arrowEnd = {
+        x: coord.x + arrowLength * Math.cos(wp.yaw),
+        y: coord.y + arrowLength * Math.sin(wp.yaw),
+      };
+      const arrowTip1 = {
+        x: arrowEnd.x - headLength * Math.cos(wp.yaw - Math.PI / 4),
+        y: arrowEnd.y - headLength * Math.sin(wp.yaw - Math.PI / 4),
+      };
+      const arrowTip2 = {
+        x: arrowEnd.x - headLength * Math.cos(wp.yaw + Math.PI / 4),
+        y: arrowEnd.y - headLength * Math.sin(wp.yaw + Math.PI / 4),
+      };
+
+      this.context.lineCap = 'round';
+      this.context.lineWidth = Math.max(1, arrowLength / 10);
+      this.context.strokeStyle = arrowColor;
+
+      this.context.beginPath();
+      this.context.moveTo(coord.x, coord.y);
+      this.context.lineTo(arrowEnd.x, arrowEnd.y);
+      this.context.stroke();
+
+      this.context.beginPath();
+      this.context.moveTo(arrowEnd.x, arrowEnd.y);
+      this.context.lineTo(arrowTip1.x, arrowTip1.y);
+      this.context.stroke();
+
+      this.context.beginPath();
+      this.context.moveTo(arrowEnd.x, arrowEnd.y);
+      this.context.lineTo(arrowTip2.x, arrowTip2.y);
+      this.context.stroke();
     },
     // Get position/coordinate of video on click
     getVideoCoordinatesFromEvent(event) {
@@ -148,9 +193,51 @@ export default {
         if (this.isClickValid(coord)) {
           const wp = coord;
           wp.yaw = 0;
-          this.addWaypoint(wp);
+          this.addWaypointCoord(wp);
         }
       }
+      this.isMouseDown = true;
+    },
+    onMouseMove(event) {
+      if (this.isMouseDown) {
+        console.log('MouseMoved');
+        const wp = this.waypointList[this.waypointList.length - 1];
+        const mousePosition = this.getVideoCoordinatesFromEvent(event);
+        wp.yaw = Math.atan2(mousePosition.y - wp.y,
+          mousePosition.x - wp.x);
+        this.updateWaypoint(wp);
+      }
+    },
+    onMouseUp(event) {
+      if (this.isMouseDown) {
+        // Write waypoint to list of waypoints
+        console.log('MouseUP');
+        const date = new Date();
+        const wp = this.waypointList[this.waypointList.length - 1];
+        const coord = this.getVideoCoordinatesFromEvent(event);
+
+        wp.yaw = Math.atan2(coord.y - wp.y,
+          coord.x - wp.x);
+        wp.dateTime = date.getTime();
+
+        this.updateWaypoint(wp);
+        this.isMouseDown = false;
+      }
+    },
+    onMouseOut(event) {
+      if (this.isMouseDown) {
+        console.log('MouseOut');
+        this.waypointList.pop();
+        this.isMouseDown = false;
+      }
+    },
+    // Add waypoint to the list
+    addWaypointCoord(wp) {
+      this.waypointList.push(wp);
+    },
+    updateWaypoint(wp) {
+      this.waypointList.pop();
+      this.waypointList.push(wp);
     },
     // Check is the click was inbound
     isClickValid(coord) {

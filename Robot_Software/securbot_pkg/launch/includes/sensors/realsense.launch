@@ -2,6 +2,8 @@
     <remap from="/camera/aligned_depth_to_color/image_raw" to="/camera/depth_registered/image_raw" />
     <remap from="/camera/color/image_raw" to="/camera/rgb/image_rect_color" />
     <remap from="/camera/color/camera_info" to="/camera/rgb/camera_info" />
+    <remap from="/camera/depth/color/points" to="/pointcloud" />
+
     <include file="$(find realsense2_camera)/launch/rs_camera.launch">
           <arg name="serial_no"           default=""/>
           <arg name="json_file_path"      default=""/>
@@ -41,7 +43,7 @@
           <arg name="enable_sync"           default="false"/>
           <arg name="align_depth"           default="true"/>
 
-          <arg name="filters"               default=""/>
+          <arg name="filters"               default="pointcloud"/>
           <arg name="clip_distance"         default="-2"/>
           <arg name="linear_accel_cov"      default="0.01"/>
           <arg name="initial_reset"         default="false"/>

@@ -2,6 +2,7 @@ module.exports = {
   env: {
     commonjs: true,
     es6: true,
+    browser: true,
   },
   extends: 'airbnb-base',
   globals: {
@@ -12,6 +13,8 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
-    'no-console':'off'
+    'no-console':'off',
+    'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
+    'no-restricted-syntax':'off',
   },
 };
