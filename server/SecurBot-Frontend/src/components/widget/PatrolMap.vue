@@ -97,7 +97,10 @@ export default {
       this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
       this.context.fillStyle = wpColor;
       this.context.fill();
-      this.context.strokeText(index + 1, coord.x, coord.y);
+
+      this.context.font = '20px serif';
+      this.context.fillStyle = '#000000';
+      this.context.fillText(index + 1, coord.x + 8, coord.y + 8, 25);
     },
     drawYawArrow(wp) {
       const arrowColor = '#00FF00';

@@ -32,34 +32,32 @@
           </div>
         </b-row>
         <!-- Joystick -->
+        <div
+          class="position-absolute"
+          style="top:55%;right:25px;z-index:10;">
+          <toggle-button
+            :value="enableJoystick"
+            :color="switchColor"
+            :sync="true"
+            :labels="true"
+            :disabled="disableJoystick"
+            @change="enableJoystick = $event.value" />
+        </div>
         <b-row
           id="joystick-row"
           class="position-relative h-50 m-auto p-4">
-          <div class="position-relative h-100 w-100">
+          <div
+            class="position-relative m-auto"
+            :style="joystickStyle">
             <div
-              class="position-absolute"
-              style="top:0;right:0;z-index:10;">
-              <toggle-button
-                :value="enableJoystick"
-                :color="switchColor"
-                :sync="true"
-                :labels="true"
-                :disabled="disableJoystick"
-                @change="enableJoystick = $event.value" />
-            </div>
-            <div
-              class="position-relative m-auto"
-              :style="joystickStyle">
-              <div
-                class="position-absolute h-100 w-100 border
+              class="position-absolute h-100 w-100 border
               border-secondary rounded-circle shadow-sb"
-                style="top:0;left:0;">
-                <joystick
-                  :enable="enableJoystick"
-                  :absolute-max-x="1"
-                  :absolute-max-y="1"
-                  :bus="bus" />
-              </div>
+              style="top:0;left:0;">
+              <joystick
+                :enable="enableJoystick"
+                :absolute-max-x="1"
+                :absolute-max-y="1"
+                :bus="bus" />
             </div>
           </div>
         </b-row>
@@ -132,15 +130,14 @@ export default {
   },
   mounted() {
     console.log('Teleop have been mounted');
-    this.router.$emit('mounted');
     this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
+    this.router.$emit('mounted');
 
     this.$nextTick(() => {
       window.addEventListener('resize', this.setJoystickStyle);
     });
 
     this.setJoystickStyle();
-    this.init();
   },
   destroyed() {
     console.log('Teleop have been destroyed');
