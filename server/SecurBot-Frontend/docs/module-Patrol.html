@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Teleop - Documentation</title>
+    <title>Patrol - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Teleop</h1>
+    <h1 class="page-title">Patrol</h1>
     
 
     
@@ -51,10 +51,17 @@
     <div class="container-overview">
     
         
-            <div class="description">Component used as a page for teleoperation of the robot. It manages the layout of
-its components and communicate with its parent component through a bus given in props. The
-components used in this page are 2 VideoBox and 1 Joystick. This component have the following
-dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue for styling.</p></div></div> 
+            <div class="description">Vue SFC used as a page for patrol planner. This component manages
+the layout for the patrol planner page. It uses 1 PatrolMap component
+and 1 WaypointTable component. The PatrolMap shows the map for the robot
+and allows users to click on the map to set waypoint, those waypoint are
+then showed in the WaypointTable that allows to remove any undesired points.
+The page also contains a box with 2 buttons and a title. The buttons are
+used to send the current waypoint list or clean it (remove every points).
+It communicates with parent component through the bus in props.
+This component have the following dependency :
+PatrolMap.vue Component, WaypointTable.map Component and Bootstrap-Vue
+for styling.</p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -104,24 +111,10 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
     <tbody>
     
     <tr>
-        <td class="name"><code>showCamera</code></td>
-        <td><code>boolean</code></td>
+        <td class="name"><code>waypointList</code></td>
+        <td><code>Array.&lt;Object></code></td>
         <td>-</td>
-        <td>Enable or disable the camera display.</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>showMap</code></td>
-        <td><code>boolean</code></td>
-        <td>-</td>
-        <td>Enable or disable the map display.</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>enableJoystick</code></td>
-        <td><code>boolean</code></td>
-        <td>-</td>
-        <td>Enable or disable the joystick ability to send data.</td>
+        <td>Lists the current waypoints</td>
     </tr>
     
     </tbody>
@@ -255,14 +248,14 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
 
     
 
-    <h4 class="name" id="changeJoystickState"><span class="type-signature"></span>changeJoystickState<span class="signature">(state)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="clearWaypointList"><span class="type-signature"></span>clearWaypointList<span class="signature">(waypointList)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Callback used to change the state of the joystick
+    Callback used to clear the patrol
 </div>
 
 
@@ -298,7 +291,7 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_Teleop.vue.html">pages/Teleop.vue</a>, <a href="pages_Teleop.vue.html#line137">line 137</a>
+        <a href="pages_Patrol.vue.html">pages/Patrol.vue</a>, <a href="pages_Patrol.vue.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -342,13 +335,13 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
 
         <tr>
             
-                <td class="name"><code>state</code></td>
+                <td class="name"><code>waypointList</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>boolean</code></span>
+<span class="param-type"><code>Array.&lt;Object></code></span>
 
 
             
@@ -359,7 +352,7 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
             
 
             <td class="description last">
-                Request of the joystick state
+                List of current waypoints to be used for patrol
                 
             </td>
         </tr>
@@ -375,10 +368,140 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
 
 
 
-<h5>Listens to Events:</h5>
-<ul>
-    <li>event:on-joystick-state-changed</li>
-</ul>
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="sendPatrol"><span class="type-signature"></span>sendPatrol<span class="signature">(waypointList)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback used to send the patrol to scheduling
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pages_Patrol.vue.html">pages/Patrol.vue</a>, <a href="pages_Patrol.vue.html#line131">line 131</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>waypointList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Array.&lt;Object></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                List of current waypoints to be used for patrol
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
 
 
 

@@ -113,7 +113,7 @@ export default {
     this.bus.$emit('mounted');
   },
   /**
-  * Lifecycle Hook - mounted
+  * Lifecycle Hook - destroyed
   *
   * @method
   * @listens destroyed(el)

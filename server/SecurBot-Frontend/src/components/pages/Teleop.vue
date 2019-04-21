@@ -117,7 +117,7 @@ export default {
     this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
   },
   /**
-   * Lifecycle Hook - mounted
+   * Lifecycle Hook - destroyed
    *
    * @method
    * @listens destroyed(el)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Teleop - Documentation</title>
+    <title>widget/PatrolMap - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Teleop</h1>
+    <h1 class="page-title">widget/PatrolMap</h1>
     
 
     
@@ -51,10 +51,15 @@
     <div class="container-overview">
     
         
-            <div class="description">Component used as a page for teleoperation of the robot. It manages the layout of
-its components and communicate with its parent component through a bus given in props. The
-components used in this page are 2 VideoBox and 1 Joystick. This component have the following
-dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue for styling.</p></div></div> 
+            <div class="description">Vue SFC used as a widget to set waypoint on a map. This component
+uses the VideoBox component to show the robot map (that is sent from
+the robot in a video feed format) and put a canvas on top of it to
+detect user clicks. When a click is detected the x and y position
+is used to set a waypoint in the array given in props (push). The
+canvas then read the array and draw waypoint on the map where the
+user clicked previously.
+This component have the following dependency :
+VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -71,19 +76,19 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
     <tbody>
     
     <tr>
-        <td class="name"><code>bus</code></td>
-        <td><code>Vue</code></td>
+        <td class="name"><code>waypointList</code></td>
+        <td><code>Array.&lt;Object></code></td>
         <td>-</td>
         <td><b>Yes</b></td>
-        <td>Vue bus use to emit event to other components.</td>
+        <td>Lists the current waypoints.</td>
     </tr>
     
     <tr>
-        <td class="name"><code>Router</code></td>
-        <td><code>Vue</code></td>
+        <td class="name"><code>patrolMapId</code></td>
+        <td><code>String</code></td>
         <td>-</td>
         <td><b>Yes</b></td>
-        <td>Vue bus use to routing emit event to parent.</td>
+        <td>Identifies source with exact name reference.</td>
     </tr>
     
     </tbody>
@@ -104,24 +109,45 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
     <tbody>
     
     <tr>
-        <td class="name"><code>showCamera</code></td>
-        <td><code>boolean</code></td>
+        <td class="name"><code>videoElement</code></td>
+        <td><code>Object</code></td>
         <td>-</td>
-        <td>Enable or disable the camera display.</td>
+        <td>Contains reference to created video-id</td>
     </tr>
     
     <tr>
-        <td class="name"><code>showMap</code></td>
-        <td><code>boolean</code></td>
+        <td class="name"><code>canvas</code></td>
+        <td><code>Object</code></td>
         <td>-</td>
-        <td>Enable or disable the map display.</td>
+        <td>Contains reference to created canvas</td>
     </tr>
     
     <tr>
-        <td class="name"><code>enableJoystick</code></td>
-        <td><code>boolean</code></td>
+        <td class="name"><code>context</code></td>
+        <td><code></code></td>
         <td>-</td>
-        <td>Enable or disable the joystick ability to send data.</td>
+        <td>-</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>CanvasRefreshRate</code></td>
+        <td><code>Number</code></td>
+        <td>-</td>
+        <td>Sets the constant refresh rate of the displayed canvas</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>loopIntervalId</code></td>
+        <td><code></code></td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>enable</code></td>
+        <td><code>Boolean</code></td>
+        <td>-</td>
+        <td>-</td>
     </tr>
     
     </tbody>
@@ -130,32 +156,6 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
 
 
 
-
-<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
-<table class="params" data-jsdoc-vuejs="table-event">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Payload Type</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-        <td><code>destroyed</code></td>
-        <td></td>
-        <td>Event indicating the component has been destroyed.</td>
-    </tr>
-    
-    <tr>
-        <td><code>mounted</code></td>
-        <td></td>
-        <td>Event indicating the component has been mounted.</td>
-    </tr>
-    
-    </tbody>
-</table>
 
 
 <div class="container-overview"><div><p> 
@@ -246,150 +246,6 @@ dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue fo
 
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="changeJoystickState"><span class="type-signature"></span>changeJoystickState<span class="signature">(state)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Callback used to change the state of the joystick
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_Teleop.vue.html">pages/Teleop.vue</a>, <a href="pages_Teleop.vue.html#line137">line 137</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>state</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>boolean</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Request of the joystick state
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<h5>Listens to Events:</h5>
-<ul>
-    <li>event:on-joystick-state-changed</li>
-</ul>
-
-
-
-
-
-
-
-
-
-</div>
-        
     
 
     

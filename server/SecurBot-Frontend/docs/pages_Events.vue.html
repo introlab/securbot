@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Home - Documentation</title>
+    <title>pages/Events.vue - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,29 +29,91 @@
 
 <div id="main">
     
+    <h1 class="page-title">pages/Events.vue</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;div />
+&lt;/template>
 
+&lt;script>
+/**
+ * Element to be implemented in future release.
+ * Component used as a page to log the communications and interactions between the operator and
+ * the robot. It will show the event logged in a database (component), allow the user to filter
+ * through the events (component) and query the database (Events.vue will manage those)
+ * There are currently no components in this page. This component have the following
+ * dependency : Bootstrap-Vue for styling.
+ *
+ *
+ * @module Events
+ * @vue-prop {Vue} bus - Vue bus use to emit event to other components.
+ * @vue-prop {Vue} Router - Vue bus use to routing emit event to parent.
+ * @vue-event {} destroyed - Event indicating the component has been destroyed.
+ * @vue-event {} mounted - Event indicating the component has been mounted.
+ */
 
+/* Disabled comment documentation
+ * Might use those eventually by forking jsdoc-vue-js so it can manage the author
+ * and version tag correctly
+ * @author Edouard Legare &lt;edouard.legare@usherbrooke.ca>
+ * @version 1.0.0
+ */
 
+import Vue from 'vue';
 
+export default {
+  name: 'event-page',
+  components: {
+  },
+  props: {
+    bus: {
+      type: Vue,
+      required: true,
+    },
+    router: {
+      type: Vue,
+      required: true,
+    },
+  },
+  /**
+   * Lifecycle Hook - mounted
+   *
+   * @method
+   * @listens mount(el)
+   */
+  mounted() {
+    console.log('Event have been mounted');
+    this.bus.$emit('mounted');
+  },
+  /**
+   * Lifecycle Hook - destroyed
+   *
+   * @method
+   * @listens destroyed(el)
+   */
+  destroyed() {
+    console.log('Event have been destroyed');
+    this.router.$emit('destroyed');
+  },
+  methods: {
+  },
+};
+&lt;/script>
 
+&lt;style>
 
-
-
-
-    
-
-
-    <section class="readme">
-        <article><h1>Frontend</h1><h2>Project setup</h2><pre class="prettyprint source"><code>npm install</code></pre><h3>Compiles and hot-reloads for development</h3><pre class="prettyprint source"><code>npm run serve</code></pre><h3>Compiles and minifies for production</h3><pre class="prettyprint source"><code>npm run build</code></pre><h3>Run your tests</h3><pre class="prettyprint source"><code>npm run test</code></pre><h3>Lints and fixes files</h3><pre class="prettyprint source"><code>npm run lint</code></pre><h3>Run your end-to-end tests</h3><pre class="prettyprint source"><code>npm run test:e2e</code></pre><h3>Run your unit tests</h3><pre class="prettyprint source"><code>npm run test:unit</code></pre><h3>Customize configuration</h3><p>See <a href="https://cli.vuejs.org/config/">Configuration Reference</a>.</p></article>
+&lt;/style>
+</code></pre>
+        </article>
     </section>
-
-
 
 
 
