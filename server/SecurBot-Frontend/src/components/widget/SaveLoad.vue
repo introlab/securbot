@@ -22,7 +22,6 @@
           class="form-control h-100">
       </div>
     </div>
-    <!-- Table -->
     <div
       class="w-100"
       style="height: calc(100% - 40px - 0.25rem)">
@@ -84,51 +83,48 @@
         </table>
       </div>
     </div>
-    <!--div
-        class="btn-toolbar mb-1 w-100 d-flex flex-row-reverse"
-        style="height:40px;"
-        role="toolbar">
-        <button
-          type="button"
-          class="btn btn-success h-100"
-          style="align-items: center; width:125px; min-width:125px;"
-          @click="addPatrolToPatrolList()">
-          Save patrol
-        </button>
-        <div
-          class="h-100 w-auto text-left mr-1"
-          style="flex:1;">
-          <input
-            id="nameTextBox"
-            v-model="newPatrolName"
-            type="text"
-            :placeholder="[[ placehold ]]"
-            class="form-control h-100">
-        </div>
-      </div>
-    </div-->
   </div>
 </template>
 
 <script>
-/*
-* Author(s):  Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>
-*
-* File :  SaveLoad.vue
-* Desc :  Complementary module allowing to send a list of patrols (a patrol being a name
-*         and a list of waypoint) to the server and manage the list form the user
-*         interface application.The table contains two colomn of buttons use to delete the row they
-*         are in and resend new version of the modified patrol list. The other button is used to
-*         copy the waypoints of a saved patrol to the current waypoint list.
-*
-* Dependencies :
-*       - Bootstrap.vue
-*
-*/
+/**
+ * Complementary module allowing to send a list of patrols (a patrol being a name
+ * and a list of waypoint) to the server and manage the list form the user
+ * interface application.The table contains two colomn of buttons use to delete the row they
+ * are in and resend new version of the modified patrol list. The other button is used to
+ * copy the waypoints of a saved patrol to the current waypoint list.
+ * This component have the following dependency :
+ * Bootstrap-Vue for styling.
+ *
+ *
+ * @module widget/SaveLoad
+ * @vue-prop {Object[]} waypointList - Lists the current waypoints
+ * @vue-prop {Object[]} patrolList - Lists the saved waypoint lists
+ * @vue-data {String} newPatrolName - Name of the current waypoint list
+ * @vue-data {String} placehold - Message of the placeholder for name input textbox
+ * /
+
+/* Disabled comment documentation
+ * Might use those eventually by forking jsdoc-vue-js so it can manage the author
+ * and version tag correctly
+ * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
+ * @version 1.0.0
+ */
 
 export default {
   name: 'save-load',
-  props: ['waypointList', 'patrolList'],
+  props: {
+    waypointList: {
+      type: Array,
+      default: () => [],
+      required: true,
+    },
+    patrolList: {
+      type: Array,
+      default: () => [],
+      required: true,
+    },
+  },
   data() {
     return {
       newPatrolName: '',
