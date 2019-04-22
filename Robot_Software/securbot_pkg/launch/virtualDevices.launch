@@ -1,6 +1,6 @@
 <!--
 
-    Lanches the map video generator on a virtual webcam
+    Launches the map video generator on a virtual webcam
     Uses v4l2loopback linux kernel module to instantiate virtual camera
 
 -->
