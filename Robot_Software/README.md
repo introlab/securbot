@@ -1,20 +1,9 @@
 # Robot Software
-> This folder contains all the ROS modules created for the SecurBot project
 
+> This folder contains all the ROS package created for the SecurBot project.
 
-## Get started:
-To get started using the robot and its ROS modules, you need to have ROS kinetic install on your machine/computer and you need to create a symbolic link from of this folder in your workspace.
+## Get started
 
+To get started using the robot and its ROS modules, you need to have ROS kinetic installed on your robot and you need to create a symbolic link to the Robot_Software folder in your catkin workspace src folder.
 
-To start the robot, enter the following command :
-
-`On Robot`
-```
-roslaunch turtlebot_bringup minimal.launch
-roslaunch launchfiles/3dsensor.launch
-```
-
-` On Computer `
-```
-roslaunch rtabmap_ros demo_turtlebot_rviz.launch
-```
+Visit [the wiki](https://github.com/introlab/securbot/wiki/ROS-Getting-Started) for more usage information and tips.
