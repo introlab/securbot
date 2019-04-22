@@ -165,7 +165,6 @@ export default {
   methods: {
     /**
      * Callback used to change the state of the joystick
-     *
      * @method
      * @param {boolean} state - Request of the joystick state
      * @listens on-joystick-state-changed

@@ -30,14 +30,14 @@
  *
  *
  * @module widget/PatrolMap
- * @vue-prop {Object[]} waypointList - Lists the current waypoints.
- * @vue-prop {String} patrolMapId - Identifies source with exact name reference.
- * @vue-data {Object} videoElement - Contains reference to created video-id
- * @vue-data {Object} canvas - Contains reference to created canvas
- * @vue-data {} context
+ * @vue-prop {Object[]} waypointList - Lists the current waypoints
+ * @vue-prop {String} patrolMapId - Identifies map source with exact name reference
+ * @vue-data {Object} videoElement - Contains reference to video-id
+ * @vue-data {Object} canvas - Contains reference to responsive overlay of map
+ * @vue-data {Object} context - Sets canvas context
  * @vue-data {Number} CanvasRefreshRate - Sets the constant refresh rate of the displayed canvas
- * @vue-data {} loopIntervalId
- * @vue-data {Boolean} enable
+ * @vue-data {Object} loopIntervalId - Contains refresh rate and display parameter of the map
+ * @vue-data {Boolean} enable - Enables or disables the display of the map and canvas
  */
 
 /* Disabled comment documentation
@@ -57,7 +57,8 @@ export default {
   },
   props: {
     waypointList: {
-      type: Object,
+      type: Array,
+      default: () => [],
       required: true,
     },
     patrolMapId: {
@@ -80,6 +81,8 @@ export default {
    * Lifecycle Hook - mounted
    * On component mounted, Get html elements and initialize
    * @method
+   * @param {String} patrolMapId - Identifies video (map) source with exact name reference
+   * @param {Object} canvas - Contains reference to responsive overlay of the video
    * @listens mount(el)
    */
   mounted() {
@@ -98,7 +101,12 @@ export default {
     clearInterval(this.loopIntervalId);
   },
   methods: {
-    // Initialisation of canvas refrash rate
+    /**
+     * Initialisation of canvas refrash rate and call to canvas resizing functions
+     * @method
+     * @param {boolean} enable - Enables or disables the display of the map and canvas
+     * @param {number} CanvasRefreshRate - Refresh rate constant
+     */
     init() {
       this.loopIntervalId = setInterval(() => {
         if (this.enable) {
@@ -107,23 +115,44 @@ export default {
         }
       }, 1000 / this.CanvasRefreshRate);
     },
-    // Clean canvas and redraw the waypoints
+
+    /**
+     * Clears canvas and redraws the waypoints of the current patrol
+     * @method
+     * @param {Object} canvas - Contains reference to responsive overlay of the video
+     */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawWaypointList();
     },
-    // Draw waypoints on canvas
+
+    /**
+     * Calls for the drawing the waypoints with corresponding arrows (indicating the yaws) of
+     * each waypoint of the current waypoint list
+     * @method
+     * @param {Object[]} waypointList - Lists the current waypoints
+     */
     drawWaypointList() {
       for (const [index, wp] of this.waypointList.entries()) {
         this.drawWaypoint(wp, index);
         this.drawYawArrow(wp);
       }
     },
+
+    /**
+     * Draws a waypoint on the canvas
+     * @method
+     * @param {function} getCanvasCoordinateFromVideo - Corrects the coordinates of the waypoints
+     * according to the video offset and scaling
+     * @param {Object} wp - Waypoint
+     * @param {Number} wp.x - Waypoint's x coordinate in pixel
+     * @param {Number} wp.y - Waypoint's y coordinate in pixel
+     * @param {Number} index - Index number of sent waypoint
+     */
     drawWaypoint(wp, index) {
       const wpColor = '#00FF00';
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
-      // Draw the WP circle
       const wpRadius = 7;
       this.context.beginPath();
       this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
@@ -134,10 +163,22 @@ export default {
       this.context.fillStyle = '#000000';
       this.context.fillText(index + 1, coord.x + 8, coord.y + 8, 25);
     },
+
+    /**
+     * Draws arrow for the yaw of the waypoint on the canvas
+     * @method
+     * @param {function} getCanvasCoordinateFromVideo - Corrects the coordinates of the waypoints
+     * according to the video offset and scaling
+     * @param {Object} wp - Waypoint
+     * @param {Number} wp.x - Waypoint's x coordinate in pixel
+     * @param {Number} wp.y - Waypoint's y coordinate in pixel
+     * @param {Number} wp.yaw - Waypoint's yaw angle in radians
+     * @param {Object} canvas - Contains reference to responsive overlay of the video
+     */
     drawYawArrow(wp) {
       const arrowColor = '#00FF00';
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
-      // Draw the arrow
+
       const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 15;
       const headLength = arrowLength / 4;
       const arrowEnd = {
@@ -172,10 +213,21 @@ export default {
       this.context.lineTo(arrowTip2.x, arrowTip2.y);
       this.context.stroke();
     },
-    // Get position/coordinate of video on click
-    getVideoCoordinatesFromEvent(event) {
-      const offsetAndScale = this.getVideoOffsetAndScale();
 
+    /**
+     * Get position/coordinate of mouse event on video
+     * @method
+     * @param {function} getVideoOffsetAndScale - Gets the offset between the original video
+     * content and the displayed map
+     * @param {Object} videoElement - Contains reference to video of the map
+     * @listens mousedown
+     * @listens mouseup
+     * @listens mousemove
+     * @listens mouseout
+     * @returns {Number} - X and Y coordinate in pixels of event (mouse position)
+     */
+    getVideoCoordinatesOfEvent(event) {
+      const offsetAndScale = this.getVideoOffsetAndScale();
       const rect = this.videoElement.getBoundingClientRect();
       const x = (event.clientX - rect.left - offsetAndScale.offsetX) / offsetAndScale.scale;
       const y = (event.clientY - rect.top - offsetAndScale.offsetY) / offsetAndScale.scale;
@@ -184,12 +236,27 @@ export default {
         y,
       };
     },
-    // Ajust canvas size to fit video
+
+    /**
+     * Sets canvas size (height and width) to match the size of the video
+     * @method
+     * @param {Object} videoElement - Contains reference to video of the map
+     */
     adjustCanvasToVideo() {
       this.canvas.width = this.videoElement.offsetWidth;
       this.canvas.height = this.videoElement.offsetHeight;
     },
-    // Get the offset and scale of canvas
+
+    /**
+     * Compute the offset and rescaling parameters of resized video from original content
+     * @method
+     * @param {Object} videoElement - Contains reference to video of the map
+     * @param {Number} videoElement.videoWidth - Current width of video
+     * @param {Number} videoElement.videoHeight - Current height of video
+     * @param {Number} videoElement.offsetWidth - Offset width from the original video content
+     * @param {Number} videoElement.offsetHeight - Offset height from the original video content
+     * @returns {Number} - Offset in X, offset in Y and scaling ratios
+     */
     getVideoOffsetAndScale() {
       const videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
 
@@ -197,7 +264,7 @@ export default {
       let offsetY = 0;
       let scale = 1;
       if ((this.videoElement.offsetHeight * videoRatio) > this.videoElement.offsetWidth) {
-        scale = this.videoElement.offsetWidth / this.videoElement.videoWidth;
+        scale = this.videoElement.osffsetWidth / this.videoElement.videoWidth;
         offsetY = (this.videoElement.offsetHeight - (this.videoElement.videoHeight * scale)) / 2;
       } else {
         scale = this.videoElement.offsetHeight / this.videoElement.videoHeight;
@@ -209,7 +276,19 @@ export default {
         scale,
       };
     },
-    // Make correction to the coordinates from canvas for the waypoint given
+
+    /**
+     * Corrects the waypoint coordinate (x,y) from the offsets and scale parameters of video
+     * @method
+     * @param {function} getVideoOffsetAndScale - Gets the offset between the original video
+     * content and the displayed map
+     * @param {Object} videoElement - Contains reference to video of the map
+     * @listens mousedown
+     * @listens mouseup
+     * @listens mousemove
+     * @listens mouseout
+     * @returns {Number} - X and Y coordinate in pixels of event (mouse position)
+     */
     getCanvasCoordinatesFromVideo(x, y) {
       const offsetAndScale = this.getVideoOffsetAndScale();
 
@@ -218,10 +297,18 @@ export default {
         y: (y * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
-    // On mouse down event, verify validity of click
+
+    /**
+     * On mouse down, verifies validity of click, creates a waypoint and sets the X and Y
+     * coordinates from click coordinates and updates mouse state (isMouseDown = true).
+     * @method
+     * @param {function} getVideoCoordinatesOfEvent - Get coordinate of mouse event on video
+     * @param {function} isClickValid - Check to see if click is in bound
+     * @listens mousedown
+     */
     onMouseDown(event) {
       if (event.button === 0) {
-        const coord = this.getVideoCoordinatesFromEvent(event);
+        const coord = this.getVideoCoordinatesOfEvent(event);
         if (this.isClickValid(coord)) {
           const wp = coord;
           wp.yaw = 0;
@@ -230,32 +317,58 @@ export default {
       }
       this.isMouseDown = true;
     },
+
+    /**
+     * On mouse move, if mouse was previously down, it computes the yaw of the waypoint using
+     * previously set coordinates (during onMouseDown) and the current mouse (event) coordinates.
+     * @method
+     * @param {Object[]} waypointList - Lists the current waypoints
+     * @param {function} getVideoCoordinatesOfEvent - Get coordinate of mouse event on video
+     * @listens mousemove
+     */
     onMouseMove(event) {
       if (this.isMouseDown) {
         console.log('MouseMoved');
         const wp = this.waypointList[this.waypointList.length - 1];
-        const mousePosition = this.getVideoCoordinatesFromEvent(event);
+        const mousePosition = this.getVideoCoordinatesOfEvent(event);
         wp.yaw = Math.atan2(mousePosition.y - wp.y,
           mousePosition.x - wp.x);
         this.updateWaypoint(wp);
       }
     },
+
+    /**
+     * On mouse up, if mouse was previously down, it computes the yaw of the waypoint using
+     * previously set coordinates (during onMouseDown) and the current mouse (event) coordinates.
+     * It also sets the date and time of the created waypoint as one of its attribute. Updates
+     * mouse state (isMouseDown = false).
+     * @method
+     * @param {Object[]} waypointList - Lists the current waypoints
+     * @param {function} getVideoCoordinatesOfEvent - Get coordinate of mouse event on video
+     * @listens mouseup
+     */
     onMouseUp(event) {
       if (this.isMouseDown) {
         // Write waypoint to list of waypoints
         console.log('MouseUP');
         const date = new Date();
         const wp = this.waypointList[this.waypointList.length - 1];
-        const coord = this.getVideoCoordinatesFromEvent(event);
-
+        const coord = this.getVideoCoordinatesOfEvent(event);
         wp.yaw = Math.atan2(coord.y - wp.y,
           coord.x - wp.x);
         wp.dateTime = date.getTime();
-
         this.updateWaypoint(wp);
         this.isMouseDown = false;
       }
     },
+
+    /**
+     * On mouse out, if mouse was previously down, it deletes the previously created waypoint
+     * (during onMouseDown) and the updates the mouse state (isMouseDown = false).
+     * @method
+     * @param {Object[]} waypointList - Lists the current waypoints
+     * @listens mousedown
+     */
     onMouseOut(event) {
       if (this.isMouseDown) {
         console.log('MouseOut');
@@ -263,15 +376,38 @@ export default {
         this.isMouseDown = false;
       }
     },
-    // Add waypoint to the list
+
+    /**
+     * Adds a waypoint to the list of current waypoints
+     * @method
+     * @param {Object[]} waypointList - Lists the current waypoints
+     * @param {Object} wp - Waypoint
+     */
     addWaypointCoord(wp) {
       this.waypointList.push(wp);
     },
+
+    /**
+     * Updates last waypoint of the waypoint list
+     * @method
+     * @param {Object[]} waypointList - Lists the current waypoints
+     * @param {Object} wp - Waypoint
+     */
     updateWaypoint(wp) {
       this.waypointList.pop();
       this.waypointList.push(wp);
     },
-    // Check is the click was inbound
+
+    /**
+     * Check to see if element is in bound
+     * @method
+     * @param {Object} coord - Coordinates of an element
+     * @param {Number} coord.x - X coordinate of element
+     * @param {Number} coord.y - Y coordinate of element
+     * @param {Number} videoElement.videoWidth - Current width of video
+     * @param {Number} videoElement.videoHeight - Current height of video
+     * @returns {boolean} - true if coordinates of the element are in bounds of the video
+     */
     isClickValid(coord) {
       return coord.x >= 0
         && coord.x < this.videoElement.videoWidth
