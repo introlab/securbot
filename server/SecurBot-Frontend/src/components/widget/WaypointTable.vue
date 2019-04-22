@@ -3,19 +3,22 @@
     <div class="mh-100 overflow-auto">
       <table
         id="waypoint-table"
-        class="table table-borderless table-striped border-left border-right"
+        class="table tabl e-borderless table-striped border-left border-right"
         style="text-align: center">
         <thead class="text-white bg-green-sb">
-          <th class="w-25">
+          <th style="width:20%">
+            #
+          </th>
+          <th style="width:20%">
             X
           </th>
-          <th class="w-25">
+          <th style="width:20%">
             Y
           </th>
-          <th class="w-25">
+          <th style="width:20%">
             Yaw
           </th>
-          <th class="w-25">
+          <th style="width:20%">
             Remove
           </th>
         </thead>
@@ -24,16 +27,19 @@
             <tr
               :key="waypoint.dateTime"
               class="border-bottom">
-              <td class="w-25">
+              <td style="width:20%">
+                {{ (index+1).toFixed(0) }}
+              </td>
+              <td style="width:20%">
                 {{ waypoint.x.toFixed(1) }}
               </td>
-              <td class="w-25">
+              <td style="width:20%">
                 {{ waypoint.y.toFixed(1) }}
               </td>
-              <td class="w-25">
-                {{ waypoint.dateTime }}  <!-- waypoint.yaw.toFixed(1) -->
+              <td style="width:20%">
+                {{ waypoint.yaw.toFixed(1) }}
               </td>
-              <td class="w-25">
+              <td style="width:20%">
                 <button
                   :id="'removeBtn'+index"
                   type="button"

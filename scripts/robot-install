@@ -8,7 +8,7 @@
 
 
 # Install settings
-CATK_WS=/opt/securbot/catkin_ws
+CATK_WS=$HOME/catkin_ws
 ROBOT_GROUP=ros
 
 KINETIC_PATH=/opt/ros/kinetic   # Path use by apt when installing kinetic
@@ -87,7 +87,8 @@ source $CATK_WS/devel/setup.sh
 
 # Creating ros usergroup
 groupadd $ROBOT_GROUP
-usermod -a -G video $ROBOT_GROUP $OPERATOR
+usermod -a -G $ROBOT_GROUP $OPERATOR
+usermod -a -G video $OPERATOR
 
 # Owning directories
 chown -R $OPERATOR:$ROBOT_GROUP $CATK_WS

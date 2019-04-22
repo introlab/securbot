@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>renderer.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-ipcInit.html">ipcInit</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Main.html">Main</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~createWindow">createWindow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startApp">startApp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startNode">startNode</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Renderer.html">Renderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~fetchParameters">fetchParameters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~myInit">myInit</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:data">data</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:goal">goal</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:msg">msg</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:parameters_response">parameters_response</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:rosdata">rosdata</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">renderer.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* global easyrtc, ipc, window */
+/**
+ * Renderer for this application.
+ * @module Renderer
+ *
+ * @author Edouard Denomme &lt;>
+ * @author Cedric Godin &lt;>
+ * @author Edouard Legare &lt;>
+ */
+
+/**
+ * Keep track of the operator id.
+ * @type {number}
+ */
+let operatorID = null;
+
+/**
+ * Virtual devices names.
+ * @type {Array}
+ */
+const virtualDevicesName = ['virtual_map', 'virtual_camera'];
+
+/**
+ * Array to keep track of the virtual devices corrected name.
+ * @type {Array}
+ */
+const streamNames = [];
+
+/**
+ * Send data comming from ROS to the easyrtc server.
+ * @method
+ * @param {String} data - Data comming from ROS to send to server.
+ * @listens rosdata
+ */
+ipc.on('rosdata', (emitter, data) => {
+  console.log(data);
+  if (operatorID != null) { easyrtc.sendDataP2P(operatorID, 'rosdata', data); }
+});
+
+/**
+ * Callback for the nav-goal data channel from easyrtc.
+ * @callback goalReceivedCallback
+ * @param {number} easyrtc - Id of the peer sending data.
+ * @param {String} msgType - Data channel the data are comming from.
+ * @param {String} msgData - JSON string of the patrol datas.
+ */
+function goalReceivedCallback(sourceId, msgType, goalJsonString) {
+  console.log(`Received new nav goal: ${goalJsonString}`);
+  ipc.send('goal', goalJsonString);
+}
+
+/**
+ * Callback for the joystick-position data channel from easyrtc.
+ * @callback teleopCallback
+ * @param {number} easyrtc - Id of the peer sending data.
+ * @param {String} msgType - Data channel the data are comming from.
+ * @param {String} msgData - JSON string of the teleop datas.
+ */
+function teleopCallback(easyrtcid, msgType, msgData) {
+  console.log(msgData);
+  ipc.send('msg', msgData);
+}
+
+/**
+ * Callback for the request-feed data channel msg from easyrtc.
+ * @callback streamRequestCallback
+ * @param {number} easyrtc - Id of the peer sending data.
+ * @param {String} msgType - Data channel the data are comming from.
+ * @param {String} msgData - String of the requested string name.
+ */
+function streamRequestCallback(easyrtcid, msgType, msgData) {
+  console.log(`Received request of type ${msgType} for ${msgData}`);
+  if (msgData === 'map' || msgData === 'camera') {
+    easyrtc.addStreamToCall(easyrtcid, msgData);
+  }
+}
+
+/**
+ * Use to fetch the parameters from main
+ * @function fetchParameters
+ */
+function fetchParameters() {
+  return new Promise((resolve) => {
+    ipc.once('parameters_response', (event, params) => {
+      resolve(params);
+    });
+
+    ipc.send('parameters_request');
+  });
+}
+
+/**
+ * Callback of the accept checker of easyrtc
+ * @callback acceptCall
+ * @param {number} easyrtcid - Id of the peer sending data.
+ * @param {callback} acceptor - Need to be sets to access or refuse a call.
+ */
+function acceptCall(easyrtcid, acceptor) {
+  if (operatorID === null) {
+    operatorID = easyrtcid;
+    console.log(`Accepting call from ${easyrtcid}, this operator can control me!`);
+    acceptor(true);
+  } else {
+    console.log(`Accepting call from ${easyrtcid}, this operator can only view me!`);
+    acceptor(true);
+  }
+}
+
+/**
+ * Main function of the renderer; set all callback for easyrtc, connect the robot to the easyrtc
+ * server and configure the 2 video stream.
+ * @function myInit
+ */
+async function myInit() {
+  const parameters = await fetchParameters();
+
+  easyrtc.setRoomApiField('default', 'type', 'robot');
+  easyrtc.setSocketUrl(parameters.webRtcServerUrl);
+
+  easyrtc.enableVideo(true);
+  easyrtc.enableAudio(false);
+
+  easyrtc.enableVideoReceive(false);
+  easyrtc.enableAudioReceive(false);
+  easyrtc.enableDataChannels(true);
+
+  easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal');
+  easyrtc.setPeerListener(teleopCallback, 'joystick-position');
+  easyrtc.setPeerListener(streamRequestCallback, 'request-feed');
+
+  easyrtc.setAcceptChecker(acceptCall);
+
+  const connectSuccess = (myId) => {
+    console.log(`My easyrtcid is ${myId}`);
+  };
+  const connectFailure = (errorCode, errText) => {
+    console.log(errText);
+  };
+
+  let isConnected = false;
+
+  easyrtc.getVideoSourceList((device) => {
+    for (const deviceName of virtualDevicesName) {
+      // eslint-disable-next-line max-len
+      const videoSource = device.find(source => source.label.toString().trim() === deviceName.trim());
+
+      if (videoSource) {
+        console.log(`Found [${videoSource.label}] stream`);
+        easyrtc.setVideoSource(videoSource.id);
+        const streamName = videoSource.label.split('_')[1];
+
+        streamNames.push(streamName);
+
+        // eslint-disable-next-line no-loop-func
+        easyrtc.initMediaSource(() => { // success callback
+          console.log(`Initializing ${streamName}...`);
+          if (!isConnected) {
+            easyrtc.connect('easyrtc.securbot', connectSuccess, connectFailure);
+            isConnected = true;
+          }
+        },
+        connectFailure,
+        streamName);
+      }
+    }
+  });
+}
+
+/**
+ * On load, start the renderer.
+ */
+window.onload = () => { myInit(); };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Apr 20 2019 17:31:50 GMT-0400 (GMT-04:00) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
