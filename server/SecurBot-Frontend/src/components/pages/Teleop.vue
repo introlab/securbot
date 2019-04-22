@@ -6,6 +6,7 @@
     class="h-100 "
     bg-variant="light">
     <b-row class="h-100">
+      <!-- Camera Video -->
       <b-col
         lg="8"
         md="7"
@@ -22,6 +23,7 @@
         md="5"
         sm="6"
         class="mh-100">
+        <!-- Map Video -->
         <b-row class="h-50 w-100 position-relative m-0">
           <div class="h-100 w-100 m-auto position-relative">
             <video-box
@@ -29,14 +31,27 @@
               video-id="map-stream" />
           </div>
         </b-row>
+        <!-- Joystick -->
+        <div
+          class="position-absolute"
+          style="top:55%;right:25px;z-index:10;">
+          <toggle-button
+            :value="enableJoystick"
+            :color="switchColor"
+            :sync="true"
+            :labels="true"
+            :disabled="disableJoystick"
+            @change="enableJoystick = $event.value" />
+        </div>
         <b-row
-          class="position-relative h-50 m-auto"
-          style="max-width:calc(100vh*0.2)">
+          id="joystick-row"
+          class="position-relative h-50 m-auto p-4">
           <div
-            class="position-relative m-auto w-100"
-            style="padding-top:100%;height:0;">
+            class="position-relative m-auto"
+            :style="joystickStyle">
             <div
-              class="position-absolute h-100 w-100 border border-secondary rounded-circle shadow-sb"
+              class="position-absolute h-100 w-100 border
+              border-secondary rounded-circle shadow-sb"
               style="top:0;left:0;">
               <joystick
                 :enable="enableJoystick"
@@ -77,6 +92,7 @@
  * @version 1.0.0
  */
 
+import { ToggleButton } from 'vue-js-toggle-button';
 import Vue from 'vue';
 
 import VideoBox from '../widget/VideoBox';
@@ -87,6 +103,7 @@ export default {
   components: {
     VideoBox,
     Joystick,
+    ToggleButton,
   },
   props: {
     bus: {
@@ -103,6 +120,17 @@ export default {
       showCamera: true,
       showMap: true,
       enableJoystick: false,
+      disableJoystick: true,
+      joystickStyle: {
+        width: '100%',
+        'padding-top': '100%',
+        height: 0,
+      },
+      switchColor: {
+        checked: '#00A759',
+        unchecked: '#808080',
+        disabled: '#E8E8E8',
+      },
     };
   },
   /**
@@ -113,8 +141,14 @@ export default {
    */
   mounted() {
     console.log('Teleop have been mounted');
-    this.bus.$emit('mounted');
     this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
+    this.router.$emit('mounted');
+
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.setJoystickStyle);
+    });
+
+    this.setJoystickStyle();
   },
   /**
    * Lifecycle Hook - destroyed
@@ -125,6 +159,8 @@ export default {
   destroyed() {
     console.log('Teleop have been destroyed');
     this.router.$emit('destroyed');
+
+    window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
     /**
@@ -136,13 +172,27 @@ export default {
      */
     changeJoystickState(state) {
       if (state === 'enable') {
-        this.enableJoystick = true;
+        this.disableJoystick = false;
       } else {
         this.enableJoystick = false;
+        this.disableJoystick = true;
+      }
+    },
+    setJoystickStyle() {
+      let ratio = 1;
+      const e = document.getElementById('joystick-row');
+      if (e) {
+        ratio = ((e.clientHeight / e.clientWidth) < 1)
+          ? `${(((e.clientHeight / e.clientWidth) * 100) - 5)}%` : '95%';
+        this.joystickStyle = {
+          width: ratio,
+          'padding-top': ratio,
+          height: 0,
+
+        };
       }
     },
   },
-
 };
 </script>
 

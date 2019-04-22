@@ -8,32 +8,44 @@
     <b-row class="h-100">
       <b-col
         md="4"
-        class="mh-100">
-        <div
-          class="align-middle p-1"
-          style="height:10%">
+        class="mh-100 d-flex flex-column">
+        <b-row class="h-50 m-0 mb-1 d-flex flex-column">
           <div
-            class="w-75 h-100 text-left float-left"
-            style="font-size: 20pt">
-            Patrol :
+            class="btn-toolbar mb-1 w-100 d-flex flex-row"
+            style="height:40px;"
+            role="toolbar">
+            <h4
+              class="h-100 text-left"
+              style="flex:1;">
+              Patrol :
+            </h4>
+            <button
+              type="button"
+              class="btn btn-success h-100"
+              style="align-items:center; width:90px; min-width:80px;"
+              @click="sendPatrol()">
+              Send
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger h-100 ml-1"
+              style="align-items:center; width:90px; min-width:80px;"
+              @click="clearWaypointList()">
+              Reset
+            </button>
           </div>
-          <button
-            type="button"
-            class="btn btn-success w-25 h-50"
-            @click="sendPatrol()">
-            Confirm
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger w-25 h-50"
-            @click="clearWaypointList()">
-            Reset
-          </button>
-        </div>
-        <div class="h-50">
-          <waypoint-table :waypoint-list="waypointList" />
-        </div>
-        <div />
+          <div style="height: calc(100% - 40px - 0.25rem)">
+            <waypoint-table :waypoint-list="waypointList" />
+          </div>
+        </b-row>
+        <b-row
+          class="m-0 d-flex flex-column"
+          style="flex:1">
+          <save-load
+            :waypoint-list="waypointList"
+            :patrol-list="patrolList"
+            :bus="bus" />
+        </b-row>
       </b-col>
       <b-col
         md="8"
@@ -80,12 +92,14 @@
 import Vue from 'vue';
 import PatrolMap from '../widget/PatrolMap';
 import WaypointTable from '../widget/WaypointTable';
+import SaveLoad from '../widget/SaveLoad';
 
 export default {
   name: 'patrol-page',
   components: {
     PatrolMap,
     WaypointTable,
+    SaveLoad,
   },
   props: {
     bus: {
@@ -100,6 +114,7 @@ export default {
   data() {
     return {
       waypointList: [],
+      patrolList: [],
     };
   },
   /**
@@ -110,7 +125,8 @@ export default {
    */
   mounted() {
     console.log('Patrol have been mounted');
-    this.bus.$emit('mounted');
+    this.router.$emit('mounted');
+    this.getSavedPatrols();
   },
   /**
   * Lifecycle Hook - destroyed
@@ -123,13 +139,26 @@ export default {
     this.router.$emit('destroyed');
   },
   methods: {
+    getSavedPatrols() {
+      this.patrolList = JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]');
+    },
     /**
      * Callback used to send the patrol to scheduling
      * @method
      * @param {Object[]} waypointList - List of current waypoints to be used for patrol
      */
     sendPatrol() {
-      this.bus.$emit('send-patrol', JSON.stringify(this.waypointList));
+      const patrolPlan = JSON.stringify({ patrol: this.waypointList, loop: false });
+
+      if (patrolPlan) {
+        console.log('Sendig patrolPlan:');
+        console.log(patrolPlan);
+
+        this.bus.$emit('send-patrol', patrolPlan);
+      }
+    },
+    sendPatrolList() {
+      this.bus.$emit('send-patrol-list', JSON.stringify(this.patrolList));
     },
     /**
      * Callback used to clear the patrol
@@ -138,6 +167,9 @@ export default {
      */
     clearWaypointList() {
       this.waypointList = [];
+    },
+    clearPatrolList() {
+      this.patrolList = [];
     },
   },
 };

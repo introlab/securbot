@@ -5,10 +5,10 @@
 
 <launch>
     <arg name="webrtc_server_url_param" default="http://securbot.gel.usherbrooke.ca:8080"/>
-    <arg name="video_device_label_param" default="virtual_map"/>
+    <!--arg name="video_device_label_param" default="virtual_camera"/-->
 
     <node pkg="electron_webrtc" type="start_node.bash" name="electron_webrtc">
         <param name="webrtc_server_url" type="string" value="$(arg webrtc_server_url_param)"/>
-        <param name="video_device_label" type="string" value="$(arg video_device_label_param)"/>
+        <!--param name="video_device_label" type="string" value="$(arg video_device_label_param)"/-->
     </node>
 </launch>
