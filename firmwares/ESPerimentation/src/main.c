@@ -7,6 +7,8 @@
 #include "driver/gpio.h"
 #include "driver/uart.h"
 
+#include "command.h"
+
 
 #define BLINK_PIN 13
 #define BUF_SIZE 256
@@ -29,6 +31,7 @@ QueueHandle_t uart0_queue;
 uart_event_t uart_event;
 uint8_t recv_buf[BUF_SIZE];
 test_packet_t test_packet;
+command_response_t response;
 
 
 void app_main()
@@ -81,8 +84,9 @@ void task_handle_uart_events()
                 case UART_DATA:
                     xTaskNotifyGive(blink_task_handle);
                     uart_read_bytes(UART_NUM_0, recv_buf, uart_event.size, portMAX_DELAY);
-                    memcpy(test_packet.bytes, recv_buf, sizeof(test_packet_t));
-                    printf("%f\n", test_packet.value);
+                    command_performCommand(recv_buf, uart_event.size, &response);
+                    uart_write_bytes(UART_NUM_0, (char*)response.data, response.length);
+                    printf("\nProcessed event\n");
                     break;
             
                 default:
