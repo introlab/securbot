@@ -119,7 +119,7 @@ function startApp() {
  * @function startNode
  *
  * @fires data
- * @fires patrol
+ * @fires patrol-plan
  * @fires msg
  * @fires parameters_response
  */
