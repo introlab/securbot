@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import rospy, json, hashlib, actionlib, time
+import rospy, json, hashlib, actionlib, time, math
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
 from move_base_msgs.msg import MoveBaseActionGoal
@@ -77,7 +77,7 @@ def waypointToPixelPoseStamped(waypointObject):
     # Formatting orientation
     roll = 0
     pitch = 0
-    yaw = waypointObject["yaw"]
+    yaw = -math.radians(waypointObject["yaw"])
     quaternion = quaternion_from_euler(roll, pitch, yaw)
     waypoint.pose.orientation.x = quaternion[0]
     waypoint.pose.orientation.y = quaternion[1]
