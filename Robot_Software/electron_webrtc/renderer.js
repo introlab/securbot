@@ -38,15 +38,15 @@ ipc.on('rosdata', (emitter, data) => {
 });
 
 /**
- * Callback for the nav-goal data channel from easyrtc.
- * @callback goalReceivedCallback
- * @param {number} easyrtc - Id of the peer sending data.
+ * Callback for the patrol-plan data channel from easyrtc.
+ * @callback patrolReceivedCallback
+ * @param {number} easyrtcId - Id of the peer sending data.
  * @param {String} msgType - Data channel the data are comming from.
- * @param {String} msgData - JSON string of the patrol datas.
+ * @param {String} patrolJsonString - JSON string of the patrol data.
  */
-function goalReceivedCallback(sourceId, msgType, goalJsonString) {
-  console.log(`Received new nav goal: ${goalJsonString}`);
-  ipc.send('goal', goalJsonString);
+function patrolReceivedCallback(easyrtcId, msgType, patrolJsonString) {
+  console.log("Received new patrol plan: " + patrolJsonString);
+  ipc.send('patrol-plan', patrolJsonString);
 }
 
 /**
@@ -124,7 +124,7 @@ async function myInit() {
   easyrtc.enableAudioReceive(false);
   easyrtc.enableDataChannels(true);
 
-  easyrtc.setPeerListener(goalReceivedCallback, 'nav-goal');
+  easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan');
   easyrtc.setPeerListener(teleopCallback, 'joystick-position');
   easyrtc.setPeerListener(streamRequestCallback, 'request-feed');
 
