@@ -86,18 +86,18 @@
  * and HTML element.
  *
  * @module Layout
- * @vue-data {String} peerId -
- * @vue-data {Boolean} isDataChannelAvailable -
- * @vue-data {String} selfEasyrtcid -
- * @vue-data {HTMLVideoElement} cameraStreamElement -
- * @vue-data {HTMLVideoElement} mapStreamElement -
- * @vue-data {HTMLVideoElement} patrolMapStreamElement -
- * @vue-data {VideoTrack} cameraStream -
- * @vue-data {VideoTrack} mapStream -
- * @vue-data {Vue} teleopBus -
- * @vue-data {Vue} routeBus -
- * @vue-data {String[]} peerTable -
- * @vue-data {String} joystickState -
+ * @vue-data {String} peerId - Id of the connected peer.
+ * @vue-data {Boolean} isDataChannelAvailable - Keep track if the data channel is open.
+ * @vue-data {String} selfEasyrtcid - self easyrtc id.
+ * @vue-data {HTMLVideoElement} cameraStreamElement - HTML video element to host camera.
+ * @vue-data {HTMLVideoElement} mapStreamElement - HTML video element to host map.
+ * @vue-data {HTMLVideoElement} patrolMapStreamElement - HTML video element to host map.
+ * @vue-data {VideoTrack} cameraStream - VideoTrack given by easyrtc of the camera.
+ * @vue-data {VideoTrack} mapStream - VideoTrack given by easyrtc of the camera.
+ * @vue-data {Vue} teleopBus - General communication bus between component. Change name.
+ * @vue-data {Vue} routeBus - Communication bus for the routing event.
+ * @vue-data {String[]} peerTable - List of the robot in the room.
+ * @vue-data {String} joystickState - Indicates if the joystick should be activable or not.
  * @vue-event {String} connection-changed - Use to communicate the state of connection
  * has changed to the other components.
  * @vue-event {String} on-joystick-state-changed - Use to communicate the joystick can
@@ -135,7 +135,10 @@ export default {
       joystickState: 'disable',
     };
   },
-  // mounted() : On component mounted, use to get and initialise
+  /**
+   * On component mounted, use to get and initialise
+   * @method
+   */
   mounted() {
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
@@ -145,7 +148,10 @@ export default {
 
     this.connect();
   },
-  // On component destroy, hangup and disconnect
+  /**
+   * On component destroy, hangup and disconnect
+   * @method
+   */
   destroyed() {
     if (this.selfEasyrtcid !== null) {
       easyrtc.hangupAll();
@@ -153,7 +159,10 @@ export default {
     }
   },
   methods: {
-    // connect(): function managing init and connection to the easyrtc server
+    /**
+     * Function managing initialisation and connection to the easyrtc server
+     * @method
+     */
     connect() {
       easyrtc.enableDebug(false);
       console.log('Initializing...');
@@ -189,11 +198,13 @@ export default {
       console.log('You are connected...');
       this.setHTMLVideoStream();
     },
-    /*
-      handleRoomOccupantChange(roomName, occupants, isPrimary):
-      Callback for the setRoomOccupantListener easyRTC function
-        Desc : Trigger on occupants change in the room, give easyRTC id of all occupant
-    */
+    /**
+     * Callback for the handle of occupant in room.
+     * @method
+     * @param {String} roomName - Name of the room.
+     * @param {Array} occupants - List of occupant in the room. 
+     * @param {Boolean} isPrimary
+     */
     handleRoomOccupantChange(roomName, occupants, isPrimary) {
       this.peerTable = [];
       if (occupants !== null) {
@@ -208,27 +219,46 @@ export default {
         }
       }
     },
-    // performCall(occupantId): use to call someone in the room with its id
+    /**
+     * Use to call someone in the room with its id.
+     * @method
+     * @param {String} occupantId - Id to call.
+     */
     performCall(occupantId) {
       easyrtc.hangupAll();
       console.log(`Calling the chosen occupant : ${occupantId}`);
 
       easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted);
     },
-    // callSuccessful(occupantId, mediaType): use to call someone in the room with its id
+    /**
+     * Callback for a successful call.
+     * @method
+     * @param {String} occupantId - Id of the occupant that was called.
+     * @param {String} mediaType - Type of media received (ex: AudioVideo)
+     */
     callSuccessful(occupantId, mediaType) {
       console.warn(`Call to ${occupantId} was successful, here's the media: ${mediaType}`);
       if (mediaType === 'connection') {
         this.teleopBus.$emit('connection-changed', 'connected');
       }
     },
-    // callFailure(errCode, errMessage): use to call someone in the room with its id
+    /**
+     * Callback for call failure.
+     * @method
+     * @param {Number} errCode - Error Code.
+     * @param {String} errMessage - Error Message.
+     */
     callFailure(errCode, errMessage) {
       console.warn(`Call failed : ${errCode} | ${errMessage}`);
       this.teleopBus.$emit('connection-changed', 'failed');
       this.peerId = null;
     },
-    // callAccepted(accepted, easyrtcid): use to call someone in the room with its id
+    /**
+     * Callback for call accepted.
+     * @method
+     * @param {Boolean} accepted - If the call was accepted.
+     * @param {String} easyrtcid - Id of the occupant that accepted the call.
+     */
     callAccepted(accepted, easyrtcid) {
       console.warn(`Call was ${accepted} from ${easyrtcid}`);
       if (!accepted) {
@@ -238,25 +268,31 @@ export default {
         this.peerId = easyrtcid;
       }
     },
-    /*
-      loginSuccess(easyrtcid): Callback for successfully connecting to the room
-        Desc: When connection to room is successful, save self id
-    */
+    /**
+     * Callback for successfully connecting to the room.
+     * @method
+     * @param {String} easyrtcid - Self id give by the server.
+     */
     loginSuccess(easyrtcid) {
       console.warn(`I am ${easyrtc.idToName(easyrtcid)}`);
       this.selfEasyrtcid = easyrtcid;
     },
-    /*
-      loginFailure(errorCode, message): Callback for failure to connect to the room
-        Desc: When connection to room is successful, save self id
-    */
+    /**
+     * Callback for failure to connect to the room.
+     * @method
+     * @param {Number} errorCode - Error code.
+     * @param {String} message - Error message.
+     */
     loginFailure(errorCode, message) {
       easyrtc.showError(errorCode, message);
     },
-    /*
-      acceptPeerVideo(easyrtcid, stream): Callback for setStreamAcceptor() function
-        Desc: This function called after a successful call
-    */
+    /** 
+     * Callback for the setStreamAcceptor function.
+     * @method
+     * @param {String} easyrtcid - Id of the occupant giving the video stream.
+     * @param {VideoTrack} stream - Track of the stream coming from the server.
+     * @param {String} streamName - Name of the stream coming from the server.
+     */
     acceptPeerVideo(easyrtcid, stream, streamName) {
       console.log(`Stream received info, id : ${easyrtcid}, streamName : ${streamName}`);
       if (streamName === 'camera') {
@@ -268,18 +304,20 @@ export default {
       }
       this.setHTMLVideoStream();
     },
-    /*
-      closePeerVideo(easyrtcid): Callback for setOnStreamClosed() function
-        Desc: Use to clear the last frame of a video feed that closed for reason
-              out of our control (other client responsible)
-    */
+    /**
+     * Callback for the setOnStreamClosed function.
+     * @method
+     * @param {String} easyrtcid - Id of the occupant that disabled or lost its stream.
+     */
     closePeerVideo(easyrtcid) {
       this.clearHTMLVideoStream();
     },
-    /*
-      acceptCall(easyrtcid, acceptor): callback for setAcceptChecker() function
-        Desc: When called, refuse the call, an operator cannot be called
-    */
+    /**
+     * Callback for the setAcceptChecker function.
+     * @method
+     * @param {String} easyrtcid - Id of the occupant calling.
+     * @param {Callback} acceptor - Callback to accept the call.
+     */
     acceptCall(easyrtcid, acceptor) {
       console.log(`This id called : ${easyrtcid}, i'll only answer to ${this.peerId}`);
       if (easyrtcid === this.peerId) {
@@ -288,11 +326,11 @@ export default {
         acceptor(false);
       }
     },
-    /*
-      connectTo(event) : on event "peer-connection", this function is called
-      Desc: Receive an id and perform the call on this id if not already connected.
-            If connected and the id is the one of the connected peer, disconnect for it.
-    */
+    /**
+     * Callback of the "peer-connection"event.
+     * @method
+     * @param {String} easyrtcid - Id of the occupant to connect to.
+     */
     connectTo(easyrtcid) {
       console.log(`A connection change with ${easyrtcid} was asked...`);
       if (this.peerId === easyrtcid) {
@@ -305,7 +343,11 @@ export default {
         console.warn("The is an issue in the connection state handling... This shouldn't happen...");
       }
     },
-    // dataOpenListenerCB(easyrtcid): Trigger on data channel opening with peer
+    /**
+     * Callback for the setDataChannelOpenListener function.
+     * @method
+     * @param {String} easyrtc - Id of the occupant that a channel was opened with.
+     */
     dataOpenListenerCB(easyrtcid) {
       console.warn(`Data channel open with ${easyrtcid}`);
       this.isDataChannelAvailable = true;
@@ -324,7 +366,11 @@ export default {
         this.requestFeedFromPeer('camera');
       }
     },
-    // dataCloseListenerCB(easyrtcid): Trigger on data channel closed with peer
+    /**
+     * Callback for the setDataChannelCloseListener function.
+     * @method
+     * @param {String} easyrtc - Id of the occupant that a channel was closed with.
+     */
     dataCloseListenerCB(easyrtcid) {
       this.isDataChannelAvailable = false;
       if (easyrtcid === this.peerId || !this.peerId) {
@@ -335,23 +381,37 @@ export default {
       this.joystickState = 'disable';
       this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
     },
-    /*
-      onJoystickPositionChange(): on event "joystick-position-change", this function is called
-        Desc: Send the JSON string received through the data channel.
-    */
+    /**
+     * Callback of the "joystick-position-change" event.
+     * @method
+     * @param {Object} data - Teleop data.
+     */
     onJoystickPositionChange(data) {
       this.sendData(this.peerId, 'joystick-position', JSON.stringify(data));
     },
     /**
-     * Sends a navigation waypoint to the robot in a JSON string
+     * Callback of the "send-patrol" event.
+     * @method
+     * @param {String} goalJsonString - Stringigify JSON of the patrol.
      */
     sendPatrol(goalJsonString) {
       this.sendData(this.peerId, 'patrol-plan', goalJsonString);
     },
+    /**
+     * Use to request a stream from the peer.
+     * @method
+     * @param {String} feed - Feed Name to request.
+     */
     requestFeedFromPeer(feed) {
       this.sendData(this.peerId, 'request-feed', feed);
     },
-    // sendData(peer, type, data): Send data through the data channel
+    /**
+     * Sends data to the robot using the data channel.
+     * @method
+     * @param {String} goalJsonString - Stringigify JSON of the patrol.
+     * @param {String} type - Channel to send the data on.
+     * @param {String} data - Stringify data to send.
+     */
     sendData(peer, type, data) {
       if (this.isDataChannelAvailable && peer) {
         easyrtc.sendDataP2P(peer, type, data);
@@ -359,7 +419,13 @@ export default {
         console.warn('No data channel or peer available to send data...');
       }
     },
-    // handleData(data): Handle datas coming through the data channel
+    /**
+     * Callback of the setPeerListener function. Not currently used.
+     * @method
+     * @param {String} easyrtcid - Peer id the datas are are coming from.
+     * @param {String} type - Channel to data was received on.
+     * @param {String} data - Data received.
+     */
     handleData(easyrtcid, type, data) {
       if (easyrtcid === this.peerId) {
         console.log(`Received ${data} of type ${type}...`);
@@ -367,14 +433,20 @@ export default {
         console.log('Received data from someone else than the peer, ignoring it...');
       }
     },
-    //
+    /**
+     * Verify if the joystick should be enable.
+     * @method
+     */
     verifyJoystickState() {
       if (this.isDataChannelAvailable) {
         this.joystickState = 'enable';
         this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
       }
     },
-    // setHTMLVideoStream(): set the available video feed(s) to available html element(s)
+    /**
+     * Sets the available video feed(s) to available html element(s).
+     * @method
+     */
     setHTMLVideoStream() {
       this.verifyJoystickState();
 
@@ -393,7 +465,10 @@ export default {
         easyrtc.setVideoObjectSrc(this.patrolMapStreamElement, this.mapStream);
       }
     },
-    // clearHTMLVideoStream(): Clears all feeds in html and reset the feed variables
+    /**
+     * Clears all feeds in html and reset the feed variables.
+     * @method
+     */
     clearHTMLVideoStream() {
       if (this.cameraStreamElement) {
         easyrtc.setVideoObjectSrc(this.cameraStreamElement, '');
@@ -409,7 +484,9 @@ export default {
       this.mapStreamElement = null;
       this.patrolMapStreamElement = null;
     },
-    // getHTMLElements() : Get HTML element of VideoBox component
+    /**
+     * Get HTML element(s) of VideoBox component in the current page.
+     */
     getHTMLElements() {
       this.cameraStreamElement = document.getElementById('camera-stream');
       this.mapStreamElement = document.getElementById('map-stream');

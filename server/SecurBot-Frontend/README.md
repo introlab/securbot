@@ -1,5 +1,8 @@
 # Frontend
 
+The frontend is been develop using the Vue.js framework with bootstrap toolbox and so is web base.
+The interface is there to offer an easy way for operators to connect to any robot in services and perform some actions on them.
+
 ## Project setup
 ```
 npm install
@@ -13,6 +16,11 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
+```
+
+### Generates the frontend doc
+```
+npm run docs
 ```
 
 ### Run your tests

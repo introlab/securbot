@@ -1,3 +1,10 @@
+/**
+ * Routing file used by the router to show desired path.
+ * @module router
+ * @author Edouard Legare <edouard.legare@usherbrooke.ca>
+ * @version 1.0.0
+ */
+
 import Vue from 'vue';
 import Router from 'vue-router';
 
@@ -11,13 +18,6 @@ import Testing2 from '@/components/pages/Testing2';
 Vue.use(Router);
 
 /*
-* Author(s) : Edouard Legare <edouard.legare@usherbrooke.ca>
-* File : index.js
-* Desc : Routing file use by the router to show desired path.
-*
->>Current routing<<
-The routing only start at the router link
-
 >index.html
   │
   └─>APP.vue
