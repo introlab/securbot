@@ -5,6 +5,5 @@ var searchData=
   ['net_5fsocket_2ecpp',['net_socket.cpp',['../win32_2net__socket_8cpp.html',1,'']]],
   ['timer_2ecpp',['timer.cpp',['../win32_2timer_8cpp.html',1,'']]],
   ['timer_2eh',['timer.h',['../win32_2timer_8h.html',1,'']]],
-  ['waypointdecoder_2epy',['waypointDecoder.py',['../waypoint_decoder_8py.html',1,'']]],
   ['winthread_2ehpp',['winthread.hpp',['../winthread_8hpp.html',1,'']]]
 ];

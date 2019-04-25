@@ -17,5 +17,7 @@ var searchData=
   ['event_5ffailed',['EVENT_FAILED',['../classrp_1_1hal_1_1_event.html#a2d0fd07013020793b840846baac111a1af73bd9207c2980aca05bc9546d72043e',1,'rp::hal::Event']]],
   ['event_5fok',['EVENT_OK',['../classrp_1_1hal_1_1_event.html#a2d0fd07013020793b840846baac111a1a139f6c3d0809889a944a18aa18ee0a5b',1,'rp::hal::Event']]],
   ['event_5ftimeout',['EVENT_TIMEOUT',['../classrp_1_1hal_1_1_event.html#a2d0fd07013020793b840846baac111a1a852ea1d1d7e6751ab08298824121c288',1,'rp::hal::Event']]],
-  ['express_5fsample_5fduration_5fus',['express_sample_duration_us',['../struct__rplidar__response__sample__rate__t.html#a01b4a4ca19a37f96a81e4eab5b31bb25',1,'_rplidar_response_sample_rate_t::express_sample_duration_us()'],['../rplidar__cmd_8h.html#ae18a5276ac047a709d2ed603cee9b73c',1,'express_sample_duration_us():&#160;rplidar_cmd.h']]]
+  ['express_5fsample_5fduration_5fus',['express_sample_duration_us',['../struct__rplidar__response__sample__rate__t.html#a01b4a4ca19a37f96a81e4eab5b31bb25',1,'_rplidar_response_sample_rate_t::express_sample_duration_us()'],['../rplidar__cmd_8h.html#ae18a5276ac047a709d2ed603cee9b73c',1,'express_sample_duration_us():&#160;rplidar_cmd.h']]],
+  ['electron_20application',['Electron Application',['../md__home_edouard_securbot_Robot_Software_electron_webrtc_README.html',1,'']]],
+  ['readme_2emd',['README.md',['../electron__webrtc_2_r_e_a_d_m_e_8md.html',1,'']]]
 ];

@@ -1,7 +1,11 @@
 var searchData=
 [
+  ['aborted',['ABORTED',['../classpatrol_executive_1_1_status.html#a167d82c2acdb71531dda8996ea65ace2',1,'patrolExecutive::Status']]],
   ['abs_5frxtx_2eh',['abs_rxtx.h',['../abs__rxtx_8h.html',1,'']]],
   ['accept',['accept',['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#ab6728a9a55e2ca2da97b58bc2b78f2f0',1,'rp::arch::net::StreamSocketImpl::accept(SocketAddress *pairAddress)'],['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#ab6728a9a55e2ca2da97b58bc2b78f2f0',1,'rp::arch::net::StreamSocketImpl::accept(SocketAddress *pairAddress)'],['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#ab6728a9a55e2ca2da97b58bc2b78f2f0',1,'rp::arch::net::StreamSocketImpl::accept(SocketAddress *pairAddress)'],['../classrp_1_1net_1_1_stream_socket.html#a4a5a4252279c17257ce8426b87e57b67',1,'rp::net::StreamSocket::accept()']]],
+  ['actionclient',['actionClient',['../namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99',1,'patrolExecutive']]],
+  ['actionserver',['actionServer',['../classpatrol__test_1_1_patrol_test_suite.html#ae0e6164681386ad8d7d2402b65e0fe6c',1,'patrol_test::PatrolTestSuite']]],
+  ['active',['ACTIVE',['../classpatrol_executive_1_1_status.html#a62f3f83f1beb93629548f78797043b1d',1,'patrolExecutive::Status']]],
   ['address',['address',['../classnodes_1_1roboclaw__node_1_1_node.html#a6ca543d5f52f316905edee1f6c08bbb4',1,'nodes::roboclaw_node::Node']]],
   ['address_5ftype_5finet',['ADDRESS_TYPE_INET',['../classrp_1_1net_1_1_socket_address.html#a88a5c5bfa0c8c4b6f1f9d95215a72c71ab7be9a2c5b7e4e572d88854edcc8bbef',1,'rp::net::SocketAddress']]],
   ['address_5ftype_5finet6',['ADDRESS_TYPE_INET6',['../classrp_1_1net_1_1_socket_address.html#a88a5c5bfa0c8c4b6f1f9d95215a72c71aa5580b18be43ab278ae42774757a997f',1,'rp::net::SocketAddress']]],
