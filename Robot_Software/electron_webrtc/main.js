@@ -119,7 +119,7 @@ function startApp() {
  * @function startNode
  *
  * @fires data
- * @fires goal
+ * @fires patrol-plan
  * @fires msg
  * @fires parameters_response
  */
@@ -177,15 +177,15 @@ function startNode() {
     });
 
     /** advertise the operatorNavGoal node */
-    const goalPublisher = nodeHandle.advertise('operatorNavGoal', std_msgs.String);
+    const patrolPublisher = nodeHandle.advertise('/electron/patrol', std_msgs.String);
     /**
      * After receiving a patrol from server, publish it to the operatorNavGoal Node
-     * @event goal
+     * @event patrol-plan
      * @type {object}
-     * @property {String} goalJsonString - JSON object containing the patrol.
+     * @property {String} patrolJsonString - JSON object containing the patrol.
      */
-    ipcMain.on('goal', (event, goalJsonString) => {
-      goalPublisher.publish({ data: goalJsonString });
+    ipcMain.on('patrol-plan', (event, patrolJsonString) => {
+      patrolPublisher.publish({ data: patrolJsonString });
     });
   });
 }

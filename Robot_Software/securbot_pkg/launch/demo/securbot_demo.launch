@@ -1,0 +1,24 @@
+<launch>
+    <!-- Robot -->
+    <include file="$(find securbot_pkg)/launch/includes/securbot_bringup.launch" />
+
+    <!-- RTAB-Map -->
+    <include file="$(find securbot_pkg)/launch/includes/rtabmap_bringup.launch">
+        <arg name="localization" value="false" />
+    </include>
+
+    <!-- Move_Base navigation -->
+    <include file="$(find securbot_pkg)/launch/navigation.launch" />
+
+    <!-- Virtual Map -->
+    <include file="$(find securbot_pkg)/launch/includes/virtualDevices.launch" />
+
+    <!-- Electron Webrtc -->
+    <include file="$(find electron_webrtc)/launch/electron_webrtc.launch" />
+
+    <!-- Patrol Executive -->
+    <include file="$(find securbot_pkg)/launch/patrolExecutive.launch" />
+
+    <!-- Teleoperation -->
+    <include file="$(find securbot_pkg)/launch/teleop.launch" />
+</launch>

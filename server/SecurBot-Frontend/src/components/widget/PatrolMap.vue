@@ -173,17 +173,18 @@ export default {
 
       const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 15;
       const headLength = arrowLength / 4;
+      const radYaw = -wp.yaw / 180 * Math.PI;
       const arrowEnd = {
-        x: coord.x + arrowLength * Math.cos(wp.yaw),
-        y: coord.y + arrowLength * Math.sin(wp.yaw),
+        x: coord.x + arrowLength * Math.cos(radYaw),
+        y: coord.y + arrowLength * Math.sin(radYaw),
       };
       const arrowTip1 = {
-        x: arrowEnd.x - headLength * Math.cos(wp.yaw - Math.PI / 4),
-        y: arrowEnd.y - headLength * Math.sin(wp.yaw - Math.PI / 4),
+        x: arrowEnd.x - headLength * Math.cos(radYaw - Math.PI / 4),
+        y: arrowEnd.y - headLength * Math.sin(radYaw - Math.PI / 4),
       };
       const arrowTip2 = {
-        x: arrowEnd.x - headLength * Math.cos(wp.yaw + Math.PI / 4),
-        y: arrowEnd.y - headLength * Math.sin(wp.yaw + Math.PI / 4),
+        x: arrowEnd.x - headLength * Math.cos(radYaw + Math.PI / 4),
+        y: arrowEnd.y - headLength * Math.sin(radYaw + Math.PI / 4),
       };
 
       this.context.lineCap = 'round';
@@ -299,9 +300,14 @@ export default {
       if (this.isMouseDown) {
         console.log('MouseMoved');
         const wp = this.waypointList[this.waypointList.length - 1];
+<<<<<<< HEAD
         const mousePosition = this.getVideoCoordinatesOfEvent(event);
         wp.yaw = Math.atan2(mousePosition.y - wp.y,
           mousePosition.x - wp.x);
+=======
+        const mousePosition = this.getVideoCoordinatesFromEvent(event);
+        wp.yaw = -Math.atan2(mousePosition.y - wp.y, mousePosition.x - wp.x) * 180 / Math.PI;
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
         this.updateWaypoint(wp);
       }
     },
@@ -317,9 +323,15 @@ export default {
         console.log('MouseUP');
         const date = new Date();
         const wp = this.waypointList[this.waypointList.length - 1];
+<<<<<<< HEAD
         const coord = this.getVideoCoordinatesOfEvent(event);
         wp.yaw = Math.atan2(coord.y - wp.y,
           coord.x - wp.x);
+=======
+        const coord = this.getVideoCoordinatesFromEvent(event);
+
+        wp.yaw = -Math.atan2(coord.y - wp.y, coord.x - wp.x) * 180 / Math.PI;
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
         wp.dateTime = date.getTime();
         this.updateWaypoint(wp);
         this.isMouseDown = false;

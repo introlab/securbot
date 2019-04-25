@@ -1,4 +1,0 @@
-<launch>
-	<include file="$(find roboclaw_node)/launch/roboclaw.launch"/>
-	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="keyboard" output="screen"/>
-</launch>

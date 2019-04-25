@@ -91,14 +91,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">electronTeleop Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This script subscribe to the electron node dealing the teleop data coming from the UI, convert those datas and publish them on the cmd node of the base.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a2aaed352ce09a4a18b14ee33960fa40b"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a2aaed352ce09a4a18b14ee33960fa40b">teleopListener</a> ()</td></tr>
+<<<<<<< HEAD
 <tr class="separator:a2aaed352ce09a4a18b14ee33960fa40b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e907d16d4abea87c720185c58fffd34"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a4e907d16d4abea87c720185c58fffd34">teleopCallback</a> (msg)</td></tr>
 <tr class="separator:a4e907d16d4abea87c720185c58fffd34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1709ad691e0e812082578aeea7a73488"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a1709ad691e0e812082578aeea7a73488">runCommand</a> (data)</td></tr>
+=======
+<tr class="memdesc:a2aaed352ce09a4a18b14ee33960fa40b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the ros node and subscribes to the electron node.  <a href="#a2aaed352ce09a4a18b14ee33960fa40b">More...</a><br /></td></tr>
+<tr class="separator:a2aaed352ce09a4a18b14ee33960fa40b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e907d16d4abea87c720185c58fffd34"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a4e907d16d4abea87c720185c58fffd34">teleopCallback</a> (msg)</td></tr>
+<tr class="memdesc:a4e907d16d4abea87c720185c58fffd34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback of the node subscription, parses the JSON string.  <a href="#a4e907d16d4abea87c720185c58fffd34">More...</a><br /></td></tr>
+<tr class="separator:a4e907d16d4abea87c720185c58fffd34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1709ad691e0e812082578aeea7a73488"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a1709ad691e0e812082578aeea7a73488">runCommand</a> (<a class="el" href="rplidar__protocol_8h.html#a9e1fb613e68ae873f82dc8162b0e35ce">data</a>)</td></tr>
+<tr class="memdesc:a1709ad691e0e812082578aeea7a73488"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the data in the Twist object and publishes them.  <a href="#a1709ad691e0e812082578aeea7a73488">More...</a><br /></td></tr>
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 <tr class="separator:a1709ad691e0e812082578aeea7a73488"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -108,7 +121,16 @@ Variables</h2></td></tr>
 <tr class="memitem:ab4c9cba70f72eba974bdfdbca27a6d10"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#ab4c9cba70f72eba974bdfdbca27a6d10">publisher</a> = rospy.Publisher('/cmd_vel', Twist, queue_size=10)</td></tr>
 <tr class="separator:ab4c9cba70f72eba974bdfdbca27a6d10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<<<<<<< HEAD
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a1709ad691e0e812082578aeea7a73488"></a>
+=======
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This script subscribe to the electron node dealing the teleop data coming from the UI, convert those datas and publish them on the cmd node of the base. </p>
+<dl class="section author"><dt>Author</dt><dd>Cedric Godin <a href="#" onclick="location.href='mai'+'lto:'+'ced'+'ri'+'c.g'+'od'+'in@'+'us'+'her'+'br'+'ook'+'e.'+'ca'; return false;">cedri<span style="display: none;">.nosp@m.</span>c.go<span style="display: none;">.nosp@m.</span>din@u<span style="display: none;">.nosp@m.</span>sher<span style="display: none;">.nosp@m.</span>brook<span style="display: none;">.nosp@m.</span>e.ca</a> </dd>
+<dd>
+Edouard Legare <a href="#" onclick="location.href='mai'+'lto:'+'edo'+'ua'+'rd.'+'le'+'gar'+'e@'+'ush'+'er'+'bro'+'ok'+'e.c'+'a'; return false;">edoua<span style="display: none;">.nosp@m.</span>rd.l<span style="display: none;">.nosp@m.</span>egare<span style="display: none;">.nosp@m.</span>@ush<span style="display: none;">.nosp@m.</span>erbro<span style="display: none;">.nosp@m.</span>oke.<span style="display: none;">.nosp@m.</span>ca</a> </dd></dl>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a1709ad691e0e812082578aeea7a73488"></a>
 <div class="memitem">
 <div class="memproto">
@@ -123,6 +145,32 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Sets the data in the Twist object and publishes them. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>teleop data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4e907d16d4abea87c720185c58fffd34"></a>
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def electronTeleop.teleopCallback </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<<<<<<< HEAD
 </div>
 </div>
 <a class="anchor" id="a4e907d16d4abea87c720185c58fffd34"></a>
@@ -138,6 +186,15 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+=======
+<p>Callback of the node subscription, parses the JSON string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>JSON string of the teleop datas. </td></tr>
+  </table>
+  </dd>
+</dl>
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 
 </div>
 </div>
@@ -153,6 +210,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Starts the ros node and subscribes to the electron node. </p>
 
 </div>
 </div>

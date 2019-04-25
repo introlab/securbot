@@ -1,5 +1,6 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['patrol_5ftest',['patrol_test',['../namespacepatrol__test.html',1,'']]],
   ['patrol_5ftest_2epy',['patrol_test.py',['../patrol__test_8py.html',1,'']]],
   ['patrolcanceller',['patrolCanceller',['../classpatrol__test_1_1_patrol_test_suite.html#a617e9add97df4428b3f48d4bb0429fd2',1,'patrol_test::PatrolTestSuite']]],
@@ -16,4 +17,7 @@ var searchData=
   ['preempting',['PREEMPTING',['../classpatrol_executive_1_1_status.html#afb4bbddd1aa6cac5c41d0325aa15cfca',1,'patrolExecutive::Status']]],
   ['publisher',['publisher',['../namespaceelectron_teleop.html#ab4c9cba70f72eba974bdfdbca27a6d10',1,'electronTeleop']]],
   ['publishpatrolfeedback',['publishPatrolFeedBack',['../namespacepatrol_executive.html#a52e09ea6ac1c05860facef17d809c3e5',1,'patrolExecutive']]]
+=======
+  ['join',['join',['../classrp_1_1hal_1_1_thread.html#abc791a18685a8a404f333f109ea2fac8',1,'rp::hal::Thread']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];
