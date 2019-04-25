@@ -1,10 +1,13 @@
 <template>
+  <!-- Patrol Map widget -->
   <div class="h-100 w-100 position-relative">
+    <!-- Video Box -->
     <video-box
       :show="true"
       :video-id="patrolMapId"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;" />
+    <!-- Canvas -->
     <canvas
       ref="canvas"
       class="w-100 h-100 position-absolute"
@@ -78,8 +81,8 @@ export default {
     };
   },
   /**
-   * Lifecycle Hook - mounted
-   * On component mounted, Get html elements and initialize
+   * Lifecycle Hook - mounted.
+   * On component mounted, Get html elements and initialize.
    * @method
    * @listens mount(el)
    */
@@ -90,8 +93,8 @@ export default {
     this.init();
   },
   /**
-   * Lifecycle Hook - destroyed
-   * On component destroyed, clear refresh rate of canvas
+   * Lifecycle Hook - destroyed.
+   * On component destroyed, clear refresh rate of canvas.
    * @method
    * @listens destroyed(el)
    */
@@ -100,7 +103,7 @@ export default {
   },
   methods: {
     /**
-     * Initialisation of canvas refrash rate and call to canvas resizing functions
+     * Initialisation of canvas refrash rate and call to canvas resizing functions.
      * @method
      */
     init() {
@@ -113,7 +116,7 @@ export default {
     },
 
     /**
-     * Clears canvas and redraws the waypoints of the current patrol
+     * Clears canvas and redraws the waypoints of the current patrol.
      * @method
      */
     drawCanvas() {
@@ -123,7 +126,7 @@ export default {
 
     /**
      * Calls for the drawing the waypoints with corresponding arrows (indicating the yaws) of
-     * each waypoint of the current waypoint list
+     * each waypoint of the current waypoint list.
      * @method
      */
     drawWaypointList() {
@@ -134,7 +137,7 @@ export default {
     },
 
     /**
-     * Draws a waypoint on the canvas
+     * Draws a waypoint on the canvas.
      * @method
      * @param {Object} wp - Waypoint
      * @param {Number} wp.x - Waypoint's x coordinate in pixel
@@ -157,7 +160,7 @@ export default {
     },
 
     /**
-     * Draws arrow for the yaw of the waypoint on the canvas
+     * Draws arrow for the yaw of the waypoint on the canvas.
      * @method
      * @param {Object} wp - Waypoint
      * @param {Number} wp.x - Waypoint's x coordinate in pixel
@@ -204,10 +207,10 @@ export default {
     },
 
     /**
-     * Get position/coordinate of mouse event on video
+     * Get position/coordinate of mouse event on video.
      * @method
      * @param {HTMLElement} - Event given by the click.
-     * @returns {Object} X and Y coordinate in pixels of event (mouse position)
+     * @returns {Object} X and Y coordinate in pixels of event (mouse position).
      */
     getVideoCoordinatesOfEvent(event) {
       const offsetAndScale = this.getVideoOffsetAndScale();
@@ -221,7 +224,7 @@ export default {
     },
 
     /**
-     * Sets canvas size (height and width) to match the size of the video
+     * Sets canvas size (height and width) to match the size of the video.
      * @method
      */
     adjustCanvasToVideo() {
@@ -230,9 +233,9 @@ export default {
     },
 
     /**
-     * Compute the offset and rescaling parameters of resized video from original content
+     * Compute the offset and rescaling parameters of resized video from original content.
      * @method
-     * @returns {Object} Offset in X, offset in Y and scaling ratios
+     * @returns {Object} Offset in X, offset in Y and scaling ratios.
      */
     getVideoOffsetAndScale() {
       const videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
@@ -337,18 +340,18 @@ export default {
     },
 
     /**
-     * Adds a waypoint to the list of current waypoints
+     * Adds a waypoint to the list of current waypoints.
      * @method
-     * @param {Object} wp - Waypoint
+     * @param {Object} wp - Waypoint.
      */
     addWaypointCoord(wp) {
       this.waypointList.push(wp);
     },
 
     /**
-     * Updates last waypoint of the waypoint list
+     * Updates last waypoint of the waypoint list.
      * @method
-     * @param {Object} wp - Waypoint
+     * @param {Object} wp - Waypoint.
      */
     updateWaypoint(wp) {
       this.waypointList.pop();
@@ -356,12 +359,12 @@ export default {
     },
 
     /**
-     * Check to see if element is in bound
+     * Check to see if element is in bound.
      * @method
-     * @param {Object} coord - Coordinates of an element
-     * @param {Number} coord.x - X coordinate of element
-     * @param {Number} coord.y - Y coordinate of element
-     * @returns {boolean} true if coordinates of the element are in bounds of the video
+     * @param {Object} coord - Coordinates of an element.
+     * @param {Number} coord.x - X coordinate of element.
+     * @param {Number} coord.y - Y coordinate of element.
+     * @returns {boolean} true if coordinates of the element are in bounds of the video.
      */
     isClickValid(coord) {
       return coord.x >= 0

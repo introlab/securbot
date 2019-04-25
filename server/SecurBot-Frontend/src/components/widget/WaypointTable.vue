@@ -1,10 +1,14 @@
 <template>
+  <!-- Waypoint Table widget -->
   <div class="w-100 h-100">
+    <!-- Overflow container -->
     <div class="mh-100 overflow-auto">
+      <!-- Table -->
       <table
         id="waypoint-table"
         class="table tabl e-borderless table-striped border-left border-right"
         style="text-align: center">
+        <!-- Header -->
         <thead class="text-white bg-green-sb">
           <th style="width:20%">
             #
@@ -22,7 +26,9 @@
             Remove
           </th>
         </thead>
+        <!-- Body -->
         <tbody>
+          <!-- Table row per waypoint in list -->
           <template v-for="(waypoint, index) of waypointList">
             <tr
               :key="waypoint.dateTime"
@@ -40,6 +46,7 @@
                 {{ waypoint.yaw.toFixed(1) }}
               </td>
               <td style="width:20%">
+                <!-- Remove button -->
                 <button
                   :id="'removeBtn'+index"
                   type="button"
@@ -96,10 +103,9 @@ export default {
   },
   methods: {
     /**
-     * Used to clear the patrol or empty the waypoint list
+     * Used to clear the patrol or empty the waypoint list.
      * @method
-     * @param {Object[]} waypointList - List of current waypoints to be used for patrol
-     * @param {Number} index - Number of the waypoint to be deleted
+     * @param {Number} index - Index of the waypoint to remove from list.
      */
     removeWaypointFromList(index) {
       this.waypointList.splice(index, 1);

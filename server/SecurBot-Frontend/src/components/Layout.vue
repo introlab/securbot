@@ -1,13 +1,17 @@
 <template>
+  <!-- Layout -->
   <div
     id="operator-layout"
     class="vh-100">
+    <!-- Navbar container-->
     <div
       id="nav-bar"
       class="position-relative">
+      <!-- Navbar -->
       <b-navbar
         toggleable="md"
         class="navbar-dark mb-0 bg-green-sb">
+        <!-- Brand -->
         <b-navbar-brand class="p-0">
           <div
             class="h-100"
@@ -18,26 +22,36 @@
               class="logo mh-100 mw-100 align-middle">
           </div>
         </b-navbar-brand>
+        <!-- Collapse Option -->
         <b-navbar-toggle target="nav_collapse" />
+        <!-- Collapsable Navbar -->
         <b-collapse
           id="nav_collapse"
           is-nav>
+          <!-- Navbar right side content -->
           <b-navbar-nav>
+            <!-- Teleop -->
             <b-nav-item to="teleop">
               Teleoperation
             </b-nav-item>
+            <!-- Patrol -->
             <b-nav-item to="patrol">
               Patrol Planner
             </b-nav-item>
+            <!-- Event -->
             <b-nav-item to="logs">
               Logs
             </b-nav-item>
           </b-navbar-nav>
+          <!-- Navbar left side content -->
           <b-navbar-nav class="ml-auto">
+            <!-- Dropdown with connection widget -->
             <b-nav-item-dropdown
               text="Connect to Robot"
               right>
+              <!-- Connection container -->
               <div class="px-2 py-1">
+                <!-- Connection -->
                 <connection
                   :self-id="selfEasyrtcid"
                   :peers-table="peerTable"
@@ -48,7 +62,9 @@
         </b-collapse>
       </b-navbar>
     </div>
+    <!-- Main content (page) -->
     <div style="height:calc(100% - 64px)">
+      <!-- Router to pages -->
       <router-view
         :bus="teleopBus"
         :router="routeBus" />
@@ -57,24 +73,41 @@
 </template>
 
 <script>
-/*
-* Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>
-* File :  Layout.vue
-* Desc :  Vue SFC that is the main routing point. All the routing is done by
-*         this component (layout = parent, other pages = children). It has a
-*         navigation bar for the routing that also contains the connection
-*         component in a drop-down menu (simplify the connection process for
-*         the user) and set the page height (currently the viewport height
-*         minus the height the navbar). This component is the one managing
-*         all the easyRTC necessary for the application. It communicates with
-*         the children component with a bus.
-*
-* Dependencies :
-*       -Connection.vue
-*       -Vue (node-module)
-*       -Bootstrap-Vue
-*
-*/
+/**
+ * Vue SFC that is the main routing point. All the routing is done by
+ * this component (layout = parent, other pages = children). It has a
+ * navigation bar for the routing that also contains the connection
+ * component in a drop-down menu (simplify the connection process for
+ * the user) and set the page height (currently the viewport height
+ * minus the height the navbar). This component is the one managing
+ * all the easyRTC necessary for the application. It communicates with
+ * the children component with a bus. The layout has the following
+ * dependencies : Connection component and Bootstrap-vue for styling
+ * and HTML element.
+ *
+ * @module Layout
+ * @vue-data {String} peerId -
+ * @vue-data {Boolean} isDataChannelAvailable -
+ * @vue-data {String} selfEasyrtcid -
+ * @vue-data {HTMLVideoElement} cameraStreamElement -
+ * @vue-data {HTMLVideoElement} mapStreamElement -
+ * @vue-data {HTMLVideoElement} patrolMapStreamElement -
+ * @vue-data {VideoTrack} cameraStream -
+ * @vue-data {VideoTrack} mapStream -
+ * @vue-data {Vue} teleopBus -
+ * @vue-data {Vue} routeBus -
+ * @vue-data {String[]} peerTable -
+ * @vue-data {String} joystickState -
+ * @vue-event {String} connection-changed - Use to communicate the state of connection
+ * has changed to the other components.
+ * @vue-event {String} on-joystick-state-changed - Use to communicate the joystick can
+ * be used to the teleop page.
+ */
+
+/**
+ * @author Edouard Legare <edouard.legare@usherbrooke.ca>
+ */
+
 /* global easyrtc */
 
 import Vue from 'vue';
@@ -88,9 +121,7 @@ export default {
   },
   data() {
     return {
-      fluidState: true,
       peerId: null,
-      isConnected: null,
       isDataChannelAvailable: false,
       selfEasyrtcid: null,
       cameraStreamElement: null,
@@ -98,7 +129,6 @@ export default {
       patrolMapStreamElement: null,
       cameraStream: null,
       mapStream: null,
-      localStream: null,
       teleopBus: new Vue(),
       routeBus: new Vue(),
       peerTable: [],

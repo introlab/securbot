@@ -100,11 +100,11 @@ export default {
       waitingForConnectionState: false,
     };
   },
-  // On component mounted, get html elements, set bus event
+  // On component mounted, get html elements, set bus event.
   mounted() {
     this.bus.$on('connection-changed', this.handleConnectionChanged);
   },
-  // On component destroyed, not use for now
+  // On component destroyed, not use for now.
   destroyed() {},
   methods: {
     /**

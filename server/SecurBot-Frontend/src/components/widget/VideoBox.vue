@@ -1,9 +1,11 @@
 <template>
-  <!-- Video stream box -->
+  <!-- Video Box widget -->
   <div
     id="VideoStream"
     class="w-100 h-100 m-auto position-relative bg-black-sb shadow-sb">
+    <!-- Video container -->
     <div class="w-100 h-100 position-relative">
+      <!-- Video -->
       <video
         v-show="show"
         :id="videoId"
@@ -27,9 +29,9 @@
  * @module widget/VideoBox
  * @vue-prop {String} videoId - Identifies source with exact name reference.
  * @vue-prop {boolean} show - Enable or disable the camera display.
- * /
+ */
 
-/* Disabled comment documentation
+/** Disabled comment documentation
  * Might use those eventually by forking jsdoc-vue-js so it can manage the author
  * and version tag correctly
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>
