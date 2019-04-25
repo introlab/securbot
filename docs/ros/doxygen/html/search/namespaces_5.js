@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['waypointdecoder',['waypointDecoder',['../namespacewaypoint_decoder.html',1,'']]]
+  ['setup',['setup',['../namespacesetup.html',1,'']]]
 ];

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>SecurBot: waypointDecoder Namespace Reference</title>
+<title>SecurBot: patrol_test Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -86,82 +86,72 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a> &#124;
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">waypointDecoder Namespace Reference</div>  </div>
+<div class="title">patrol_test Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a53891e57b46a128e9658aca731e50501"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewaypoint_decoder.html#a53891e57b46a128e9658aca731e50501">jsonStringToPoseStamped</a> (jsonString)</td></tr>
-<tr class="separator:a53891e57b46a128e9658aca731e50501"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d62f6eb09b5a2be14a0a45277cacc20"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewaypoint_decoder.html#a6d62f6eb09b5a2be14a0a45277cacc20">waypointToMapImageGeneratorCallback</a> (waypointJsonStr)</td></tr>
-<tr class="separator:a6d62f6eb09b5a2be14a0a45277cacc20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62c9a3c13681cdb95e2d0bec02b899eb"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewaypoint_decoder.html#a62c9a3c13681cdb95e2d0bec02b899eb">waypointListener</a> ()</td></tr>
-<tr class="separator:a62c9a3c13681cdb95e2d0bec02b899eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpatrol__test_1_1_patrol_test_suite.html">PatrolTestSuite</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a5a08062d8de4486d1350859aae28927c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewaypoint_decoder.html#a5a08062d8de4486d1350859aae28927c">waypointPublisher</a> = rospy.Publisher('/map_image_generator/goal', PoseStamped, queue_size=10)</td></tr>
-<tr class="separator:a5a08062d8de4486d1350859aae28927c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1c1330dab43685c2fabe465ca3d2ba8"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol__test.html#ab1c1330dab43685c2fabe465ca3d2ba8">PKG</a> = 'securbot_pkg'</td></tr>
+<tr class="separator:ab1c1330dab43685c2fabe465ca3d2ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6422b03e0ae4516ae7d5e0ee84295c6b"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol__test.html#a6422b03e0ae4516ae7d5e0ee84295c6b">FAKE_PATROL_1</a> = '{ &quot;patrol&quot;:[ {&quot;x&quot;:1,&quot;y&quot;:2,&quot;yaw&quot;:3}, {&quot;x&quot;:2,&quot;y&quot;:1,&quot;yaw&quot;:4}, {&quot;x&quot;:3,&quot;y&quot;:0,&quot;yaw&quot;:3}, {&quot;x&quot;:4,&quot;y&quot;:-1,&quot;yaw&quot;:4} ], &quot;loop&quot;: false }'</td></tr>
+<tr class="separator:a6422b03e0ae4516ae7d5e0ee84295c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f464844af9693189a5ad77f8972b6f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol__test.html#ab5f464844af9693189a5ad77f8972b6f">INTERRUPT_TRUE_JSON</a> = json.dumps({&quot;interrupt&quot;:True})</td></tr>
+<tr class="separator:ab5f464844af9693189a5ad77f8972b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa72156bf1994082054ce1a8c22383a81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol__test.html#aa72156bf1994082054ce1a8c22383a81">TIMEOUT</a> = 2</td></tr>
+<tr class="separator:aa72156bf1994082054ce1a8c22383a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a53891e57b46a128e9658aca731e50501"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def waypointDecoder.jsonStringToPoseStamped </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>jsonString</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a62c9a3c13681cdb95e2d0bec02b899eb"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def waypointDecoder.waypointListener </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6d62f6eb09b5a2be14a0a45277cacc20"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def waypointDecoder.waypointToMapImageGeneratorCallback </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>waypointJsonStr</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="a5a08062d8de4486d1350859aae28927c"></a>
+<a class="anchor" id="a6422b03e0ae4516ae7d5e0ee84295c6b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">waypointDecoder.waypointPublisher = rospy.Publisher('/map_image_generator/goal', PoseStamped, queue_size=10)</td>
+          <td class="memname">string patrol_test.FAKE_PATROL_1 = '{ &quot;patrol&quot;:[ {&quot;x&quot;:1,&quot;y&quot;:2,&quot;yaw&quot;:3}, {&quot;x&quot;:2,&quot;y&quot;:1,&quot;yaw&quot;:4}, {&quot;x&quot;:3,&quot;y&quot;:0,&quot;yaw&quot;:3}, {&quot;x&quot;:4,&quot;y&quot;:-1,&quot;yaw&quot;:4} ], &quot;loop&quot;: false }'</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab5f464844af9693189a5ad77f8972b6f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">patrol_test.INTERRUPT_TRUE_JSON = json.dumps({&quot;interrupt&quot;:True})</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab1c1330dab43685c2fabe465ca3d2ba8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string patrol_test.PKG = 'securbot_pkg'</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa72156bf1994082054ce1a8c22383a81"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int patrol_test.TIMEOUT = 2</td>
         </tr>
       </table>
 </div><div class="memdoc">

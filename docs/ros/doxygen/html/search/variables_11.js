@@ -36,7 +36,7 @@ var searchData=
   ['status1',['status1',['../classnodes_1_1roboclaw__node_1_1_node.html#a460cde5c43ada8d2b185f08dd6c9088e',1,'nodes::roboclaw_node::Node']]],
   ['status2',['status2',['../classnodes_1_1roboclaw__node_1_1_node.html#a10141d306594e19f5f9b10558af03fe0',1,'nodes::roboclaw_node::Node']]],
   ['std_5fsample_5fduration_5fus',['std_sample_duration_us',['../struct__rplidar__response__sample__rate__t.html#a5e2bc1f0dfd5b174f059878b52f059d6',1,'_rplidar_response_sample_rate_t::std_sample_duration_us()'],['../rplidar__cmd_8h.html#a85ab35c75290747b4be4dd91842ef721',1,'std_sample_duration_us():&#160;rplidar_cmd.h']]],
-  ['subscriber',['subscriber',['../namespaceelectron_teleop.html#a53a18fafb707ae06c6573d77595e91f5',1,'electronTeleop']]],
+  ['succeeded',['SUCCEEDED',['../classpatrol_executive_1_1_status.html#af031bda2bd70b1d13e36258a4400693b',1,'patrolExecutive::Status']]],
   ['support_5fflag',['support_flag',['../struct__rplidar__response__acc__board__flag__t.html#a16cba2d0e3f92de088db8249079dd3fa',1,'_rplidar_response_acc_board_flag_t::support_flag()'],['../rplidar__cmd_8h.html#aebbcf741c53bba7cfb5dccd4a4501185',1,'support_flag():&#160;rplidar_cmd.h']]],
   ['sync_5fbyte',['sync_byte',['../struct__rplidar__response__hq__capsule__measurement__nodes__t.html#ac9ad2844dfa31dc44731b02ade7dbec2',1,'_rplidar_response_hq_capsule_measurement_nodes_t::sync_byte()'],['../rplidar__cmd_8h.html#ac3674bba5c030b11232e6a2c43ea2d94',1,'sync_byte():&#160;rplidar_cmd.h']]],
   ['sync_5fquality',['sync_quality',['../struct__rplidar__response__measurement__node__t.html#a42e516bdeec1a257328026340465e024',1,'_rplidar_response_measurement_node_t::sync_quality()'],['../rplidar__cmd_8h.html#a11b77416bcbd71c82f58a4b04a4b3029',1,'sync_quality():&#160;rplidar_cmd.h']]],

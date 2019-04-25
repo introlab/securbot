@@ -23,6 +23,7 @@ var searchData=
   ['locker_2eh',['locker.h',['../locker_8h.html',1,'']]],
   ['loopback_5fdevice',['LOOPBACK_DEVICE',['../virtualcam__node_8cpp.html#aa9deb45290998719ba8ba8ac456bcd15',1,'virtualcam_node.cpp']]],
   ['loopuphostname',['LoopUpHostName',['../classrp_1_1net_1_1_socket_address.html#a78afc44a613aa195421be8cd6ae2466c',1,'rp::net::SocketAddress']]],
+  ['lost',['LOST',['../classpatrol_executive_1_1_status.html#a2beacc9c20b7701758d1623597441e97',1,'patrolExecutive::Status']]],
   ['net_5fserial_2ecpp',['net_serial.cpp',['../linux_2net__serial_8cpp.html',1,'']]],
   ['net_5fserial_2eh',['net_serial.h',['../linux_2net__serial_8h.html',1,'']]],
   ['net_5fsocket_2ecpp',['net_socket.cpp',['../linux_2net__socket_8cpp.html',1,'']]],
