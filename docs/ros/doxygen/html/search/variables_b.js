@@ -1,5 +1,10 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['waypointpublisher',['waypointPublisher',['../namespacewaypoint_decoder.html#a5a08062d8de4486d1350859aae28927c',1,'waypointDecoder']]],
+  ['waypointsdonestatus',['waypointsDoneStatus',['../classpatrol__test_1_1_patrol_test_suite.html#a0e4820248aad38faaf69acd78b449ea8',1,'patrol_test::PatrolTestSuite']]],
+  ['waypointspatrollist',['waypointsPatrolList',['../namespacepatrol_executive.html#ac5012d6c6e1f67b98385f4ffab8b677f',1,'patrolExecutive']]]
+=======
   ['m17bit',['M17BIT',['../classroboclaw__driver_1_1roboclaw__driver_1_1_cmd.html#a004bbe82ba550f26f165e8abfd1a4986',1,'roboclaw_driver::roboclaw_driver::Cmd']]],
   ['m1backward',['M1BACKWARD',['../classroboclaw__driver_1_1roboclaw__driver_1_1_cmd.html#a764f6e04507284f09b0ba1ec3f1deb76',1,'roboclaw_driver::roboclaw_driver::Cmd']]],
   ['m1duty',['M1DUTY',['../classroboclaw__driver_1_1roboclaw__driver_1_1_cmd.html#a4c2c24bde32f8b29b0dea79fa7a31ccf',1,'roboclaw_driver::roboclaw_driver::Cmd']]],
@@ -46,4 +51,5 @@ var searchData=
   ['mixedspeeddist',['MIXEDSPEEDDIST',['../classroboclaw__driver_1_1roboclaw__driver_1_1_cmd.html#a286cbe1ab8577c5b4c5edf9604d20d50',1,'roboclaw_driver::roboclaw_driver::Cmd']]],
   ['model',['model',['../struct__rplidar__response__device__info__t.html#afaaa8feaddc8c8b9b878b6ec1490f5c2',1,'_rplidar_response_device_info_t::model()'],['../rplidar__cmd_8h.html#a65325158b4dfcd74f93a9c316957e8a1',1,'model():&#160;rplidar_cmd.h']]],
   ['mutex',['mutex',['../namespacenodes_1_1roboclaw__node.html#ae56e275f08f70db044b6278aaa775df2',1,'nodes::roboclaw_node']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

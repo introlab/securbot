@@ -1,5 +1,9 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['mapimagecallback',['mapImageCallBack',['../classpatrol__test_1_1_patrol_test_suite.html#ac700339fe0fa93255d39ab43097579f2',1,'patrol_test::PatrolTestSuite']]],
+  ['mapimageoutput',['mapImageOutput',['../classpatrol__test_1_1_patrol_test_suite.html#a258037f1e2d52246fdca15a2d8cb023d',1,'patrol_test::PatrolTestSuite']]]
+=======
   ['id',['id',['../structrp_1_1standalone_1_1rplidar_1_1_rplidar_scan_mode.html#ad3501ead32537f81abc4363b79f763ed',1,'rp::standalone::rplidar::RplidarScanMode']]],
   ['imagecb',['imageCb',['../class_image_converter.html#ab70b33720d4f8b71be32e9e17201d0a3',1,'ImageConverter']]],
   ['imageconverter',['ImageConverter',['../class_image_converter.html',1,'ImageConverter'],['../class_image_converter.html#a6af5dc04c98b2600b23da45db4389916',1,'ImageConverter::ImageConverter()']]],
@@ -15,4 +19,5 @@ var searchData=
   ['isconnected',['isConnected',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a9a6230508c0d1c9bc493714c64b69421',1,'rp::standalone::rplidar::RPlidarDriver::isConnected()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#ad5616109a2a492aba80a5077774f8f53',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::isConnected()']]],
   ['islooped',['isLooped',['../namespacepatrol_executive.html#afffb19bc289301a6eb58e0edca10391e',1,'patrolExecutive']]],
   ['isopened',['isOpened',['../classrp_1_1hal_1_1serial__rxtx.html#ae7476161fd1c84e2fc9fc5caca0f4766',1,'rp::hal::serial_rxtx']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

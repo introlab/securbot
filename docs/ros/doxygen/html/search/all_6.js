@@ -1,5 +1,10 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['interrupt_5ftrue_5fjson',['INTERRUPT_TRUE_JSON',['../namespacepatrol__test.html#ab5f464844af9693189a5ad77f8972b6f',1,'patrol_test']]],
+  ['interruptreceivercallback',['interruptReceiverCallback',['../namespacepatrol_executive.html#a116bc4ba9cdd430f99e6c9e1959157e0',1,'patrolExecutive']]],
+  ['islooped',['isLooped',['../namespacepatrol_executive.html#afffb19bc289301a6eb58e0edca10391e',1,'patrolExecutive']]]
+=======
   ['fake_5fpatrol_5f1',['FAKE_PATROL_1',['../namespacepatrol__test.html#a6422b03e0ae4516ae7d5e0ee84295c6b',1,'patrol_test']]],
   ['firmware_5fversion',['firmware_version',['../struct__rplidar__response__device__info__t.html#ab515d2f3fe2aaa5722814747c0b471c3',1,'_rplidar_response_device_info_t::firmware_version()'],['../rplidar__cmd_8h.html#a4c512696ea17633a0d088ce2bb40e436',1,'firmware_version():&#160;rplidar_cmd.h']]],
   ['flag',['flag',['../struct__rplidar__payload__hq__scan__t.html#a25a547fc2ddaaa57294276511197304e',1,'_rplidar_payload_hq_scan_t::flag()'],['../structrplidar__response__measurement__node__hq__t.html#a78279d87122c7a62658ed07fa856aa44',1,'rplidar_response_measurement_node_hq_t::flag()'],['../rplidar__cmd_8h.html#a96314d1d8113de61e64b466e2b885310',1,'flag():&#160;rplidar_cmd.h']]],
@@ -16,4 +21,5 @@ var searchData=
   ['forwardmixed',['ForwardMixed',['../namespaceroboclaw__driver_1_1roboclaw__driver.html#af774f74321119b079ebc74a4b50a54a9',1,'roboclaw_driver::roboclaw_driver']]],
   ['frame_5fformat',['FRAME_FORMAT',['../virtualcam__node_8cpp.html#a83603cd2d4aab12e59c0a1c734c3734d',1,'virtualcam_node.cpp']]],
   ['freespacecolor',['freeSpaceColor',['../classmap__image__generator_1_1_parameters.html#ae7e93f03789aed8e6208646b1278c3af',1,'map_image_generator::Parameters']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

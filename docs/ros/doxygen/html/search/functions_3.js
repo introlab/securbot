@@ -1,5 +1,8 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['jsonstringtoposestamped',['jsonStringToPoseStamped',['../namespacewaypoint_decoder.html#a53891e57b46a128e9658aca731e50501',1,'waypointDecoder']]]
+=======
   ['canceloperation',['cancelOperation',['../classrp_1_1arch_1_1net_1_1raw__serial.html#afa7a10aae5dbc15d6d1b5e8ae4a8d2ff',1,'rp::arch::net::raw_serial::cancelOperation()'],['../classrp_1_1hal_1_1serial__rxtx.html#a0e35d10ec042bba82beb27f0d7a870b9',1,'rp::hal::serial_rxtx::cancelOperation()']]],
   ['check_5fvitals',['check_vitals',['../classnodes_1_1roboclaw__node_1_1_node.html#a2868c159bcdb78d8e1d0546b6c9cee55',1,'nodes::roboclaw_node::Node']]],
   ['checkexpressscansupported',['checkExpressScanSupported',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#aa45e262a58a027b8dd32c4661ef2c46c',1,'rp::standalone::rplidar::RPlidarDriverImplCommon']]],
@@ -20,4 +23,5 @@ var searchData=
   ['createdriver',['CreateDriver',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#abe5dfedd5b3e6ebeae6c312a69cd61d4',1,'rp::standalone::rplidar::RPlidarDriver']]],
   ['createrxtx',['CreateRxTx',['../classrp_1_1hal_1_1serial__rxtx.html#ab44bbeed161297a344d425337235ffce',1,'rp::hal::serial_rxtx']]],
   ['createsocket',['CreateSocket',['../classrp_1_1net_1_1_stream_socket.html#a8e99045aff45aa07ca6fc5da44f5fb35',1,'rp::net::StreamSocket::CreateSocket()'],['../classrp_1_1net_1_1_d_gram_socket.html#a5c1c845de55d991ff43c0ce2765151f5',1,'rp::net::DGramSocket::CreateSocket()']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

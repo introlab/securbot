@@ -1,5 +1,9 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['electronteleop',['electronTeleop',['../namespaceelectron_teleop.html',1,'']]],
+  ['electronteleop_2epy',['electronTeleop.py',['../electron_teleop_8py.html',1,'']]]
+=======
   ['cabins',['cabins',['../struct__rplidar__response__capsule__measurement__nodes__t.html#ad11dd1861d148148f7a5311b750cd925',1,'_rplidar_response_capsule_measurement_nodes_t::cabins()'],['../rplidar__cmd_8h.html#a70e31430daceca59d97bec1375dbf7a7',1,'cabins():&#160;rplidar_cmd.h']]],
   ['canceloperation',['cancelOperation',['../classrp_1_1arch_1_1net_1_1raw__serial.html#afa7a10aae5dbc15d6d1b5e8ae4a8d2ff',1,'rp::arch::net::raw_serial::cancelOperation()'],['../classrp_1_1hal_1_1serial__rxtx.html#a0e35d10ec042bba82beb27f0d7a870b9',1,'rp::hal::serial_rxtx::cancelOperation()']]],
   ['channeldevice',['ChannelDevice',['../classrp_1_1standalone_1_1rplidar_1_1_channel_device.html',1,'rp::standalone::rplidar']]],
@@ -35,4 +39,5 @@ var searchData=
   ['cur_5fx',['cur_x',['../classnodes_1_1roboclaw__node_1_1_encoder_odom.html#a28a796c2bab8a377f12d454c090ae9af',1,'nodes::roboclaw_node::EncoderOdom']]],
   ['cur_5fy',['cur_y',['../classnodes_1_1roboclaw__node_1_1_encoder_odom.html#a69bc0ecbd9484fafb7fbd7d6228913d2',1,'nodes::roboclaw_node::EncoderOdom']]],
   ['currentwaypointindex',['currentWaypointIndex',['../namespacepatrol_executive.html#a8ad7674bddfa1ae554aba971d3fc60ca',1,'patrolExecutive']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

@@ -1,19 +1,18 @@
 <template>
+  <!-- App -->
   <div
     id="app"
     class="h-100">
+    <!-- Router View to Layout -->
     <router-view />
   </div>
 </template>
 
 <script>
-/*
-* Author: SecurBot 2019 Team
-* File: App.vue
-* Desc :  This is the main Vue component use to call
-*         all the other using the router-view element.
-*
-*
+/**
+ * This is the main Vue component use to call all the other using the router-view element.
+ *
+ * @module App
 */
 
 export default {

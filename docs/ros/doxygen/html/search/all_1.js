@@ -1,6 +1,11 @@
 var searchData=
 [
   ['aborted',['ABORTED',['../classpatrol_executive_1_1_status.html#a167d82c2acdb71531dda8996ea65ace2',1,'patrolExecutive::Status']]],
+<<<<<<< HEAD
+  ['actionclient',['actionClient',['../namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99',1,'patrolExecutive']]],
+  ['actionserver',['actionServer',['../classpatrol__test_1_1_patrol_test_suite.html#ae0e6164681386ad8d7d2402b65e0fe6c',1,'patrol_test::PatrolTestSuite']]],
+  ['active',['ACTIVE',['../classpatrol_executive_1_1_status.html#a62f3f83f1beb93629548f78797043b1d',1,'patrolExecutive::Status']]]
+=======
   ['abs_5frxtx_2eh',['abs_rxtx.h',['../abs__rxtx_8h.html',1,'']]],
   ['accept',['accept',['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#ab6728a9a55e2ca2da97b58bc2b78f2f0',1,'rp::arch::net::StreamSocketImpl::accept(SocketAddress *pairAddress)'],['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#ab6728a9a55e2ca2da97b58bc2b78f2f0',1,'rp::arch::net::StreamSocketImpl::accept(SocketAddress *pairAddress)'],['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#ab6728a9a55e2ca2da97b58bc2b78f2f0',1,'rp::arch::net::StreamSocketImpl::accept(SocketAddress *pairAddress)'],['../classrp_1_1net_1_1_stream_socket.html#a4a5a4252279c17257ce8426b87e57b67',1,'rp::net::StreamSocket::accept()']]],
   ['actionclient',['actionClient',['../namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99',1,'patrolExecutive']]],
@@ -24,4 +29,5 @@ var searchData=
   ['assert_2eh',['assert.h',['../assert_8h.html',1,'']]],
   ['autolocker',['AutoLocker',['../classrp_1_1hal_1_1_auto_locker.html#a61c446101afc5c1bbf47b45cd232986e',1,'rp::hal::AutoLocker']]],
   ['autolocker',['AutoLocker',['../classrp_1_1hal_1_1_auto_locker.html',1,'rp::hal']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

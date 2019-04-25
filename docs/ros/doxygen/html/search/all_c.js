@@ -1,5 +1,12 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['sendgoaldonecallback',['sendGoalDoneCallback',['../namespacepatrol_executive.html#a2748fed61621678f4ea0b3d732482ae9',1,'patrolExecutive']]],
+  ['setup',['setUp',['../classpatrol__test_1_1_patrol_test_suite.html#a8e2c5d056c4d289212f98752a2aab5fb',1,'patrol_test::PatrolTestSuite']]],
+  ['startpatrolnavigation',['startPatrolNavigation',['../namespacepatrol_executive.html#a053fc2b8c4c45559e05ef75b84f3b570',1,'patrolExecutive']]],
+  ['status',['Status',['../classpatrol_executive_1_1_status.html',1,'patrolExecutive']]],
+  ['succeeded',['SUCCEEDED',['../classpatrol_executive_1_1_status.html#af031bda2bd70b1d13e36258a4400693b',1,'patrolExecutive::Status']]]
+=======
   ['m17bit',['M17BIT',['../classroboclaw__driver_1_1roboclaw__driver_1_1_cmd.html#a004bbe82ba550f26f165e8abfd1a4986',1,'roboclaw_driver::roboclaw_driver::Cmd']]],
   ['m1backward',['M1BACKWARD',['../classroboclaw__driver_1_1roboclaw__driver_1_1_cmd.html#a764f6e04507284f09b0ba1ec3f1deb76',1,'roboclaw_driver::roboclaw_driver::Cmd']]],
   ['m1duty',['M1DUTY',['../classroboclaw__driver_1_1roboclaw__driver_1_1_cmd.html#a4c2c24bde32f8b29b0dea79fa7a31ccf',1,'roboclaw_driver::roboclaw_driver::Cmd']]],
@@ -69,4 +76,5 @@ var searchData=
   ['thread_2ehpp',['thread.hpp',['../mac_o_s_2thread_8hpp.html',1,'']]],
   ['timer_2ecpp',['timer.cpp',['../mac_o_s_2timer_8cpp.html',1,'']]],
   ['timer_2eh',['timer.h',['../mac_o_s_2timer_8h.html',1,'']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

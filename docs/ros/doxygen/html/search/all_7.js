@@ -1,5 +1,8 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['jsonstringtoposestamped',['jsonStringToPoseStamped',['../namespacewaypoint_decoder.html#a53891e57b46a128e9658aca731e50501',1,'waypointDecoder']]]
+=======
   ['generate',['generate',['../classmap__image__generator_1_1_map_image_generator.html#a4a357bcbbe2f14fe07ed9921eed3c35a',1,'map_image_generator::MapImageGenerator']]],
   ['getaddressasstring',['getAddressAsString',['../classrp_1_1net_1_1_socket_address.html#a8b771f89c4be15bc39fdd739d5092d19',1,'rp::net::SocketAddress']]],
   ['getaddresstype',['getAddressType',['../classrp_1_1net_1_1_socket_address.html#ae99ea8d9ab32cd9d285e467baaa27b73',1,'rp::net::SocketAddress']]],
@@ -74,4 +77,5 @@ var searchData=
   ['goalsize',['goalSize',['../classmap__image__generator_1_1_parameters.html#a452784ed653aee8088366a7ddeab8e19',1,'map_image_generator::Parameters']]],
   ['grabscandata',['grabScanData',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#a6f4e5a641496de3063171e9e4d6c6a55',1,'rp::standalone::rplidar::RPlidarDriverImplCommon']]],
   ['grabscandatahq',['grabScanDataHq',['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver.html#a4ec453930816193afab7c4be2cf1bfac',1,'rp::standalone::rplidar::RPlidarDriver::grabScanDataHq()'],['../classrp_1_1standalone_1_1rplidar_1_1_r_plidar_driver_impl_common.html#a2d490164b27b750bc4b2c3a034f60e3d',1,'rp::standalone::rplidar::RPlidarDriverImplCommon::grabScanDataHq()']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

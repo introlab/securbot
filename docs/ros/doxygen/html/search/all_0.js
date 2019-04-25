@@ -1,5 +1,8 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['_5f_5finit_5f_5f',['__init__',['../classpatrol__test_1_1_patrol_test_suite.html#ac17d03d4bf21a506cc25d095eda84e29',1,'patrol_test::PatrolTestSuite']]]
+=======
   ['_5f_5fattribute_5f_5f',['__attribute__',['../rptypes_8h.html#a9d373a9b65ff25b2db84c07394e1c212',1,'__attribute__():&#160;rptypes.h'],['../types_8h.html#a9d373a9b65ff25b2db84c07394e1c212',1,'__attribute__():&#160;types.h'],['../namespacerp_1_1standalone_1_1rplidar.html#a2e28ba3424556ddf20ff2e6fda7d66c4',1,'rp::standalone::rplidar::__attribute__()'],['../namespacerp_1_1arch_1_1net.html#a96b7970716f0cb9a1cf96ddcf6f235a2',1,'rp::arch::net::__attribute__()'],['../rplidar__cmd_8h.html#a9b6a05988b231ab26e36eb846713bfd6',1,'__attribute__((packed)) rplidar_payload_express_scan_t:&#160;rplidar_cmd.h'],['../rplidar__protocol_8h.html#ad93895ed389e9354d065b7074610af9c',1,'__attribute__((packed)) rplidar_cmd_packet_t:&#160;rplidar_protocol.h']]],
   ['_5f_5fbe',['__be',['../types_8h.html#acaa995a226ba39f602003280982c6840',1,'types.h']]],
   ['_5f_5ffast_5fswap',['__fast_swap',['../byteops_8h.html#ab7c59d0ea347d51157e3f92136fdd7a5',1,'byteops.h']]],
@@ -105,4 +108,5 @@ var searchData=
   ['_5fwinsockapi_5f',['_WINSOCKAPI_',['../win32_2net__socket_8cpp.html#a8d9ac41ded5e14e0ced0dc41b3fb5258',1,'net_socket.cpp']]],
   ['_5fwo',['_wo',['../classrp_1_1arch_1_1net_1_1raw__serial.html#a5d871b37ae5c98d9f1ac40e81324996b',1,'rp::arch::net::raw_serial']]],
   ['_5fword_5fsize_5ft',['_word_size_t',['../rptypes_8h.html#a4771db3b1758bdddc709e86b91dcc364',1,'_word_size_t(THREAD_PROC *thread_proc_t)(void *):&#160;rptypes.h'],['../types_8h.html#a4771db3b1758bdddc709e86b91dcc364',1,'_word_size_t(THREAD_PROC *thread_proc_t)(void *):&#160;types.h']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];

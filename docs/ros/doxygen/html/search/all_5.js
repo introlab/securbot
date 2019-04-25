@@ -1,5 +1,8 @@
 var searchData=
 [
+<<<<<<< HEAD
+  ['getstatusstring',['getStatusString',['../namespacepatrol_executive.html#a506e16c528993117bb64ac4d84ade632',1,'patrolExecutive']]]
+=======
   ['electronteleop',['electronTeleop',['../namespaceelectron_teleop.html',1,'']]],
   ['electronteleop_2epy',['electronTeleop.py',['../electron_teleop_8py.html',1,'']]],
   ['enablekeepalive',['enableKeepAlive',['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#afb2a7db47247d4147046dfcd3000067b',1,'rp::arch::net::StreamSocketImpl::enableKeepAlive(bool enable)'],['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#afb2a7db47247d4147046dfcd3000067b',1,'rp::arch::net::StreamSocketImpl::enableKeepAlive(bool enable)'],['../classrp_1_1arch_1_1net_1_1_stream_socket_impl.html#afb2a7db47247d4147046dfcd3000067b',1,'rp::arch::net::StreamSocketImpl::enableKeepAlive(bool enable)'],['../classrp_1_1net_1_1_stream_socket.html#a8b1cb19e02f1decc817464cdc8312128',1,'rp::net::StreamSocket::enableKeepAlive()']]],
@@ -20,4 +23,5 @@ var searchData=
   ['express_5fsample_5fduration_5fus',['express_sample_duration_us',['../struct__rplidar__response__sample__rate__t.html#a01b4a4ca19a37f96a81e4eab5b31bb25',1,'_rplidar_response_sample_rate_t::express_sample_duration_us()'],['../rplidar__cmd_8h.html#ae18a5276ac047a709d2ed603cee9b73c',1,'express_sample_duration_us():&#160;rplidar_cmd.h']]],
   ['electron_20application',['Electron Application',['../md__home_edouard_securbot_Robot_Software_electron_webrtc_README.html',1,'']]],
   ['readme_2emd',['README.md',['../electron__webrtc_2_r_e_a_d_m_e_8md.html',1,'']]]
+>>>>>>> 27cf356aa41d60dae0ae9e384d91f22388a064d2
 ];
