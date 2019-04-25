@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Home - Documentation</title>
+    <title>widget/SaveLoad - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,29 +29,573 @@
 
 <div id="main">
     
+    <h1 class="page-title">widget/SaveLoad</h1>
+    
 
     
 
 
 
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Complementary module allowing to send a list of patrols (a patrol being a name
+and a list of waypoint) to the server and manage the list form the user
+interface application.The table contains two colomn of buttons use to delete the row they
+are in and resend new version of the modified patrol list. The other button is used to
+copy the waypoints of a saved patrol to the current waypoint list.
+This component have the following dependency :
+Bootstrap-Vue for styling.</p></div></div> 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
+<table class="params" data-jsdoc-vuejs="table-props">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Required?</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    <tr>
+        <td class="name"><code>waypointList</code></td>
+        <td><code>Array.&lt;Object></code></td>
+        <td>-</td>
+        <td><b>Yes</b></td>
+        <td>Lists the current waypoints</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>patrolList</code></td>
+        <td><code>Array.&lt;Object></code></td>
+        <td>-</td>
+        <td><b>Yes</b></td>
+        <td>Lists the saved waypoint lists</td>
+    </tr>
+    
+    </tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table class="params" data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    <tr>
+        <td class="name"><code>newPatrolName</code></td>
+        <td><code>String</code></td>
+        <td>-</td>
+        <td>Name of the current waypoint list</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>placehold</code></td>
+        <td><code>String</code></td>
+        <td>-</td>
+        <td>Message of the placeholder for name input textbox
+/
+
+/** Disabled comment documentation
+Might use those eventually by forking jsdoc-vue-js so it can manage the author
+and version tag correctly</td>
+    </tr>
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="container-overview"><div><p> 
+</div>
+        
+
+        
+            
+<div class="section-method">
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:valerie.gauthier@usherbrooke.ca">Valerie Gauthier</a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="addPatrolToPatrolList"><span class="type-signature"></span>addPatrolToPatrolList<span class="signature">()</span><span class="type-signature"></span></h4>
+
     
 
 
 
+<div class="description">
+    Add a patrol to the list, eventually will add on DB.
+</div>
 
 
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_widget_SaveLoad.vue.html">components/widget/SaveLoad.vue</a>, <a href="components_widget_SaveLoad.vue.html#line160">line 160</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="removePatrolFromList"><span class="type-signature"></span>removePatrolFromList<span class="signature">(index)</span><span class="type-signature"></span></h4>
 
     
 
 
-    <section class="readme">
-        <article><h1>Frontend</h1><h2>Project setup</h2><pre class="prettyprint source"><code>npm install</code></pre><h3>Compiles and hot-reloads for development</h3><pre class="prettyprint source"><code>npm run serve</code></pre><h3>Compiles and minifies for production</h3><pre class="prettyprint source"><code>npm run build</code></pre><h3>Run your tests</h3><pre class="prettyprint source"><code>npm run test</code></pre><h3>Lints and fixes files</h3><pre class="prettyprint source"><code>npm run lint</code></pre><h3>Run your end-to-end tests</h3><pre class="prettyprint source"><code>npm run test:e2e</code></pre><h3>Run your unit tests</h3><pre class="prettyprint source"><code>npm run test:unit</code></pre><h3>Customize configuration</h3><p>See <a href="https://cli.vuejs.org/config/">Configuration Reference</a>.</p></article>
-    </section>
+
+<div class="description">
+    Remove the patrol from the list, eventually this will remove on DB.
+</div>
 
 
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_widget_SaveLoad.vue.html">components/widget/SaveLoad.vue</a>, <a href="components_widget_SaveLoad.vue.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Index of the element to remove.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="selectPatrolFromList"><span class="type-signature"></span>selectPatrolFromList<span class="signature">(index)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Load the selected patrol from the list.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_widget_SaveLoad.vue.html">components/widget/SaveLoad.vue</a>, <a href="components_widget_SaveLoad.vue.html#line178">line 178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Index of the element to load.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -61,7 +605,7 @@
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 15:55:39 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 16:03:54 GMT-0400 (Eastern Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

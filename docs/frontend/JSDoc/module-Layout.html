@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>widget/PatrolMap - Documentation</title>
+    <title>Layout - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">widget/PatrolMap</h1>
+    <h1 class="page-title">Layout</h1>
     
 
     
@@ -51,48 +51,17 @@
     <div class="container-overview">
     
         
-            <div class="description">Vue SFC used as a widget to set waypoint on a map. This component
-uses the VideoBox component to show the robot map (that is sent from
-the robot in a video feed format) and put a canvas on top of it to
-detect user clicks. When a click is detected the x and y position
-is used to set a waypoint in the array given in props (push). The
-canvas then read the array and draw waypoint on the map where the
-user clicked previously.
-This component have the following dependency :
-VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div> 
+            <div class="description">Vue SFC that is the main routing point. All the routing is done by
+this component (layout = parent, other pages = children). It has a
+navigation bar for the routing that also contains the connection
+component in a drop-down menu (simplify the connection process for
+the user) and set the page height (currently the viewport height
+minus the height the navbar). This component is the one managing
+all the easyRTC necessary for the application. It communicates with
+the children component with a bus. The layout has the following
+dependencies : Connection component and Bootstrap-vue for styling
+and HTML element.</p></div></div> 
 
-
-<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
-<table class="params" data-jsdoc-vuejs="table-props">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Default value</th>
-        <th>Required?</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-        <td class="name"><code>waypointList</code></td>
-        <td><code>Array.&lt;Object></code></td>
-        <td>-</td>
-        <td><b>Yes</b></td>
-        <td>Lists the current waypoints</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>patrolMapId</code></td>
-        <td><code>String</code></td>
-        <td>-</td>
-        <td><b>Yes</b></td>
-        <td>Identifies map source with exact name reference</td>
-    </tr>
-    
-    </tbody>
-</table>
 
 
 
@@ -109,45 +78,87 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
     <tbody>
     
     <tr>
-        <td class="name"><code>videoElement</code></td>
-        <td><code>Object</code></td>
+        <td class="name"><code>peerId</code></td>
+        <td><code>String</code></td>
         <td>-</td>
-        <td>Contains reference to video-id</td>
+        <td>Id of the connected peer.</td>
     </tr>
     
     <tr>
-        <td class="name"><code>canvas</code></td>
-        <td><code>Object</code></td>
-        <td>-</td>
-        <td>Contains reference to responsive overlay of map</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>context</code></td>
-        <td><code>Object</code></td>
-        <td>-</td>
-        <td>Sets canvas context</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>CanvasRefreshRate</code></td>
-        <td><code>Number</code></td>
-        <td>-</td>
-        <td>Sets the constant refresh rate of the displayed canvas</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>loopIntervalId</code></td>
-        <td><code>Object</code></td>
-        <td>-</td>
-        <td>Contains refresh rate and display parameter of the map</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>enable</code></td>
+        <td class="name"><code>isDataChannelAvailable</code></td>
         <td><code>Boolean</code></td>
         <td>-</td>
-        <td>Enables or disables the display of the map and canvas</td>
+        <td>Keep track if the data channel is open.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>selfEasyrtcid</code></td>
+        <td><code>String</code></td>
+        <td>-</td>
+        <td>self easyrtc id.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>cameraStreamElement</code></td>
+        <td><code>HTMLVideoElement</code></td>
+        <td>-</td>
+        <td>HTML video element to host camera.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>mapStreamElement</code></td>
+        <td><code>HTMLVideoElement</code></td>
+        <td>-</td>
+        <td>HTML video element to host map.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>patrolMapStreamElement</code></td>
+        <td><code>HTMLVideoElement</code></td>
+        <td>-</td>
+        <td>HTML video element to host map.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>cameraStream</code></td>
+        <td><code>VideoTrack</code></td>
+        <td>-</td>
+        <td>VideoTrack given by easyrtc of the camera.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>mapStream</code></td>
+        <td><code>VideoTrack</code></td>
+        <td>-</td>
+        <td>VideoTrack given by easyrtc of the camera.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>teleopBus</code></td>
+        <td><code>Vue</code></td>
+        <td>-</td>
+        <td>General communication bus between component. Change name.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>routeBus</code></td>
+        <td><code>Vue</code></td>
+        <td>-</td>
+        <td>Communication bus for the routing event.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>peerTable</code></td>
+        <td><code>Array.&lt;String></code></td>
+        <td>-</td>
+        <td>List of the robot in the room.</td>
+    </tr>
+    
+    <tr>
+        <td class="name"><code>joystickState</code></td>
+        <td><code>String</code></td>
+        <td>-</td>
+        <td>Indicates if the joystick should be activable or not.</td>
     </tr>
     
     </tbody>
@@ -156,6 +167,34 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
 
 
 
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table class="params" data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    <tr>
+        <td><code>connection-changed</code></td>
+        <td>String</td>
+        <td>Use to communicate the state of connection
+has changed to the other components.</td>
+    </tr>
+    
+    <tr>
+        <td><code>on-joystick-state-changed</code></td>
+        <td>String</td>
+        <td>Use to communicate the joystick can
+be used to the teleop page.</td>
+    </tr>
+    
+    </tbody>
+</table>
 
 
 <div class="container-overview"><div><p> 
@@ -255,14 +294,14 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
 
     
 
-    <h4 class="name" id="addWaypointCoord"><span class="type-signature"></span>addWaypointCoord<span class="signature">(wp)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acceptCall"><span class="type-signature"></span>acceptCall<span class="signature">(easyrtcid, acceptor)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Adds a waypoint to the list of current waypoints.
+    Callback for the setAcceptChecker function.
 </div>
 
 
@@ -298,7 +337,7 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line347">line 347</a>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line321">line 321</a>
     </li></ul></dd>
     
 
@@ -342,7 +381,2297 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
 
         <tr>
             
-                <td class="name"><code>wp</code></td>
+                <td class="name"><code>easyrtcid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant calling.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>acceptor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Callback</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Callback to accept the call.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="acceptPeerVideo"><span class="type-signature"></span>acceptPeerVideo<span class="signature">(easyrtcid, stream, streamName)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for the setStreamAcceptor function.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line296">line 296</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtcid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant giving the video stream.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stream</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>VideoTrack</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Track of the stream coming from the server.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>streamName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Name of the stream coming from the server.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="callAccepted"><span class="type-signature"></span>callAccepted<span class="signature">(accepted, easyrtcid)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for call accepted.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line262">line 262</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>accepted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                If the call was accepted.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtcid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant that accepted the call.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="callFailure"><span class="type-signature"></span>callFailure<span class="signature">(errCode, errMessage)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for call failure.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line251">line 251</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>errCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Error Code.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errMessage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Error Message.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="callSuccessful"><span class="type-signature"></span>callSuccessful<span class="signature">(occupantId, mediaType)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for a successful call.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line239">line 239</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>occupantId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant that was called.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Type of media received (ex: AudioVideo)
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="clearHTMLVideoStream"><span class="type-signature"></span>clearHTMLVideoStream<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Clears all feeds in html and reset the feed variables.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line472">line 472</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="closePeerVideo"><span class="type-signature"></span>closePeerVideo<span class="signature">(easyrtcid)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for the setOnStreamClosed function.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line312">line 312</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtcid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant that disabled or lost its stream.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="connect"><span class="type-signature"></span>connect<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Function managing initialisation and connection to the easyrtc server
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line166">line 166</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="connectTo"><span class="type-signature"></span>connectTo<span class="signature">(easyrtcid)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback of the "peer-connection"event.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line334">line 334</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtcid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant to connect to.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="dataCloseListenerCB"><span class="type-signature"></span>dataCloseListenerCB<span class="signature">(easyrtc)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for the setDataChannelCloseListener function.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line374">line 374</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant that a channel was closed with.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="dataOpenListenerCB"><span class="type-signature"></span>dataOpenListenerCB<span class="signature">(easyrtc)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for the setDataChannelOpenListener function.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line351">line 351</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Id of the occupant that a channel was opened with.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getHTMLElements"><span class="type-signature"></span>getHTMLElements<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Get HTML element(s) of VideoBox component in the current page.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line490">line 490</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="handleData"><span class="type-signature"></span>handleData<span class="signature">(easyrtcid, type, data)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback of the setPeerListener function. Not currently used.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line429">line 429</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtcid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Peer id the datas are are coming from.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Channel to data was received on.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Data received.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="handleRoomOccupantChange"><span class="type-signature"></span>handleRoomOccupantChange<span class="signature">(roomName, occupants, isPrimary)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for the handle of occupant in room.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line208">line 208</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>roomName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Name of the room.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>occupants</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Array</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                List of occupant in the room.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isPrimary</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="loginFailure"><span class="type-signature"></span>loginFailure<span class="signature">(errorCode, message)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for failure to connect to the room.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line286">line 286</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>errorCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Error code.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Error message.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="loginSuccess"><span class="type-signature"></span>loginSuccess<span class="signature">(easyrtcid)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback for successfully connecting to the room.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line276">line 276</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>easyrtcid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Self id give by the server.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="onJoystickPositionChange"><span class="type-signature"></span>onJoystickPositionChange<span class="signature">(data)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Callback of the "joystick-position-change" event.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line389">line 389</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
@@ -359,7 +2688,7 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
             
 
             <td class="description last">
-                Waypoint.
+                Teleop data.
                 
             </td>
         </tr>
@@ -390,14 +2719,14 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
 
     
 
-    <h4 class="name" id="adjustCanvasToVideo"><span class="type-signature"></span>adjustCanvasToVideo<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="performCall"><span class="type-signature"></span>performCall<span class="signature">(occupantId)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Sets canvas size (height and width) to match the size of the video.
+    Use to call someone in the room with its id.
 </div>
 
 
@@ -433,173 +2762,7 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line230">line 230</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="drawCanvas"><span class="type-signature"></span>drawCanvas<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Clears canvas and redraws the waypoints of the current patrol.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line122">line 122</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="drawWaypoint"><span class="type-signature"></span>drawWaypoint<span class="signature">(wp, index)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Draws a waypoint on the canvas.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line147">line 147</a>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line227">line 227</a>
     </li></ul></dd>
     
 
@@ -643,13 +2806,13 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
 
         <tr>
             
-                <td class="name"><code>wp</code></td>
+                <td class="name"><code>occupantId</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -660,110 +2823,7 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
             
 
             <td class="description last">
-                Waypoint
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Waypoint's x coordinate in pixel
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Waypoint's y coordinate in pixel
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>index</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Index number of sent waypoint
+                Id to call.
                 
             </td>
         </tr>
@@ -794,15 +2854,14 @@ VideoBox.vue Component and Bootstrap-Vue for styling.</p></div></div>
 
     
 
-    <h4 class="name" id="drawWaypointList"><span class="type-signature"></span>drawWaypointList<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="requestFeedFromPeer"><span class="type-signature"></span>requestFeedFromPeer<span class="signature">(feed)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Calls for the drawing the waypoints with corresponding arrows (indicating the yaws) of
-each waypoint of the current waypoint list.
+    Use to request a stream from the peer.
 </div>
 
 
@@ -838,90 +2897,7 @@ each waypoint of the current waypoint list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line132">line 132</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="drawYawArrow"><span class="type-signature"></span>drawYawArrow<span class="signature">(wp)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Draws arrow for the yaw of the waypoint on the canvas.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line170">line 170</a>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line405">line 405</a>
     </li></ul></dd>
     
 
@@ -965,13 +2941,13 @@ each waypoint of the current waypoint list.
 
         <tr>
             
-                <td class="name"><code>wp</code></td>
+                <td class="name"><code>feed</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -982,110 +2958,7 @@ each waypoint of the current waypoint list.
             
 
             <td class="description last">
-                Waypoint
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Waypoint's x coordinate in pixel
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Waypoint's y coordinate in pixel
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>yaw</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Waypoint's yaw angle in radians
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+                Feed Name to request.
                 
             </td>
         </tr>
@@ -1116,14 +2989,14 @@ each waypoint of the current waypoint list.
 
     
 
-    <h4 class="name" id="getCanvasCoordinatesFromVideo"><span class="type-signature"></span>getCanvasCoordinatesFromVideo<span class="signature">(x, y)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="sendData"><span class="type-signature"></span>sendData<span class="signature">(goalJsonString, type, data)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Corrects the waypoint coordinate (x,y) from the offsets and scale parameters of video.
+    Sends data to the robot using the data channel.
 </div>
 
 
@@ -1159,7 +3032,7 @@ each waypoint of the current waypoint list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line267">line 267</a>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line415">line 415</a>
     </li></ul></dd>
     
 
@@ -1203,13 +3076,13 @@ each waypoint of the current waypoint list.
 
         <tr>
             
-                <td class="name"><code>x</code></td>
+                <td class="name"><code>goalJsonString</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Number</code></span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -1220,7 +3093,7 @@ each waypoint of the current waypoint list.
             
 
             <td class="description last">
-                Horizontal coordinate on canvas.
+                Stringigify JSON of the patrol.
                 
             </td>
         </tr>
@@ -1229,13 +3102,13 @@ each waypoint of the current waypoint list.
 
         <tr>
             
-                <td class="name"><code>y</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Number</code></span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -1246,7 +3119,33 @@ each waypoint of the current waypoint list.
             
 
             <td class="description last">
-                Vertical coordinate on canvas.
+                Channel to send the data on.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Stringify data to send.
                 
             </td>
         </tr>
@@ -1268,31 +3167,6 @@ each waypoint of the current waypoint list.
 
 
 
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Object</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    - X and Y coordinate in pixels of event (mouse position).
-</div>
-
-    
-</div>
-
 
 
 </div>
@@ -1302,14 +3176,14 @@ each waypoint of the current waypoint list.
 
     
 
-    <h4 class="name" id="getVideoCoordinatesOfEvent"><span class="type-signature"></span>getVideoCoordinatesOfEvent<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="sendPatrol"><span class="type-signature"></span>sendPatrol<span class="signature">(goalJsonString)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Get position/coordinate of mouse event on video.
+    Callback of the "send-patrol" event.
 </div>
 
 
@@ -1345,354 +3219,7 @@ each waypoint of the current waypoint list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line215">line 215</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>HTMLElement</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Event given by the click.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Object</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    X and Y coordinate in pixels of event (mouse position).
-</div>
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="getVideoOffsetAndScale"><span class="type-signature"></span>getVideoOffsetAndScale<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Compute the offset and rescaling parameters of resized video from original content.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line240">line 240</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Object</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    Offset in X, offset in Y and scaling ratios.
-</div>
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="init"><span class="type-signature"></span>init<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Initialisation of canvas refrash rate and call to canvas resizing functions.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line109">line 109</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="isClickValid"><span class="type-signature"></span>isClickValid<span class="signature">(coord)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Check to see if element is in bound.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line369">line 369</a>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line397">line 397</a>
     </li></ul></dd>
     
 
@@ -1736,13 +3263,13 @@ each waypoint of the current waypoint list.
 
         <tr>
             
-                <td class="name"><code>coord</code></td>
+                <td class="name"><code>goalJsonString</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -1753,84 +3280,7 @@ each waypoint of the current waypoint list.
             
 
             <td class="description last">
-                Coordinates of an element.
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                X coordinate of element.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Y coordinate of element.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+                Stringigify JSON of the patrol.
                 
             </td>
         </tr>
@@ -1851,31 +3301,6 @@ each waypoint of the current waypoint list.
 
 
 
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>boolean</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    true if coordinates of the element are in bounds of the video.
-</div>
-
-    
-</div>
 
 
 
@@ -1886,14 +3311,14 @@ each waypoint of the current waypoint list.
 
     
 
-    <h4 class="name" id="onMouseDown"><span class="type-signature"></span>onMouseDown<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setHTMLVideoStream"><span class="type-signature"></span>setHTMLVideoStream<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    CallBack of mouse down event. Verify validity and initialise waypoint creation.
+    Sets the available video feed(s) to available html element(s).
 </div>
 
 
@@ -1929,7 +3354,7 @@ each waypoint of the current waypoint list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line281">line 281</a>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line450">line 450</a>
     </li></ul></dd>
     
 
@@ -1946,58 +3371,6 @@ each waypoint of the current waypoint list.
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>HTMLElement</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Event element given by the click.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -2021,14 +3394,14 @@ each waypoint of the current waypoint list.
 
     
 
-    <h4 class="name" id="onMouseMove"><span class="type-signature"></span>onMouseMove<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="verifyJoystickState"><span class="type-signature"></span>verifyJoystickState<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Callback of mouse move event. Updates the yaw with mouse position.
+    Verify if the joystick should be enable.
 </div>
 
 
@@ -2064,7 +3437,7 @@ each waypoint of the current waypoint list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line298">line 298</a>
+        <a href="components_Layout.vue.html">components/Layout.vue</a>, <a href="components_Layout.vue.html#line440">line 440</a>
     </li></ul></dd>
     
 
@@ -2081,463 +3454,6 @@ each waypoint of the current waypoint list.
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>HTMLElement</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Event given by mouse move.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="onMouseOut"><span class="type-signature"></span>onMouseOut<span class="signature">(event)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Callback of mouse out event, terminate the waypoint creation.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line334">line 334</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>HTMLElement</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Event element given by the click.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="onMouseUp"><span class="type-signature"></span>onMouseUp<span class="signature">(event)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Callback of mouse up event, finalize the waypoint creation process.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line314">line 314</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>HTMLElement</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Event element given by the click.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="updateWaypoint"><span class="type-signature"></span>updateWaypoint<span class="signature">(wp)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Updates last waypoint of the waypoint list.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_PatrolMap.vue.html">components/widget/PatrolMap.vue</a>, <a href="components_widget_PatrolMap.vue.html#line356">line 356</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>wp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Waypoint.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -2573,7 +3489,7 @@ each waypoint of the current waypoint list.
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 15:55:39 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 16:03:54 GMT-0400 (Eastern Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -12,7 +12,7 @@ module.exports = {
   "sourceType": "module",
   "opts": {
     "template": "node_modules/minami",
-    "destination": "./docs",
+    "destination": "../../docs/frontend/JSDoc",
     "recurse": true,
     "readme": "README.md",
   },

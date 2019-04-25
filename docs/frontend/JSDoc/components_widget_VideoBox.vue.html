@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Patrol - Documentation</title>
+    <title>components/widget/VideoBox.vue - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,579 +29,76 @@
 
 <div id="main">
     
-    <h1 class="page-title">Patrol</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Vue SFC used as a page for patrol planner. This component manages
-the layout for the patrol planner page. It uses 1 PatrolMap component
-and 1 WaypointTable component. The PatrolMap shows the map for the robot
-and allows users to click on the map to set waypoint, those waypoint are
-then showed in the WaypointTable that allows to remove any undesired points.
-The page also contains a box with 2 buttons and a title. The buttons are
-used to send the current waypoint list or clean it (remove every points).
-It communicates with parent component through the bus in props.
-This component have the following dependency :
-PatrolMap.vue Component, WaypointTable.map Component and Bootstrap-Vue
-for styling.</p></div></div> 
-
-
-<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
-<table class="params" data-jsdoc-vuejs="table-props">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Default value</th>
-        <th>Required?</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-        <td class="name"><code>bus</code></td>
-        <td><code>Vue</code></td>
-        <td>-</td>
-        <td><b>Yes</b></td>
-        <td>Vue bus use to emit event to other components.</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>Router</code></td>
-        <td><code>Vue</code></td>
-        <td>-</td>
-        <td><b>Yes</b></td>
-        <td>Vue bus use to routing emit event to parent.</td>
-    </tr>
-    
-    </tbody>
-</table>
-
-
-
-<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
-<table class="params" data-jsdoc-vuejs="table-data">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Default value</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-        <td class="name"><code>waypointList</code></td>
-        <td><code>Array.&lt;Object></code></td>
-        <td>-</td>
-        <td>Lists of the current waypoints.</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>patrolList</code></td>
-        <td><code>Array.&lt;Object></code></td>
-        <td>-</td>
-        <td>Lists of saved patrol fetched on DB.</td>
-    </tr>
-    
-    </tbody>
-</table>
-
-
-
-
-
-<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
-<table class="params" data-jsdoc-vuejs="table-event">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Payload Type</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-        <td><code>destroyed</code></td>
-        <td></td>
-        <td>Event indicating the component has been destroyed.</td>
-    </tr>
-    
-    <tr>
-        <td><code>mounted</code></td>
-        <td></td>
-        <td>Event indicating the component has been mounted.</td>
-    </tr>
-    
-    <tr>
-        <td><code>send-patrol</code></td>
-        <td>patrol</td>
-        <td>Event sending the patrol to the layout to send to robot.</td>
-    </tr>
-    
-    <tr>
-        <td><code>send-patrol-list</code></td>
-        <td>patrolList</td>
-        <td>Event saving the patrol list on DB.</td>
-    </tr>
-    
-    </tbody>
-</table>
-
-
-<div class="container-overview"><div><p> 
-</div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="clearPatrolList"><span class="type-signature"></span>clearPatrolList<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Method used to clear the patrol list (delete the list on db)
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_pages_Patrol.vue.html">components/pages/Patrol.vue</a>, <a href="components_pages_Patrol.vue.html#line191">line 191</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="clearWaypointList"><span class="type-signature"></span>clearWaypointList<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Callback used to clear the patrol
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_pages_Patrol.vue.html">components/pages/Patrol.vue</a>, <a href="components_pages_Patrol.vue.html#line184">line 184</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="getSavedPatrols"><span class="type-signature"></span>getSavedPatrols<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Callback used to get patrols on DB
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_pages_Patrol.vue.html">components/pages/Patrol.vue</a>, <a href="components_pages_Patrol.vue.html#line160">line 160</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="sendPatrol"><span class="type-signature"></span>sendPatrol<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Callback used to send the patrol to the connected robot robot
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_pages_Patrol.vue.html">components/pages/Patrol.vue</a>, <a href="components_pages_Patrol.vue.html#line167">line 167</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">components/widget/VideoBox.vue</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;!-- Video Box widget -->
+  &lt;div
+    id="VideoStream"
+    class="w-100 h-100 m-auto position-relative bg-black-sb shadow-sb">
+    &lt;!-- Video container -->
+    &lt;div class="w-100 h-100 position-relative">
+      &lt;!-- Video -->
+      &lt;video
+        v-show="show"
+        :id="videoId"
+        class="w-100 h-100" />
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;script>
+/**
+ * Vue SFC that makes a box containing a video element that will fit
+ * the size given by the element in which it called (in the caller
+ * component). It keeps the aspect ratio of the video and adapt the
+ * the rest of the box (black bars) to fit. It takes 2 props, an id
+ * for the video element so a feed can be set to it and a boolean show
+ * to show or hid the video. It is used as a widget.
+ * This component have the following dependency :
+ * Bootstrap-Vue for styling.
+ *
+ *
+ * @module widget/VideoBox
+ * @vue-prop {String} videoId - Identifies source with exact name reference.
+ * @vue-prop {boolean} show - Enable or disable the camera display.
+ */
+
+/** Disabled comment documentation
+ * Might use those eventually by forking jsdoc-vue-js so it can manage the author
+ * and version tag correctly
+ * @author Edouard Legare &lt;edouard.legare@usherbrooke.ca>
+ * @version 1.0.0
+ */
+
+export default {
+  name: 'video-box',
+  props: {
+    videoId: {
+      type: String,
+      required: true,
+    },
+    show: {
+      type: Boolean,
+      required: true,
+    },
+  },
+};
+&lt;/script>
+
+&lt;style>
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -611,7 +108,7 @@ for styling.</p></div></div>
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 15:55:39 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 16:03:54 GMT-0400 (Eastern Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

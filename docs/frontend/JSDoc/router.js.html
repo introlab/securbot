@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>widget/VideoBox - Documentation</title>
+    <title>router.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,270 +29,101 @@
 
 <div id="main">
     
-    <h1 class="page-title">widget/VideoBox</h1>
+    <h1 class="page-title">router.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Vue SFC that makes a box containing a video element that will fit
-the size given by the element in which it called (in the caller
-component). It keeps the aspect ratio of the video and adapt the
-the rest of the box (black bars) to fit. It takes 2 props, an id
-for the video element so a feed can be set to it and a boolean show
-to show or hid the video. It is used as a widget.
-This component have the following dependency :
-Bootstrap-Vue for styling.</p></div></div> 
-
-
-<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
-<table class="params" data-jsdoc-vuejs="table-props">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Default value</th>
-        <th>Required?</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-        <td class="name"><code>videoId</code></td>
-        <td><code>String</code></td>
-        <td>-</td>
-        <td><b>Yes</b></td>
-        <td>Identifies source with exact name reference.</td>
-    </tr>
-    
-    <tr>
-        <td class="name"><code>show</code></td>
-        <td><code>boolean</code></td>
-        <td>-</td>
-        <td><b>Yes</b></td>
-        <td>Enable or disable the camera display.</td>
-    </tr>
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<div class="container-overview"><div><p> 
-</div>
-        
-
-        
-            
-<div class="section-method">
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="module:widget/VideoBox"><span class="type-signature"></span>module:widget/VideoBox<span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Disabled comment documentation
-Might use those eventually by forking jsdoc-vue-js so it can manage the author
-and version tag correctly
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>1.0.0</li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li><a href="mailto:edouard.legare@usherbrooke.ca">Edouard Legare</a></li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_widget_VideoBox.vue.html">components/widget/VideoBox.vue</a>, <a href="components_widget_VideoBox.vue.html#line25">line 25</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Routing file used by the router to show desired path.
+ * @module router
+ * @author Edouard Legare &lt;edouard.legare@usherbrooke.ca>
+ * @version 1.0.0
+ */
+
+import Vue from 'vue';
+import Router from 'vue-router';
+
+import Layout from '@/components/Layout';
+import Teleop from '@/components/pages/Teleop';
+import Patrol from '@/components/pages/Patrol';
+import Events from '@/components/pages/Events';
+import Testing from '@/components/pages/Testing';
+import Testing2 from '@/components/pages/Testing2';
+
+Vue.use(Router);
+
+/*
+>index.html
+  │
+  └─>APP.vue
+      │
+      └─>Layout
+          │
+          ├─>Navigation Bar
+          │
+          └─>Router-Link
+              │
+              ├─>Teleoperation Page
+              │
+              ├─>Patrol Page
+              │
+              └─>Events Page
+*/
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      redirect: {
+        name: 'SecurBot Teleoperation',
+      },
+    },
+    {
+      path: '/operator',
+      component: Layout,
+      redirect: {
+        name: 'SecurBot Teleoperation',
+      },
+      children: [
+        {
+          path: 'teleop',
+          name: 'SecurBot Teleoperation',
+          component: Teleop,
+          props: true,
+        },
+        {
+          path: 'patrol',
+          name: 'SecurBot Patrol Planner',
+          component: Patrol,
+          props: true,
+        },
+        {
+          path: 'logs',
+          name: 'SecurBot Event Logging',
+          component: Events,
+          props: true,
+        },
+      ],
+    },
+    {
+      path: '/testing',
+      component: Testing,
+    },
+    {
+      path: '/testing2',
+      component: Testing2,
+    },
+  ],
+});
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -302,7 +133,7 @@ and version tag correctly
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 15:55:39 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 16:03:54 GMT-0400 (Eastern Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
