@@ -208,7 +208,6 @@ export default {
         this.peerId = easyrtcid;
       }
     },
-
     /*
       loginSuccess(easyrtcid): Callback for successfully connecting to the room
         Desc: When connection to room is successful, save self id

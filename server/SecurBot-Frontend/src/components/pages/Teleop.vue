@@ -1,37 +1,44 @@
 <template>
+  <!-- Teleop Page -->
   <b-jumbotron
     id="teleop-layout"
     :fluid="true"
     :container-fluid="true"
     class="h-100 "
     bg-variant="light">
+    <!-- Row -->
     <b-row class="h-100">
-      <!-- Camera Video -->
+      <!-- Camera column -->
       <b-col
         lg="8"
         md="7"
         sm="6"
         class="mh-100">
+        <!-- Camera Container -->
         <div class="h-100 w-100 m-auto position-relative">
+          <!-- Camera -->
           <video-box
             :show="showCamera"
             video-id="camera-stream" />
         </div>
       </b-col>
+      <!-- Map and joystick column -->
       <b-col
         lg="4"
         md="5"
         sm="6"
         class="mh-100">
-        <!-- Map Video -->
+        <!-- Map row -->
         <b-row class="h-50 w-100 position-relative m-0">
+          <!-- Map container -->
           <div class="h-100 w-100 m-auto position-relative">
+            <!-- Map -->
             <video-box
               :show="showMap"
               video-id="map-stream" />
           </div>
         </b-row>
-        <!-- Joystick -->
+        <!-- Joystick Switch -->
         <div
           class="position-absolute"
           style="top:55%;right:25px;z-index:10;">
@@ -43,16 +50,20 @@
             :disabled="disableJoystick"
             @change="enableJoystick = $event.value" />
         </div>
+        <!-- Joystick Row -->
         <b-row
           id="joystick-row"
           class="position-relative h-50 m-auto p-4">
+          <!-- Joystick Outer -->
           <div
             class="position-relative m-auto"
             :style="joystickStyle">
+            <!-- Joystick Inner-->
             <div
               class="position-absolute h-100 w-100 border
               border-secondary rounded-circle shadow-sb"
               style="top:0;left:0;">
+              <!-- Joystick -->
               <joystick
                 :enable="enableJoystick"
                 :absolute-max-x="1"
@@ -85,7 +96,7 @@
  * @vue-data {boolean} enableJoystick - Enable or disable the joystick ability to send data.
  */
 
-/* Disabled comment documentation
+/** Disabled comment documentation
  * Might use those eventually by forking jsdoc-vue-js so it can manage the author
  * and version tag correctly
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>

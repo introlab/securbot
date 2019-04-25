@@ -1,24 +1,31 @@
 <template>
+  <!-- Patrol page -->
   <b-jumbotron
     id="patrol-layout"
     :fluid="true"
     :container-fluid="true"
     class="h-100 w-100"
     bg-variant="light">
+    <!-- Row -->
     <b-row class="h-100">
+      <!-- Table column -->
       <b-col
         md="4"
         class="mh-100 d-flex flex-column">
+        <!-- Waypoint list -->
         <b-row class="h-50 m-0 mb-1 d-flex flex-column">
+          <!-- Waypoint list Container -->
           <div
             class="btn-toolbar mb-1 w-100 d-flex flex-row"
             style="height:40px;"
             role="toolbar">
+            <!-- Title -->
             <h4
               class="h-100 text-left"
               style="flex:1;">
               Patrol :
             </h4>
+            <!-- Send button -->
             <button
               type="button"
               class="btn btn-success h-100"
@@ -26,6 +33,7 @@
               @click="sendPatrol()">
               Send
             </button>
+            <!-- Clear button -->
             <button
               type="button"
               class="btn btn-danger h-100 ml-1"
@@ -38,6 +46,7 @@
             <waypoint-table :waypoint-list="waypointList" />
           </div>
         </b-row>
+        <!-- Save-load patrol table -->
         <b-row
           class="m-0 d-flex flex-column"
           style="flex:1">
@@ -47,9 +56,11 @@
             :bus="bus" />
         </b-row>
       </b-col>
+      <!-- Map column -->
       <b-col
         md="8"
         class="mh-100">
+        <!-- Map -->
         <patrol-map
           :waypoint-list="waypointList"
           patrol-map-id="patrol-map-stream" />
@@ -78,10 +89,13 @@
  * @vue-prop {Vue} Router - Vue bus use to routing emit event to parent.
  * @vue-event {} destroyed - Event indicating the component has been destroyed.
  * @vue-event {} mounted - Event indicating the component has been mounted.
- * @vue-data {Object[]} waypointList - Lists the current waypoints
+ * @vue-event {patrol} send-patrol - Event sending the patrol to the layout to send to robot.
+ * @vue-event {patrolList} send-patrol-list - Event saving the patrol list on DB.
+ * @vue-data {Object[]} waypointList - Lists of the current waypoints.
+ * @vue-data {Object[]} patrolList - Lists of saved patrol fetched on DB.
  */
 
-/* Disabled comment documentation
+/** Disabled comment documentation
  * Might use those eventually by forking jsdoc-vue-js so it can manage the author
  * and version tag correctly
  * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
@@ -139,13 +153,16 @@ export default {
     this.router.$emit('destroyed');
   },
   methods: {
+    /**
+     * Callback used to get patrols on DB
+     * @method
+     */
     getSavedPatrols() {
       this.patrolList = JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]');
     },
     /**
-     * Callback used to send the patrol to scheduling
+     * Callback used to send the patrol to the connected robot robot
      * @method
-     * @param {Object[]} waypointList - List of current waypoints to be used for patrol
      */
     sendPatrol() {
       const patrolPlan = JSON.stringify({ patrol: this.waypointList, loop: false });
@@ -163,11 +180,14 @@ export default {
     /**
      * Callback used to clear the patrol
      * @method
-     * @param {Object[]} waypointList - List of current waypoints to be used for patrol
      */
     clearWaypointList() {
       this.waypointList = [];
     },
+    /**
+     * Method used to clear the patrol list (delete the list on db)
+     * @method
+     */
     clearPatrolList() {
       this.patrolList = [];
     },

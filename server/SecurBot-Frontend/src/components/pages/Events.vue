@@ -1,4 +1,5 @@
 <template>
+  <!-- Event page -->
   <div />
 </template>
 
@@ -19,8 +20,8 @@
  * @vue-event {} mounted - Event indicating the component has been mounted.
  */
 
-/* Disabled comment documentation
- * Might use those eventually by forking jsdoc-vue-js so it can manage the author
+/** Disabled comment documentation
+ * Might use those eventually by forking jsdoc-vuejs so it can manage the author
  * and version tag correctly
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>
  * @version 1.0.0

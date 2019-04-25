@@ -41,7 +41,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -95,39 +94,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a16c1d8bc5d9bfb2d176dd0449c0f4981"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a16c1d8bc5d9bfb2d176dd0449c0f4981">commandCallback</a> (msg)</td></tr>
-<tr class="separator:a16c1d8bc5d9bfb2d176dd0449c0f4981"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1709ad691e0e812082578aeea7a73488"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a1709ad691e0e812082578aeea7a73488">runCommand</a> (<a class="el" href="rplidar__protocol_8h.html#a9e1fb613e68ae873f82dc8162b0e35ce">data</a>)</td></tr>
+<tr class="memitem:a2aaed352ce09a4a18b14ee33960fa40b"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a2aaed352ce09a4a18b14ee33960fa40b">teleopListener</a> ()</td></tr>
+<tr class="separator:a2aaed352ce09a4a18b14ee33960fa40b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e907d16d4abea87c720185c58fffd34"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a4e907d16d4abea87c720185c58fffd34">teleopCallback</a> (msg)</td></tr>
+<tr class="separator:a4e907d16d4abea87c720185c58fffd34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1709ad691e0e812082578aeea7a73488"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a1709ad691e0e812082578aeea7a73488">runCommand</a> (data)</td></tr>
 <tr class="separator:a1709ad691e0e812082578aeea7a73488"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a451494e5076bad8957b7f4f6488d0f08"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a451494e5076bad8957b7f4f6488d0f08">vel_msg</a> = Twist()</td></tr>
 <tr class="separator:a451494e5076bad8957b7f4f6488d0f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4c9cba70f72eba974bdfdbca27a6d10"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#ab4c9cba70f72eba974bdfdbca27a6d10">publisher</a> = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)</td></tr>
+<tr class="memitem:ab4c9cba70f72eba974bdfdbca27a6d10"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#ab4c9cba70f72eba974bdfdbca27a6d10">publisher</a> = rospy.Publisher('/cmd_vel', Twist, queue_size=10)</td></tr>
 <tr class="separator:ab4c9cba70f72eba974bdfdbca27a6d10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53a18fafb707ae06c6573d77595e91f5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a53a18fafb707ae06c6573d77595e91f5">subscriber</a> = rospy.Subscriber('/fromElectron', String, <a class="el" href="namespaceelectron_teleop.html#a16c1d8bc5d9bfb2d176dd0449c0f4981">commandCallback</a>)</td></tr>
-<tr class="separator:a53a18fafb707ae06c6573d77595e91f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49160bd33d5c1b57570ca839dacee638"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceelectron_teleop.html#a49160bd33d5c1b57570ca839dacee638">rate</a> = rospy.Rate(10)</td></tr>
-<tr class="separator:a49160bd33d5c1b57570ca839dacee638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a16c1d8bc5d9bfb2d176dd0449c0f4981"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def electronTeleop.commandCallback </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>msg</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a1709ad691e0e812082578aeea7a73488"></a>
 <div class="memitem">
 <div class="memproto">
@@ -144,37 +125,44 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4e907d16d4abea87c720185c58fffd34"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def electronTeleop.teleopCallback </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2aaed352ce09a4a18b14ee33960fa40b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def electronTeleop.teleopListener </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a class="anchor" id="ab4c9cba70f72eba974bdfdbca27a6d10"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">electronTeleop.publisher = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a49160bd33d5c1b57570ca839dacee638"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">electronTeleop.rate = rospy.Rate(10)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a53a18fafb707ae06c6573d77595e91f5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">electronTeleop.subscriber = rospy.Subscriber('/fromElectron', String, <a class="el" href="namespaceelectron_teleop.html#a16c1d8bc5d9bfb2d176dd0449c0f4981">commandCallback</a>)</td>
+          <td class="memname">electronTeleop.publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)</td>
         </tr>
       </table>
 </div><div class="memdoc">

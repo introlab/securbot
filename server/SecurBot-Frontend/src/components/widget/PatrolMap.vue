@@ -81,8 +81,6 @@ export default {
    * Lifecycle Hook - mounted
    * On component mounted, Get html elements and initialize
    * @method
-   * @param {String} patrolMapId - Identifies video (map) source with exact name reference
-   * @param {Object} canvas - Contains reference to responsive overlay of the video
    * @listens mount(el)
    */
   mounted() {
@@ -104,8 +102,6 @@ export default {
     /**
      * Initialisation of canvas refrash rate and call to canvas resizing functions
      * @method
-     * @param {boolean} enable - Enables or disables the display of the map and canvas
-     * @param {number} CanvasRefreshRate - Refresh rate constant
      */
     init() {
       this.loopIntervalId = setInterval(() => {
@@ -119,7 +115,6 @@ export default {
     /**
      * Clears canvas and redraws the waypoints of the current patrol
      * @method
-     * @param {Object} canvas - Contains reference to responsive overlay of the video
      */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -130,7 +125,6 @@ export default {
      * Calls for the drawing the waypoints with corresponding arrows (indicating the yaws) of
      * each waypoint of the current waypoint list
      * @method
-     * @param {Object[]} waypointList - Lists the current waypoints
      */
     drawWaypointList() {
       for (const [index, wp] of this.waypointList.entries()) {
@@ -142,8 +136,6 @@ export default {
     /**
      * Draws a waypoint on the canvas
      * @method
-     * @param {function} getCanvasCoordinateFromVideo - Corrects the coordinates of the waypoints
-     * according to the video offset and scaling
      * @param {Object} wp - Waypoint
      * @param {Number} wp.x - Waypoint's x coordinate in pixel
      * @param {Number} wp.y - Waypoint's y coordinate in pixel
@@ -167,13 +159,10 @@ export default {
     /**
      * Draws arrow for the yaw of the waypoint on the canvas
      * @method
-     * @param {function} getCanvasCoordinateFromVideo - Corrects the coordinates of the waypoints
-     * according to the video offset and scaling
      * @param {Object} wp - Waypoint
      * @param {Number} wp.x - Waypoint's x coordinate in pixel
      * @param {Number} wp.y - Waypoint's y coordinate in pixel
      * @param {Number} wp.yaw - Waypoint's yaw angle in radians
-     * @param {Object} canvas - Contains reference to responsive overlay of the video
      */
     drawYawArrow(wp) {
       const arrowColor = '#00FF00';
@@ -217,14 +206,8 @@ export default {
     /**
      * Get position/coordinate of mouse event on video
      * @method
-     * @param {function} getVideoOffsetAndScale - Gets the offset between the original video
-     * content and the displayed map
-     * @param {Object} videoElement - Contains reference to video of the map
-     * @listens mousedown
-     * @listens mouseup
-     * @listens mousemove
-     * @listens mouseout
-     * @returns {Number} - X and Y coordinate in pixels of event (mouse position)
+     * @param {HTMLElement} - Event given by the click.
+     * @returns {Object} X and Y coordinate in pixels of event (mouse position)
      */
     getVideoCoordinatesOfEvent(event) {
       const offsetAndScale = this.getVideoOffsetAndScale();
@@ -240,7 +223,6 @@ export default {
     /**
      * Sets canvas size (height and width) to match the size of the video
      * @method
-     * @param {Object} videoElement - Contains reference to video of the map
      */
     adjustCanvasToVideo() {
       this.canvas.width = this.videoElement.offsetWidth;
@@ -250,12 +232,7 @@ export default {
     /**
      * Compute the offset and rescaling parameters of resized video from original content
      * @method
-     * @param {Object} videoElement - Contains reference to video of the map
-     * @param {Number} videoElement.videoWidth - Current width of video
-     * @param {Number} videoElement.videoHeight - Current height of video
-     * @param {Number} videoElement.offsetWidth - Offset width from the original video content
-     * @param {Number} videoElement.offsetHeight - Offset height from the original video content
-     * @returns {Number} - Offset in X, offset in Y and scaling ratios
+     * @returns {Object} Offset in X, offset in Y and scaling ratios
      */
     getVideoOffsetAndScale() {
       const videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
@@ -278,16 +255,11 @@ export default {
     },
 
     /**
-     * Corrects the waypoint coordinate (x,y) from the offsets and scale parameters of video
+     * Corrects the waypoint coordinate (x,y) from the offsets and scale parameters of video.
      * @method
-     * @param {function} getVideoOffsetAndScale - Gets the offset between the original video
-     * content and the displayed map
-     * @param {Object} videoElement - Contains reference to video of the map
-     * @listens mousedown
-     * @listens mouseup
-     * @listens mousemove
-     * @listens mouseout
-     * @returns {Number} - X and Y coordinate in pixels of event (mouse position)
+     * @param {Number} x - Horizontal coordinate on canvas.
+     * @param {Number} y - Vertical coordinate on canvas.
+     * @returns {Object} - X and Y coordinate in pixels of event (mouse position).
      */
     getCanvasCoordinatesFromVideo(x, y) {
       const offsetAndScale = this.getVideoOffsetAndScale();
@@ -299,12 +271,9 @@ export default {
     },
 
     /**
-     * On mouse down, verifies validity of click, creates a waypoint and sets the X and Y
-     * coordinates from click coordinates and updates mouse state (isMouseDown = true).
+     * CallBack of mouse down event. Verify validity and initialise waypoint creation.
      * @method
-     * @param {function} getVideoCoordinatesOfEvent - Get coordinate of mouse event on video
-     * @param {function} isClickValid - Check to see if click is in bound
-     * @listens mousedown
+     * @param {HTMLElement} event - Event element given by the click.
      */
     onMouseDown(event) {
       if (event.button === 0) {
@@ -319,12 +288,9 @@ export default {
     },
 
     /**
-     * On mouse move, if mouse was previously down, it computes the yaw of the waypoint using
-     * previously set coordinates (during onMouseDown) and the current mouse (event) coordinates.
+     * Callback of mouse move event. Updates the yaw with mouse position.
      * @method
-     * @param {Object[]} waypointList - Lists the current waypoints
-     * @param {function} getVideoCoordinatesOfEvent - Get coordinate of mouse event on video
-     * @listens mousemove
+     * @param {HTMLElement} event - Event given by mouse move.
      */
     onMouseMove(event) {
       if (this.isMouseDown) {
@@ -338,14 +304,9 @@ export default {
     },
 
     /**
-     * On mouse up, if mouse was previously down, it computes the yaw of the waypoint using
-     * previously set coordinates (during onMouseDown) and the current mouse (event) coordinates.
-     * It also sets the date and time of the created waypoint as one of its attribute. Updates
-     * mouse state (isMouseDown = false).
+     * Callback of mouse up event, finalize the waypoint creation process.
      * @method
-     * @param {Object[]} waypointList - Lists the current waypoints
-     * @param {function} getVideoCoordinatesOfEvent - Get coordinate of mouse event on video
-     * @listens mouseup
+     * @param {HTMLElement} event - Event element given by the click.
      */
     onMouseUp(event) {
       if (this.isMouseDown) {
@@ -363,11 +324,9 @@ export default {
     },
 
     /**
-     * On mouse out, if mouse was previously down, it deletes the previously created waypoint
-     * (during onMouseDown) and the updates the mouse state (isMouseDown = false).
+     * Callback of mouse out event, terminate the waypoint creation.
      * @method
-     * @param {Object[]} waypointList - Lists the current waypoints
-     * @listens mousedown
+     * @param {HTMLElement} event - Event element given by the click.
      */
     onMouseOut(event) {
       if (this.isMouseDown) {
@@ -380,7 +339,6 @@ export default {
     /**
      * Adds a waypoint to the list of current waypoints
      * @method
-     * @param {Object[]} waypointList - Lists the current waypoints
      * @param {Object} wp - Waypoint
      */
     addWaypointCoord(wp) {
@@ -390,7 +348,6 @@ export default {
     /**
      * Updates last waypoint of the waypoint list
      * @method
-     * @param {Object[]} waypointList - Lists the current waypoints
      * @param {Object} wp - Waypoint
      */
     updateWaypoint(wp) {
@@ -404,9 +361,7 @@ export default {
      * @param {Object} coord - Coordinates of an element
      * @param {Number} coord.x - X coordinate of element
      * @param {Number} coord.y - Y coordinate of element
-     * @param {Number} videoElement.videoWidth - Current width of video
-     * @param {Number} videoElement.videoHeight - Current height of video
-     * @returns {boolean} - true if coordinates of the element are in bounds of the video
+     * @returns {boolean} true if coordinates of the element are in bounds of the video
      */
     isClickValid(coord) {
       return coord.x >= 0
