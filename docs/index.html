@@ -1,13 +1,66 @@
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Securbot Software Documentation</title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    </head>
-    <body>
-        <h1>Documentation page</h1>
-        <a href="ros/doxygen/html/index.html">Ros software documentation (doxygen)</a>
-    </body>
-</html>
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Securbot Software Documentation</title>
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        </head>
+        <body class="text-center h-100" style="background-color: #F2F2F2">
+            <div class="jumbotron border border-success rounded shadow-sm m-4 bg-light p-5" style="height: calc( 100vh - 48px )">
+                <img src="../assets/securbot_logo_text.svg" alt="SecurBot" height="180px" width="100%" class="mb-4"/>
+                <div id="title-container" style="height: 85px">
+                    <h1>Code Documentation</h1>
+                    <h6>Click on the desired page to acces the documentation: </h6>
+                </div>
+
+                <div class="border border-secondary rounded" style="background-color: #E6E6E6">
+                    <div id="carouselDocumentation" class="carousel slide carousel-fade" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li class="bg-secondary" data-target="#carouselDocumentation" data-slide-to="0"></li>
+                        <li class="bg-secondary" data-target="#carouselDocumentation" data-slide-to="1"></li>
+                        <li class="bg-secondary" data-target="#carouselDocumentation" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="ros/doxygen/html/index.html">
+                            <img src="../assets/docs_assets/secubot_pkg_carousel.png" class="d-block w-auto mx-auto">
+                            <div class="carousel-caption d-block">
+                                <h5 class="text-dark font-weight-bold">SecurBot Package Documentation</h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="ros/JSDoc/index.html">
+                            <img src="../assets/docs_assets/electron_carousel.png" class="d-block w-auto mx-auto">
+                            <div class="carousel-caption d-block">
+                                <h5 class="text-dark font-weight-bold">Electron Package Documentation</h5>
+                            </div>
+                            </div>
+                        <div class="carousel-item">
+                            <a href="frontend/JSDoc/index.html">
+                            <img src="../assets/docs_assets/frontend_carousel.png" class="d-block w-auto mx-auto">
+                            <div class="carousel-caption d-block">
+                                <h5 class="text-dark font-weight-bold">Frontend Documentation</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselDocumentation" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon bg-secondary border border-dark rounded" aria-hidden="false"></span>
+                        <span class="sr-only bg-secondary">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselDocumentation" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon bg-secondary border border-dark rounded" aria-hidden="false"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    </div>
+                </div>
+                <p class="text-muted" style="height:30px">
+                    Or look at our  
+                    <a href="https://github.com/introlab/securbot/wiki">Wiki</a>
+                </p>
+            </div>
+        </body>
+    </html>
 
