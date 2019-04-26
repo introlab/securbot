@@ -73,7 +73,7 @@ mkdir -p $CATK_WS $CATK_WS/build
 rm -rf $CATK_WS/src
 
 # Copying the project files
-ln -fs $BASEDIR/../Robot_Software $CATK_WS/src
+ln -fs $BASEDIR/../ros_pkg $CATK_WS/src
 
 # Catkin Make
 catkin_make --directory $CATK_WS
