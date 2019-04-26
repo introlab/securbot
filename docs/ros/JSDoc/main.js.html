@@ -24,7 +24,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-ipcInit.html">ipcInit</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Main.html">Main</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~createWindow">createWindow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startApp">startApp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startNode">startNode</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Renderer.html">Renderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~fetchParameters">fetchParameters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~myInit">myInit</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:data">data</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:goal">goal</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:msg">msg</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:parameters_response">parameters_response</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:rosdata">rosdata</a></span></li>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-ipcInit.html">ipcInit</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Main.html">Main</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~createWindow">createWindow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startApp">startApp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startNode">startNode</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Renderer.html">Renderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~fetchParameters">fetchParameters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~myInit">myInit</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:data">data</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:msg">msg</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:parameters_response">parameters_response</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:patrol-plan">patrol-plan</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:rosdata">rosdata</a></span></li>
 </nav>
 
 <div id="main">
@@ -160,7 +160,7 @@ function startApp() {
  * @function startNode
  *
  * @fires data
- * @fires goal
+ * @fires patrol-plan
  * @fires msg
  * @fires parameters_response
  */
@@ -218,15 +218,15 @@ function startNode() {
     });
 
     /** advertise the operatorNavGoal node */
-    const goalPublisher = nodeHandle.advertise('operatorNavGoal', std_msgs.String);
+    const patrolPublisher = nodeHandle.advertise('/electron/patrol', std_msgs.String);
     /**
      * After receiving a patrol from server, publish it to the operatorNavGoal Node
-     * @event goal
+     * @event patrol-plan
      * @type {object}
-     * @property {String} goalJsonString - JSON object containing the patrol.
+     * @property {String} patrolJsonString - JSON object containing the patrol.
      */
-    ipcMain.on('goal', (event, goalJsonString) => {
-      goalPublisher.publish({ data: goalJsonString });
+    ipcMain.on('patrol-plan', (event, patrolJsonString) => {
+      patrolPublisher.publish({ data: patrolJsonString });
     });
   });
 }
@@ -248,7 +248,7 @@ startNode();
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Apr 20 2019 17:31:50 GMT-0400 (GMT-04:00) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Apr 26 2019 14:19:31 GMT-0400 (Eastern Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
