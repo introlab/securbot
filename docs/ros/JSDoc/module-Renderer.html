@@ -24,7 +24,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-ipcInit.html">ipcInit</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Main.html">Main</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~createWindow">createWindow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startApp">startApp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startNode">startNode</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Renderer.html">Renderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~fetchParameters">fetchParameters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~myInit">myInit</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:data">data</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:goal">goal</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:msg">msg</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:parameters_response">parameters_response</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:rosdata">rosdata</a></span></li>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-ipcInit.html">ipcInit</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Main.html">Main</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~createWindow">createWindow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startApp">startApp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Main.html#~startNode">startNode</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Renderer.html">Renderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~fetchParameters">fetchParameters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Renderer.html#~myInit">myInit</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:data">data</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:msg">msg</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:parameters_response">parameters_response</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:patrol-plan">patrol-plan</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="module-Main.html#~event:rosdata">rosdata</a></span></li>
 </nav>
 
 <div id="main">
@@ -723,14 +723,14 @@ server and configure the 2 video stream.
 
     
 
-    <h4 class="name" id="~goalReceivedCallback"><span class="type-signature"></span>goalReceivedCallback<span class="signature">(easyrtc, msgType, msgData)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~patrolReceivedCallback"><span class="type-signature"></span>patrolReceivedCallback<span class="signature">(easyrtcId, msgType, patrolJsonString)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Callback for the nav-goal data channel from easyrtc.
+    Callback for the patrol-plan data channel from easyrtc.
 </div>
 
 
@@ -810,7 +810,7 @@ server and configure the 2 video stream.
 
         <tr>
             
-                <td class="name"><code>easyrtc</code></td>
+                <td class="name"><code>easyrtcId</code></td>
             
 
             <td class="type">
@@ -862,7 +862,7 @@ server and configure the 2 video stream.
 
         <tr>
             
-                <td class="name"><code>msgData</code></td>
+                <td class="name"><code>patrolJsonString</code></td>
             
 
             <td class="type">
@@ -879,7 +879,7 @@ server and configure the 2 video stream.
             
 
             <td class="description last">
-                JSON string of the patrol datas.
+                JSON string of the patrol data.
                 
             </td>
         </tr>
@@ -1294,7 +1294,7 @@ server and configure the 2 video stream.
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Apr 20 2019 17:31:50 GMT-0400 (GMT-04:00) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Apr 26 2019 14:19:31 GMT-0400 (Eastern Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

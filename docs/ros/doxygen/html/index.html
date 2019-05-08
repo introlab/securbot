@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>SecurBot: Main Page</title>
+<title>SecurBot: SecurBot Package</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -79,15 +79,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="headertitle">
-<div class="title">SecurBot Documentation</div>  </div>
+<div class="title">SecurBot Package </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><blockquote class="doxtable">
-<p>This folder contains all the ROS package created for the SecurBot project. </p>
-</blockquote>
-<h2>Get started</h2>
-<p>To get started using the robot and its ROS modules, you need to have ROS kinetic installed on your robot and you need to create a symbolic link to the Robot_Software folder in your catkin workspace src folder.</p>
-<p>Visit <a href="https://github.com/introlab/securbot/wiki/ROS-Getting-Started">the wiki</a> for more usage information and tips. </p>
+<div class="textblock"><p>This package contains the navigation files for the different robotic platforms.</p>
+<h2>Content</h2>
+<p>The package contains the following folders:</p>
+<ul>
+<li>config: Navigation configuration files (1 folder per base)<ul>
+<li>base_local_planner_params.yaml: Parameters for the local planner (TrajectoryPlannerROS) and the global planner (NavfnROS) of move_base</li>
+<li>costmap_common_params.yaml: Parameters for the local and global costmap with the obstacle sources</li>
+<li>global_costmap_params.yaml: Parameters for the global costmap</li>
+<li>local_costmap_params.yaml: Parameters for the local costmap</li>
+<li>smoother.yaml: Parameters for the yocs_velocity_smoother</li>
+</ul>
+</li>
+<li>launch: ROS launch files<ul>
+<li>localization.launch: Starts the robot base and RTAB-Map in localization mode.</li>
+<li>mapping.launch: Starts the robot base and RTAB-Map in mapping mode.</li>
+<li>mapping.rviz: RViz config save file with the correct display to monitor mapping.</li>
+<li>navigation.launch: Starts move_base node with the params from the config folder.</li>
+<li>navigation.rviz: RViz config save file with the correct display to monitor navigation.</li>
+<li>patrolExecutive.launch: Starts the ROS node that can execute a patrol on the robot.</li>
+<li>teleop.launch: Starts the teleop node.</li>
+<li>include: Contains the specific launch files for the hardware setup of each robot.<ul>
+<li>bases: Launch files for the specific base of the robot</li>
+<li>frames: Frames of reference for the sensors</li>
+<li>sensors: Lidar and camera launch files</li>
+<li>securbot_bringup.launch: Starts the robot with the appropriate base, frames and sensors.</li>
+<li>rtabmap_bringup.launch: Starts RTAB-Map in mapping or localization according to the provided arguments.</li>
+<li>virtualDevices.launch: Start the map image generator and create the virtual cameras trough V4L2 loopback that will be opened by EasyRTC.</li>
+</ul>
+</li>
+<li>template_launch_files: Contains templates for creating new launch files.</li>
+<li>demo:<ul>
+<li>securbot_demo.launch: Start the full SecurBot demo with RTAB-Map in mapping mode. It allows teleoperation and patrol trough the web interface.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>scripts: Python scripts for the waypoint navigation</li>
+<li>test: Test scripts for the package's scripts based on the ROS test framework and Python unittest.</li>
+</ul>
+<h2>Usage</h2>
+<p>Visit <a href="https://github.com/introlab/securbot/wiki/ROS-Getting-Started">the wiki</a> for examples on how to use these files. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
