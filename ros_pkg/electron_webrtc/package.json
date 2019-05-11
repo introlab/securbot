@@ -1,0 +1,26 @@
+{
+  "name": "electron_webrtc",
+  "version": "1.0.0",
+  "description": "Electron app implementing a WebRTC client",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "npx jsdoc -c jsdoc.config.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.1",
+    "jsdoc": "^3.5.5",
+    "minami": "^1.2.3"
+  },
+  "dependencies": {
+    "electron": "=3.0.13",
+    "easyrtc": "github:priologic/easyrtc#a6e1bee7d3b09dce57475d19423f0229a38dc554",
+    "rosnodejs": "^3.0.0",
+    "socket.io-client": "github:socketio/socket.io-client#3020e455ab9a81341722e6c1e6cd8ef6b4b0ea28"
+  }
+}

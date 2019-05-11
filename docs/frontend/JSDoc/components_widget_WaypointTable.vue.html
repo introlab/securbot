@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>components/widget/WaypointTable.vue - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-App.html">App</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Events.html">Events</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Layout.html">Layout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#acceptCall">acceptCall</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#acceptPeerVideo">acceptPeerVideo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#callAccepted">callAccepted</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#callFailure">callFailure</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#callSuccessful">callSuccessful</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#clearHTMLVideoStream">clearHTMLVideoStream</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#closePeerVideo">closePeerVideo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#connect">connect</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#connectTo">connectTo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#dataCloseListenerCB">dataCloseListenerCB</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#dataOpenListenerCB">dataOpenListenerCB</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#getHTMLElements">getHTMLElements</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#handleData">handleData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#handleRoomOccupantChange">handleRoomOccupantChange</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#loginFailure">loginFailure</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#loginSuccess">loginSuccess</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#onJoystickPositionChange">onJoystickPositionChange</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#performCall">performCall</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#requestFeedFromPeer">requestFeedFromPeer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#sendData">sendData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#sendPatrol">sendPatrol</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#setHTMLVideoStream">setHTMLVideoStream</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Layout.html#verifyJoystickState">verifyJoystickState</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-main.html">main</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Patrol.html">Patrol</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Patrol.html#clearPatrolList">clearPatrolList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Patrol.html#clearWaypointList">clearWaypointList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Patrol.html#getSavedPatrols">getSavedPatrols</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Patrol.html#sendPatrol">sendPatrol</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-router.html">router</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Teleop.html">Teleop</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Teleop.html#changeJoystickState">changeJoystickState</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-widget_Connection.html">widget/Connection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Connection.html#connectToPeer">connectToPeer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Connection.html#disconnectFromPeer">disconnectFromPeer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Connection.html#handleConnectionChanged">handleConnectionChanged</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Connection.html#handlePeerConnection">handlePeerConnection</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-widget_Joystick.html">widget/Joystick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#drawBackground">drawBackground</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#drawCanvas">drawCanvas</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#drawJoystick">drawJoystick</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#emitJoystickPosition">emitJoystickPosition</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#findCenterCanvas">findCenterCanvas</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#getCanvasRadius">getCanvasRadius</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#getCenterX">getCenterX</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#getCenterY">getCenterY</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#getJoystickRadius">getJoystickRadius</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#init">init</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#onMouseDown">onMouseDown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#onMouseMove">onMouseMove</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#onMouseOut">onMouseOut</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#onMouseUp">onMouseUp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#setCanvasSize">setCanvasSize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_Joystick.html#updateJoystickPositionFromMouseEvent">updateJoystickPositionFromMouseEvent</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html">widget/PatrolMap</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#addWaypointCoord">addWaypointCoord</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#adjustCanvasToVideo">adjustCanvasToVideo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#drawCanvas">drawCanvas</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#drawWaypoint">drawWaypoint</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#drawWaypointList">drawWaypointList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#drawYawArrow">drawYawArrow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#getCanvasCoordinatesFromVideo">getCanvasCoordinatesFromVideo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#getVideoCoordinatesOfEvent">getVideoCoordinatesOfEvent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#getVideoOffsetAndScale">getVideoOffsetAndScale</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#init">init</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#isClickValid">isClickValid</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#onMouseDown">onMouseDown</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#onMouseMove">onMouseMove</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#onMouseOut">onMouseOut</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#onMouseUp">onMouseUp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_PatrolMap.html#updateWaypoint">updateWaypoint</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-widget_SaveLoad.html">widget/SaveLoad</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_SaveLoad.html#addPatrolToPatrolList">addPatrolToPatrolList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_SaveLoad.html#removePatrolFromList">removePatrolFromList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_SaveLoad.html#selectPatrolFromList">selectPatrolFromList</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-widget_VideoBox.html">widget/VideoBox</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-widget_WaypointTable.html">widget/WaypointTable</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-widget_WaypointTable.html#removeWaypointFromList">removeWaypointFromList</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/widget/WaypointTable.vue</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;!-- Waypoint Table widget -->
+  &lt;div class="w-100 h-100">
+    &lt;!-- Overflow container -->
+    &lt;div class="mh-100 overflow-auto">
+      &lt;!-- Table -->
+      &lt;table
+        id="waypoint-table"
+        class="table tabl e-borderless table-striped border-left border-right"
+        style="text-align: center">
+        &lt;!-- Header -->
+        &lt;thead class="text-white bg-green-sb">
+          &lt;th style="width:20%">
+            #
+          &lt;/th>
+          &lt;th style="width:20%">
+            X
+          &lt;/th>
+          &lt;th style="width:20%">
+            Y
+          &lt;/th>
+          &lt;th style="width:20%">
+            Yaw
+          &lt;/th>
+          &lt;th style="width:20%">
+            Remove
+          &lt;/th>
+        &lt;/thead>
+        &lt;!-- Body -->
+        &lt;tbody>
+          &lt;!-- Table row per waypoint in list -->
+          &lt;template v-for="(waypoint, index) of waypointList">
+            &lt;tr
+              :key="waypoint.dateTime"
+              class="border-bottom">
+              &lt;td style="width:20%">
+                {{ (index+1).toFixed(0) }}
+              &lt;/td>
+              &lt;td style="width:20%">
+                {{ waypoint.x.toFixed(1) }}
+              &lt;/td>
+              &lt;td style="width:20%">
+                {{ waypoint.y.toFixed(1) }}
+              &lt;/td>
+              &lt;td style="width:20%">
+                {{ waypoint.yaw.toFixed(1) }}
+              &lt;/td>
+              &lt;td style="width:20%">
+                &lt;!-- Remove button -->
+                &lt;button
+                  :id="'removeBtn'+index"
+                  type="button"
+                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
+                  @click="removeWaypointFromList(index)">
+                  &lt;img
+                    src="~/open-iconic/svg/trash.svg"
+                    alt=""
+                    style="width:12px;height:12px">
+                &lt;/button>
+              &lt;/td>
+            &lt;/tr>
+          &lt;/template>
+        &lt;/tbody>
+      &lt;/table>
+    &lt;/div>
+  &lt;/div>
+&lt;/template>
+
+&lt;script>
+/**
+ * Vue SFC used as a widget to show waypoints in a array given as props.
+ * The waypoints are shown in a html table generated with vue v-for.
+ * The table contains a colomn of buttons use to delete the row they
+ * are in and, at the same time, delete the corresponding waypoint in
+ * the array.
+ * This component have the following dependency :
+ * Bootstrap-Vue for styling.
+ *
+ *
+ * @module widget/WaypointTable
+ * @vue-prop {Object[]} waypointList - Lists the current waypoints
+ */
+
+/* Disabled comment documentation
+ * Might use those eventually by forking jsdoc-vue-js so it can manage the author
+ * and version tag correctly
+ * @author Valerie Gauthier &lt;valerie.gauthier@usherbrooke.ca>
+ * @author Edouard Legare &lt;edouard.legare@usherbrooke.ca>
+ * @version 1.0.0
+ */
+
+export default {
+  name: 'waypoint-table',
+  props: {
+    waypointList: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+    };
+  },
+  methods: {
+    /**
+     * Used to clear the patrol or empty the waypoint list.
+     * @method
+     * @param {Number} index - Index of the waypoint to remove from list.
+     */
+    removeWaypointFromList(index) {
+      this.waypointList.splice(index, 1);
+    },
+  },
+};
+&lt;/script>
+
+&lt;style>
+.bg-trash{
+  display: block;
+  background: url("~/open-iconic/svg/trash.svg");
+  fill: black;
+}
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Apr 26 2019 14:20:12 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

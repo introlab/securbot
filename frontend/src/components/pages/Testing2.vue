@@ -1,0 +1,215 @@
+<template>
+  <div>
+    <div style="height:540px;width:960px;background-color:black;">
+      <video-box
+        :show="true"
+        video-id="local-stream" />
+    </div>
+    <div style="height:20px;width:960px;background-color:white;" />
+    <div style="height:540px;width:960px;background-color:black;">
+      <video-box
+        :show="true"
+        video-id="remote-stream" />
+    </div>
+    <div>
+      <connection
+        :self-id="selfEasyrtcid"
+        :peers-table="testPeerTable"
+        :bus="busBus" />
+    </div>
+  </div>
+</template>
+
+<script>
+/*
+  Page to test API by simulating a robot without all the other control.
+  This page gets video feed from computer and sets a data channel.
+  When the simulator are done, this page needs to get remove (from index too)
+*/
+/* global easyrtc */
+
+import Vue from 'vue';
+
+import VideoBox from '../widget/VideoBox';
+import Connection from '../widget/Connection';
+
+export default {
+  name: 'testing2',
+  components: {
+    VideoBox,
+    Connection,
+  },
+  data() {
+    return {
+      // Rename variables
+      peerId: null,
+      isConnected: null,
+      selfEasyrtcid: null,
+      remoteStream: null,
+      localStreamNames: ['camera', 'map'],
+      localStreams: {},
+      localElement: null,
+      remoteElement: null,
+      testPeerTable: [],
+      busBus: new Vue(),
+    };
+  },
+  /*
+    mounted() : On component mounted, use to get and initialise
+  */
+  mounted() {
+    this.localElement = document.getElementById('local-stream');
+    this.remoteElement = document.getElementById('remote-stream');
+    this.busBus.$on('peer-connection', this.connectTo);
+
+    this.connect();
+  },
+  // On component destroy, hangup and disconnect
+  destroyed() {
+    if (this.operatorEasyrtcId !== null) {
+      easyrtc.hangupAll();
+      easyrtc.disconnect();
+    }
+  },
+  methods: {
+    connect() {
+      easyrtc.enableDebug(false);
+      console.log('Initializing...');
+      easyrtc.enableVideo(true);
+      easyrtc.enableAudio(false);
+      easyrtc.enableVideoReceive(false);
+      easyrtc.enableAudioReceive(false);
+      easyrtc.enableDataChannels(true);
+
+      easyrtc.setDataChannelOpenListener(this.dataOpenListenerCB);
+      easyrtc.setDataChannelCloseListener(this.dataCloseListenerCB);
+      easyrtc.setPeerListener(this.handleData);
+
+      easyrtc.setRoomOccupantListener(this.handleRoomOccupantChange);
+      easyrtc.setStreamAcceptor(this.acceptPeerVideo);
+      easyrtc.setOnStreamClosed(this.closePeerVideo);
+      easyrtc.setAcceptChecker(this.acceptCall);
+
+      easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
+
+      // Uncomment next line to use the dev server
+      easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
+
+      let temp = false;
+      // eslint-disable-next-line no-loop-func
+      easyrtc.getVideoSourceList((videoSources) => {
+        for (let i = 0; i < videoSources.length; i++) {
+          const videoSource = videoSources[i];
+
+          const streamName = videoSource.label;
+
+          easyrtc.setVideoSource(videoSource.id);
+          // eslint-disable-next-line no-loop-func
+          easyrtc.initMediaSource(() => {
+            const stream = easyrtc.getLocalStream(streamName);
+            this.localStreams[streamName] = stream;
+
+            if (streamName === 'map') {
+              easyrtc.setVideoObjectSrc(this.remoteElement, stream);
+            } else if (streamName === 'camera') {
+              easyrtc.setVideoObjectSrc(this.localElement, stream);
+            }
+            if (!temp) {
+              easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+              temp = true;
+            }
+          }, this.loginFailure, streamName);
+        }
+      });
+      console.log('Connected...');
+    },
+    handleRoomOccupantChange(roomName, occupants, isPrimary) {
+      this.testPeerTable = [];
+      if (occupants !== null) {
+        // eslint-disable-next-line guard-for-in
+        for (const occupant in occupants) {
+          const peer = { peerName: occupant, peerId: occupant };
+          this.testPeerTable.push(peer);
+        }
+      }
+    },
+    connectTo(easyrtcid) {
+      if (this.peerId === easyrtcid) {
+        easyrtc.hangupAll();
+        this.busBus.$emit('connection-changed', 'disconnected');
+        this.peerId = null;
+      } else if (this.peerId === null) {
+        this.performCall(easyrtcid);
+      } else {
+        console.warn("The is an issue in the connection state handling... This shouldn't happen...");
+      }
+    },
+    performCall(occupantId) {
+      easyrtc.hangupAll();
+      console.log(`Calling the chosen occupant : ${occupantId}`);
+
+      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted);
+    },
+    callSuccessful(occupantId, mediaType) {
+      console.warn(`Call to ${occupantId} was successful, here's the media: ${mediaType}`);
+      if (mediaType === 'connection') {
+        this.busBus.$emit('connection-changed', 'connected');
+      }
+    },
+    callFailure(errCode, errMessage) {
+      console.warn(`Call failed : ${errCode} | ${errMessage}`);
+      this.busBus.$emit('connection-changed', 'failed');
+      this.peerId = null;
+    },
+    callAccepted(accepted, easyrtcid) {
+      console.warn(`Call was ${accepted} from ${easyrtcid}`);
+      if (!accepted) {
+        this.busBus.$emit('connection-changed', 'failed');
+        this.peerId = null;
+      } else {
+        this.peerId = easyrtcid;
+      }
+    },
+    loginSuccess(easyrtcid) {
+      console.warn(`I am ${easyrtc.idToName(easyrtcid)}`);
+      this.selfEasyrtcid = easyrtcid;
+    },
+    loginFailure(errorCode, message) {
+      easyrtc.showError(errorCode, message);
+    },
+    acceptCall(easyrtcid, acceptor) {
+      this.peerId = easyrtcid;
+      acceptor(true);
+    },
+    acceptPeerVideo(easyrtcid, stream, streamName) {
+      this.remoteStream = stream;
+      easyrtc.setVideoObjectSrc(this.remoteElement, this.remoteStream);
+    },
+    closePeerVideo(easyrtcid) {
+      this.localStreams = [];
+      this.remoteStream = null;
+      easyrtc.setVideoObjectSrc(this.localElement, '');
+      easyrtc.setVideoObjectSrc(this.remoteElement, '');
+    },
+    dataOpenListenerCB(easyrtcid) {
+      console.warn(`Data channel open with ${easyrtcid}`);
+    },
+    dataCloseListenerCB(easyrtcid) {
+      console.warn(`Data channel close with ${easyrtcid}`);
+    },
+    handleData(easyrtcid, type, data) {
+      if (easyrtcid === this.peerId && type === 'request-feed') {
+        easyrtc.addStreamToCall(easyrtcid, data);
+      } else if (easyrtcid === this.peerId) {
+        console.log(`Received ${data} of type ${type}...`);
+      } else {
+        console.log('Received data from someone else than the peer, ignoring it...');
+      }
+    },
+  },
+};
+</script>
+
+<style>
+
+</style>

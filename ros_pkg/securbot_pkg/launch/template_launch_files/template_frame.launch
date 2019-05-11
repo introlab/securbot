@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="pkg" type="type" name="name" args="args" />
+</launch>

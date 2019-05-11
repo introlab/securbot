@@ -1,6 +1,0 @@
-[submodule "Robot_Software/Electron_WebRTC/easyrtc"]
-	path = Robot_Software/Electron_WebRTC/easyrtc
-	url = https://github.com/priologic/easyrtc.git
-[submodule "Robot_Software/Electron_WebRTC/socket.io-client"]
-	path = Robot_Software/Electron_WebRTC/socket.io-client
-	url = https://github.com/socketio/socket.io-client.git
