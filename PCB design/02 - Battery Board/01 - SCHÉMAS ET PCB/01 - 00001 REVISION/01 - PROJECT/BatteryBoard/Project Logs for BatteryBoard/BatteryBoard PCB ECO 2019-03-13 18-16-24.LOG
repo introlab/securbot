@@ -1,0 +1,63 @@
+Added Component: Designator=B1(18650 PC PIN)
+Added Component: Designator=B2(18650 PC PIN)
+Added Component: Designator=B3(18650 PC PIN)
+Added Component: Designator=B4(18650 PC PIN)
+Added Component: Designator=B5(18650 PC PIN)
+Added Component: Designator=B6(18650 PC PIN)
+Added Component: Designator=B7(18650 PC PIN)
+Added Component: Designator=B8(18650 PC PIN)
+Added Pin To Net: NetName=NetB1_1 Pin=B1-1
+Added Pin To Net: NetName=NetB1_1 Pin=B1-1
+Added Pin To Net: NetName=NetB1_1 Pin=B1-1
+Added Pin To Net: NetName=NetB1_1 Pin=B2-1
+Added Pin To Net: NetName=NetB1_1 Pin=B2-1
+Added Pin To Net: NetName=NetB1_1 Pin=B2-1
+Added Net: Name=NetB1_1
+Added Pin To Net: NetName=NetB1_2 Pin=B1-2
+Added Pin To Net: NetName=NetB1_2 Pin=B1-2
+Added Pin To Net: NetName=NetB1_2 Pin=B1-2
+Added Pin To Net: NetName=NetB1_2 Pin=B2-2
+Added Pin To Net: NetName=NetB1_2 Pin=B2-2
+Added Pin To Net: NetName=NetB1_2 Pin=B2-2
+Added Pin To Net: NetName=NetB1_2 Pin=B3-1
+Added Pin To Net: NetName=NetB1_2 Pin=B3-1
+Added Pin To Net: NetName=NetB1_2 Pin=B3-1
+Added Pin To Net: NetName=NetB1_2 Pin=B4-1
+Added Pin To Net: NetName=NetB1_2 Pin=B4-1
+Added Pin To Net: NetName=NetB1_2 Pin=B4-1
+Added Net: Name=NetB1_2
+Added Pin To Net: NetName=NetB3_2 Pin=B3-2
+Added Pin To Net: NetName=NetB3_2 Pin=B3-2
+Added Pin To Net: NetName=NetB3_2 Pin=B3-2
+Added Pin To Net: NetName=NetB3_2 Pin=B4-2
+Added Pin To Net: NetName=NetB3_2 Pin=B4-2
+Added Pin To Net: NetName=NetB3_2 Pin=B4-2
+Added Pin To Net: NetName=NetB3_2 Pin=B5-1
+Added Pin To Net: NetName=NetB3_2 Pin=B5-1
+Added Pin To Net: NetName=NetB3_2 Pin=B5-1
+Added Pin To Net: NetName=NetB3_2 Pin=B6-1
+Added Pin To Net: NetName=NetB3_2 Pin=B6-1
+Added Pin To Net: NetName=NetB3_2 Pin=B6-1
+Added Net: Name=NetB3_2
+Added Pin To Net: NetName=NetB5_2 Pin=B5-2
+Added Pin To Net: NetName=NetB5_2 Pin=B5-2
+Added Pin To Net: NetName=NetB5_2 Pin=B5-2
+Added Pin To Net: NetName=NetB5_2 Pin=B6-2
+Added Pin To Net: NetName=NetB5_2 Pin=B6-2
+Added Pin To Net: NetName=NetB5_2 Pin=B6-2
+Added Pin To Net: NetName=NetB5_2 Pin=B7-1
+Added Pin To Net: NetName=NetB5_2 Pin=B7-1
+Added Pin To Net: NetName=NetB5_2 Pin=B7-1
+Added Pin To Net: NetName=NetB5_2 Pin=B8-1
+Added Pin To Net: NetName=NetB5_2 Pin=B8-1
+Added Pin To Net: NetName=NetB5_2 Pin=B8-1
+Added Net: Name=NetB5_2
+Added Pin To Net: NetName=NetB7_2 Pin=B7-2
+Added Pin To Net: NetName=NetB7_2 Pin=B7-2
+Added Pin To Net: NetName=NetB7_2 Pin=B7-2
+Added Pin To Net: NetName=NetB7_2 Pin=B8-2
+Added Pin To Net: NetName=NetB7_2 Pin=B8-2
+Added Pin To Net: NetName=NetB7_2 Pin=B8-2
+Added Net: Name=NetB7_2
+Added Class: Name=Battery Front End
+Added Room: Name=Battery Front End

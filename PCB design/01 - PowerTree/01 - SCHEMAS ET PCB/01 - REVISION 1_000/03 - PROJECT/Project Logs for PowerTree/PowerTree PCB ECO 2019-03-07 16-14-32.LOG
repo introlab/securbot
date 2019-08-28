@@ -1,0 +1,36 @@
+Added Component: Designator=L1(BOURNS 12.5x12.5mm)
+Added Component: Designator=L2(BOURNS 12.5x12.5mm)
+Added Component: Designator=L3(BOURNS 12.5x12.5mm)
+Added Component: Designator=L4(BOURNS 12.5x12.5mm)
+Added Component: Designator=L5(BOURNS 12.5x12.5mm)
+Added Component: Designator=L6(BOURNS 12.5x12.5mm)
+Added Component: Designator=L7(BOURNS 12.5x12.5mm)
+Added Component: Designator=L8(BOURNS 12.5x12.5mm)
+Added Component: Designator=L9(BOURNS 12.5x12.5mm)
+Added Pin To Net: NetName=VBATT Pin=L1-1
+Added Pin To Net: NetName=NetD1_1 Pin=L1-2
+Added Pin To Net: NetName=NetC14_2 Pin=L2-1
+Added Pin To Net: NetName=NetC15_1 Pin=L2-2
+Added Pin To Net: NetName=NetC22_2 Pin=L3-1
+Added Pin To Net: NetName=NetC23_1 Pin=L3-2
+Added Pin To Net: NetName=NetC30_2 Pin=L4-1
+Added Pin To Net: NetName=NetC31_1 Pin=L4-2
+Added Pin To Net: NetName=NetC38_2 Pin=L5-1
+Added Pin To Net: NetName=NetC39_1 Pin=L5-2
+Added Pin To Net: NetName=NetC46_2 Pin=L6-1
+Added Pin To Net: NetName=NetC47_1 Pin=L6-2
+Added Pin To Net: NetName=NetC54_2 Pin=L7-1
+Added Pin To Net: NetName=NetC55_1 Pin=L7-2
+Added Pin To Net: NetName=NetC62_2 Pin=L8-1
+Added Pin To Net: NetName=NetC63_1 Pin=L8-2
+Added Pin To Net: NetName=NetC70_2 Pin=L9-1
+Added Pin To Net: NetName=NetC71_1 Pin=L9-2
+Added Member To Class: ClassName=Buck Boost 19V Member=Component L1 IND
+Added Member To Class: ClassName=DC_DC_5V_1 Member=Component L2 IND
+Added Member To Class: ClassName=DC_DC_5V_1 Member=Component L3 IND
+Added Member To Class: ClassName=DC_DC_5V_2 Member=Component L4 IND
+Added Member To Class: ClassName=DC_DC_5V_2 Member=Component L5 IND
+Added Member To Class: ClassName=DC_DC_12V Member=Component L6 IND
+Added Member To Class: ClassName=DC_DC_12V Member=Component L7 IND
+Added Member To Class: ClassName=DC_DC_15V_AND_VAR Member=Component L8 IND
+Added Member To Class: ClassName=DC_DC_15V_AND_VAR Member=Component L9 IND

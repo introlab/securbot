@@ -1,0 +1,25 @@
+Added Component: Designator=J6(MOLEX4POS_TERMBLOCK2POS)
+Added Component: Designator=Q8(SOT-23)
+Added Component: Designator=R40(RES_0805)
+Added Component: Designator=R41(RES_0805)
+Added Pin To Net: NetName=5V_REG Pin=J6-1
+Added Pin To Net: NetName=5V_REG Pin=J6-3
+Added Pin To Net: NetName=5V_REG Pin=J6-5
+Added Pin To Net: NetName=GND Pin=Q8-1
+Added Pin To Net: NetName=GND Pin=R41-1
+Added Pin To Net: NetName=NetJ6_2 Pin=J6-2
+Added Pin To Net: NetName=NetJ6_2 Pin=J6-4
+Added Pin To Net: NetName=NetJ6_2 Pin=J6-6
+Added Pin To Net: NetName=NetJ6_2 Pin=Q8-3
+Added Net: Name=NetJ6_2
+Added Pin To Net: NetName=NetQ8_2 Pin=Q8-2
+Added Pin To Net: NetName=NetQ8_2 Pin=R40-2
+Added Pin To Net: NetName=NetQ8_2 Pin=R41-2
+Added Net: Name=NetQ8_2
+Added Pin To Net: NetName=NetR40_1 Pin=R40-1
+Added Pin To Net: NetName=NetR40_1 Pin=U7-1
+Added Net: Name=NetR40_1
+Added Member To Class: ClassName=MC Member=Component J6 MOLEX 4 POS - TERMINAL BLOCK 2 POS
+Added Member To Class: ClassName=MC Member=Component Q8 NMOS
+Added Member To Class: ClassName=MC Member=Component R40 RES - 0805
+Added Member To Class: ClassName=MC Member=Component R41 RES - 0805

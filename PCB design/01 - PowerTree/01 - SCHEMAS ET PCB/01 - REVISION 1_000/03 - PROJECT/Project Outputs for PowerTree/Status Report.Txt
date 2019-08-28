@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [PowerTree.PrjPcb]
+   Generated File[PowerTree.TXT]
+   Generated File[PowerTree.LDP]
+   Generated File[PowerTree.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 15:28:39 On 2019-03-12
