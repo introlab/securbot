@@ -96,7 +96,7 @@ AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
 AnnotateSuffix=
 AnnotateScope=All
-AnnotateOrder=-1
+AnnotateOrder=7
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
@@ -106,41 +106,58 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=MVBJWIYY
 
+[Document5]
+DocumentPath=Charge Station.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=HSNTAQCY
+
 [Parameter1]
-Name=Project_Revision
-Value=1
+Name=Project_Date
+Value=12/03/2019
 
 [Parameter2]
-Name=Project_Name
-Value=PowerTree
+Name=Project_Designer1
+Value=Olivier Belval
 
 [Parameter3]
-Name=Project_Group
-Value=SecurBot
+Name=Project_Designer2
+Value=Philippe Marcoux
 
 [Parameter4]
-Name=Project_Global
-Value=SecurBot
+Name=Project_Designer3
+Value=
 
 [Parameter5]
 Name=Project_Designer4
 Value=
 
 [Parameter6]
-Name=Project_Designer3
-Value=
+Name=Project_Global
+Value=SecurBot
 
 [Parameter7]
-Name=Project_Designer2
-Value=Philippe Marcoux
+Name=Project_Group
+Value=SecurBot
 
 [Parameter8]
-Name=Project_Designer1
-Value=Olivier Belval
+Name=Project_Name
+Value=PowerTree
 
 [Parameter9]
-Name=Project_Date
-Value=12/03/2019
+Name=Project_Revision
+Value=1
 
 [Configuration1]
 Name=Default Configuration
@@ -363,12 +380,6 @@ OutputDocumentPath18=
 OutputVariantName18=
 OutputDefault18=0
 PageOptions18=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
-OutputType19=Logic Analyser Print
-OutputName19=Logic Analyser Prints
-OutputDocumentPath19=
-OutputVariantName19=
-OutputDefault19=0
-PageOptions19=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
 
 [OutputGroup4]
 Name=Assembly Outputs
