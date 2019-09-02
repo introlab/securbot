@@ -8,8 +8,8 @@
 * [ ] VS Code Config
   * [ ] Debug
   * [ ] Markdown
-* [ ] New Vue Project Template Version
-* [ ] ESLint Config changes
+* [x] Update packages
+* [x] ESLint Config changes
 * [ ] Docs Update (Comments + Package Used)
 * [ ] Put navbar in its own file
 * [ ] Reorganize Components
@@ -18,5 +18,5 @@
 
 ### To Investigate
 
-* [ ] New Icon package
-* [ ] Package Integration (eg: Moment)
+* [x] New Icon package
+* [x] Package Integration (eg: Moment)
