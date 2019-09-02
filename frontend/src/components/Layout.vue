@@ -5,7 +5,7 @@
     class="vh-100">
     <!-- Navbar container-->
     <div
-      id="nav-bar"
+      id="sec-nav"
       class="position-relative">
       <!-- Navbar -->
       <b-navbar
@@ -506,6 +506,13 @@ export default {
 }
 .navbar{
   min-height:64px;
+}
+/* #sec-nav a {
+  font-weight: bold;
+  color: white;
+} */
+#sec-nav a.router-link-exact-active {
+  color: white;
 }
 /*Custom CSS element (SecurBot)*/
 .shadow-sb{
