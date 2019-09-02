@@ -3,19 +3,22 @@
     <div style="height:540px;width:960px;background-color:black;">
       <video-box
         :show="true"
-        video-id="local-stream" />
+        video-id="local-stream"
+      />
     </div>
     <div style="height:20px;width:960px;background-color:white;" />
     <div style="height:540px;width:960px;background-color:black;">
       <video-box
         :show="true"
-        video-id="remote-stream" />
+        video-id="remote-stream"
+      />
     </div>
     <div>
       <connection
         :self-id="selfEasyrtcid"
         :peers-table="testPeerTable"
-        :bus="busBus" />
+        :bus="busBus"
+      />
     </div>
   </div>
 </template>
@@ -123,7 +126,7 @@ export default {
       });
       console.log('Connected...');
     },
-    handleRoomOccupantChange(roomName, occupants, isPrimary) {
+    handleRoomOccupantChange(roomName, occupants) {
       this.testPeerTable = [];
       if (occupants !== null) {
         // eslint-disable-next-line guard-for-in
@@ -181,11 +184,11 @@ export default {
       this.peerId = easyrtcid;
       acceptor(true);
     },
-    acceptPeerVideo(easyrtcid, stream, streamName) {
+    acceptPeerVideo(easyrtcid, stream) {
       this.remoteStream = stream;
       easyrtc.setVideoObjectSrc(this.remoteElement, this.remoteStream);
     },
-    closePeerVideo(easyrtcid) {
+    closePeerVideo() {
       this.localStreams = [];
       this.remoteStream = null;
       easyrtc.setVideoObjectSrc(this.localElement, '');

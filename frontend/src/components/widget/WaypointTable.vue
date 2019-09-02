@@ -7,7 +7,8 @@
       <table
         id="waypoint-table"
         class="table tabl e-borderless table-striped border-left border-right"
-        style="text-align: center">
+        style="text-align: center"
+      >
         <!-- Header -->
         <thead class="text-white bg-green-sb">
           <th style="width:20%">
@@ -32,7 +33,8 @@
           <template v-for="(waypoint, index) of waypointList">
             <tr
               :key="waypoint.dateTime"
-              class="border-bottom">
+              class="border-bottom"
+            >
               <td style="width:20%">
                 {{ (index+1).toFixed(0) }}
               </td>
@@ -51,11 +53,13 @@
                   :id="'removeBtn'+index"
                   type="button"
                   class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                  @click="removeWaypointFromList(index)">
+                  @click="removeWaypointFromList(index)"
+                >
                   <img
                     src="~/open-iconic/svg/trash.svg"
                     alt=""
-                    style="width:12px;height:12px">
+                    style="width:12px;height:12px"
+                  >
                 </button>
               </td>
             </tr>

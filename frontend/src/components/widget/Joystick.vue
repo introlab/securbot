@@ -2,7 +2,8 @@
   <!-- Joystick widget -->
   <div
     id="joystick"
-    class="h-100 w-100">
+    class="h-100 w-100"
+  >
     <!-- Joystick canvas -->
     <canvas
       ref="canvas"
@@ -10,7 +11,8 @@
       @mousedown="onMouseDown"
       @mouseup="onMouseUp"
       @mousemove="onMouseMove"
-      @mouseout="onMouseOut" />
+      @mouseout="onMouseOut"
+    />
   </div>
 </template>
 
@@ -162,7 +164,7 @@ export default {
      * @method
      * @param {HTMLElement} event - The html event given by the click.
      */
-    onMouseOut(event) {
+    onMouseOut() {
       this.x = this.getCenterX();
       this.y = this.getCenterY();
       this.isMouseDown = false;

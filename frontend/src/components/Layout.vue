@@ -2,24 +2,29 @@
   <!-- Layout -->
   <div
     id="operator-layout"
-    class="vh-100">
+    class="vh-100"
+  >
     <!-- Navbar container-->
     <div
       id="sec-nav"
-      class="position-relative">
+      class="position-relative"
+    >
       <!-- Navbar -->
       <b-navbar
         toggleable="md"
-        class="navbar-dark mb-0 bg-green-sb">
+        class="navbar-dark mb-0 bg-green-sb"
+      >
         <!-- Brand -->
         <b-navbar-brand class="p-0">
           <div
             class="h-100"
-            style="width:240px">
+            style="width:240px"
+          >
             <img
               src="../assets/SecurBotLogo.png"
               alt="SecurBot"
-              class="logo mh-100 mw-100 align-middle">
+              class="logo mh-100 mw-100 align-middle"
+            >
           </div>
         </b-navbar-brand>
         <!-- Collapse Option -->
@@ -27,7 +32,8 @@
         <!-- Collapsable Navbar -->
         <b-collapse
           id="nav_collapse"
-          is-nav>
+          is-nav
+        >
           <!-- Navbar right side content -->
           <b-navbar-nav>
             <!-- Teleop -->
@@ -48,14 +54,16 @@
             <!-- Dropdown with connection widget -->
             <b-nav-item-dropdown
               text="Connect to Robot"
-              right>
+              right
+            >
               <!-- Connection container -->
               <div class="px-2 py-1">
                 <!-- Connection -->
                 <connection
                   :self-id="selfEasyrtcid"
                   :peers-table="peerTable"
-                  :bus="teleopBus" />
+                  :bus="teleopBus"
+                />
               </div>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -67,7 +75,8 @@
       <!-- Router to pages -->
       <router-view
         :bus="teleopBus"
-        :router="routeBus" />
+        :router="routeBus"
+      />
     </div>
   </div>
 </template>
@@ -205,7 +214,7 @@ export default {
      * @param {Array} occupants - List of occupant in the room.
      * @param {Boolean} isPrimary
      */
-    handleRoomOccupantChange(roomName, occupants, isPrimary) {
+    handleRoomOccupantChange(roomName, occupants) {
       this.peerTable = [];
       if (occupants !== null) {
         for (const occupant in occupants) {
@@ -309,7 +318,7 @@ export default {
      * @method
      * @param {String} easyrtcid - Id of the occupant that disabled or lost its stream.
      */
-    closePeerVideo(easyrtcid) {
+    closePeerVideo() {
       this.clearHTMLVideoStream();
     },
     /**

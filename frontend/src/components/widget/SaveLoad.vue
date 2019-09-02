@@ -5,44 +5,52 @@
     <div
       class="btn-toolbar mb-1 w-100 d-flex flex-row-reverse"
       style="height:40px;"
-      role="toolbar">
+      role="toolbar"
+    >
       <!-- Save patrol button -->
       <button
         type="button"
         class="btn btn-success h-100"
         style="align-items: center; width:125px; min-width:125px;"
-        @click="addPatrolToPatrolList()">
+        @click="addPatrolToPatrolList()"
+      >
         Save patrol
       </button>
       <!-- Patrol name input -->
       <div
         class="h-100 w-auto text-left mr-1"
-        style="flex:1;">
+        style="flex:1;"
+      >
         <input
           id="nameTextBox"
           v-model="newPatrolName"
           type="text"
           :placeholder="[[ placehold ]]"
-          class="form-control h-100">
+          class="form-control h-100"
+        >
       </div>
     </div>
     <!-- Patrol List container -->
     <div
       class="w-100"
-      style="height: calc(100% - 40px - 0.25rem)">
+      style="height: calc(100% - 40px - 0.25rem)"
+    >
       <!-- Overflow container -->
       <div class="mh-100 overflow-auto">
         <!-- Patrol table -->
         <table
           id="saved-patrol-table"
           class="table table-borderless table-striped border-right border-left"
-          style="text-align: center">
+          style="text-align: center"
+        >
           <!-- Header -->
           <thead
-            class="text-white bg-green-sb">
+            class="text-white bg-green-sb"
+          >
             <th
               class="w-50"
-              style="text-align:left">
+              style="text-align:left"
+            >
               Patrols
             </th>
             <th class="w-25">
@@ -58,11 +66,13 @@
             <tr
               v-for="(patrol,index) of patrolList"
               :key="patrol.Name"
-              class="border-bottom">
+              class="border-bottom"
+            >
               <!-- Patrol Name -->
               <td
                 class="w-50"
-                style="text-align:left">
+                style="text-align:left"
+              >
                 {{ patrol.Name }}
               </td>
               <!-- Select button -->
@@ -71,11 +81,13 @@
                   :id="'selectBtn'+index"
                   type="button"
                   class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
-                  @click="selectPatrolFromList(index)">
+                  @click="selectPatrolFromList(index)"
+                >
                   <img
                     src="~/open-iconic/svg/check.svg"
                     alt=""
-                    style="width:12px;height:12px;">
+                    style="width:12px;height:12px;"
+                  >
                 </button>
               </td>
               <!-- Remove button -->
@@ -84,11 +96,13 @@
                   :id="'removeBtn'+index"
                   type="button"
                   class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
-                  @click="removePatrolFromList(index)">
+                  @click="removePatrolFromList(index)"
+                >
                   <img
                     src="~/open-iconic/svg/trash.svg"
                     alt=""
-                    style="width:12px;height:12px;">
+                    style="width:12px;height:12px;"
+                  >
                 </button>
               </td>
             </tr>

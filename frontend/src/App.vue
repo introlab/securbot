@@ -2,7 +2,8 @@
   <!-- App -->
   <div
     id="app"
-    class="h-100">
+    class="h-100"
+  >
     <!-- Router View to Layout -->
     <router-view />
   </div>

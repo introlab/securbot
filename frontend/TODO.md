@@ -4,7 +4,7 @@
 
 ### Features
 
-* [ ] Tabs Highlight
+* [x] Tabs Highlight
 * [ ] VS Code Config
   * [ ] Debug
   * [ ] Markdown

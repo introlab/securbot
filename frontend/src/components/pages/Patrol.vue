@@ -5,24 +5,28 @@
     :fluid="true"
     :container-fluid="true"
     class="h-100 w-100"
-    bg-variant="light">
+    bg-variant="light"
+  >
     <!-- Row -->
     <b-row class="h-100">
       <!-- Table column -->
       <b-col
         md="4"
-        class="mh-100 d-flex flex-column">
+        class="mh-100 d-flex flex-column"
+      >
         <!-- Waypoint list -->
         <b-row class="h-50 m-0 mb-1 d-flex flex-column">
           <!-- Waypoint list Container -->
           <div
             class="btn-toolbar mb-1 w-100 d-flex flex-row"
             style="height:40px;"
-            role="toolbar">
+            role="toolbar"
+          >
             <!-- Title -->
             <h4
               class="h-100 text-left"
-              style="flex:1;">
+              style="flex:1;"
+            >
               Patrol :
             </h4>
             <!-- Send button -->
@@ -30,7 +34,8 @@
               type="button"
               class="btn btn-success h-100"
               style="align-items:center; width:90px; min-width:80px;"
-              @click="sendPatrol()">
+              @click="sendPatrol()"
+            >
               Send
             </button>
             <!-- Clear button -->
@@ -38,7 +43,8 @@
               type="button"
               class="btn btn-danger h-100 ml-1"
               style="align-items:center; width:90px; min-width:80px;"
-              @click="clearWaypointList()">
+              @click="clearWaypointList()"
+            >
               Reset
             </button>
           </div>
@@ -49,21 +55,25 @@
         <!-- Save-load patrol table -->
         <b-row
           class="m-0 d-flex flex-column"
-          style="flex:1">
+          style="flex:1"
+        >
           <save-load
             :waypoint-list="waypointList"
             :patrol-list="patrolList"
-            :bus="bus" />
+            :bus="bus"
+          />
         </b-row>
       </b-col>
       <!-- Map column -->
       <b-col
         md="8"
-        class="mh-100">
+        class="mh-100"
+      >
         <!-- Map -->
         <patrol-map
           :waypoint-list="waypointList"
-          patrol-map-id="patrol-map-stream" />
+          patrol-map-id="patrol-map-stream"
+        />
       </b-col>
     </b-row>
   </b-jumbotron>
