@@ -2,17 +2,16 @@
 
 ## TODO
 
+asdasdasd
+
 ### Features
 
 * [x] Tabs Highlight
-* [ ] VS Code Config
-  * [ ] Debug
-  * [ ] Markdown
+* [x] VS Code Config
+  * [x] Debug
+  * [x] Markdown
 * [x] Update packages
 * [x] ESLint Config changes
-* [ ] Docs Update (Comments + Package Used)
-* [ ] Put navbar in its own file
-* [ ] Reorganize Components
 
 ### To Remove
 

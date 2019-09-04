@@ -149,6 +149,7 @@ export default {
    * @method
    */
   mounted() {
+    console.log(process.env.TEST);
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
     this.teleopBus.$on('send-patrol', this.sendPatrol);
