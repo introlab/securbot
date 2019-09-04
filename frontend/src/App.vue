@@ -11,7 +11,7 @@
 
 <script>
 /**
- * This is the main Vue component use to call all the other using the router-view element.
+ * This is the main Vue component used to call all the other using the router-view element.
  *
  * @module App
 */
