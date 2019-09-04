@@ -149,7 +149,7 @@ export default {
    * @method
    */
   mounted() {
-    console.log(process.env.TEST);
+    console.log(process.env);
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
     this.teleopBus.$on('send-patrol', this.sendPatrol);
@@ -194,7 +194,7 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'operator');
 
       // Uncomment next line to use the dev server
-      easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
+      easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
 
       // Uncomment initialisation to use local stream for map (debugging only)
       // easyrtc.initMediaSource(() => {
