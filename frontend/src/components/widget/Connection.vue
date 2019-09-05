@@ -42,11 +42,15 @@
           <span
             v-else-if="peer.peerId == isConnectedToPeerId"
             class="badge badge-success"
-          >Connected</span>
+          >
+            Connected
+          </span>
           <span
             v-else
             class="badge badge-secondary"
-          >Not Connected</span>
+          >
+            Not Connected
+          </span>
         </button>
       </div>
     </div>

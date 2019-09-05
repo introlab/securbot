@@ -191,7 +191,7 @@ export default {
      * @param {boolean} state - Request of the joystick state
      * @listens on-joystick-state-changed
      */
-    changeJoystickState(state) {
+    changeJoystickState(state) { // Change to computed
       if (state === 'enable') {
         this.disableJoystick = false;
       } else {
