@@ -93,18 +93,19 @@
  * @version 1.0.0
  */
 
+import { mapState } from 'vuex';
+
 export default {
   name: 'waypoint-table',
-  props: {
-    waypointList: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-    };
-  },
+  // props: {
+  //   waypointList: {
+  //     type: Object,
+  //     required: true,
+  //   },
+  // },
+  computed: mapState({
+    waypointList: state => state.patrol.waypointList,
+  }),
   methods: {
     /**
      * Used to clear the patrol or empty the waypoint list.
@@ -112,7 +113,7 @@ export default {
      * @param {Number} index - Index of the waypoint to remove from list.
      */
     removeWaypointFromList(index) {
-      this.waypointList.splice(index, 1);
+      this.$store.commit('removeWaypoint', index);
     },
   },
 };

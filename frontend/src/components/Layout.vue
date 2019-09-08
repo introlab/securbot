@@ -153,6 +153,7 @@ export default {
     myId: state => state.myId,
     robotId: state => state.robotId,
     robotList: state => state.robotList,
+    robotConnection: state => state.connectionState.robot,
     mapStream: state => state.mapStream,
     cameraStream: state => state.cameraStream,
   }),
@@ -349,11 +350,11 @@ export default {
      */
     connectTo(easyrtcid) {
       console.log(`A connection change with ${easyrtcid} was asked...`);
-      if (this.robotId === easyrtcid) {
+      if (this.robotConnection === 'connected') {
         easyrtc.hangupAll();
         this.teleopBus.$emit('connection-changed', 'disconnected');
         this.$store.commit('resetRobotId');
-      } else if (this.robotId) {
+      } else if (this.robotId && this.robotConnection === 'connecting') {
         this.performCall(easyrtcid);
       } else {
         console.warn("The is an issue in the connection state handling... This shouldn't happen...");

@@ -76,6 +76,9 @@ export default new Vuex.Store({
     setServerConnState(state, serverState) {
       state.connectionState.server = serverState;
     },
+    connected(state) {
+      state.isConnected = true;
+    },
     /**
      * Updates the robot/peer connection state.
      * * Connected
@@ -86,8 +89,20 @@ export default new Vuex.Store({
      * @param {*} state
      * @param {*} robotState
      */
-    connectingToRobot(state, robotState) {
-      state.connectionState.robot = robotState;
+    connectingToRobot(state) {
+      state.connectionState.robot = 'connecting';
+    },
+    connectedToRobot(state) {
+      state.connectionState.robot = 'connected';
+    },
+    lostRobot(state) {
+      state.connectionState.robot = 'lost';
+    },
+    failedToConnectToRobot(state) {
+      state.connectionState.robot = 'failed';
+    },
+    disconnectedFromRobot(state) {
+      state.connectionState.robot = 'disconnected';
     },
     /**
      * Shows the stream of the robot.

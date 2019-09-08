@@ -114,6 +114,7 @@
  */
 
 import Vue from 'vue';
+import { mapState } from 'vuex';
 import PatrolMap from '../widget/PatrolMap';
 import WaypointTable from '../widget/WaypointTable';
 import SaveLoad from '../widget/SaveLoad';
@@ -135,12 +136,10 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      waypointList: [],
-      patrolList: [],
-    };
-  },
+  computed: mapState({
+    waypointList: state => state.patrol.waypointList,
+    patrolList: state => state.patrol.patrolList,
+  }),
   /**
    * Lifecycle Hook - mounted
    *
@@ -192,14 +191,14 @@ export default {
      * @method
      */
     clearWaypointList() {
-      this.waypointList = [];
+      this.$store.commit('clearWaypointList');
     },
     /**
      * Method used to clear the patrol list (delete the list on db)
      * @method
      */
     clearPatrolList() {
-      this.patrolList = [];
+      this.$store.commit('clearPatrol');
     },
   },
 };
