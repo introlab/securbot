@@ -92,7 +92,7 @@ export default {
   name: 'connection',
   props: {
     selfId: {
-      type: Number,
+      type: String,
       required: true,
     },
     peersTable: {

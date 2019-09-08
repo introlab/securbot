@@ -19,8 +19,8 @@ export default new Vuex.Store({
       server: 'disconnected',
       robot: 'disconnected',
     },
-    myId: undefined, // Layout:selfEasyrtcid
-    robotId: undefined, // Layout:peerId
+    myId: '', // Layout:selfEasyrtcid
+    robotId: '', // Layout:peerId
     cameraStream: undefined, // Layout:cameraStream
     mapStream: undefined, // Layout:mapStream | Teleop:showCamera|showMap
     robotsIdTable: [], // Layout:peerTable
@@ -102,7 +102,7 @@ export default new Vuex.Store({
      * @param {*} state
      */
     resetMyId(state) {
-      state.myId = undefined;
+      state.myId = '';
     },
     /**
      * Sets the robot ID to the one connected to.
@@ -122,7 +122,7 @@ export default new Vuex.Store({
      */
     resetRobotId(state) {
       if (state.robotId) {
-        state.robotId = undefined;
+        state.robotId = '';
       }
     },
     /**
