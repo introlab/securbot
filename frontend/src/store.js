@@ -6,6 +6,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   // State = var/let calls
   state: {
+    // /////////////////////////////////// //
+    test: {
+      OwO: {
+        apiField: {
+          type: {
+            fieldValue: 'robot-OwO',
+          },
+        },
+      },
+      UwU: {
+        apiField: {
+          type: {
+            fieldValue: 'robot-UwU',
+          },
+        },
+      },
+    },
+    // //////////////////////////////////// //
     theme: {
       white: {
 
@@ -23,7 +41,7 @@ export default new Vuex.Store({
     robotId: '', // Layout:peerId
     cameraStream: undefined, // Layout:cameraStream
     mapStream: undefined, // Layout:mapStream | Teleop:showCamera|showMap
-    robotsIdTable: [], // Layout:peerTable
+    robotList: [], // Layout:peerTable
     showStreams: true, // VideoBox:show
     joystickEnabled: false, // Layout:joystickState | Joystick:enable | Teleop:enableJoystick
     connecting: false, // Connection:waitingForConnectionState
@@ -267,6 +285,12 @@ export default new Vuex.Store({
     clearPatrol(state) {
       state.patrol.patrolList = [];
     },
+    clearRobotList(state) {
+      state.robotList = [];
+    },
+    addRobotToList(state, robot) {
+      state.robotList.push(robot);
+    },
   },
   // Actions are methods that normally calls a mutation, but can do so asynchronously
   actions: {
@@ -300,7 +324,18 @@ export default new Vuex.Store({
      */
     connectToRobot() {
     },
-    handleRobotsInRoom() {
+    handleRobotsInRoom({ commit }, occupants) {
+      commit('clearRobotList');
+      console.log(occupants);
+      for (const occupant in occupants) {
+        if (occupants[occupant].apiField.type.fieldValue.includes('robot')) {
+          const robot = {
+            robotName: occupants[occupant].apiField.type.fieldValue,
+            robotId: occupant,
+          };
+          commit('addRobotToList', robot);
+        }
+      }
     },
   },
 });

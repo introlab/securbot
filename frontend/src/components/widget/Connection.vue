@@ -26,21 +26,21 @@
       <div class="list-group">
         <!-- Create a button per robot in room -->
         <button
-          v-for="peer in peersTable"
-          :key="peer.peerId"
+          v-for="robot in robotList"
+          :key="robot.robotId"
           type="button"
           class="list-group-item-action list-group-item d-flex justify-content-between
           align-items-center peer-item"
-          @click="handlePeerConnection(peer.peerId)"
+          @click="handlePeerConnection(robot.robotId)"
         >
-          {{ peer.peerName }}
+          {{ robot.robotName }}
           <!-- Tag -->
           <span
-            v-if="peer.peerId == isConnectedToPeerId && waitingForConnectionState"
+            v-if="robot.robotId == isConnectedToPeerId && waitingForConnectionState"
             class="spinner-border spinner-border-sm text-warning"
           />
           <span
-            v-else-if="peer.peerId == isConnectedToPeerId"
+            v-else-if="robot.robotId == isConnectedToPeerId"
             class="badge badge-success"
           >
             Connected
@@ -87,6 +87,11 @@
  */
 
 import Vue from 'vue';
+import { mapState } from 'vuex';
+
+/**
+ * Remove bus -> Use easyrtc to connect directly or use the store.
+ */
 
 export default {
   name: 'connection',
@@ -95,7 +100,7 @@ export default {
       type: String,
       required: true,
     },
-    peersTable: {
+    robotList: {
       type: Array,
       required: true,
     },
@@ -106,11 +111,13 @@ export default {
   },
   data() {
     return {
-      isConnected: false,
       isConnectedToPeerId: null,
       waitingForConnectionState: false,
     };
   },
+  computed: mapState({
+    isConnected: state => state.isConnected,
+  }),
   // On component mounted, get html elements, set bus event.
   mounted() {
     this.bus.$on('connection-changed', this.handleConnectionChanged);
