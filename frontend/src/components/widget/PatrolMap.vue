@@ -6,7 +6,8 @@
       :show="true"
       :video-id="patrolMapId"
       class="w-100 h-100 position-absolute"
-      style="top:0;left:0;" />
+      style="top:0;left:0;"
+    />
     <!-- Canvas -->
     <canvas
       ref="canvas"
@@ -15,7 +16,8 @@
       @mousedown="onMouseDown"
       @mousemove="onMouseMove"
       @mouseup="onMouseUp"
-      @mouseout="onMouseOut" />
+      @mouseout="onMouseOut"
+    />
   </div>
 </template>
 
@@ -331,7 +333,7 @@ export default {
      * @method
      * @param {HTMLElement} event - Event element given by the click.
      */
-    onMouseOut(event) {
+    onMouseOut() {
       if (this.isMouseDown) {
         console.log('MouseOut');
         this.waypointList.pop();

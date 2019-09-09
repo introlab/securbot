@@ -3,16 +3,19 @@
   <div
     id="connection"
     class="mx-auto"
-    style="min-width:320px">
+    style="min-width:320px"
+  >
     <!-- Connection Container -->
     <div
       id="connection-container"
       class="rounded-lg"
-      style="border: 1px solid lightgray;">
+      style="border: 1px solid lightgray;"
+    >
       <!-- Who Am I ? -->
       <h4
         id="who-am-i"
-        class="text-muted ml-1">
+        class="text-muted ml-1"
+      >
         I am : {{ selfId }}
       </h4>
       <!-- Title -->
@@ -28,18 +31,22 @@
           type="button"
           class="list-group-item-action list-group-item d-flex justify-content-between
           align-items-center peer-item"
-          @click="handlePeerConnection(peer.peerId)">
+          @click="handlePeerConnection(peer.peerId)"
+        >
           {{ peer.peerName }}
           <!-- Tag -->
           <span
             v-if="peer.peerId == isConnectedToPeerId && waitingForConnectionState"
-            class="spinner-border spinner-border-sm text-warning" />
+            class="spinner-border spinner-border-sm text-warning"
+          />
           <span
             v-else-if="peer.peerId == isConnectedToPeerId"
-            class="badge badge-success">Connected</span>
+            class="badge badge-success"
+          >Connected</span>
           <span
             v-else
-            class="badge badge-secondary">Not Connected</span>
+            class="badge badge-secondary"
+          >Not Connected</span>
         </button>
       </div>
     </div>

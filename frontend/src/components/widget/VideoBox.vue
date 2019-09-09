@@ -2,14 +2,16 @@
   <!-- Video Box widget -->
   <div
     id="VideoStream"
-    class="w-100 h-100 m-auto position-relative bg-black-sb shadow-sb">
+    class="w-100 h-100 m-auto position-relative bg-black-sb shadow-sb"
+  >
     <!-- Video container -->
     <div class="w-100 h-100 position-relative">
       <!-- Video -->
       <video
         v-show="show"
         :id="videoId"
-        class="w-100 h-100" />
+        class="w-100 h-100"
+      />
     </div>
   </div>
 </template>

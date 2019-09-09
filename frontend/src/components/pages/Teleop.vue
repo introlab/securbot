@@ -5,7 +5,8 @@
     :fluid="true"
     :container-fluid="true"
     class="h-100 "
-    bg-variant="light">
+    bg-variant="light"
+  >
     <!-- Row -->
     <b-row class="h-100">
       <!-- Camera column -->
@@ -13,13 +14,15 @@
         lg="8"
         md="7"
         sm="6"
-        class="mh-100">
+        class="mh-100"
+      >
         <!-- Camera Container -->
         <div class="h-100 w-100 m-auto position-relative">
           <!-- Camera -->
           <video-box
             :show="showCamera"
-            video-id="camera-stream" />
+            video-id="camera-stream"
+          />
         </div>
       </b-col>
       <!-- Map and joystick column -->
@@ -27,7 +30,8 @@
         lg="4"
         md="5"
         sm="6"
-        class="mh-100">
+        class="mh-100"
+      >
         <!-- Map row -->
         <b-row class="h-50 w-100 position-relative m-0">
           <!-- Map container -->
@@ -35,40 +39,47 @@
             <!-- Map -->
             <video-box
               :show="showMap"
-              video-id="map-stream" />
+              video-id="map-stream"
+            />
           </div>
         </b-row>
         <!-- Joystick Switch -->
         <div
           class="position-absolute"
-          style="top:55%;right:25px;z-index:10;">
+          style="top:55%;right:25px;z-index:10;"
+        >
           <toggle-button
             :value="enableJoystick"
             :color="switchColor"
             :sync="true"
             :labels="true"
             :disabled="disableJoystick"
-            @change="enableJoystick = $event.value" />
+            @change="enableJoystick = $event.value"
+          />
         </div>
         <!-- Joystick Row -->
         <b-row
           id="joystick-row"
-          class="position-relative h-50 m-auto p-4">
+          class="position-relative h-50 m-auto p-4"
+        >
           <!-- Joystick Outer -->
           <div
             class="position-relative m-auto"
-            :style="joystickStyle">
+            :style="joystickStyle"
+          >
             <!-- Joystick Inner-->
             <div
               class="position-absolute h-100 w-100 border
               border-secondary rounded-circle shadow-sb"
-              style="top:0;left:0;">
+              style="top:0;left:0;"
+            >
               <!-- Joystick -->
               <joystick
                 :enable="enableJoystick"
                 :absolute-max-x="1"
                 :absolute-max-y="1"
-                :bus="bus" />
+                :bus="bus"
+              />
             </div>
           </div>
         </b-row>
