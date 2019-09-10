@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="116.62729"
-     inkscape:cy="515.76764"
+     inkscape:zoom="0.32"
+     inkscape:cx="-236.1055"
+     inkscape:cy="561.53841"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -54,11 +54,102 @@
      id="layer1"
      transform="translate(0,9703)">
     <rect
-       style="fill:none;stroke:#ff0000;stroke-width:0.32745895;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#ff0000;stroke-width:0.14070749;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1389"
-       width="4.6725411"
-       height="249.67255"
-       x="0.16372947"
-       y="47.163723" />
+       width="249.86029"
+       height="249.85928"
+       x="0.070353746"
+       y="47.070358" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.16887346;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect816"
+       width="85.831123"
+       height="167.83113"
+       x="145.08444"
+       y="88.084435" />
+    <circle
+       style="fill:none;stroke:#ff0000;stroke-width:0.13229166;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path833"
+       cx="137.56615"
+       cy="169.43385"
+       r="5" />
+    <circle
+       style="fill:none;stroke:#ff0000;stroke-width:0.13229166;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path833-1"
+       cx="238.56615"
+       cy="169.43385"
+       r="5" />
+    <circle
+       style="fill:none;stroke:#ff0000;stroke-width:0.13229166;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path833-5"
+       cx="135.06615"
+       cy="169.43388"
+       r="0" />
+    <circle
+       style="fill:none;stroke:#ff0000;stroke-width:0.13229166;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path833-3"
+       cx="135.06615"
+       cy="169.43388"
+       r="0" />
+    <g
+       id="g997"
+       transform="translate(6.0340425)">
+      <rect
+         y="206.04443"
+         x="49.010387"
+         height="49.91114"
+         width="79.91114"
+         id="rect816-6"
+         style="fill:none;stroke:#000000;stroke-width:0.08885977;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <ellipse
+         ry="2.4673588"
+         rx="2.4673591"
+         cy="210.05"
+         cx="53.009998"
+         id="path833-59"
+         style="fill:none;stroke:#ff0000;stroke-width:0.0652822;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <ellipse
+         ry="2.4673588"
+         rx="2.4673591"
+         cy="251.96001"
+         cx="53.009998"
+         id="path833-59-6"
+         style="fill:none;stroke:#ff0000;stroke-width:0.0652822;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <ellipse
+         ry="2.4673588"
+         rx="2.4673591"
+         cy="251.96001"
+         cx="124.76"
+         id="path833-59-6-2"
+         style="fill:none;stroke:#ff0000;stroke-width:0.0652822;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <ellipse
+         ry="2.4673588"
+         rx="2.4673591"
+         cy="210.05"
+         cx="124.76"
+         id="path833-59-6-2-4"
+         style="fill:none;stroke:#ff0000;stroke-width:0.0652822;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <ellipse
+       style="fill:none;stroke:#ff0000;stroke-width:0.09139509;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path833-8"
+       cx="28.998919"
+       cy="63.440739"
+       rx="3.4543023"
+       ry="3.4543025" />
+    <ellipse
+       style="fill:none;stroke:#ff0000;stroke-width:0.09139509;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path833-8-1"
+       cx="33.909821"
+       cy="254.3204"
+       rx="3.4543023"
+       ry="3.4543025" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.12654857;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect816-9"
+       width="32.373451"
+       height="249.87346"
+       x="0.063274287"
+       y="47.063278" />
   </g>
 </svg>
