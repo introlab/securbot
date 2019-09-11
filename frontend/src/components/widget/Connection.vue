@@ -184,7 +184,7 @@ export default {
       if (this.isConnected && robotId === this.robotId) {
         console.log('Disconnecting...');
         this.disconnectFromRobot(this.robotId);
-      } else if (this.isConnected) {
+      } else if (this.isConnected && this.robotId) {
         // Add popup message saying : "You are already connected to this.robotId,
         // disconnect from it to connect to an other robot"
         console.log('Already connected to someone...');

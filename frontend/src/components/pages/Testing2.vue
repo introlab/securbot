@@ -16,7 +16,7 @@
     <div>
       <connection
         :self-id="selfEasyrtcid"
-        :peers-table="testPeerTable"
+        :robot-list="testPeerTable"
         :bus="busBus"
       />
     </div>
@@ -96,7 +96,7 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
 
       // Uncomment next line to use the dev server
-      easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
+      easyrtc.setSocketUrl('localhost:8080');
 
       let temp = false;
       // eslint-disable-next-line no-loop-func
@@ -182,7 +182,7 @@ export default {
     },
     acceptCall(easyrtcid, acceptor) {
       this.peerId = easyrtcid;
-      acceptor(true);
+      acceptor(true, ['camera', 'map']);
     },
     acceptPeerVideo(easyrtcid, stream) {
       this.remoteStream = stream;
@@ -202,6 +202,7 @@ export default {
     },
     handleData(easyrtcid, type, data) {
       if (easyrtcid === this.peerId && type === 'request-feed') {
+        console.log(`${easyrtcid} requested the ${data} feed/stream...`);
         easyrtc.addStreamToCall(easyrtcid, data);
       } else if (easyrtcid === this.peerId) {
         console.log(`Received ${data} of type ${type}...`);

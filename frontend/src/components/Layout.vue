@@ -245,7 +245,7 @@ export default {
       easyrtc.hangupAll();
       console.log(`Calling the chosen occupant : ${occupantId}`);
 
-      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted);
+      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted, ['camera', 'map']);
     },
     /**
      * Callback for a successful call.
@@ -390,7 +390,7 @@ export default {
      */
     dataCloseListenerCB(easyrtcid) {
       this.isDataChannelAvailable = false;
-      if (easyrtcid === this.robotId || !this.robotId) {
+      if (easyrtcid === this.robotId || this.robotId) {
         this.$store.commit('resetRobotId');
         this.teleopBus.$emit('connection-changed', 'disconnected');
         this.clearHTMLVideoStream();
@@ -431,6 +431,7 @@ export default {
      */
     sendData(peer, type, data) {
       if (this.isDataChannelAvailable && peer) {
+        debugger;
         easyrtc.sendDataP2P(peer, type, data);
       } else {
         console.warn('No data channel or peer available to send data...');
