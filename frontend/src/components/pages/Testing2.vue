@@ -96,7 +96,7 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
 
       // Uncomment next line to use the dev server
-      easyrtc.setSocketUrl('localhost:8080');
+      easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
 
       let temp = false;
       // eslint-disable-next-line no-loop-func
@@ -107,21 +107,23 @@ export default {
           const streamName = videoSource.label;
 
           easyrtc.setVideoSource(videoSource.id);
-          // eslint-disable-next-line no-loop-func
-          easyrtc.initMediaSource(() => {
-            const stream = easyrtc.getLocalStream(streamName);
-            this.localStreams[streamName] = stream;
+          if (streamName.includes('map') || streamName.includes('camera')) {
+            // eslint-disable-next-line no-loop-func
+            easyrtc.initMediaSource(() => {
+              const stream = easyrtc.getLocalStream(streamName);
+              this.localStreams[streamName] = stream;
 
-            if (streamName === 'map') {
-              easyrtc.setVideoObjectSrc(this.remoteElement, stream);
-            } else if (streamName === 'camera') {
-              easyrtc.setVideoObjectSrc(this.localElement, stream);
-            }
-            if (!temp) {
-              easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-              temp = true;
-            }
-          }, this.loginFailure, streamName);
+              if (streamName === 'map') {
+                easyrtc.setVideoObjectSrc(this.remoteElement, stream);
+              } else if (streamName === 'camera') {
+                easyrtc.setVideoObjectSrc(this.localElement, stream);
+              }
+              if (!temp) {
+                easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+                temp = true;
+              }
+            }, this.loginFailure, streamName);
+          }
         }
       });
       console.log('Connected...');

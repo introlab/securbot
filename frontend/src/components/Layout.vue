@@ -317,7 +317,7 @@ export default {
       } else if (streamName === 'map') {
         this.$store.commit('setMapStream', stream);
       } else {
-        console.warn('Unknown stream obtained...');
+        console.warn('Unknown stream passed...');
       }
       this.setHTMLVideoStream();
     },
@@ -374,14 +374,14 @@ export default {
       // This request the stream from the robot so the operator doesn't have to have
       // a local stream to get the feed from the robot. It also allows to get both stream
       // from robot, which might have been a problem previously. They can be somewhere else.
-      if (!this.mapStream) {
-        console.log('Requesting the map stream from peer...');
-        this.requestFeedFromPeer('map');
-      }
-      if (!this.cameraStream) {
-        console.log('Requesting the camera stream from peer...');
-        this.requestFeedFromPeer('camera');
-      }
+      // if (!this.mapStream) {
+      //   console.log('Requesting the map stream from peer...');
+      //   this.requestFeedFromPeer('map');
+      // }
+      // if (!this.cameraStream) {
+      //   console.log('Requesting the camera stream from peer...');
+      //   this.requestFeedFromPeer('camera');
+      // }
     },
     /**
      * Callback for the setDataChannelCloseListener function.
@@ -431,7 +431,6 @@ export default {
      */
     sendData(peer, type, data) {
       if (this.isDataChannelAvailable && peer) {
-        debugger;
         easyrtc.sendDataP2P(peer, type, data);
       } else {
         console.warn('No data channel or peer available to send data...');
