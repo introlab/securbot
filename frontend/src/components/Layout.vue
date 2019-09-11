@@ -245,7 +245,7 @@ export default {
       easyrtc.hangupAll();
       console.log(`Calling the chosen occupant : ${occupantId}`);
 
-      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted, ['camera', 'map']);
+      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted);
     },
     /**
      * Callback for a successful call.

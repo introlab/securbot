@@ -125,8 +125,13 @@ export default {
             }, this.loginFailure, streamName);
           }
         }
+        console.log('Printing ids:');
+        const ids = easyrtc.getLocalMediaIds();
+        for (let i = 0; i < ids.length; i++) {
+          console.log(ids[i]);
+        }
+        console.log('Connected...');
       });
-      console.log('Connected...');
     },
     handleRoomOccupantChange(roomName, occupants) {
       this.testPeerTable = [];
@@ -184,7 +189,7 @@ export default {
     },
     acceptCall(easyrtcid, acceptor) {
       this.peerId = easyrtcid;
-      acceptor(true, ['camera', 'map']);
+      acceptor(true, easyrtc.getLocalMediaIds());
     },
     acceptPeerVideo(easyrtcid, stream) {
       this.remoteStream = stream;
@@ -205,7 +210,9 @@ export default {
     handleData(easyrtcid, type, data) {
       if (easyrtcid === this.peerId && type === 'request-feed') {
         console.log(`${easyrtcid} requested the ${data} feed/stream...`);
-        easyrtc.addStreamToCall(easyrtcid, data);
+        easyrtc.addStreamToCall(easyrtcid, data, (id, name) => {
+          console.log(`${id} acknowledges receiving ${name}`);
+        });
       } else if (easyrtcid === this.peerId) {
         console.log(`Received ${data} of type ${type}...`);
       } else {
