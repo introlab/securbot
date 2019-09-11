@@ -58,7 +58,8 @@ export default new Vuex.Store({
       enable: false, // PatrolMap:enable
       patrolId: '', // PatrolMap:patrolMapId
       waypointList: [], // Patrol:waypointList | PatrolMap:waypointList
-      patrolList: [], // SaveLoad:patrolList | Patrol:patrolList
+      // SaveLoad:patrolList | Patrol:patrolList
+      patrolList: JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]'),
     },
   },
   // Mutation is the same thing as a set call, needs to be synchronous

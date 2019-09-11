@@ -84,6 +84,7 @@ export default {
     };
   },
   computed: mapState({
+    mapStream: state => state.mapStream,
     waypointList: state => state.patrol.waypointList,
     patrolId: state => state.patrol.patrolId,
   }),
@@ -115,7 +116,7 @@ export default {
      */
     init() {
       this.loopIntervalId = setInterval(() => {
-        if (this.enable) {
+        if (this.mapStream) {
           this.adjustCanvasToVideo();
           this.drawCanvas();
         }
@@ -287,15 +288,17 @@ export default {
      * @param {HTMLElement} event - Event element given by the click.
      */
     onMouseDown(event) {
-      if (event.button === 0) {
-        const coord = this.getVideoCoordinatesOfEvent(event);
-        if (this.isClickValid(coord)) {
-          const wp = coord;
-          wp.yaw = 0;
-          this.addWaypointCoord(wp);
+      if (this.mapStream) {
+        if (event.button === 0) {
+          const coord = this.getVideoCoordinatesOfEvent(event);
+          if (this.isClickValid(coord)) {
+            const wp = coord;
+            wp.yaw = 0;
+            this.addWaypointCoord(wp);
+          }
         }
+        this.isMouseDown = true;
       }
-      this.isMouseDown = true;
     },
 
     /**
