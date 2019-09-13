@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
@@ -14,7 +15,8 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.28",
     "core-js": "^2.6.9",
-    "easyrtc": "git+https://github.com/priologic/easyrtc.git#v1.1.1-rc2",
+    "easyrtc": "github:priologic/easyrtc#f6365959801209f13b153c10bc9ca8ec398ca9ad",
+    "jquery": "^3.4.1",
     "open-iconic": "git+https://github.com/iconic/open-iconic.git",
     "socket.io": "^1.4.5",
     "vue": "^2.6.6",

@@ -71,7 +71,10 @@ function teleopCallback(easyrtcid, msgType, msgData) {
 function streamRequestCallback(easyrtcid, msgType, msgData) {
   console.log(`Received request of type ${msgType} for ${msgData}`);
   if (msgData === 'map' || msgData === 'camera') {
-    easyrtc.addStreamToCall(easyrtcid, msgData);
+    easyrtc.addStreamToCall(easyrtcid, msgData,(id, name) => {
+      console.log(`Stream ${name} received by ${id}`)
+    });
+    console.log(`Stream ${msgData} added to call`)
   }
 }
 
@@ -81,7 +84,10 @@ function streamRequestCallback(easyrtcid, msgType, msgData) {
  */
 function fetchParameters() {
   return new Promise((resolve) => {
+    console.log("Fetching parameters")
     ipc.once('parameters_response', (event, params) => {
+      console.log("Got parameters")
+      console.log(params)
       resolve(params);
     });
 
@@ -99,10 +105,12 @@ function acceptCall(easyrtcid, acceptor) {
   if (operatorID === null) {
     operatorID = easyrtcid;
     console.log(`Accepting call from ${easyrtcid}, this operator can control me!`);
-    acceptor(true);
+    acceptor(true,streamNames[0]);
+    setTimeout(() => streamRequestCallback(easyrtcid, 'fake-request', streamNames[1]), 1000);
   } else {
     console.log(`Accepting call from ${easyrtcid}, this operator can only view me!`);
-    acceptor(true);
+    acceptor(true,streamNames[0]);
+    setTimeout(() => streamRequestCallback(easyrtcid, 'fake-request', streamNames[1]), 1000);
   }
 }
 
@@ -124,6 +132,9 @@ async function myInit() {
   easyrtc.enableAudioReceive(false);
   easyrtc.enableDataChannels(true);
 
+  easyrtc.setPeerListener((id,type,data) => {
+    console.log(`Receive ${data} from ${id} of type ${type}`)
+  })
   easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan');
   easyrtc.setPeerListener(teleopCallback, 'joystick-position');
   easyrtc.setPeerListener(streamRequestCallback, 'request-feed');
@@ -139,7 +150,10 @@ async function myInit() {
 
   let isConnected = false;
 
+  console.log("Getting video sources")
   easyrtc.getVideoSourceList((device) => {
+    console.log("Devices:")
+    console.log(device)
     for (const deviceName of virtualDevicesName) {
       // eslint-disable-next-line max-len
       const videoSource = device.find(source => source.label.toString().trim() === deviceName.trim());
@@ -152,8 +166,10 @@ async function myInit() {
         streamNames.push(streamName);
 
         // eslint-disable-next-line no-loop-func
-        easyrtc.initMediaSource(() => { // success callback
-          console.log(`Initializing ${streamName}...`);
+        console.log(`Initializing ${streamName}...`);
+        easyrtc.initMediaSource((stream) => { // success callback
+          easyrtc.setVideoObjectSrc(document.getElementById(streamName),stream)
+          console.log(`${streamName} initialized...`);
           if (!isConnected) {
             easyrtc.connect('easyrtc.securbot', connectSuccess, connectFailure);
             isConnected = true;
@@ -161,6 +177,7 @@ async function myInit() {
         },
         connectFailure,
         streamName);
+        console.log(streamName + ' added to easyrtc')
       }
     }
   });
