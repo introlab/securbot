@@ -182,15 +182,15 @@ export default {
   },
   methods: {
     vuexTesting() {
-      this.$store.dispatch('handleRobotsInRoom', this.$store.state.test);
+      this.connect();
     },
     /**
      * Function managing initialisation and connection to the easyrtc server
      * @method
      */
     connect() {
-      easyrtc.enableDebug(false);
       console.log('Initializing...');
+      easyrtc.setAutoInitUserMedia(false);
       easyrtc.enableVideo(false);
       easyrtc.enableAudio(false);
       easyrtc.enableVideoReceive(true);
@@ -211,14 +211,8 @@ export default {
       // Uncomment next line to use the dev server
       easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
 
-      // Uncomment initialisation to use local stream for map (debugging only)
-      // easyrtc.initMediaSource(() => {
-      //   this.mapStream = easyrtc.getLocalStream();
-      //   easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-      // }, this.loginFailure);
-
       // This is the production line, only comment if necessary for debugging
-      easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      easyrtc.connect(process.env.VUE_APP_SERVER_ROOM_NAME, this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
       this.setHTMLVideoStream();
@@ -245,7 +239,7 @@ export default {
       easyrtc.hangupAll();
       console.log(`Calling the chosen occupant : ${occupantId}`);
 
-      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted);
+      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted, []);
     },
     /**
      * Callback for a successful call.
@@ -312,9 +306,10 @@ export default {
      */
     acceptPeerVideo(easyrtcid, stream, streamName) {
       console.log(`Stream received info, id : ${easyrtcid}, streamName : ${streamName}`);
-      if (streamName === 'camera') {
+      console.log(`checking incoming ${easyrtc.getNameOfRemoteStream(easyrtcid, stream)}`);
+      if (streamName.includes('camera')) {
         this.$store.commit('setCameraStream', stream);
-      } else if (streamName === 'map') {
+      } else if (streamName.includes('map')) {
         this.$store.commit('setMapStream', stream);
       } else {
         console.warn('Unknown stream passed...');
@@ -327,6 +322,8 @@ export default {
      * @param {String} easyrtcid - Id of the occupant that disabled or lost its stream.
      */
     closePeerVideo() {
+      this.$store.commit('clearCameraStream');
+      this.$store.commit('clearMapStream');
       this.clearHTMLVideoStream();
     },
     /**
@@ -338,13 +335,13 @@ export default {
     acceptCall(easyrtcid, acceptor) {
       console.log(`This id called : ${easyrtcid}, i'll only answer to ${this.robotId}`);
       if (easyrtcid === this.robotId) {
-        acceptor(true);
+        acceptor(true, easyrtc.getLocalMediaIds());
       } else {
-        acceptor(false);
+        acceptor(false, []);
       }
     },
     /**
-     * Callback of the "peer-connection"event.
+     * Callback of the "peer-connection" event
      * @method
      * @param {String} easyrtcid - Id of the occupant to connect to.
      */
@@ -371,18 +368,18 @@ export default {
       this.joystickState = 'enable';
       this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
 
-      // This request the stream from the robot so the operator doesn't have to have
-      // a local stream to get the feed from the robot. It also allows to get both stream
-      // from robot, which might have been a problem previously. They can be somewhere else.
-      if (!this.mapStream) {
-        console.log('Requesting the map stream from peer...');
-        this.requestFeedFromPeer('map');
-      }
+      // Request the streams
       setTimeout(() => {
-        if (!this.cameraStream) {
-          console.log('Requesting the camera stream from peer...');
-          this.requestFeedFromPeer('camera');
+        if (!this.mapStream) {
+          console.log('Requesting the map stream from peer...');
+          this.requestFeedFromPeer('map');
         }
+        setTimeout(() => {
+          if (!this.cameraStream) {
+            console.log('Requesting the camera stream from peer...');
+            this.requestFeedFromPeer('camera');
+          }
+        }, 1000);
       }, 1000);
     },
     /**
@@ -422,7 +419,7 @@ export default {
      * @param {String} feed - Feed Name to request.
      */
     requestFeedFromPeer(feed) {
-      this.sendData(this.robotId, 'request-feed', feed);
+      this.sendData(this.robotId, 'onDemandStream', feed);
     },
     /**
      * Sends data to the robot using the data channel.

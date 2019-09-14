@@ -344,7 +344,7 @@ export default new Vuex.Store({
       commit('clearRobotList');
       console.log(occupants);
       for (const occupant in occupants) {
-        if (occupants[occupant].apiField.type.fieldValue.includes('robot')) {
+        if ('type' in occupants[occupant].apiField && occupants[occupant].apiField.type.fieldValue.includes('robot')) {
           const robot = {
             robotName: occupants[occupant].apiField.type.fieldValue,
             robotId: occupant,
