@@ -4,8 +4,7 @@
     id="teleop-layout"
     :fluid="true"
     :container-fluid="true"
-    class="h-100 "
-    bg-variant="light"
+    class="h-100 bg-light"
   >
     <!-- Row -->
     <b-row class="h-100">
@@ -191,7 +190,7 @@ export default {
      * @param {boolean} state - Request of the joystick state
      * @listens on-joystick-state-changed
      */
-    changeJoystickState(state) {
+    changeJoystickState(state) { // Change to computed
       if (state === 'enable') {
         this.disableJoystick = false;
       } else {

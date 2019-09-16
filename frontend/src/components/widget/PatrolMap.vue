@@ -4,7 +4,7 @@
     <!-- Video Box -->
     <video-box
       :show="true"
-      :video-id="patrolMapId"
+      :video-id="patrolId"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;"
     />
@@ -53,6 +53,7 @@
  * @version 1.0.0
  */
 
+import { mapState } from 'vuex';
 import VideoBox from './VideoBox';
 
 export default {
@@ -60,17 +61,17 @@ export default {
   components: {
     VideoBox,
   },
-  props: {
-    waypointList: {
-      type: Array,
-      default: () => [],
-      required: true,
-    },
-    patrolMapId: {
-      type: String,
-      required: true,
-    },
-  },
+  // props: {
+  //   waypointList: {
+  //     type: Array,
+  //     default: () => [],
+  //     required: true,
+  //   },
+  //   patrolMapId: {
+  //     type: String,
+  //     required: true,
+  //   },
+  // },
   data() {
     return {
       videoElement: null,
@@ -82,6 +83,11 @@ export default {
       enable: true,
     };
   },
+  computed: mapState({
+    mapStream: state => state.mapStream,
+    waypointList: state => state.patrol.waypointList,
+    patrolId: state => state.patrol.patrolId,
+  }),
   /**
    * Lifecycle Hook - mounted.
    * On component mounted, Get html elements and initialize.
@@ -89,7 +95,7 @@ export default {
    * @listens mount(el)
    */
   mounted() {
-    this.videoElement = document.getElementById(this.patrolMapId);
+    this.videoElement = document.getElementById(this.patrolId);
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();
@@ -110,7 +116,7 @@ export default {
      */
     init() {
       this.loopIntervalId = setInterval(() => {
-        if (this.enable) {
+        if (this.mapStream) {
           this.adjustCanvasToVideo();
           this.drawCanvas();
         }
@@ -282,15 +288,17 @@ export default {
      * @param {HTMLElement} event - Event element given by the click.
      */
     onMouseDown(event) {
-      if (event.button === 0) {
-        const coord = this.getVideoCoordinatesOfEvent(event);
-        if (this.isClickValid(coord)) {
-          const wp = coord;
-          wp.yaw = 0;
-          this.addWaypointCoord(wp);
+      if (this.mapStream) {
+        if (event.button === 0) {
+          const coord = this.getVideoCoordinatesOfEvent(event);
+          if (this.isClickValid(coord)) {
+            const wp = coord;
+            wp.yaw = 0;
+            this.addWaypointCoord(wp);
+          }
         }
+        this.isMouseDown = true;
       }
-      this.isMouseDown = true;
     },
 
     /**
@@ -336,7 +344,7 @@ export default {
     onMouseOut() {
       if (this.isMouseDown) {
         console.log('MouseOut');
-        this.waypointList.pop();
+        this.$store.commit('removeWaypoint', this.waypointList.length - 1);
         this.isMouseDown = false;
       }
     },
@@ -347,7 +355,7 @@ export default {
      * @param {Object} wp - Waypoint.
      */
     addWaypointCoord(wp) {
-      this.waypointList.push(wp);
+      this.$store.commit('addWaypoint', { wp });
     },
 
     /**
@@ -356,8 +364,8 @@ export default {
      * @param {Object} wp - Waypoint.
      */
     updateWaypoint(wp) {
-      this.waypointList.pop();
-      this.waypointList.push(wp);
+      this.$store.commit('removeWaypoint', this.waypointList.length - 1);
+      this.$store.commit('addWaypoint', { wp });
     },
 
     /**

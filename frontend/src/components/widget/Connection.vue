@@ -26,27 +26,31 @@
       <div class="list-group">
         <!-- Create a button per robot in room -->
         <button
-          v-for="peer in peersTable"
-          :key="peer.peerId"
+          v-for="robot in robotList"
+          :key="robot.robotId"
           type="button"
           class="list-group-item-action list-group-item d-flex justify-content-between
           align-items-center peer-item"
-          @click="handlePeerConnection(peer.peerId)"
+          @click="handlePeerConnection(robot.robotId)"
         >
-          {{ peer.peerName }}
+          {{ robot.robotName }}
           <!-- Tag -->
           <span
-            v-if="peer.peerId == isConnectedToPeerId && waitingForConnectionState"
+            v-if="robot.robotId == robotId && connectionState == 'connecting'"
             class="spinner-border spinner-border-sm text-warning"
           />
           <span
-            v-else-if="peer.peerId == isConnectedToPeerId"
+            v-else-if="robot.robotId == robotId"
             class="badge badge-success"
-          >Connected</span>
+          >
+            Connected
+          </span>
           <span
             v-else
             class="badge badge-secondary"
-          >Not Connected</span>
+          >
+            Not Connected
+          </span>
         </button>
       </div>
     </div>
@@ -72,7 +76,6 @@
  * @vue-prop {Vue} bus - Vue bus use to emit event to other components.
  * @vue-event {Number} peer-connection - Send the peer id to Layout for connection state change.
  * @vue-data {Boolean} isConnected - Current connection state, only one connection is allowed.
- * @vue-data {Number} isConnectedToPeerId - Peer Id, name should be change...
  * @vue-data {Boolean} waitingForConnectionState - Indicate if connection in progress.
  */
 
@@ -83,15 +86,20 @@
  */
 
 import Vue from 'vue';
+import { mapState } from 'vuex';
+
+/**
+ * Remove bus -> Use easyrtc to connect directly or use the store.
+ */
 
 export default {
   name: 'connection',
   props: {
     selfId: {
-      type: Number,
+      type: String,
       required: true,
     },
-    peersTable: {
+    robotList: {
       type: Array,
       required: true,
     },
@@ -100,13 +108,11 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      isConnected: false,
-      isConnectedToPeerId: null,
-      waitingForConnectionState: false,
-    };
-  },
+  computed: mapState({
+    isConnected: state => state.isConnected,
+    robotId: state => state.robotId,
+    connectionState: state => state.connectionState.robot,
+  }),
   // On component mounted, get html elements, set bus event.
   mounted() {
     this.bus.$on('connection-changed', this.handleConnectionChanged);
@@ -124,32 +130,29 @@ export default {
       switch (state) {
         case 'connected':
           console.log('Connected!');
-          this.waitingForConnectionState = false;
-          this.isConnected = true;
-          // this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Connected");
+          this.$store.commit('connectedToRobot');
+          this.$store.commit('connected');
           break;
         case 'failed':
           // Popup : Connection Failed...
           console.log('Connection failed...');
-          this.waitingForConnectionState = false;
-          this.isConnectedToPeerId = null;
+          this.$store.commit('failedToConnectToRobot');
+          this.$store.commit('resetRobotId');
           break;
         case 'disconnected':
           console.log('Disconnected!');
-          this.isConnected = false;
-          // this.switchPeerConnectionButtonHtmlState(this.isConnectedToPeerId, "Disconnected");
-          this.isConnectedToPeerId = null;
+          this.$store.commit('disconnectedFromRobot');
+          this.$store.commit('resetRobotId');
           break;
         case 'lost':
           // This Id might not be available anymore... Might get a error...
           // Popup : The connection was lost...
           console.log('Connection lost...');
-          this.isConnectedToPeerId = null;
-          this.waitingForConnectionState = false;
-          this.isConnectedToPeerId = null;
+          this.$store.commit('failedToConnectToRobot');
+          this.$store.commit('resetRobotId');
           break;
         default:
-          console.log(`Something Something : ${state}`);
+          console.log(`This should not happen/isn't managed : ${state}`);
       }
     },
     /**
@@ -157,11 +160,11 @@ export default {
      * @method
      * @param {Number} peerId - Peer Id to connect to.
      */
-    connectToPeer(peerId) {
-      console.log(`Connecting to : ${peerId}`);
-      this.isConnectedToPeerId = peerId;
-      this.waitingForConnectionState = true;
-      this.bus.$emit('peer-connection', peerId);
+    connectToRobot(robotId) {
+      console.log(`Connecting to : ${robotId}`);
+      this.$store.commit('setRobotId', robotId);
+      this.$store.commit('connectingToRobot');
+      this.bus.$emit('peer-connection', robotId);
       console.log('Connecting...');
     },
     /**
@@ -169,28 +172,28 @@ export default {
      * @method
      * @param {Number} peerId - Peer Id currently connected to.
      */
-    disconnectFromPeer(peerId) {
-      this.bus.$emit('peer-connection', peerId);
+    disconnectFromRobot(robotId) {
+      this.bus.$emit('peer-connection', robotId);
     },
     /**
      * HTML button callback to handle the connection/disconnection to a peer.
      * @method
      * @param {Number} peerId - Peer Id associated with the button.
      */
-    handlePeerConnection(peerId) {
-      if (this.isConnected && peerId === this.isConnectedToPeerId) {
+    handlePeerConnection(robotId) {
+      if (this.isConnected && robotId === this.robotId) {
         console.log('Disconnecting...');
-        this.disconnectFromPeer(this.isConnectedToPeerId);
-      } else if (this.isConnected) {
-        // Add popup message saying : "You are already connected to this.isConnectedToPeerId,
+        this.disconnectFromRobot(this.robotId);
+      } else if (this.isConnected && this.robotId) {
+        // Add popup message saying : "You are already connected to this.robotId,
         // disconnect from it to connect to an other robot"
         console.log('Already connected to someone...');
-      } else if (this.waitingForConnectionState) {
-        // Popup saying : "Currently trying to connect to this.isConnectedToPeerId,
+      } else if (this.connectionState === 'connecting') {
+        // Popup saying : "Currently trying to connect to this.robotId,
         // please be patient..."
         console.log('Waiting for state...');
       } else {
-        this.connectToPeer(peerId);
+        this.connectToRobot(robotId);
       }
     },
   },

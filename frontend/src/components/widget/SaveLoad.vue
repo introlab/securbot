@@ -138,26 +138,32 @@
  * @version 1.0.0
  */
 
+import { mapState } from 'vuex';
+
 export default {
   name: 'save-load',
-  props: {
-    waypointList: {
-      type: Array,
-      default: () => [],
-      required: true,
-    },
-    patrolList: {
-      type: Array,
-      default: () => [],
-      required: true,
-    },
-  },
+  // props: {
+  //   waypointList: {
+  //     type: Array,
+  //     default: () => [],
+  //     required: true,
+  //   },
+  //   patrolList: {
+  //     type: Array,
+  //     default: () => [],
+  //     required: true,
+  //   },
+  // },
   data() {
     return {
       newPatrolName: '',
       placehold: 'Patrol name',
     };
   },
+  computed: mapState({
+    waypointList: state => state.patrol.waypointList,
+    patrolList: state => state.patrol.patrolList,
+  }),
   methods: {
     /**
      * Remove the patrol from the list, eventually this will remove on DB.
@@ -165,7 +171,7 @@ export default {
      * @param {Number} index - Index of the element to remove.
      */
     removePatrolFromList(index) {
-      this.patrolList.splice(index, 1);
+      this.$store.commit('removePatrol', index);
     },
     /**
      * Add a patrol to the list, eventually will add on DB.
@@ -178,7 +184,7 @@ export default {
       } else {
         patrol.Name = this.newPatrolName;
         patrol.waypoints = Array.from(this.waypointList);
-        this.patrolList.push(patrol);
+        this.$store.commit('addPatrol', patrol);
         this.newPatrolName = '';
         this.placehold = 'Patrol name   ';
         console.log(this.patrolList);
@@ -190,15 +196,15 @@ export default {
      * @param {Number} index - Index of the element to load.
      */
     selectPatrolFromList(index) {
-      if (this.waypointList !== []) {
+      if (this.waypointList.length) {
         console.log('overwrite plan');
-        this.waypointList.splice(0, this.waypointList.length);
+        this.$store.commit('clearWaypointList');
       } else {
         console.log(this.patrolList[index].waypoints);
       }
       console.log(this.patrolList[index]);
       this.patrolList[index].waypoints.forEach((element) => {
-        this.waypointList.push(element);
+        this.$store.commit('addWaypoint', { wp: element });
       });
     },
   },

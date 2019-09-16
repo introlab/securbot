@@ -16,7 +16,7 @@
     <div>
       <connection
         :self-id="selfEasyrtcid"
-        :peers-table="testPeerTable"
+        :robot-list="testPeerTable"
         :bus="busBus"
       />
     </div>
@@ -96,7 +96,7 @@ export default {
       easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
 
       // Uncomment next line to use the dev server
-      easyrtc.setSocketUrl('http://securbot.gel.usherbrooke.ca:8080');
+      easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
 
       let temp = false;
       // eslint-disable-next-line no-loop-func
@@ -107,24 +107,31 @@ export default {
           const streamName = videoSource.label;
 
           easyrtc.setVideoSource(videoSource.id);
-          // eslint-disable-next-line no-loop-func
-          easyrtc.initMediaSource(() => {
-            const stream = easyrtc.getLocalStream(streamName);
-            this.localStreams[streamName] = stream;
+          if (streamName.includes('map') || streamName.includes('camera')) {
+            // eslint-disable-next-line no-loop-func
+            easyrtc.initMediaSource(() => {
+              const stream = easyrtc.getLocalStream(streamName);
+              this.localStreams[streamName] = stream;
 
-            if (streamName === 'map') {
-              easyrtc.setVideoObjectSrc(this.remoteElement, stream);
-            } else if (streamName === 'camera') {
-              easyrtc.setVideoObjectSrc(this.localElement, stream);
-            }
-            if (!temp) {
-              easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-              temp = true;
-            }
-          }, this.loginFailure, streamName);
+              if (streamName === 'map') {
+                easyrtc.setVideoObjectSrc(this.remoteElement, stream);
+              } else if (streamName === 'camera') {
+                easyrtc.setVideoObjectSrc(this.localElement, stream);
+              }
+              if (!temp) {
+                easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+                temp = true;
+              }
+            }, this.loginFailure, streamName);
+          }
         }
+        console.log('Printing ids:');
+        const ids = easyrtc.getLocalMediaIds();
+        for (let i = 0; i < ids.length; i++) {
+          console.log(ids[i]);
+        }
+        console.log('Connected...');
       });
-      console.log('Connected...');
     },
     handleRoomOccupantChange(roomName, occupants) {
       this.testPeerTable = [];
@@ -182,7 +189,7 @@ export default {
     },
     acceptCall(easyrtcid, acceptor) {
       this.peerId = easyrtcid;
-      acceptor(true);
+      acceptor(true, easyrtc.getLocalMediaIds());
     },
     acceptPeerVideo(easyrtcid, stream) {
       this.remoteStream = stream;
@@ -202,7 +209,10 @@ export default {
     },
     handleData(easyrtcid, type, data) {
       if (easyrtcid === this.peerId && type === 'request-feed') {
-        easyrtc.addStreamToCall(easyrtcid, data);
+        console.log(`${easyrtcid} requested the ${data} feed/stream...`);
+        easyrtc.addStreamToCall(easyrtcid, data, (id, name) => {
+          console.log(`${id} acknowledges receiving ${name}`);
+        });
       } else if (easyrtcid === this.peerId) {
         console.log(`Received ${data} of type ${type}...`);
       } else {

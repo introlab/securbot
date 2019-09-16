@@ -52,6 +52,12 @@
           <!-- Navbar left side content -->
           <b-navbar-nav class="ml-auto">
             <!-- Dropdown with connection widget -->
+            <b-button
+              variant="warning"
+              @click="vuexTesting"
+            >
+              Test
+            </b-button>
             <b-nav-item-dropdown
               text="Connect to Robot"
               right
@@ -60,8 +66,8 @@
               <div class="px-2 py-1">
                 <!-- Connection -->
                 <connection
-                  :self-id="selfEasyrtcid"
-                  :peers-table="peerTable"
+                  :self-id="myId"
+                  :robot-list="robotList"
                   :bus="teleopBus"
                 />
               </div>
@@ -97,7 +103,6 @@
  * @module Layout
  * @vue-data {String} peerId - Id of the connected peer.
  * @vue-data {Boolean} isDataChannelAvailable - Keep track if the data channel is open.
- * @vue-data {String} selfEasyrtcid - self easyrtc id.
  * @vue-data {HTMLVideoElement} cameraStreamElement - HTML video element to host camera.
  * @vue-data {HTMLVideoElement} mapStreamElement - HTML video element to host map.
  * @vue-data {HTMLVideoElement} patrolMapStreamElement - HTML video element to host map.
@@ -120,36 +125,43 @@
 /* global easyrtc */
 
 import Vue from 'vue';
+import { mapState } from 'vuex';
 import Connection from './widget/Connection';
 
-export default {
+/**
+ * Check to change the easyrtc module
+ * Check what to do with the set/reset of the html element
+ */
 
+export default {
   name: 'layout',
   components: {
     Connection,
   },
   data() {
     return {
-      peerId: null,
       isDataChannelAvailable: false,
-      selfEasyrtcid: null,
       cameraStreamElement: null,
       mapStreamElement: null,
       patrolMapStreamElement: null,
-      cameraStream: null,
-      mapStream: null,
       teleopBus: new Vue(),
       routeBus: new Vue(),
-      peerTable: [],
       joystickState: 'disable',
     };
   },
+  computed: mapState({
+    myId: state => state.myId,
+    robotId: state => state.robotId,
+    robotList: state => state.robotList,
+    robotConnection: state => state.connectionState.robot,
+    mapStream: state => state.mapStream,
+    cameraStream: state => state.cameraStream,
+  }),
   /**
    * On component mounted, use to get and initialise
    * @method
    */
   mounted() {
-    console.log(process.env);
     this.teleopBus.$on('peer-connection', this.connectTo);
     this.teleopBus.$on('joystick-position-change', this.onJoystickPositionChange);
     this.teleopBus.$on('send-patrol', this.sendPatrol);
@@ -163,19 +175,22 @@ export default {
    * @method
    */
   destroyed() {
-    if (this.selfEasyrtcid !== null) {
+    if (!this.myId) {
       easyrtc.hangupAll();
       easyrtc.disconnect();
     }
   },
   methods: {
+    vuexTesting() {
+      this.connect();
+    },
     /**
      * Function managing initialisation and connection to the easyrtc server
      * @method
      */
     connect() {
-      easyrtc.enableDebug(false);
       console.log('Initializing...');
+      easyrtc.setAutoInitUserMedia(false);
       easyrtc.enableVideo(false);
       easyrtc.enableAudio(false);
       easyrtc.enableVideoReceive(true);
@@ -196,14 +211,8 @@ export default {
       // Uncomment next line to use the dev server
       easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
 
-      // Uncomment initialisation to use local stream for map (debugging only)
-      // easyrtc.initMediaSource(() => {
-      //   this.mapStream = easyrtc.getLocalStream();
-      //   easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-      // }, this.loginFailure);
-
       // This is the production line, only comment if necessary for debugging
-      easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      easyrtc.connect(process.env.VUE_APP_SERVER_ROOM_NAME, this.loginSuccess, this.loginFailure);
 
       console.log('You are connected...');
       this.setHTMLVideoStream();
@@ -216,17 +225,9 @@ export default {
      * @param {Boolean} isPrimary
      */
     handleRoomOccupantChange(roomName, occupants) {
-      this.peerTable = [];
-      if (occupants !== null) {
-        for (const occupant in occupants) {
-          if (occupants[occupant].apiField.type.fieldValue.includes('robot')) {
-            const peer = {
-              peerName: occupants[occupant].apiField.type.fieldValue,
-              peerId: occupant,
-            };
-            this.peerTable.push(peer);
-          }
-        }
+      console.log(occupants);
+      if (Object.keys(occupants).length) {
+        this.$store.dispatch('handleRobotsInRoom', occupants);
       }
     },
     /**
@@ -238,7 +239,7 @@ export default {
       easyrtc.hangupAll();
       console.log(`Calling the chosen occupant : ${occupantId}`);
 
-      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted);
+      easyrtc.call(occupantId, this.callSuccessful, this.callFailure, this.callAccepted, []);
     },
     /**
      * Callback for a successful call.
@@ -261,7 +262,7 @@ export default {
     callFailure(errCode, errMessage) {
       console.warn(`Call failed : ${errCode} | ${errMessage}`);
       this.teleopBus.$emit('connection-changed', 'failed');
-      this.peerId = null;
+      this.$store.commit('resetRobotId');
     },
     /**
      * Callback for call accepted.
@@ -273,9 +274,9 @@ export default {
       console.warn(`Call was ${accepted} from ${easyrtcid}`);
       if (!accepted) {
         this.teleopBus.$emit('connection-changed', 'failed');
-        this.peerId = null;
+        this.$store.commit('resetRobotId');
       } else {
-        this.peerId = easyrtcid;
+        this.$store.commit('setRobotId', easyrtcid);
       }
     },
     /**
@@ -285,7 +286,7 @@ export default {
      */
     loginSuccess(easyrtcid) {
       console.warn(`I am ${easyrtc.idToName(easyrtcid)}`);
-      this.selfEasyrtcid = easyrtcid;
+      this.$store.commit('setMyId', easyrtcid);
     },
     /**
      * Callback for failure to connect to the room.
@@ -305,12 +306,13 @@ export default {
      */
     acceptPeerVideo(easyrtcid, stream, streamName) {
       console.log(`Stream received info, id : ${easyrtcid}, streamName : ${streamName}`);
-      if (streamName === 'camera') {
-        this.cameraStream = stream;
-      } else if (streamName === 'map') {
-        this.mapStream = stream;
+      console.log(`checking incoming ${easyrtc.getNameOfRemoteStream(easyrtcid, stream)}`);
+      if (streamName.includes('camera')) {
+        this.$store.commit('setCameraStream', stream);
+      } else if (streamName.includes('map')) {
+        this.$store.commit('setMapStream', stream);
       } else {
-        console.warn('Unknown stream obtained...');
+        console.warn('Unknown stream passed...');
       }
       this.setHTMLVideoStream();
     },
@@ -320,6 +322,8 @@ export default {
      * @param {String} easyrtcid - Id of the occupant that disabled or lost its stream.
      */
     closePeerVideo() {
+      this.$store.commit('clearCameraStream');
+      this.$store.commit('clearMapStream');
       this.clearHTMLVideoStream();
     },
     /**
@@ -329,25 +333,25 @@ export default {
      * @param {Callback} acceptor - Callback to accept the call.
      */
     acceptCall(easyrtcid, acceptor) {
-      console.log(`This id called : ${easyrtcid}, i'll only answer to ${this.peerId}`);
-      if (easyrtcid === this.peerId) {
-        acceptor(true);
+      console.log(`This id called : ${easyrtcid}, i'll only answer to ${this.robotId}`);
+      if (easyrtcid === this.robotId) {
+        acceptor(true, easyrtc.getLocalMediaIds());
       } else {
-        acceptor(false);
+        acceptor(false, []);
       }
     },
     /**
-     * Callback of the "peer-connection"event.
+     * Callback of the "peer-connection" event
      * @method
      * @param {String} easyrtcid - Id of the occupant to connect to.
      */
     connectTo(easyrtcid) {
       console.log(`A connection change with ${easyrtcid} was asked...`);
-      if (this.peerId === easyrtcid) {
+      if (this.robotConnection === 'connected') {
         easyrtc.hangupAll();
         this.teleopBus.$emit('connection-changed', 'disconnected');
-        this.peerId = null;
-      } else if (this.peerId === null) {
+        this.$store.commit('resetRobotId');
+      } else if (this.robotId && this.robotConnection === 'connecting') {
         this.performCall(easyrtcid);
       } else {
         console.warn("The is an issue in the connection state handling... This shouldn't happen...");
@@ -364,17 +368,19 @@ export default {
       this.joystickState = 'enable';
       this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
 
-      // This request the stream from the robot so the operator doesn't have to have
-      // a local stream to get the feed from the robot. It also allows to get both stream
-      // from robot, which might have been a problem previously. They can be somewhere else.
-      if (!this.mapStream) {
-        console.log('Requesting the map stream from peer...');
-        this.requestFeedFromPeer('map');
-      }
-      if (!this.cameraStream) {
-        console.log('Requesting the camera stream from peer...');
-        this.requestFeedFromPeer('camera');
-      }
+      // Request the streams
+      setTimeout(() => {
+        if (!this.mapStream) {
+          console.log('Requesting the map stream from peer...');
+          this.requestFeedFromPeer('map');
+        }
+        setTimeout(() => {
+          if (!this.cameraStream) {
+            console.log('Requesting the camera stream from peer...');
+            this.requestFeedFromPeer('camera');
+          }
+        }, 1000);
+      }, 1000);
     },
     /**
      * Callback for the setDataChannelCloseListener function.
@@ -383,8 +389,8 @@ export default {
      */
     dataCloseListenerCB(easyrtcid) {
       this.isDataChannelAvailable = false;
-      if (easyrtcid === this.peerId || !this.peerId) {
-        this.peerId = null;
+      if (easyrtcid === this.robotId || this.robotId) {
+        this.$store.commit('resetRobotId');
         this.teleopBus.$emit('connection-changed', 'disconnected');
         this.clearHTMLVideoStream();
       }
@@ -397,7 +403,7 @@ export default {
      * @param {Object} data - Teleop data.
      */
     onJoystickPositionChange(data) {
-      this.sendData(this.peerId, 'joystick-position', JSON.stringify(data));
+      this.sendData(this.robotId, 'joystick-position', JSON.stringify(data));
     },
     /**
      * Callback of the "send-patrol" event.
@@ -405,7 +411,7 @@ export default {
      * @param {String} goalJsonString - Stringigify JSON of the patrol.
      */
     sendPatrol(goalJsonString) {
-      this.sendData(this.peerId, 'patrol-plan', goalJsonString);
+      this.sendData(this.robotId, 'patrol-plan', goalJsonString);
     },
     /**
      * Use to request a stream from the peer.
@@ -413,7 +419,7 @@ export default {
      * @param {String} feed - Feed Name to request.
      */
     requestFeedFromPeer(feed) {
-      this.sendData(this.peerId, 'request-feed', feed);
+      this.sendData(this.robotId, 'onDemandStream', feed);
     },
     /**
      * Sends data to the robot using the data channel.
@@ -437,7 +443,7 @@ export default {
      * @param {String} data - Data received.
      */
     handleData(easyrtcid, type, data) {
-      if (easyrtcid === this.peerId) {
+      if (easyrtcid === this.robotId) {
         console.log(`Received ${data} of type ${type}...`);
       } else {
         console.log('Received data from someone else than the peer, ignoring it...');
