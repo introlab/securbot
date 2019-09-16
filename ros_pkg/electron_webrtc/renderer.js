@@ -125,6 +125,8 @@ async function myInit() {
   easyrtc.setRoomApiField('default', 'type', 'robot');
   easyrtc.setSocketUrl(parameters.webRtcServerUrl);
 
+  easyrtc.setAutoInitUserMedia(false);
+
   easyrtc.enableVideo(true);
   easyrtc.enableAudio(false);
 
@@ -137,7 +139,6 @@ async function myInit() {
   })
   easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan');
   easyrtc.setPeerListener(teleopCallback, 'joystick-position');
-  easyrtc.setPeerListener(streamRequestCallback, 'request-feed');
 
   easyrtc.setAcceptChecker(acceptCall);
 
