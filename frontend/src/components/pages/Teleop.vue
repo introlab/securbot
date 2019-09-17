@@ -4,7 +4,7 @@
     id="teleop-layout"
     :fluid="true"
     :container-fluid="true"
-    class="h-100 bg-light"
+    class="h-100"
   >
     <!-- Row -->
     <b-row class="h-100">

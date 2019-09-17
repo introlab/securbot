@@ -5,7 +5,6 @@
     :fluid="true"
     :container-fluid="true"
     class="h-100 w-100"
-    bg-variant="light"
   >
     <!-- Row -->
     <b-row class="h-100">

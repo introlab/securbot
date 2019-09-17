@@ -44,6 +44,9 @@
             <b-nav-item to="logs">
               Logs
             </b-nav-item>
+            <b-nav-item to="testing">
+              .
+            </b-nav-item>
           </b-navbar-nav>
           <!-- Navbar left side content -->
           <b-navbar-nav class="ml-auto">

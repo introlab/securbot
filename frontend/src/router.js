@@ -12,6 +12,7 @@ import Layout from '@/components/Layout';
 import Teleop from '@/components/pages/Teleop';
 import Patrol from '@/components/pages/Patrol';
 import Events from '@/components/pages/Events';
+import Testing from '@/components/pages/Testing';
 import Testing2 from '@/components/pages/Testing2';
 
 Vue.use(Router);
@@ -66,6 +67,11 @@ export default new Router({
           name: 'SecurBot Event Logging',
           component: Events,
           props: true,
+        },
+        {
+          path: 'testing',
+          component: Testing,
+          props: false,
         },
       ],
     },

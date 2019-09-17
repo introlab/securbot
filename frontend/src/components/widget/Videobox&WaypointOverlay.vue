@@ -1,10 +1,8 @@
 <template>
-  <!-- Patrol Map widget -->
   <div class="h-100 w-100 position-relative">
-    <!-- Video Box -->
     <video-box
       :show="true"
-      :video-id="'patrol-map-stream'"
+      :video-id="videoId"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;"
     />
@@ -22,90 +20,43 @@
 </template>
 
 <script>
-/**
- * Vue SFC used as a widget to set waypoint on a map. This component
- * uses the VideoBox component to show the robot map (that is sent from
- * the robot in a video feed format) and put a canvas on top of it to
- * detect user clicks. When a click is detected the x and y position
- * is used to set a waypoint in the array given in props (push). The
- * canvas then read the array and draw waypoint on the map where the
- * user clicked previously.
- * This component have the following dependency :
- * VideoBox.vue Component and Bootstrap-Vue for styling.
- *
- *
- * @module widget/PatrolMap
- * @vue-prop {Object[]} waypointList - Lists the current waypoints
- * @vue-prop {String} patrolMapId - Identifies map source with exact name reference
- * @vue-data {Object} videoElement - Contains reference to video-id
- * @vue-data {Object} canvas - Contains reference to responsive overlay of map
- * @vue-data {Object} context - Sets canvas context
- * @vue-data {Number} CanvasRefreshRate - Sets the constant refresh rate of the displayed canvas
- * @vue-data {Object} loopIntervalId - Contains refresh rate and display parameter of the map
- * @vue-data {Boolean} enable - Enables or disables the display of the map and canvas
- */
-
-/* Disabled comment documentation
- * Might use those eventually by forking jsdoc-vue-js so it can manage the author
- * and version tag correctly
- * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
- * @author Edouard Legare <edouard.legare@usherbrooke.ca>
- * @version 1.0.0
- */
-
-import { mapState } from 'vuex';
+// import { mapState } from 'vuex';
 import VideoBox from './VideoBox';
 
 export default {
-  name: 'patrol-map',
+  name: 'waypoint-overlay',
   components: {
     VideoBox,
   },
-  // props: {
-  //   waypointList: {
-  //     type: Array,
-  //     default: () => [],
-  //     required: true,
-  //   },
-  //   patrolMapId: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
+  props: {
+    componentName: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
+      waypoint: { x: 0, y: 0, yaw: 0 },
       videoElement: null,
       canvas: null,
       context: null,
+      loopIntervalId: null,
       CanvasRefreshRate: 60.0, // Hz
       isMouseDown: false,
-      loopIntervalId: null,
-      enable: true,
     };
   },
-  computed: mapState({
-    mapStream: state => state.mapStream,
-    waypointList: state => state.patrol.waypointList,
-    patrolId: state => state.patrol.patrolId,
-  }),
-  /**
-   * Lifecycle Hook - mounted.
-   * On component mounted, Get html elements and initialize.
-   * @method
-   * @listens mount(el)
-   */
+  computed: {
+    videoId() {
+      return `${this.componentName}-videobox`;
+    },
+  },
   mounted() {
-    this.videoElement = document.getElementById('patrol-map-stream');
+    this.videoElement = document.getElementById(this.videoId);
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
+
     this.init();
   },
-  /**
-   * Lifecycle Hook - destroyed.
-   * On component destroyed, clear refresh rate of canvas.
-   * @method
-   * @listens destroyed(el)
-   */
   destroyed() {
     clearInterval(this.loopIntervalId);
   },
@@ -127,7 +78,7 @@ export default {
      */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.drawWaypointList();
+      this.draw();
     },
 
     /**
@@ -135,11 +86,13 @@ export default {
      * each waypoint of the current waypoint list.
      * @method
      */
-    drawWaypointList() {
-      for (const [index, wp] of this.waypointList.entries()) {
-        this.drawWaypoint(wp, index);
-        this.drawYawArrow(wp);
-      }
+    draw() {
+      this.drawWaypoint(this.waypoint);
+      this.drawYawArrow(this.waypoint);
+      // for (const [index, wp] of this.waypointList.entries()) {
+      //   this.drawWaypoint(wp, index);
+      //   this.drawYawArrow(wp);
+      // }
     },
 
     /**
@@ -150,7 +103,7 @@ export default {
      * @param {Number} wp.y - Waypoint's y coordinate in pixel
      * @param {Number} index - Index number of sent waypoint
      */
-    drawWaypoint(wp, index) {
+    drawWaypoint(wp) {
       const wpColor = '#00FF00';
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
@@ -159,10 +112,6 @@ export default {
       this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
       this.context.fillStyle = wpColor;
       this.context.fill();
-
-      this.context.font = '20px serif';
-      this.context.fillStyle = '#000000';
-      this.context.fillText(index + 1, coord.x + 8, coord.y + 8, 25);
     },
 
     /**
@@ -285,13 +234,13 @@ export default {
      * @param {HTMLElement} event - Event element given by the click.
      */
     onMouseDown(event) {
-      if (event.button === 0 && this.mapStream) {
+      if (event.button === 0) {
         console.log('onMouseDown');
         const coord = this.getVideoCoordinatesOfEvent(event);
         if (this.isClickValid(coord)) {
           const wp = coord;
           wp.yaw = 0;
-          this.addWaypointCoord(wp);
+          this.waypoint = wp;
           this.isMouseDown = true;
         }
       }
@@ -305,10 +254,10 @@ export default {
     onMouseMove(event) {
       if (this.isMouseDown) {
         console.log('MouseMoved');
-        const wp = this.waypointList[this.waypointList.length - 1];
         const mousePosition = this.getVideoCoordinatesOfEvent(event);
-        wp.yaw = -Math.atan2(mousePosition.y - wp.y, mousePosition.x - wp.x) * 180 / Math.PI;
-        this.updateWaypoint(wp);
+        // eslint-disable-next-line max-len
+        this.waypoint.yaw = -Math.atan2(mousePosition.y - this.waypoint.y, mousePosition.x - this.waypoint.x) * 180 / Math.PI;
+        // this.updateWaypoint(wp);
       }
     },
 
@@ -321,13 +270,11 @@ export default {
       if (this.isMouseDown) {
         // Write waypoint to list of waypoints
         console.log('MouseUP');
-        const date = new Date();
-        const wp = this.waypointList[this.waypointList.length - 1];
+        // const date = new Date();
         const coord = this.getVideoCoordinatesOfEvent(event);
 
-        wp.yaw = -Math.atan2(coord.y - wp.y, coord.x - wp.x) * 180 / Math.PI;
-        wp.dateTime = date.getTime();
-        this.updateWaypoint(wp);
+        // eslint-disable-next-line max-len
+        this.waypoint.yaw = -Math.atan2(coord.y - this.waypoint.y, coord.x - this.waypoint.x) * 180 / Math.PI;
         this.isMouseDown = false;
       }
     },
@@ -340,32 +287,20 @@ export default {
     onMouseOut() {
       if (this.isMouseDown) {
         console.log('MouseOut');
-        this.$store.commit('removeWaypoint', this.waypointList.length - 1);
+        // this.$store.commit('removeWaypoint', this.waypointList.length - 1);
+        this.waypoint = { x: 0, y: 0, yaw: 0 };
         this.isMouseDown = false;
       }
     },
 
-    /**
-     * Adds a waypoint to the list of current waypoints.
-     * @method
-     * @param {Object} wp - Waypoint.
-     */
-    addWaypointCoord(wp) {
-      this.$store.commit('addWaypoint', { wp });
-    },
-
-    /**
-     * Updates last waypoint of the waypoint list.
-     * @method
-     * @param {Object} wp - Waypoint.
-     */
-    updateWaypoint(wp) {
-      const update = {
-        wp,
-        index: this.waypointList.length - 1,
-      };
-      this.$store.commit('updateWaypoint', update);
-    },
+    // /**
+    //  * Adds a waypoint to the list of current waypoints.
+    //  * @method
+    //  * @param {Object} wp - Waypoint.
+    //  */
+    // addWaypointCoord(wp) {
+    //   this.$store.commit('addWaypoint', { wp });
+    // },
 
     /**
      * Check to see if element is in bound.
@@ -385,5 +320,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>
