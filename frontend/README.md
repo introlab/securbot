@@ -2,7 +2,10 @@
 
 - [Frontend](#frontend)
   - [Summary](#summary)
-  - [Initial step to setup the project](#initial-step-to-setup-the-project)
+  - [Environment Variables](#environment-variables)
+  - [Changelog](#changelog)
+  - [Project commands](#project-commands)
+    - [Setup the project](#setup-the-project)
     - [Compiles and hot-reloads for development](#compiles-and-hot-reloads-for-development)
     - [Compiles and minifies for production](#compiles-and-minifies-for-production)
     - [Generates the frontend documentation](#generates-the-frontend-documentation)
@@ -18,7 +21,20 @@ The interface is there to offer an easy way for operators to connect to any robo
 
 > We currently do not support mobile devices.
 
-## Initial step to setup the project
+## Environment Variables
+The UI, through Vue/webpack, uses environment variables to set come variables used during execution. The variables are set inside a [.env file](https://cli.vuejs.org/guide/mode-and-env.html#modes).
+
+An example of this is shown inside .env.example. You would need to either create a new file in the same format or create a copy of the file and change its values to the ones you desired.s
+
+- VUE_APP_SERVER_URL: The URL of the server to connect to.
+- VUE_APP_SERVER_ROOM_NAME: The room name to connect to on the server.
+
+## Changelog
+The changelog file shows changes between versions since v0.1.0. It was created on September 17th 2019, before that the only changelogs available for the UI are the commits done on the repo.
+
+## Project commands
+
+### Setup the project
 ```sh
 npm install
 ```
