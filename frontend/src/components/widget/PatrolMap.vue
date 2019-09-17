@@ -4,7 +4,7 @@
     <!-- Video Box -->
     <video-box
       :show="true"
-      :video-id="patrolId"
+      :video-id="'patrol-map-stream'"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;"
     />
@@ -95,7 +95,7 @@ export default {
    * @listens mount(el)
    */
   mounted() {
-    this.videoElement = document.getElementById(this.patrolId);
+    this.videoElement = document.getElementById('patrol-map-stream');
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();
@@ -116,10 +116,8 @@ export default {
      */
     init() {
       this.loopIntervalId = setInterval(() => {
-        if (this.mapStream) {
-          this.adjustCanvasToVideo();
-          this.drawCanvas();
-        }
+        this.adjustCanvasToVideo();
+        this.drawCanvas();
       }, 1000 / this.CanvasRefreshRate);
     },
 
@@ -248,12 +246,11 @@ export default {
      */
     getVideoOffsetAndScale() {
       const videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
-
       let offsetX = 0;
       let offsetY = 0;
       let scale = 1;
       if ((this.videoElement.offsetHeight * videoRatio) > this.videoElement.offsetWidth) {
-        scale = this.videoElement.osffsetWidth / this.videoElement.videoWidth;
+        scale = this.videoElement.offsetWidth / this.videoElement.videoWidth;
         offsetY = (this.videoElement.offsetHeight - (this.videoElement.videoHeight * scale)) / 2;
       } else {
         scale = this.videoElement.offsetHeight / this.videoElement.videoHeight;
@@ -288,16 +285,15 @@ export default {
      * @param {HTMLElement} event - Event element given by the click.
      */
     onMouseDown(event) {
-      if (this.mapStream) {
-        if (event.button === 0) {
-          const coord = this.getVideoCoordinatesOfEvent(event);
-          if (this.isClickValid(coord)) {
-            const wp = coord;
-            wp.yaw = 0;
-            this.addWaypointCoord(wp);
-          }
+      if (event.button === 0) {
+        console.log('onMouseDown');
+        const coord = this.getVideoCoordinatesOfEvent(event);
+        if (this.isClickValid(coord)) {
+          const wp = coord;
+          wp.yaw = 0;
+          this.addWaypointCoord(wp);
+          this.isMouseDown = true;
         }
-        this.isMouseDown = true;
       }
     },
 
@@ -310,7 +306,7 @@ export default {
       if (this.isMouseDown) {
         console.log('MouseMoved');
         const wp = this.waypointList[this.waypointList.length - 1];
-        const mousePosition = this.getVideoCoordinatesFromEvent(event);
+        const mousePosition = this.getVideoCoordinatesOfEvent(event);
         wp.yaw = -Math.atan2(mousePosition.y - wp.y, mousePosition.x - wp.x) * 180 / Math.PI;
         this.updateWaypoint(wp);
       }
@@ -327,7 +323,7 @@ export default {
         console.log('MouseUP');
         const date = new Date();
         const wp = this.waypointList[this.waypointList.length - 1];
-        const coord = this.getVideoCoordinatesFromEvent(event);
+        const coord = this.getVideoCoordinatesOfEvent(event);
 
         wp.yaw = -Math.atan2(coord.y - wp.y, coord.x - wp.x) * 180 / Math.PI;
         wp.dateTime = date.getTime();
@@ -364,8 +360,11 @@ export default {
      * @param {Object} wp - Waypoint.
      */
     updateWaypoint(wp) {
-      this.$store.commit('removeWaypoint', this.waypointList.length - 1);
-      this.$store.commit('addWaypoint', { wp });
+      const update = {
+        wp,
+        index: this.waypointList.length - 1,
+      };
+      this.$store.commit('updateWaypoint', update);
     },
 
     /**
