@@ -6,9 +6,7 @@ January 22 2019
 ## What is SecurBot ?
 SecurBot is a project develop by a team of 8 students in electrical engineering from the Universite de Sherbrooke. The goal of this project is to use the different technologies develop by the [IntRoLab](https://introlab.3it.usherbrooke.ca/mediawiki-introlab/index.php/Main_Page) research team to create an autonomous security robot. The following video shows the current state of the project :
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE
-" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
-alt="ADD THE PROMO VIDEO" width="240" height="180" border="10" /></a>
+[![PROMO](https://img.youtube.com/vi/https://youtu.be/6ueq7txrOng/0.jpg)](https://www.youtube.com/watch?v=https://youtu.be/6ueq7txrOng)
 
 ## Project status
 
