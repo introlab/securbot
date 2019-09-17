@@ -34,7 +34,6 @@
           <arg name="accel_fps"           default="250"/>
           <arg name="enable_gyro"         default="false"/>
           <arg name="enable_accel"        default="false"/>
-          <arg name="enable_tm2"          default="false"/>
 
           <arg name="enable_pointcloud"         default="false"/>
           <arg name="pointcloud_texture_stream" default="RS2_STREAM_COLOR"/>
