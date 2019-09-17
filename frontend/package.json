@@ -15,7 +15,6 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.28",
     "core-js": "^2.6.9",
-    "jquery": "^3.4.1",
     "open-iconic": "git+https://github.com/iconic/open-iconic.git",
     "socket.io": "^1.4.5",
     "vue": "^2.6.6",

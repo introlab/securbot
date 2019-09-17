@@ -15,7 +15,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "=6.0",
     "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
@@ -23,6 +22,7 @@
     "minami": "^1.2.3"
   },
   "dependencies": {
+    "electron": "=6.0",
     "easyrtc": "github:priologic/easyrtc#f6365959801209f13b153c10bc9ca8ec398ca9ad",
     "rosnodejs": "^3.0.0",
     "socket.io-client": "github:socketio/socket.io-client#3020e455ab9a81341722e6c1e6cd8ef6b4b0ea28"

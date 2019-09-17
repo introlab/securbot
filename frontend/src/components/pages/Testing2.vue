@@ -49,7 +49,7 @@ export default {
       isConnected: null,
       selfEasyrtcid: null,
       remoteStream: null,
-      localStreamNames: ['camera', 'map'],
+      localStreamNames: [],
       localStreams: {},
       localElement: null,
       remoteElement: null,
@@ -78,6 +78,7 @@ export default {
     connect() {
       easyrtc.enableDebug(false);
       console.log('Initializing...');
+      easyrtc.setAutoInitUserMedia(false);
       easyrtc.enableVideo(true);
       easyrtc.enableAudio(false);
       easyrtc.enableVideoReceive(false);
@@ -94,41 +95,29 @@ export default {
       easyrtc.setAcceptChecker(this.acceptCall);
 
       easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
-
-      // Uncomment next line to use the dev server
       easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
+      easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 
-      let temp = false;
       // eslint-disable-next-line no-loop-func
       easyrtc.getVideoSourceList((videoSources) => {
         for (let i = 0; i < videoSources.length; i++) {
           const videoSource = videoSources[i];
 
           const streamName = videoSource.label;
+          this.localStreams[streamName] = videoSource.id;
+          this.localStreamNames.push(streamName);
 
           easyrtc.setVideoSource(videoSource.id);
-          if (streamName.includes('map') || streamName.includes('camera')) {
-            // eslint-disable-next-line no-loop-func
-            easyrtc.initMediaSource(() => {
-              const stream = easyrtc.getLocalStream(streamName);
-              this.localStreams[streamName] = stream;
+          // eslint-disable-next-line no-loop-func
+          easyrtc.initMediaSource((stream) => {
+            this.localStreams[streamName] = stream;
 
-              if (streamName === 'map') {
-                easyrtc.setVideoObjectSrc(this.remoteElement, stream);
-              } else if (streamName === 'camera') {
-                easyrtc.setVideoObjectSrc(this.localElement, stream);
-              }
-              if (!temp) {
-                easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
-                temp = true;
-              }
-            }, this.loginFailure, streamName);
-          }
-        }
-        console.log('Printing ids:');
-        const ids = easyrtc.getLocalMediaIds();
-        for (let i = 0; i < ids.length; i++) {
-          console.log(ids[i]);
+            if (streamName.includes('map')) {
+              easyrtc.setVideoObjectSrc(this.remoteElement, stream);
+            } else if (streamName.includes('camera')) {
+              easyrtc.setVideoObjectSrc(this.localElement, stream);
+            }
+          }, this.loginFailure, streamName);
         }
         console.log('Connected...');
       });
@@ -189,7 +178,7 @@ export default {
     },
     acceptCall(easyrtcid, acceptor) {
       this.peerId = easyrtcid;
-      acceptor(true, easyrtc.getLocalMediaIds());
+      acceptor(true, this.localStreamNames[0]);
     },
     acceptPeerVideo(easyrtcid, stream) {
       this.remoteStream = stream;
@@ -208,11 +197,15 @@ export default {
       console.warn(`Data channel close with ${easyrtcid}`);
     },
     handleData(easyrtcid, type, data) {
-      if (easyrtcid === this.peerId && type === 'request-feed') {
+      if (easyrtcid === this.peerId && type === 'onDemandStream') {
         console.log(`${easyrtcid} requested the ${data} feed/stream...`);
-        easyrtc.addStreamToCall(easyrtcid, data, (id, name) => {
-          console.log(`${id} acknowledges receiving ${name}`);
-        });
+        for (let i = 0; i < this.localStreamNames.length; i++) {
+          if (this.localStreamNames[i].includes(data)) {
+            easyrtc.addStreamToCall(easyrtcid, this.localStreamNames[i], (id, name) => {
+              console.log(`${id} acknowledges receiving ${name}`);
+            });
+          }
+        }
       } else if (easyrtcid === this.peerId) {
         console.log(`Received ${data} of type ${type}...`);
       } else {

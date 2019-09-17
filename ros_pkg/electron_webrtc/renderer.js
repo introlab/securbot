@@ -1,4 +1,4 @@
-/* global easyrtc, ipc, window */
+/* global easyrtc, ipc */
 /**
  * Renderer for this application.
  * @module Renderer
@@ -45,7 +45,7 @@ ipc.on('rosdata', (emitter, data) => {
  * @param {String} patrolJsonString - JSON string of the patrol data.
  */
 function patrolReceivedCallback(easyrtcId, msgType, patrolJsonString) {
-  console.log("Received new patrol plan: " + patrolJsonString);
+  console.log(`Received new patrol plan: ${patrolJsonString}`);
   ipc.send('patrol-plan', patrolJsonString);
 }
 
@@ -71,10 +71,10 @@ function teleopCallback(easyrtcid, msgType, msgData) {
 function streamRequestCallback(easyrtcid, msgType, msgData) {
   console.log(`Received request of type ${msgType} for ${msgData}`);
   if (msgData === 'map' || msgData === 'camera') {
-    easyrtc.addStreamToCall(easyrtcid, msgData,(id, name) => {
-      console.log(`Stream ${name} received by ${id}`)
+    easyrtc.addStreamToCall(easyrtcid, msgData, (id, name) => {
+      console.log(`Stream ${name} received by ${id}`);
     });
-    console.log(`Stream ${msgData} added to call`)
+    console.log(`Stream ${msgData} added to call`);
   }
 }
 
@@ -84,10 +84,10 @@ function streamRequestCallback(easyrtcid, msgType, msgData) {
  */
 function fetchParameters() {
   return new Promise((resolve) => {
-    console.log("Fetching parameters")
+    console.log('Fetching parameters');
     ipc.once('parameters_response', (event, params) => {
-      console.log("Got parameters")
-      console.log(params)
+      console.log('Got parameters');
+      console.log(params);
       resolve(params);
     });
 
@@ -105,11 +105,11 @@ function acceptCall(easyrtcid, acceptor) {
   if (operatorID === null) {
     operatorID = easyrtcid;
     console.log(`Accepting call from ${easyrtcid}, this operator can control me!`);
-    acceptor(true,streamNames[0]);
+    acceptor(true, streamNames[0]);
     setTimeout(() => streamRequestCallback(easyrtcid, 'fake-request', streamNames[1]), 1000);
   } else {
     console.log(`Accepting call from ${easyrtcid}, this operator can only view me!`);
-    acceptor(true,streamNames[0]);
+    acceptor(true, streamNames[0]);
     setTimeout(() => streamRequestCallback(easyrtcid, 'fake-request', streamNames[1]), 1000);
   }
 }
@@ -134,9 +134,9 @@ async function myInit() {
   easyrtc.enableAudioReceive(false);
   easyrtc.enableDataChannels(true);
 
-  easyrtc.setPeerListener((id,type,data) => {
-    console.log(`Receive ${data} from ${id} of type ${type}`)
-  })
+  easyrtc.setPeerListener((id, type, data) => {
+    console.log(`Receive ${data} from ${id} of type ${type}`);
+  });
   easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan');
   easyrtc.setPeerListener(teleopCallback, 'joystick-position');
 
@@ -151,13 +151,13 @@ async function myInit() {
 
   let isConnected = false;
 
-  console.log("Getting video sources")
+  console.log('Getting video sources');
   easyrtc.getVideoSourceList((device) => {
-    console.log("Devices:")
-    console.log(device)
+    console.log('Devices:');
+    console.log(device);
     for (const deviceName of virtualDevicesName) {
       // eslint-disable-next-line max-len
-      const videoSource = device.find(source => source.label.toString().trim() === deviceName.trim());
+      const videoSource = device.find((source) => source.label.toString().trim() === deviceName.trim());
 
       if (videoSource) {
         console.log(`Found [${videoSource.label}] stream`);
@@ -168,8 +168,9 @@ async function myInit() {
 
         // eslint-disable-next-line no-loop-func
         console.log(`Initializing ${streamName}...`);
+        // eslint-disable-next-line no-loop-func
         easyrtc.initMediaSource((stream) => { // success callback
-          easyrtc.setVideoObjectSrc(document.getElementById(streamName),stream)
+          easyrtc.setVideoObjectSrc(document.getElementById(streamName), stream);
           console.log(`${streamName} initialized...`);
           if (!isConnected) {
             easyrtc.connect('easyrtc.securbot', connectSuccess, connectFailure);
@@ -178,7 +179,7 @@ async function myInit() {
         },
         connectFailure,
         streamName);
-        console.log(streamName + ' added to easyrtc')
+        console.log(`${streamName} added to easyrtc`);
       }
     }
   });

@@ -6,7 +6,6 @@
  * @author Edouard Legare <>
  */
 
-
 const { app, BrowserWindow, ipcMain } = require('electron');
 const events = require('events');
 const rosnodejs = require('rosnodejs');
