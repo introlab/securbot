@@ -23,6 +23,8 @@
 	</group>
 	<group>
 		<remap from="/cmd_vel" to="/smooth_cmd_vel"/>
+		<!--<remap from="/cmd_vel" to="/cmd_vel"/>-->
 		<include file="$(find roboclaw_node)/launch/roboclaw.launch" />
 	</group>
 </launch>
+
