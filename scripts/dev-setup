@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Add virtual cam tool to PATH
+ln -fs $DIR/VirtualCamSecurBot/scripts/* $DIR
+
+# Prevent links to be added to git
+find $DIR/ -type l -printf '%f\n' > $DIR/.gitignore
+
+# make all scripts executable
+chmod -c +x $DIR/*
+
+# add scripts to path
+export PATH="$PATH:$DIR"
+echo "$DIR added to \$PATH"

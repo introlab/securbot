@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  webrtc-server:
+    build: ./webrtc-server
+    ports:
+      - "8080:8080"

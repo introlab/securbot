@@ -1,0 +1,17 @@
+{
+    "url": "",
+    "worklogUrl": "",
+    "user": "",
+    "passwd": "",
+    "output": "./out/dashboard.png",
+    "outputPDF": "./out/dashboard.pdf",
+    "outputLandscapePDF": "./out/dashboard_print.pdf",
+    "startDate":"",
+    "screenWidth": 1920,
+    "deviceScalingFactor": 1,
+    "cron_schedule": "",
+    "cron_email": "",
+    "mail_transport": {},
+    "mail_from": "",
+    "mailing_list":[]
+}

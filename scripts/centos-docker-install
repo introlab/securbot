@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# https://docs.docker.com/install/linux/docker-ce/centos/
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Uninstall previous versions
+sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
+# Setting up docker apt repos
+sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+# Install docker
+# GPG should be 060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35
+sudo yum install docker-ce docker-ce-cli containerd.io docker-compose
+
+# Post-install script
+sh $DIR/docker-postinstall

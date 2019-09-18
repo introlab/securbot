@@ -1,0 +1,7 @@
+<launch>
+    <remap from="/camera/depth/points" to="/pointcloud" />
+    
+    <include file="$(find freenect_launch)/launch/freenect.launch">
+	<arg name="depth_registration" default="true" />
+    </include>
+</launch>

@@ -1,0 +1,5 @@
+/dist/
+/tests/
+/src/components/demo
+/node_modules
+/*.js
