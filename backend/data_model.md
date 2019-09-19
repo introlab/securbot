@@ -24,7 +24,7 @@ events
 ```
 
 ### Robot document model:
-```json
+```js
 $jsonSchema:
 {
     type: "object",
@@ -50,7 +50,7 @@ $jsonSchema:
 ```
 
 ### Patrol document model:
-```json
+```js
 $jsonSchema:
 {
     type: "object",
@@ -92,7 +92,7 @@ $jsonSchema:
 ```
 
 ### Schedule document model:
-```json
+```js
 $jsonSchema:
 {
     type: "object",
@@ -130,7 +130,7 @@ $jsonSchema:
 ```
 
 ### Event document model:
-```json
+```js
 $jsonSchema:
 {
     type: "object",
