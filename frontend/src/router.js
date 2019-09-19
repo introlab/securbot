@@ -14,6 +14,7 @@ import Patrol from '@/components/pages/Patrol';
 import Events from '@/components/pages/Events';
 import Testing from '@/components/pages/Testing';
 import Testing2 from '@/components/pages/Testing2';
+import Next from '@/components/next/LayoutNext';
 
 Vue.use(Router);
 
@@ -78,6 +79,10 @@ export default new Router({
     {
       path: '/testing2',
       component: Testing2,
+    },
+    {
+      path: '/next',
+      component: Next,
     },
   ],
 });

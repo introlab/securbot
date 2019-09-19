@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+/* global easyrtc */
+
 export default new Vuex.Store({
   // State = var/let calls
   state: {
@@ -45,14 +47,23 @@ export default new Vuex.Store({
     showStreams: true, // VideoBox:show
     joystickEnabled: false, // Layout:joystickState | Joystick:enable | Teleop:enableJoystick
     connecting: false, // Connection:waitingForConnectionState
+    isDataChannelAvailable: false,
     joystickConfig: { // Joystick:absoluteMaxX | Joystick:absoluteMaxY
       maxX: 0,
       maxY: 0,
     },
-    intervals: {
+    rates: {
       joystickCanvasRefreshRate: 1000 / 60, // Joystick:canvasRefreshRate
       joystickPositionRefreshRate: 100, // Joystick:operatorCommandInterval
       patrolCanvasRefreshRate: 1000 / 60, // PatrolMap:CanvasRefreshRate
+    },
+    htmlElement: {
+      cameraId: 'camera-videobox-html-id',
+      camera: null,
+      mapId: 'map-videobox-html-id',
+      map: null,
+      patrolId: 'patrol-videobox-html-id',
+      patrol: null,
     },
     patrol: {
       enable: false, // PatrolMap:enable
@@ -174,6 +185,24 @@ export default new Vuex.Store({
      */
     disableJoystick(state) {
       state.joystickEnabled = false;
+    },
+    setCameraHTMLElement(state, element) {
+      state.htmlElement.camera = element;
+    },
+    clearCameraHTMLElement(state) {
+      state.htmlElement.camera = null;
+    },
+    setMapHTMLElement(state, element) {
+      state.htmlElement.map = element;
+    },
+    clearMapHTMLElement(state) {
+      state.htmlElement.map = null;
+    },
+    setPatrolHTMLElement(state, element) {
+      state.htmlElement.patrol = element;
+    },
+    clearPatrolHTMLElement(state) {
+      state.htmlElement.patrol = null;
     },
     /**
      * Sets the camera stream.
@@ -307,38 +336,66 @@ export default new Vuex.Store({
     addRobotToList(state, robot) {
       state.robotList.push(robot);
     },
+    enableDataChannel(state) {
+      state.isDataChannelAvailable = true;
+    },
+    disableDataChannel(state) {
+      state.isDataChannelAvailable = false;
+    },
   },
   // Actions are methods that normally calls a mutation, but can do so asynchronously
   actions: {
-    /**
-     * Sends the joystick position to the connected robot.
-     *
-     */
-    sendJoystickPosition() {
+    /* ***********************************EASYRTC**************************************** */
+    connectToServer({ dispatch }) {
+      console.log('Initializing...');
+      easyrtc.setAutoInitUserMedia(false);
+      easyrtc.enableVideo(false);
+      easyrtc.enableAudio(false);
+      easyrtc.enableVideoReceive(true);
+      easyrtc.enableAudioReceive(false);
+      easyrtc.enableDataChannels(true);
+
+      // openedDataChannelListener({ state, commit, dispatch }, id)
+      easyrtc.setDataChannelOpenListener(id => dispatch('openedDataChannelListener', id));
+      // closedDataChannelListener({ state, commit, dispatch }, id)
+      easyrtc.setDataChannelCloseListener(id => dispatch('closedDataChannelListener', id));
+      // handleData({ state }, msg)
+      easyrtc.setPeerListener((id, channel, data) => dispatch('handleData', { id, channel, data }));
+
+      easyrtc.setRoomOccupantListener((roomName, occupants) => dispatch('handleRobotsInRoomNext', occupants));
+      // acceptRobotVideo({ commit, dispatch }, robot)
+      easyrtc.setStreamAcceptor((id, stream, streamName) => dispatch('acceptRobotVideo', { id, stream, streamName }));
+      easyrtc.setOnStreamClosed(() => dispatch('closeRobotVideo'));
+      // acceptCall(_, acceptor)
+      easyrtc.setAcceptChecker((_, acceptor) => dispatch('acceptCall', acceptor));
+
+      easyrtc.setRoomApiField('default', 'type', 'operator');
+
+      // Uncomment next line to use the dev server
+      easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
+
+      // This is the production line, only comment if necessary for debugging
+      easyrtc.connect(
+        process.env.VUE_APP_SERVER_ROOM_NAME,
+        id => dispatch('loginSuccess', id), // this.loginSuccess
+        (code, message) => dispatch('loginFailure', { code, message }), // this.loginFailure,
+      );
+
+      console.log('You are connected...');
     },
-    /**
-     * Gets the patrol list from the database.
-     *
-     */
-    getPatrolList() {
-    },
-    /**
-     * Sends a patrol to the database to be saved.
-     *
-     */
-    sendPatrol() {
-    },
-    /**
-     * Connects to the easyrtc server.
-     *
-     */
-    connectToServer() {
-    },
-    /**
-     * Connects to the given robot id.
-     *
-     */
-    connectToRobot() {
+    handleRobotsInRoomNext({ commit }, occupants) {
+      console.log(occupants);
+      if (Object.keys(occupants).length) {
+        for (const occupant in occupants) {
+          if ('type' in occupants[occupant].apiField && occupants[occupant].apiField.type.fieldValue.includes('robot')) {
+            const robot = {
+              robotName: occupants[occupant].apiField.type.fieldValue,
+              robotId: occupant,
+            };
+            commit('addRobotToList', robot);
+          }
+        }
+      }
     },
     handleRobotsInRoom({ commit }, occupants) {
       commit('clearRobotList');
@@ -352,6 +409,165 @@ export default new Vuex.Store({
           commit('addRobotToList', robot);
         }
       }
+    },
+    connectToRobot({ commit, dispatch }, occupantId) {
+      easyrtc.hangupAll();
+      console.log(`Calling the chosen occupant : ${occupantId}`);
+
+      commit('setRobotId', occupantId);
+      commit('connectingToRobot');
+
+      easyrtc.call(
+        occupantId,
+        (id, mediaType) => dispatch('callSuccessful', { id, mediaType }),
+        (code, message) => dispatch('callFailure', { code, message }),
+        (accepted, id) => dispatch('callAccepted', { accepted, id }),
+      );
+    },
+    disconnectFromRobot({ commit }) {
+      easyrtc.hangupAll();
+      commit('disconnectedFromRobot');
+      commit('resetRobotId');
+    },
+    callSuccessful({ commit }, robot) {
+      console.warn(`Call to ${robot.id} was successful, here's the media: ${robot.mediaType}`);
+      if (robot.mediaType === 'connection') {
+        // this.teleopBus.$emit('connection-changed', 'connected');
+        console.log('Connected!');
+        commit('connectedToRobot');
+      }
+    },
+    callFailure({ commit }, error) {
+      console.warn(`Call failed : ${error.code} | ${error.message}`);
+      commit('failedToConnectToRobot');
+      commit('resetRobotId');
+    },
+    callAccepted({ commit }, result) {
+      console.warn(`Call was ${result.accepted} from ${result.id}`);
+      if (!result.accepted) {
+        commit('failedToConnectToRobot');
+        commit('resetRobotId');
+      } else {
+        commit('setRobotId', result.id);
+      }
+    },
+    loginSuccess({ commit }, id) {
+      console.warn(`I am ${easyrtc.idToName(id)}`);
+      commit('connected');
+      commit('setMyId', id);
+    },
+    loginFailure(_, error) {
+      console.warn(`${error.code}:${error.message}`);
+    },
+    acceptRobotVideo({ commit, dispatch }, robot) {
+      console.log(`Stream received info, id : ${robot.id}, streamName : ${robot.streamName}`);
+      console.log(`checking incoming ${easyrtc.getNameOfRemoteStream(robot.id, robot.stream)}`);
+      if (robot.streamName.includes('camera')) {
+        commit('setCameraStream', robot.stream);
+      } else if (robot.streamName.includes('map')) {
+        commit('setMapStream', robot.stream);
+      } else {
+        console.warn('Unknown stream passed...');
+      }
+      dispatch('setHTMLVideoElements');
+      // this.setHTMLVideoStream();
+    },
+    closeRobotVideo({ commit, dispatch }) {
+      commit('clearCameraStream');
+      commit('clearMapStream');
+      dispatch('clearHTMLVideoElements');
+      // this.clearHTMLVideoStream();
+    },
+    acceptCall(_, acceptor) {
+      acceptor(false);
+    },
+    openedDataChannelListener({ state, commit, dispatch }, id) {
+      console.warn(`Data channel open with ${id}`);
+      // this.isDataChannelAvailable = true;
+      commit('enableDataChannel');
+      commit('enableJoystick');
+
+      // Request the streams
+      setTimeout(() => {
+        if (!state.mapStream) {
+          console.log('Requesting the map stream from peer...');
+          dispatch('requestStreamFromRobot', 'map');
+          // this.requestFeedFromPeer('map');
+        }
+        setTimeout(() => {
+          if (!state.cameraStream) {
+            console.log('Requesting the camera stream from peer...');
+            dispatch('requestStreamFromRobot', 'camera');
+            // this.requestFeedFromPeer('camera');
+          }
+        }, 1000);
+      }, 1000);
+    },
+    closedDataChannelListener({ state, commit, dispatch }, id) {
+      commit('disableDataChannel');
+      if (id === state.robotId || state.robotId) {
+        commit('disconnectedFromRobot');
+        commit('resetRobotId');
+
+        // this.teleopBus.$emit('connection-changed', 'disconnected');
+        dispatch('clearHTMLVideoElements');
+        // this.clearHTMLVideoStream();
+      }
+      commit('disableJoystick');
+      // this.joystickState = 'disable';
+      // this.teleopBus.$emit('on-joystick-state-changed', this.joystickState);
+    },
+    sendJoystickPosition({ state, dispatch }, data) {
+      dispatch('sendData', { id: state.robotId, channel: 'joystick-position', data: JSON.stringify(data) });
+    },
+    sendPatrol({ dispatch }, data) {
+      dispatch('sendData', { id: this.state.robotId, channel: 'patrol-plan', data: JSON.stringify(data) });
+    },
+    requestStreamFromRobot({ state, dispatch }, feed) {
+      dispatch('sendData', { id: state.robotId, channel: 'onDemandStream', data: feed });
+    },
+    sendData({ state }, msg) {
+      if (state.isDataChannelAvailable && state.robotId) {
+        easyrtc.sendDataP2P(msg.id, msg.channel, msg.data);
+      } else {
+        console.warn('No data channel or peer available to send data...');
+      }
+    },
+    handleData({ state }, msg) {
+      if (state.robotId === msg.id) {
+        console.log(`Received data from ${msg.id} on channel ${msg.channel}:`);
+        console.log(msg.data);
+      } else {
+        console.log('Received data from someone else than the peer, ignoring it...');
+      }
+    },
+    setHTMLVideoElements({ state }) {
+      console.log('Setting html elements...');
+      if (state.htmlElement.camera && state.cameraStream) {
+        console.log('Setting camera stream...');
+        easyrtc.setVideoObjectSrc(state.htmlElement.camera, state.cameraStream);
+      }
+      if (state.htmlElement.map && state.mapStream) {
+        console.log('Setting map stream...');
+        easyrtc.setVideoObjectSrc(state.htmlElement.map, state.mapStream);
+      }
+      if (state.htmlElement.patrol && state.mapStream) {
+        console.log('Setting patrol stream...');
+        easyrtc.setVideoObjectSrc(state.htmlElement.patrol, state.mapStream);
+      }
+    },
+    clearHTMLVideoElements({ state }) {
+      if (state.cameraStreamElement) {
+        easyrtc.setVideoObjectSrc(state.cameraStreamElement, '');
+      }
+      if (state.mapStreamElement) {
+        easyrtc.setVideoObjectSrc(state.mapStreamElement, '');
+      }
+      if (state.patrolMapStreamElement) {
+        easyrtc.setVideoObjectSrc(state.patrolMapStreamElement, '');
+      }
+    },
+    getPatrolList() {
     },
   },
 });
