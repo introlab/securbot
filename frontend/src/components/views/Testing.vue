@@ -15,7 +15,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import WaypointOverlay from '../widget/Videobox&WaypointOverlay';
+import WaypointOverlay from '../widgets/Videobox&WaypointOverlay';
 
 /* global easyrtc */
 

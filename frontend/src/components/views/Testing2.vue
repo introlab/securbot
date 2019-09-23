@@ -33,8 +33,8 @@
 
 import Vue from 'vue';
 
-import VideoBox from '../widget/VideoBox';
-import Connection from '../widget/Connection';
+import VideoBox from '../widgets/VideoBox';
+import Connection from '../widgets/Connection';
 
 export default {
   name: 'testing2',

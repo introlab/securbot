@@ -18,39 +18,10 @@
 
 <script>
 /**
- * Vue SFC used as a widget that draws an joystick that the user
- * can use to send teleoperation control to the robot that it is
- * connected to. Takes 2 absolute values in props to set the max
- * value of a command and a bus to send the event (new joystick value).
- * This widget has the following dependencies : Bootstrap-Vue for styling.
- *
- * @module widget/Joystick
- * @vue-prop {Boolean} enable - Enable the sending of joystick data.
- * @vue-prop {Number} absoluteMaxX - Max x value of the joystick coordinate.
- * @vue-prop {Number} absoluteMaxY - Max y value of the joystick coordinate.
- * @vue-prop {Vue} bus - Vue bus use to emit event to other components.
- * @vue-event {Object} joystick-position-change - Emit joystick data to be sent to robot.
- * @vue-data {Number} x - Horizontal coordinate of the joystick.
- * @vue-data {Number} y - Vertical coordinate of the joystick.
- * @vue-data {Number} loopIntervalId - Refresh canvas loop (timer).
- * @vue-data {Number} positionChangeIntervalId - Joystick updating loop (timer).
- * @vue-data {HTMLCanvasElement} canvas - HTML element of the canvas.
- * @vue-data {HTMLCanvasElement} context - Canvas 2d context.
- * @vue-data {Number} radiusRatio - Size of the joystick in ratio of available space.
- * @vue-data {HTMLElement} joystickElement - HTML element of the joystick.
- * @vue-data {Boolean} isMouseDown - Keep a manual trace of click in canvas for drawing.
- * @vue-data {Number} canvasRefreshRate - Number of time to update canvas for 1 sec.
- * @vue-data {Number} operatorCommandInterval - Time in ms between the joystick postion update.
- */
-
-/**
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>,
  * @author Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>,
  * @version 1.0.0
  */
-
-import Vue from 'vue';
-
 export default {
   name: 'joystick',
   props: {
@@ -64,10 +35,6 @@ export default {
     },
     absoluteMaxY: {
       type: Number,
-      required: true,
-    },
-    bus: {
-      type: Vue,
       required: true,
     },
   },
@@ -110,7 +77,9 @@ export default {
       }, 1000 / this.canvasRefreshRate);
       // Timer sending joystick position
       this.positionChangeIntervalId = setInterval(() => {
-        this.emitJoystickPosition();
+        if (this.enable) {
+          this.emitJoystickPosition();
+        }
       }, this.operatorCommandInterval);
     },
     /**
@@ -342,7 +311,7 @@ export default {
         / (this.getCanvasRadius() - this.getJoystickRadius()),
       };
       if (this.enable) {
-        this.bus.$emit('joystick-position-change', event);
+        this.$store.dispatch('sendJoystickPosition', event);
       }
     },
   },

@@ -61,7 +61,6 @@
                 <connection
                   :self-id="myId"
                   :robot-list="robotList"
-                  :bus="teleopBus"
                 />
               </div>
             </b-nav-item-dropdown>
@@ -73,7 +72,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import Connection from './Connection';
 
 export default {
@@ -88,10 +86,6 @@ export default {
     },
     robotList: {
       type: Array,
-      required: true,
-    },
-    teleopBus: {
-      type: Vue,
       required: true,
     },
   },

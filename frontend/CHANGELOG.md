@@ -17,6 +17,31 @@
     - Removed disconnectFromRobot method, replaced it by a dispatch
     - Replaced the bus calls by commits and dispatched
     - Removed connectToRobot method, replaced it by a dispatch
+  - Store:
+    - Integrated Easyrtc api inside the store, created the required actions and mutations for it to work.
+    - Added a darkMode state to be used/implemented in the future
+  - Teleop:
+    - Removed easyrtc events
+    - Integrated Vuex
+    - Changed components calls in html
+  - Events:
+    - Removed the Vue event
+  - Patrol:
+    - Removed easyrtc events
+    - Integrated Vuex
+    - Changed components calls in html
+  - Joystick:
+    - Now dispatches to the store its data to be sent to the robot
+  - PatrolMap:
+    - Removed easyrtc events
+    - Integrated Vuex
+  - SaveLoad:
+    - Removed easyrtc events
+    - Integrated Vuex
+  - WaypointTable:
+    - Removed easyrtc events
+    - Integrated Vuex
+- Rename the **pages** folder to **views**
 
 ## SEC-510
 > Version: 0.1.1

@@ -4,7 +4,7 @@
     <!-- Video Box -->
     <video-box
       :show="true"
-      :video-id="'patrol-map-stream'"
+      :video-id="patrolId"
       class="w-100 h-100 position-absolute"
       style="top:0;left:0;"
     />
@@ -23,31 +23,6 @@
 
 <script>
 /**
- * Vue SFC used as a widget to set waypoint on a map. This component
- * uses the VideoBox component to show the robot map (that is sent from
- * the robot in a video feed format) and put a canvas on top of it to
- * detect user clicks. When a click is detected the x and y position
- * is used to set a waypoint in the array given in props (push). The
- * canvas then read the array and draw waypoint on the map where the
- * user clicked previously.
- * This component have the following dependency :
- * VideoBox.vue Component and Bootstrap-Vue for styling.
- *
- *
- * @module widget/PatrolMap
- * @vue-prop {Object[]} waypointList - Lists the current waypoints
- * @vue-prop {String} patrolMapId - Identifies map source with exact name reference
- * @vue-data {Object} videoElement - Contains reference to video-id
- * @vue-data {Object} canvas - Contains reference to responsive overlay of map
- * @vue-data {Object} context - Sets canvas context
- * @vue-data {Number} CanvasRefreshRate - Sets the constant refresh rate of the displayed canvas
- * @vue-data {Object} loopIntervalId - Contains refresh rate and display parameter of the map
- * @vue-data {Boolean} enable - Enables or disables the display of the map and canvas
- */
-
-/* Disabled comment documentation
- * Might use those eventually by forking jsdoc-vue-js so it can manage the author
- * and version tag correctly
  * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>
  * @version 1.0.0
@@ -61,23 +36,11 @@ export default {
   components: {
     VideoBox,
   },
-  // props: {
-  //   waypointList: {
-  //     type: Array,
-  //     default: () => [],
-  //     required: true,
-  //   },
-  //   patrolMapId: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
   data() {
     return {
-      videoElement: null,
       canvas: null,
       context: null,
-      CanvasRefreshRate: 60.0, // Hz
+      CanvasRefreshRate: 30.0, // Hz
       isMouseDown: false,
       loopIntervalId: null,
       enable: true,
@@ -86,7 +49,8 @@ export default {
   computed: mapState({
     mapStream: state => state.mapStream,
     waypointList: state => state.patrol.waypointList,
-    patrolId: state => state.patrol.patrolId,
+    patrolId: state => state.htmlElement.patrolId,
+    videoElement: state => state.htmlElement.patrol,
   }),
   /**
    * Lifecycle Hook - mounted.
@@ -95,7 +59,6 @@ export default {
    * @listens mount(el)
    */
   mounted() {
-    this.videoElement = document.getElementById('patrol-map-stream');
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();
@@ -116,8 +79,10 @@ export default {
      */
     init() {
       this.loopIntervalId = setInterval(() => {
-        this.adjustCanvasToVideo();
-        this.drawCanvas();
+        if (this.videoElement) {
+          this.adjustCanvasToVideo();
+          this.drawCanvas();
+        }
       }, 1000 / this.CanvasRefreshRate);
     },
 

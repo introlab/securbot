@@ -79,12 +79,12 @@
  * @version 1.0.0
  */
 import { mapState } from 'vuex';
-import PatrolMap from '../widgets/PatrolMapNext';
-import WaypointTable from '../widgets/WaypointTableNext';
-import SaveLoad from '../widgets/SaveLoadNext';
+import PatrolMap from '../widgets/PatrolMap';
+import WaypointTable from '../widgets/WaypointTable';
+import SaveLoad from '../widgets/SaveLoad';
 
 export default {
-  name: 'patrol-page',
+  name: 'patrol',
   components: {
     PatrolMap,
     WaypointTable,

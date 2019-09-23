@@ -6,7 +6,7 @@
       <!-- Table -->
       <table
         id="waypoint-table"
-        class="table tabl e-borderless table-striped border-left border-right"
+        class="table table-borderless table-striped border-left border-right"
         style="text-align: center"
       >
         <!-- Header -->
@@ -97,12 +97,6 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'waypoint-table',
-  // props: {
-  //   waypointList: {
-  //     type: Object,
-  //     required: true,
-  //   },
-  // },
   computed: mapState({
     waypointList: state => state.patrol.waypointList,
   }),

@@ -4,7 +4,7 @@
     id="teleop-layout"
     :fluid="true"
     :container-fluid="true"
-    class="h-100"
+    class="h-100 bg-transparent"
   >
     <!-- Row -->
     <b-row class="h-100">
@@ -19,8 +19,8 @@
         <div class="h-100 w-100 m-auto position-relative">
           <!-- Camera -->
           <video-box
-            :show="showCamera"
-            video-id="camera-stream"
+            :show="showStream"
+            :video-id="cameraId"
           />
         </div>
       </b-col>
@@ -37,8 +37,8 @@
           <div class="h-100 w-100 m-auto position-relative">
             <!-- Map -->
             <video-box
-              :show="showMap"
-              video-id="map-stream"
+              :show="showStream"
+              :video-id="mapId"
             />
           </div>
         </b-row>
@@ -48,12 +48,12 @@
           style="top:55%;right:25px;z-index:10;"
         >
           <toggle-button
-            :value="enableJoystick"
+            :value="joystickEnabled"
             :color="switchColor"
             :sync="true"
             :labels="true"
-            :disabled="disableJoystick"
-            @change="enableJoystick = $event.value"
+            :disabled="!connectedToRobot"
+            @change="changeJoystickState"
           />
         </div>
         <!-- Joystick Row -->
@@ -74,10 +74,9 @@
             >
               <!-- Joystick -->
               <joystick
-                :enable="enableJoystick"
+                :enable="joystickEnabled"
                 :absolute-max-x="1"
                 :absolute-max-y="1"
-                :bus="bus"
               />
             </div>
           </div>
@@ -90,58 +89,23 @@
 
 <script>
 /**
- * Component used as a page for teleoperation of the robot. It manages the layout of
- * its components and communicate with its parent component through a bus given in props. The
- * components used in this page are 2 VideoBox and 1 Joystick. This component have the following
- * dependency : VideoBox.vue Component, Joystick.vue Component and Bootstrap-Vue for styling.
- *
- *
- * @module Teleop
- * @vue-prop {Vue} bus - Vue bus use to emit event to other components.
- * @vue-prop {Vue} Router - Vue bus use to routing emit event to parent.
- * @vue-event {} destroyed - Event indicating the component has been destroyed.
- * @vue-event {} mounted - Event indicating the component has been mounted.
- * @vue-data {boolean} showCamera - Enable or disable the camera display.
- * @vue-data {boolean} showMap - Enable or disable the map display.
- * @vue-data {boolean} enableJoystick - Enable or disable the joystick ability to send data.
- */
-
-/** Disabled comment documentation
- * Might use those eventually by forking jsdoc-vue-js so it can manage the author
- * and version tag correctly
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>
  * @version 1.0.0
  */
-
 import { ToggleButton } from 'vue-js-toggle-button';
-import Vue from 'vue';
-
-import VideoBox from '../widget/VideoBox';
-import Joystick from '../widget/Joystick';
+import { mapState } from 'vuex';
+import VideoBox from '../widgets/VideoBox';
+import Joystick from '../widgets/Joystick';
 
 export default {
-  name: 'teleop-page',
+  name: 'teleop',
   components: {
     VideoBox,
     Joystick,
     ToggleButton,
   },
-  props: {
-    bus: {
-      type: Vue,
-      required: true,
-    },
-    router: {
-      type: Vue,
-      required: true,
-    },
-  },
   data() {
     return {
-      showCamera: true,
-      showMap: true,
-      enableJoystick: false,
-      disableJoystick: true,
       joystickStyle: {
         width: '100%',
         'padding-top': '100%',
@@ -154,6 +118,13 @@ export default {
       },
     };
   },
+  computed: mapState({
+    cameraId: state => state.htmlElement.cameraId,
+    mapId: state => state.htmlElement.mapId,
+    showStream: state => state.showStreams,
+    joystickEnabled: state => state.joystickEnabled,
+    connectedToRobot: state => state.connectionState.robot === 'connected',
+  }),
   /**
    * Lifecycle Hook - mounted
    *
@@ -162,8 +133,8 @@ export default {
    */
   mounted() {
     console.log('Teleop have been mounted');
-    this.bus.$on('on-joystick-state-changed', this.changeJoystickState);
-    this.router.$emit('mounted');
+
+    this.$store.dispatch('updateHTMLVideoElements');
 
     this.$nextTick(() => {
       window.addEventListener('resize', this.setJoystickStyle);
@@ -179,8 +150,6 @@ export default {
    */
   destroyed() {
     console.log('Teleop have been destroyed');
-    this.router.$emit('destroyed');
-
     window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
@@ -190,12 +159,11 @@ export default {
      * @param {boolean} state - Request of the joystick state
      * @listens on-joystick-state-changed
      */
-    changeJoystickState(state) { // Change to computed
-      if (state === 'enable') {
-        this.disableJoystick = false;
+    changeJoystickState(event) { // Change to computed
+      if (event.value) {
+        this.$store.commit('enableJoystick');
       } else {
-        this.enableJoystick = false;
-        this.disableJoystick = true;
+        this.$store.commit('disableJoystick');
       }
     },
     setJoystickStyle() {
@@ -208,7 +176,6 @@ export default {
           width: ratio,
           'padding-top': ratio,
           height: 0,
-
         };
       }
     },
