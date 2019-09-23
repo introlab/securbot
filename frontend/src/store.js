@@ -8,32 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   // State = var/let calls
   state: {
-    // /////////////////////////////////// //
-    test: {
-      OwO: {
-        apiField: {
-          type: {
-            fieldValue: 'robot-OwO',
-          },
-        },
-      },
-      UwU: {
-        apiField: {
-          type: {
-            fieldValue: 'robot-UwU',
-          },
-        },
-      },
-    },
-    // //////////////////////////////////// //
-    theme: {
-      white: {
-
-      },
-      dark: {
-
-      },
-    },
+    darkMode: true,
     isConnected: false, // Connection:isConnected
     connectionState: {
       server: 'disconnected',
@@ -67,7 +42,6 @@ export default new Vuex.Store({
     },
     patrol: {
       enable: false, // PatrolMap:enable
-      patrolId: '', // PatrolMap:patrolMapId
       waypointList: [], // Patrol:waypointList | PatrolMap:waypointList
       // SaveLoad:patrolList | Patrol:patrolList
       patrolList: JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]'),
@@ -383,6 +357,11 @@ export default new Vuex.Store({
 
       console.log('You are connected...');
     },
+    disconnectFromServer({ commit }) {
+      commit('resetMyId');
+      easyrtc.hangupAll();
+      easyrtc.disconnect();
+    },
     handleRobotsInRoomNext({ commit }, occupants) {
       console.log(occupants);
       if (Object.keys(occupants).length) {
@@ -485,7 +464,6 @@ export default new Vuex.Store({
       console.warn(`Data channel open with ${id}`);
       // this.isDataChannelAvailable = true;
       commit('enableDataChannel');
-      commit('enableJoystick');
 
       // Request the streams
       setTimeout(() => {
@@ -556,18 +534,33 @@ export default new Vuex.Store({
         easyrtc.setVideoObjectSrc(state.htmlElement.patrol, state.mapStream);
       }
     },
-    clearHTMLVideoElements({ state }) {
+    getHTMLVideoElements({ state, commit }) {
+      commit('setCameraHTMLElement', document.getElementById(state.htmlElement.cameraId));
+      commit('setMapHTMLElement', document.getElementById(state.htmlElement.mapId));
+      commit('setPatrolHTMLElement', document.getElementById(state.htmlElement.patrolId));
+    },
+    updateHTMLVideoElements({ dispatch }) {
+      dispatch('clearHTMLVideoElements');
+      dispatch('getHTMLVideoElements');
+      dispatch('setHTMLVideoElements');
+    },
+    clearHTMLVideoElements({ state, commit }) {
       if (state.cameraStreamElement) {
         easyrtc.setVideoObjectSrc(state.cameraStreamElement, '');
+        commit('clearCameraHTMLElement');
       }
       if (state.mapStreamElement) {
         easyrtc.setVideoObjectSrc(state.mapStreamElement, '');
+        commit('clearMapHTMLElement');
       }
       if (state.patrolMapStreamElement) {
         easyrtc.setVideoObjectSrc(state.patrolMapStreamElement, '');
+        commit('clearPatrolHTMLElement');
       }
     },
-    getPatrolList() {
+    getPatrols() {
+    },
+    savePatrols() {
     },
   },
 });

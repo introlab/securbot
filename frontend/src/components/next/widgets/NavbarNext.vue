@@ -17,7 +17,7 @@
             style="width:240px"
           >
             <img
-              src="../../assets/SecurBotLogo.png"
+              src="../../../assets/SecurBotLogo.png"
               alt="SecurBot"
               class="logo mh-100 mw-100 align-middle"
             >

@@ -1,38 +1,26 @@
 <template>
-  <div class="h-100 w-100">
+  <div
+    id="operator-layout"
+    class="vh-100"
+  >
     <navbar
       :my-id="myId"
       :robot-list="robotList"
     />
-    <div
-      style="height:480px;width:720px;"
-    >
-      <video-box
-        :video-id="cameraId"
-        :show="true"
-      />
-    </div>
-    <div
-      style="height:480px;width:720px;"
-    >
-      <video-box
-        :video-id="mapId"
-        :show="true"
-      />
+    <div style="height:calc(100% - 64px)">
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Navbar from './NavbarNext';
-import VideoBox from './VideoBox';
+import Navbar from './widgets/NavbarNext';
 
 export default {
   name: 'impl',
   components: {
     Navbar,
-    VideoBox,
   },
   computed: mapState({
     myId: state => state.myId,
@@ -42,13 +30,30 @@ export default {
     mapId: state => state.htmlElement.mapId,
   }),
   mounted() {
-    this.$store.commit('setCameraHTMLElement', document.getElementById(this.cameraId));
-    this.$store.commit('setMapHTMLElement', document.getElementById(this.mapId));
     this.$store.dispatch('connectToServer');
   },
 };
 </script>
 
 <style scoped>
-
+/* Changes to the bootstrap CSS */
+.jumbotron{
+  margin-bottom: 0;
+}
+.container-fluid{
+  height: 100%
+}
+/*Custom CSS element (SecurBot)*/
+.shadow-sb{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);
+}
+.bg-black-sb{
+  background-color: black;
+}
+.bg-green-sb{
+  background-color:#00A759
+}
+.b-collapse-sb{
+  border-collapse: collapse;
+}
 </style>

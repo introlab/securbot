@@ -15,6 +15,9 @@ import Events from '@/components/pages/Events';
 import Testing from '@/components/pages/Testing';
 import Testing2 from '@/components/pages/Testing2';
 import Next from '@/components/next/LayoutNext';
+import TeleopNext from '@/components/next/views/TeleopNext';
+import PatrolNext from '@/components/next/views/PatrolNext';
+import EventsNext from '@/components/next/views/EventsNext';
 
 Vue.use(Router);
 
@@ -83,6 +86,29 @@ export default new Router({
     {
       path: '/next',
       component: Next,
+      redirect: {
+        name: 'SecurBot Teleoperation Next',
+      },
+      children: [
+        {
+          path: 'teleop',
+          name: 'SecurBot Teleoperation Next',
+          component: TeleopNext,
+          props: false,
+        },
+        {
+          path: 'patrol',
+          name: 'SecurBot Patrol Planner Next',
+          component: PatrolNext,
+          props: false,
+        },
+        {
+          path: 'logs',
+          name: 'SecurBot Event Logging Next',
+          component: EventsNext,
+          props: false,
+        },
+      ],
     },
   ],
 });
