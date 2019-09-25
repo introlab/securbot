@@ -123,14 +123,8 @@ export default {
     mapId: state => state.htmlElement.mapId,
     showStream: state => state.showStreams,
     joystickEnabled: state => state.joystickEnabled,
-    connectedToRobot: state => state.connectionState.robot === 'connected',
+    connectedToRobot: state => state.client.connectionState.robot === 'connected',
   }),
-  /**
-   * Lifecycle Hook - mounted
-   *
-   * @method
-   * @listens mount(el)
-   */
   mounted() {
     console.log('Teleop have been mounted');
 
@@ -142,24 +136,12 @@ export default {
 
     this.setJoystickStyle();
   },
-  /**
-   * Lifecycle Hook - destroyed
-   *
-   * @method
-   * @listens destroyed(el)
-   */
   destroyed() {
     console.log('Teleop have been destroyed');
     window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
-    /**
-     * Callback used to change the state of the joystick
-     * @method
-     * @param {boolean} state - Request of the joystick state
-     * @listens on-joystick-state-changed
-     */
-    changeJoystickState(event) { // Change to computed
+    changeJoystickState(event) {
       if (event.value) {
         this.$store.commit('enableJoystick');
       } else {

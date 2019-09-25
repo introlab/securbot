@@ -94,27 +94,13 @@ export default {
     waypointList: state => state.patrol.waypointList,
     patrolList: state => state.patrol.patrolList,
   }),
-  /**
-   * Lifecycle Hook - mounted
-   *
-   * @method
-   * @listens mount(el)
-   */
   mounted() {
     this.$store.dispatch('getPatrols');
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
-    /**
-     * Callback used to get patrols on DB
-     * @method
-     */
     getSavedPatrols() {
     },
-    /**
-     * Callback used to send the patrol to the connected robot robot
-     * @method
-     */
     sendPatrol() {
       console.log('Sendig patrolPlan:');
       if (this.waypointList.length) {
@@ -124,17 +110,9 @@ export default {
     savePatrols() {
       this.$store.dispatch('savePatrols', this.patrolList);
     },
-    /**
-     * Callback used to clear the patrol
-     * @method
-     */
     clearWaypointList() {
       this.$store.commit('clearWaypointList');
     },
-    /**
-     * Method used to clear the patrol list (delete the list on db)
-     * @method
-     */
     clearPatrolList() {
       this.$store.commit('clearPatrol');
     },

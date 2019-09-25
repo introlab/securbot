@@ -23,14 +23,14 @@ export default {
     Navbar,
   },
   computed: mapState({
-    myId: state => state.myId,
-    robotId: state => state.robotId,
-    robotList: state => state.robotList,
+    myId: state => state.client.myId,
+    robotId: state => state.client.robotId,
+    robotList: state => state.client.robotList,
     cameraId: state => state.htmlElement.cameraId,
     mapId: state => state.htmlElement.mapId,
   }),
   mounted() {
-    this.$store.dispatch('connectToServer');
+    this.$store.dispatch('client/connectToServer');
   },
 };
 </script>

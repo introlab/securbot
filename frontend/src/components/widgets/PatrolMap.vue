@@ -47,7 +47,7 @@ export default {
     };
   },
   computed: mapState({
-    mapStream: state => state.mapStream,
+    mapStream: state => state.client.mapStream,
     waypointList: state => state.patrol.waypointList,
     patrolId: state => state.htmlElement.patrolId,
     videoElement: state => state.htmlElement.patrol,
