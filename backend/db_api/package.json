@@ -1,0 +1,22 @@
+{
+  "name": "db_api",
+  "version": "1.0.0",
+  "description": "Securbot database API",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/introlab/securbot.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/introlab/securbot/issues"
+  },
+  "homepage": "https://github.com/introlab/securbot#readme",
+  "dependencies": {
+    "mongodb": "^3.3.2"
+  }
+}
