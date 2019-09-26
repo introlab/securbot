@@ -52,31 +52,15 @@ export default {
     patrolId: state => state.htmlElement.patrolId,
     videoElement: state => state.htmlElement.patrol,
   }),
-  /**
-   * Lifecycle Hook - mounted.
-   * On component mounted, Get html elements and initialize.
-   * @method
-   * @listens mount(el)
-   */
   mounted() {
     this.canvas = this.$refs.canvas;
     this.context = this.canvas.getContext('2d');
     this.init();
   },
-  /**
-   * Lifecycle Hook - destroyed.
-   * On component destroyed, clear refresh rate of canvas.
-   * @method
-   * @listens destroyed(el)
-   */
   destroyed() {
     clearInterval(this.loopIntervalId);
   },
   methods: {
-    /**
-     * Initialisation of canvas refrash rate and call to canvas resizing functions.
-     * @method
-     */
     init() {
       this.loopIntervalId = setInterval(() => {
         if (this.videoElement) {
@@ -85,36 +69,16 @@ export default {
         }
       }, 1000 / this.CanvasRefreshRate);
     },
-
-    /**
-     * Clears canvas and redraws the waypoints of the current patrol.
-     * @method
-     */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawWaypointList();
     },
-
-    /**
-     * Calls for the drawing the waypoints with corresponding arrows (indicating the yaws) of
-     * each waypoint of the current waypoint list.
-     * @method
-     */
     drawWaypointList() {
       for (const [index, wp] of this.waypointList.entries()) {
         this.drawWaypoint(wp, index);
         this.drawYawArrow(wp);
       }
     },
-
-    /**
-     * Draws a waypoint on the canvas.
-     * @method
-     * @param {Object} wp - Waypoint
-     * @param {Number} wp.x - Waypoint's x coordinate in pixel
-     * @param {Number} wp.y - Waypoint's y coordinate in pixel
-     * @param {Number} index - Index number of sent waypoint
-     */
     drawWaypoint(wp, index) {
       const wpColor = '#00FF00';
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
@@ -129,15 +93,6 @@ export default {
       this.context.fillStyle = '#000000';
       this.context.fillText(index + 1, coord.x + 8, coord.y + 8, 25);
     },
-
-    /**
-     * Draws arrow for the yaw of the waypoint on the canvas.
-     * @method
-     * @param {Object} wp - Waypoint
-     * @param {Number} wp.x - Waypoint's x coordinate in pixel
-     * @param {Number} wp.y - Waypoint's y coordinate in pixel
-     * @param {Number} wp.yaw - Waypoint's yaw angle in radians
-     */
     drawYawArrow(wp) {
       const arrowColor = '#00FF00';
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
@@ -177,13 +132,6 @@ export default {
       this.context.lineTo(arrowTip2.x, arrowTip2.y);
       this.context.stroke();
     },
-
-    /**
-     * Get position/coordinate of mouse event on video.
-     * @method
-     * @param {HTMLElement} - Event given by the click.
-     * @returns {Object} X and Y coordinate in pixels of event (mouse position).
-     */
     getVideoCoordinatesOfEvent(event) {
       const offsetAndScale = this.getVideoOffsetAndScale();
       const rect = this.videoElement.getBoundingClientRect();
@@ -194,21 +142,10 @@ export default {
         y,
       };
     },
-
-    /**
-     * Sets canvas size (height and width) to match the size of the video.
-     * @method
-     */
     adjustCanvasToVideo() {
       this.canvas.width = this.videoElement.offsetWidth;
       this.canvas.height = this.videoElement.offsetHeight;
     },
-
-    /**
-     * Compute the offset and rescaling parameters of resized video from original content.
-     * @method
-     * @returns {Object} Offset in X, offset in Y and scaling ratios.
-     */
     getVideoOffsetAndScale() {
       const videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
       let offsetX = 0;
@@ -227,14 +164,6 @@ export default {
         scale,
       };
     },
-
-    /**
-     * Corrects the waypoint coordinate (x,y) from the offsets and scale parameters of video.
-     * @method
-     * @param {Number} x - Horizontal coordinate on canvas.
-     * @param {Number} y - Vertical coordinate on canvas.
-     * @returns {Object} - X and Y coordinate in pixels of event (mouse position).
-     */
     getCanvasCoordinatesFromVideo(x, y) {
       const offsetAndScale = this.getVideoOffsetAndScale();
 
@@ -243,12 +172,6 @@ export default {
         y: (y * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
-
-    /**
-     * CallBack of mouse down event. Verify validity and initialise waypoint creation.
-     * @method
-     * @param {HTMLElement} event - Event element given by the click.
-     */
     onMouseDown(event) {
       if (event.button === 0 && this.mapStream) {
         console.log('onMouseDown');
@@ -261,12 +184,6 @@ export default {
         }
       }
     },
-
-    /**
-     * Callback of mouse move event. Updates the yaw with mouse position.
-     * @method
-     * @param {HTMLElement} event - Event given by mouse move.
-     */
     onMouseMove(event) {
       if (this.isMouseDown) {
         console.log('MouseMoved');
@@ -276,12 +193,6 @@ export default {
         this.updateWaypoint(wp);
       }
     },
-
-    /**
-     * Callback of mouse up event, finalize the waypoint creation process.
-     * @method
-     * @param {HTMLElement} event - Event element given by the click.
-     */
     onMouseUp(event) {
       if (this.isMouseDown) {
         // Write waypoint to list of waypoints
@@ -296,12 +207,6 @@ export default {
         this.isMouseDown = false;
       }
     },
-
-    /**
-     * Callback of mouse out event, terminate the waypoint creation.
-     * @method
-     * @param {HTMLElement} event - Event element given by the click.
-     */
     onMouseOut() {
       if (this.isMouseDown) {
         console.log('MouseOut');
@@ -309,21 +214,9 @@ export default {
         this.isMouseDown = false;
       }
     },
-
-    /**
-     * Adds a waypoint to the list of current waypoints.
-     * @method
-     * @param {Object} wp - Waypoint.
-     */
     addWaypointCoord(wp) {
       this.$store.commit('addWaypoint', { wp });
     },
-
-    /**
-     * Updates last waypoint of the waypoint list.
-     * @method
-     * @param {Object} wp - Waypoint.
-     */
     updateWaypoint(wp) {
       const update = {
         wp,
@@ -331,15 +224,6 @@ export default {
       };
       this.$store.commit('updateWaypoint', update);
     },
-
-    /**
-     * Check to see if element is in bound.
-     * @method
-     * @param {Object} coord - Coordinates of an element.
-     * @param {Number} coord.x - X coordinate of element.
-     * @param {Number} coord.y - Y coordinate of element.
-     * @returns {boolean} true if coordinates of the element are in bounds of the video.
-     */
     isClickValid(coord) {
       return coord.x >= 0
         && coord.x < this.videoElement.videoWidth

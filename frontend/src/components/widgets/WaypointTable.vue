@@ -72,22 +72,6 @@
 
 <script>
 /**
- * Vue SFC used as a widget to show waypoints in a array given as props.
- * The waypoints are shown in a html table generated with vue v-for.
- * The table contains a colomn of buttons use to delete the row they
- * are in and, at the same time, delete the corresponding waypoint in
- * the array.
- * This component have the following dependency :
- * Bootstrap-Vue for styling.
- *
- *
- * @module widget/WaypointTable
- * @vue-prop {Object[]} waypointList - Lists the current waypoints
- */
-
-/* Disabled comment documentation
- * Might use those eventually by forking jsdoc-vue-js so it can manage the author
- * and version tag correctly
  * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>
  * @version 1.0.0
@@ -101,11 +85,6 @@ export default {
     waypointList: state => state.patrol.waypointList,
   }),
   methods: {
-    /**
-     * Used to clear the patrol or empty the waypoint list.
-     * @method
-     * @param {Number} index - Index of the waypoint to remove from list.
-     */
     removeWaypointFromList(index) {
       this.$store.commit('removeWaypoint', index);
     },

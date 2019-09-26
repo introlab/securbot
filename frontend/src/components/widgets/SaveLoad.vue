@@ -134,18 +134,9 @@ export default {
     patrolList: state => state.patrol.patrolList,
   }),
   methods: {
-    /**
-     * Remove the patrol from the list, eventually this will remove on DB.
-     * @method
-     * @param {Number} index - Index of the element to remove.
-     */
     removePatrolFromList(index) {
       this.$store.commit('removePatrol', index);
     },
-    /**
-     * Add a patrol to the list, eventually will add on DB.
-     * @method
-     */
     addPatrolToPatrolList() {
       const patrol = [];
       if (this.newPatrolName === '') {
@@ -159,11 +150,6 @@ export default {
         console.log(this.patrolList);
       }
     },
-    /**
-     * Load the selected patrol from the list.
-     * @method
-     * @param {Number} index - Index of the element to load.
-     */
     selectPatrolFromList(index) {
       if (this.waypointList.length) {
         console.log('overwrite plan');

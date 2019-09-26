@@ -78,7 +78,7 @@ export default {
     },
   },
   computed: mapState('client', {
-    isConnected: state => state.isConnected,
+    isConnected: state => state.connectionState.server,
     robotId: state => state.robotId,
     connectionState: state => state.connectionState.robot,
   }),

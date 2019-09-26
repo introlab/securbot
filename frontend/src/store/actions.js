@@ -6,7 +6,7 @@ export default {
     dispatch('client/sendData', { id: state.client.robotId, channel: 'patrol-plan', data: JSON.stringify(data) });
   },
   setHTMLVideoElements({ state, dispatch }) {
-    dispatch('client/setStream', state.htmlElement);
+    dispatch('client/setStreams', state.htmlElement);
   },
   getHTMLVideoElements({ state, commit }) {
     commit('setCameraHTMLElement', document.getElementById(state.htmlElement.cameraId));
@@ -19,7 +19,7 @@ export default {
     dispatch('setHTMLVideoElements');
   },
   clearHTMLVideoElements({ state, commit, dispatch }) {
-    dispatch('client/resetStream', state.htmlElement);
+    dispatch('client/resetStreams', state.htmlElement);
     commit('clearCameraHTMLElement');
     commit('clearMapHTMLElement');
     commit('clearPatrolHTMLElement');

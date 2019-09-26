@@ -64,10 +64,6 @@ export default {
     clearInterval(this.positionChangeIntervalId);
   },
   methods: {
-    /**
-     * Initilisation of component and timer.
-     * @method
-     */
     init() {
       // Timer refreshing the canvas
       this.loopIntervalId = setInterval(() => {
@@ -82,32 +78,18 @@ export default {
         }
       }, this.operatorCommandInterval);
     },
-    /**
-     * Find the center of canvas
-     * @method
-     */
     findCenterCanvas() {
       if (this.x === null || this.y === null || !this.isMouseDown) {
         this.x = this.getCenterX();
         this.y = this.getCenterY();
       }
     },
-    /**
-     * Callback for the mouse down event.
-     * @method
-     * @param {HTMLElement} event - The html event given by the click.
-     */
     onMouseDown(event) {
       if (event.button === 0) {
         this.updateJoystickPositionFromMouseEvent(event);
         this.isMouseDown = true;
       }
     },
-    /**
-     * Callback for the mouse up event.
-     * @method
-     * @param {HTMLElement} event - The html event given by the click.
-     */
     onMouseUp(event) {
       if (event.button === 0) {
         this.x = this.getCenterX();
@@ -118,21 +100,11 @@ export default {
         }
       }
     },
-    /**
-     * Callback for the mouse move event.
-     * @method
-     * @param {HTMLElement} event - The html event given by the click.
-     */
     onMouseMove(event) {
       if (this.isMouseDown) {
         this.updateJoystickPositionFromMouseEvent(event);
       }
     },
-    /**
-     * Callback for the mouse out event.
-     * @method
-     * @param {HTMLElement} event - The html event given by the click.
-     */
     onMouseOut() {
       this.x = this.getCenterX();
       this.y = this.getCenterY();
@@ -141,11 +113,6 @@ export default {
         this.emitJoystickPosition();
       }
     },
-    /**
-     * Update the joystick position with the given event.
-     * @method
-     * @param {HTMLElement} event - The html event given by the click.
-     */
     updateJoystickPositionFromMouseEvent(event) {
       const rect = this.canvas.getBoundingClientRect();
       this.x = event.clientX - rect.left;
@@ -164,19 +131,11 @@ export default {
         this.y = (deltaY * ratio) + centerY;
       }
     },
-    /**
-     * Calls the different methods to draw the canvas.
-     * @method
-     */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawBackground();
       this.drawJoystick();
     },
-    /**
-     * Draws the joystick movable circle.
-     * @method
-     */
     drawJoystick() {
       if (this.isMouseDown) {
         this.context.fillStyle = 'rgba(0, 0, 0, 0.75)';
@@ -188,10 +147,6 @@ export default {
       this.context.arc(this.x, this.y, this.getJoystickRadius(), 0, 2 * Math.PI);
       this.context.fill();
     },
-    /**
-     * Draws the joystick background.
-     * @method
-     */
     drawBackground() {
       const centerX = this.getCenterX();
       const centerY = this.getCenterY();
@@ -259,50 +214,22 @@ export default {
       this.context.lineTo(rightTriangleStartX - pointOffset, centerY + halfPointOffset);
       this.context.fill();
     },
-    /**
-     * Set the size of the canvas.
-     * @method
-     */
     setCanvasSize() {
       this.canvas.width = this.joystickElement.clientWidth;
       this.canvas.height = this.joystickElement.clientHeight;
     },
-    /**
-     * Get the central horizontal value of canvas.
-     * @method
-     * @returns {Number} Canvas width divided by 2.
-     */
     getCenterX() {
       return this.canvas.width / 2;
     },
-    /**
-     * Get the central vertical value of canvas.
-     * @method
-     * @returns {Number} Canvas height divided by 2.
-     */
     getCenterY() {
       return this.canvas.height / 2;
     },
-    /**
-     * Get the center of the joystick's canvas.
-     * @method
-     * @returns {Number} Radius times the lowest value between height or width divided by 2.
-     */
     getCanvasRadius() {
       return (this.radiusRatio * Math.min(this.canvas.width, this.canvas.height)) / 2;
     },
-    /**
-     * Get the joystick radius.
-     * @method
-     * @returns {Number} Canvas radius divided by 6.
-     */
     getJoystickRadius() {
       return this.getCanvasRadius() / 6;
     },
-    /**
-     * Emit the joystick position to be sent to robot.
-     * @method
-     */
     emitJoystickPosition() {
       const event = {
         x: ((this.x - this.getCenterX()) * this.absoluteMaxX)

@@ -96,10 +96,6 @@ export default {
 .navbar{
   min-height:64px;
 }
-/* #sec-nav a {
-  font-weight: bold;
-  color: white;
-} */
 #sec-nav a.router-link-exact-active {
   color: white;
 }

@@ -1,7 +1,12 @@
 /* global easyrtc */
 export default {
-  connectToServer({ dispatch }) {
+  testLogger(_, data) {
+    console.log('Test Logger:');
+    console.log(data);
+  },
+  connectToServer({ commit, dispatch }) {
     console.log('Initializing...');
+    commit('setServerConnState', 'connecting');
     easyrtc.setAutoInitUserMedia(false);
     easyrtc.enableVideo(false);
     easyrtc.enableAudio(false);
@@ -10,8 +15,9 @@ export default {
     easyrtc.enableDataChannels(true);
 
     easyrtc.setDataChannelOpenListener(id => dispatch('openedDataChannelListener', id));
-    easyrtc.setDataChannelCloseListener(id => dispatch('closedDataChannelListener', id));
+    easyrtc.setDataChannelCloseListener(() => commit('disableDataChannel'));
     easyrtc.setPeerListener((id, channel, data) => dispatch('handleData', { id, channel, data }));
+    easyrtc.setPeerClosedListener((id, other) => dispatch('handleRobotDisconnection', { id, other }));
 
     easyrtc.setRoomOccupantListener((roomName, occupants) => dispatch('handleRobotsInRoomNext', occupants));
     easyrtc.setStreamAcceptor((id, stream, streamName) => dispatch('acceptRobotVideo', { id, stream, streamName }));
@@ -31,6 +37,7 @@ export default {
     console.log('You are connected...');
   },
   disconnectFromServer({ commit }) {
+    commit('setServerConnState', 'disconnected');
     commit('resetMyId');
     easyrtc.hangupAll();
     easyrtc.disconnect();
@@ -46,19 +53,6 @@ export default {
           };
           commit('addRobotToList', robot);
         }
-      }
-    }
-  },
-  handleRobotsInRoom({ commit }, occupants) {
-    commit('clearRobotList');
-    console.log(occupants);
-    for (const occupant in occupants) {
-      if ('type' in occupants[occupant].apiField && occupants[occupant].apiField.type.fieldValue.includes('robot')) {
-        const robot = {
-          robotName: occupants[occupant].apiField.type.fieldValue,
-          robotId: occupant,
-        };
-        commit('addRobotToList', robot);
       }
     }
   },
@@ -80,6 +74,13 @@ export default {
     easyrtc.hangupAll();
     commit('disconnectedFromRobot');
     commit('resetRobotId');
+  },
+  handleRobotDisconnection({ state, commit, dispatch }, id) {
+    if (id === state.robotId) {
+      commit('disconnectedFromRobot');
+      commit('resetRobotId');
+      dispatch('updateHTMLVideoElements', null, { root: true });
+    }
   },
   callSuccessful({ commit }, robot) {
     console.warn(`Call to ${robot.id} was successful, here's the media: ${robot.mediaType}`);
@@ -104,10 +105,12 @@ export default {
   },
   loginSuccess({ commit }, id) {
     console.warn(`I am ${easyrtc.idToName(id)}`);
-    commit('connected');
+    commit('setServerConnState', 'connected');
+    // commit('connected');
     commit('setMyId', id);
   },
-  loginFailure(_, error) {
+  loginFailure({ commit }, error) {
+    commit('setServerConnState', 'failed');
     console.warn(`${error.code}:${error.message}`);
   },
   acceptRobotVideo({ commit, dispatch }, robot) {
@@ -148,14 +151,6 @@ export default {
       }, 1000);
     }, 1000);
   },
-  closedDataChannelListener({ state, commit, dispatch }, id) {
-    commit('disableDataChannel');
-    if (id === state.robotId || state.robotId) {
-      commit('disconnectedFromRobot');
-      commit('resetRobotId');
-      dispatch('updateHTMLVideoElements', null, { root: true });
-    }
-  },
   requestStreamFromRobot({ state, dispatch }, feed) {
     dispatch('sendData', { id: state.robotId, channel: 'onDemandStream', data: feed });
   },
@@ -174,7 +169,7 @@ export default {
       console.log('Received data from someone else than the peer, ignoring it...');
     }
   },
-  setStream({ state }, htmlElement) {
+  setStreams({ state }, htmlElement) {
     console.log('Setting html elements...');
     if (htmlElement.camera && state.cameraStream) {
       console.log('Setting camera stream...');
@@ -189,7 +184,7 @@ export default {
       easyrtc.setVideoObjectSrc(htmlElement.patrol, state.mapStream);
     }
   },
-  resetStream(_, htmlElement) {
+  resetStreams(_, htmlElement) {
     if (htmlElement.camera) {
       easyrtc.setVideoObjectSrc(htmlElement.camera, '');
     }
