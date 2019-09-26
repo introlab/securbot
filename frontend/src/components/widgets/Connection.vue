@@ -58,20 +58,33 @@
 </template>
 
 <script>
-/**
- * Author(s):  Edouard Legare <edouard.legare@usherbrooke.ca>,
- *             Anthony Parris <anthony.parris@usherbrooke.ca>,
- * @version 1.0.0
- */
 import { mapState } from 'vuex';
 
+/**
+ * A component generating a list of button that the operator can click to connect to a robot.
+ *
+ * Authors:
+ *
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>,
+ *    - Anthony Parris - <anthony.parris@usherbrooke.ca>,
+ * @version 2.0.0
+ * @displayName Connection
+ */
 export default {
   name: 'connection',
   props: {
+    /**
+     * The id to display.
+     */
     selfId: {
       type: String,
       required: true,
     },
+    /**
+     * The list of robot that be called.
+     *
+     * @public
+     */
     robotList: {
       type: Array,
       required: true,
@@ -83,6 +96,12 @@ export default {
     connectionState: state => state.connectionState.robot,
   }),
   methods: {
+    /**
+     * Handles the connection changes when a element in the list is clicked.
+     *
+     * @param {number} robotId The id of the robot to handle.
+     * @public
+     */
     handleConnection(robotId) {
       if (this.isConnected && robotId === this.robotId) {
         console.log('Disconnecting...');

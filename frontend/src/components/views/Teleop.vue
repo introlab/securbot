@@ -88,15 +88,21 @@
 
 
 <script>
-/**
- * @author Edouard Legare <edouard.legare@usherbrooke.ca>
- * @version 1.0.0
- */
 import { ToggleButton } from 'vue-js-toggle-button';
 import { mapState } from 'vuex';
 import VideoBox from '../widgets/VideoBox';
 import Joystick from '../widgets/Joystick';
 
+/**
+ * The teleoperation page. Allow an operator to control a robot through the joystick and see what
+ * the robot sees.
+ *
+ * Authors:
+ *
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>,
+ * @version 2.0.0
+ * @displayName Teleoperation View
+ */
 export default {
   name: 'teleop',
   components: {
@@ -141,6 +147,12 @@ export default {
     window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
+    /**
+     * Enables/disables the sending of joystick data.
+     *
+     * @public
+     * @param {Event} event The event emitted by the toggle.
+     */
     changeJoystickState(event) {
       if (event.value) {
         this.$store.commit('enableJoystick');
@@ -148,6 +160,10 @@ export default {
         this.$store.commit('disableJoystick');
       }
     },
+    /**
+     * Dynamically sets the joystick height and width to fit the page size.
+     * @public
+     */
     setJoystickStyle() {
       let ratio = 1;
       const e = document.getElementById('joystick-row');

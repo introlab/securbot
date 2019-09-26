@@ -71,20 +71,32 @@
 </template>
 
 <script>
-/**
- * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
- * @author Edouard Legare <edouard.legare@usherbrooke.ca>
- * @version 1.0.0
- */
-
 import { mapState } from 'vuex';
 
+/**
+ * A component that dynamically generates a table from the given array. Allows the operator to
+ * remove any element from the list and clear the entire. Also allows the operator to send the
+ * list as a patrol to the robot. Will soon be deprecated.
+ *
+ * Authors:
+ *
+ *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
+ * @version 2.0.0
+ * @displayName Waypoint Table
+ */
 export default {
   name: 'waypoint-table',
   computed: mapState({
     waypointList: state => state.patrol.waypointList,
   }),
   methods: {
+    /**
+     * Removes a element from the list.
+     *
+     * @param {Number} index The index of the element to remove.
+     * @public
+     */
     removeWaypointFromList(index) {
       this.$store.commit('removeWaypoint', index);
     },

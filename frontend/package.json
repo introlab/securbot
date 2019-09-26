@@ -1,13 +1,14 @@
 {
   "name": "securbot",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
-    "start": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "docs": "npx jsdoc -c jsdoc.config.js",
+    "start": "npm run serve",
+    "styleguide": "vue-cli-service styleguidist",
+    "styleguide:build": "vue-cli-service styleguidist:build",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },
@@ -34,10 +35,8 @@
     "chai": "^4.1.2",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.2.3",
-    "jsdoc": "^3.6.3",
-    "jsdoc-vue": "^1.0.0",
-    "jsdoc-vuejs": "^2.4.3",
     "minami": "^1.2.3",
+    "vue-cli-plugin-styleguidist": "^3.24.1",
     "vue-template-compiler": "^2.6.10"
   }
 }

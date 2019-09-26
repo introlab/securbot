@@ -114,13 +114,19 @@
 </template>
 
 <script>
-/**
- * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
- * @version 1.0.0
- */
-
 import { mapState } from 'vuex';
 
+/**
+ * A component that dynamically generates a table with given array. Allows to select and remove
+ * any element from the list. This component will soon be deprecated.
+ *
+ * Authors:
+ *
+ *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
+ * @version 2.0.0
+ * @displayName Patrol List
+ */
 export default {
   name: 'save-load',
   data() {
@@ -134,9 +140,20 @@ export default {
     patrolList: state => state.patrol.patrolList,
   }),
   methods: {
+    /**
+     * Removes an element from the list.
+     *
+     * @param {Number} index The element index to remove.
+     * @public
+     */
     removePatrolFromList(index) {
       this.$store.commit('removePatrol', index);
     },
+    /**
+     * Adds an element to the list.
+     *
+     * @public
+     */
     addPatrolToPatrolList() {
       const patrol = [];
       if (this.newPatrolName === '') {
@@ -150,6 +167,12 @@ export default {
         console.log(this.patrolList);
       }
     },
+    /**
+     * Select an element from the list.
+     *
+     * @param {Number} index The element index to select.
+     * @public
+     */
     selectPatrolFromList(index) {
       if (this.waypointList.length) {
         console.log('overwrite plan');

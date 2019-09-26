@@ -26,11 +26,11 @@ The UI, through Vue/webpack, uses environment variables to set come variables us
 
 An example of this is shown inside .env.example. You would need to either create a new file in the same format or create a copy of the file and change its values to the ones you desired.s
 
-- VUE_APP_SERVER_URL: The URL of the server to connect to.
-- VUE_APP_SERVER_ROOM_NAME: The room name to connect to on the server.
+- VUE&#95_APP&#95_SERVER&#95_URL: The URL of the server to connect to.
+- VUE&#95_APP&#95_SERVER&#95_ROOM&#95_NAME: The room name to connect to on the server.
 
 ## Changelog
-The changelog file shows changes between versions since v0.1.0. It was created on September 17th 2019, before that the only changelogs available for the UI are the commits done on the repo.
+The changelog file shows all changes since v0.1.0. It was created on September 17th 2019, any changes before that date are available through the commits of the got repo.
 
 ## Project commands
 
@@ -51,29 +51,25 @@ npm run build
 
 ### Generates the frontend documentation
 ```sh
-npm run docs
+npm run styleguide:build
 ```
 
 ### Lints and fixes files
-> ESLint is use for linting the code.
 ```sh
 npm run lint
 ```
 
 ### Run your tests
-> There is currently no test suits even though the packages (Mocha + Nightwatch) are included in dependcies.
 ```sh
 npm run test
 ```
 
 ### Run your end-to-end tests
-> Only runs the e2e (Nightwatch) test suits.
 ```sh
 npm run test:e2e
 ```
 
 ### Run your unit tests
-> Only runs the unit (mocha) test suits.
 ```sh
 npm run test:unit
 ```

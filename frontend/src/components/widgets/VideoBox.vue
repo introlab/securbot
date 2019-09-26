@@ -18,17 +18,28 @@
 
 <script>
 /**
- * @author Edouard Legare <edouard.legare@usherbrooke.ca>
+ * A component that sets the html of a video element to be used the api.
+ *
+ * Authors:
+ *
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  * @version 1.0.0
+ * @displayName Video Box
  */
 
 export default {
   name: 'video-box',
   props: {
+    /**
+     * The html id of the video.
+     */
     videoId: {
       type: String,
       required: true,
     },
+    /**
+     * The status indicating if the video should be shown or not.
+     */
     show: {
       type: Boolean,
       required: true,

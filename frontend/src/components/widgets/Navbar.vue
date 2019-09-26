@@ -74,16 +74,33 @@
 <script>
 import Connection from './Connection';
 
+/**
+ * The navigation bar used to change views.
+ *
+ * Authors:
+ *
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
+ *
+ * @version 1.0.0
+ * @displayName Navbar
+ */
+
 export default {
   name: 'navbar',
   components: {
     Connection,
   },
   props: {
+    /**
+     * The operator id to display
+     */
     myId: {
       type: String,
       required: true,
     },
+    /**
+     * The list of robots that the operator can call.
+     */
     robotList: {
       type: Array,
       required: true,

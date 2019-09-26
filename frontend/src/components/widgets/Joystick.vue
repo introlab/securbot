@@ -18,21 +18,36 @@
 
 <script>
 /**
- * @author Edouard Legare <edouard.legare@usherbrooke.ca>,
- * @author Valerie Gauthier <valerie.gauthier4@usherbrooke.ca>,
- * @version 1.0.0
+ * A joystick widget that be used by an operator to send data to the robot and control it.
+ *
+ * Authors:
+ *
+ *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
+ *
+ * @version 2.0.0
+ * @displayName Joystick
  */
 export default {
   name: 'joystick',
   props: {
+    /**
+     * The state of the joystick. On true, joystick starts to send data to robot.
+     */
     enable: {
       type: Boolean,
       required: true,
     },
+    /**
+     * The max X value of the joystick.
+     */
     absoluteMaxX: {
       type: Number,
       required: true,
     },
+    /**
+     * The max Y value of the joystick.
+     */
     absoluteMaxY: {
       type: Number,
       required: true,
@@ -64,6 +79,11 @@ export default {
     clearInterval(this.positionChangeIntervalId);
   },
   methods: {
+    /**
+     * Initialzes the joystick.
+     *
+     * @public
+     */
     init() {
       // Timer refreshing the canvas
       this.loopIntervalId = setInterval(() => {
@@ -78,18 +98,35 @@ export default {
         }
       }, this.operatorCommandInterval);
     },
+    /**
+     * Finds the center of the canvas.
+     *
+     * @public
+     */
     findCenterCanvas() {
       if (this.x === null || this.y === null || !this.isMouseDown) {
         this.x = this.getCenterX();
         this.y = this.getCenterY();
       }
     },
+    /**
+     * Called when the operator clicks the joystick.
+     *
+     * @param {Event} event The mouse click event
+     * @public
+     */
     onMouseDown(event) {
       if (event.button === 0) {
         this.updateJoystickPositionFromMouseEvent(event);
         this.isMouseDown = true;
       }
     },
+    /**
+     * Called when the operator stop pressing the mouse button on the joystick.
+     *
+     * @param {Event} event The mouse click event
+     * @public
+     */
     onMouseUp(event) {
       if (event.button === 0) {
         this.x = this.getCenterX();
@@ -100,11 +137,22 @@ export default {
         }
       }
     },
+    /**
+     * Called when the operator moves the joystick.
+     *
+     * @param {Event} event The mouse click event
+     * @public
+     */
     onMouseMove(event) {
       if (this.isMouseDown) {
         this.updateJoystickPositionFromMouseEvent(event);
       }
     },
+    /**
+     * Called when the operator moves its mouse out of the joystick zone.
+     *
+     * @public
+     */
     onMouseOut() {
       this.x = this.getCenterX();
       this.y = this.getCenterY();
@@ -113,6 +161,12 @@ export default {
         this.emitJoystickPosition();
       }
     },
+    /**
+     * Updates the joystick position.
+     *
+     * @param {Event} event The mouse event to update the joystick to.
+     * @public
+     */
     updateJoystickPositionFromMouseEvent(event) {
       const rect = this.canvas.getBoundingClientRect();
       this.x = event.clientX - rect.left;
@@ -131,11 +185,21 @@ export default {
         this.y = (deltaY * ratio) + centerY;
       }
     },
+    /**
+     * Draws the canvas.
+     *
+     * @public
+     */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.drawBackground();
       this.drawJoystick();
     },
+    /**
+     * Draws the joystick.
+     *
+     * @public
+     */
     drawJoystick() {
       if (this.isMouseDown) {
         this.context.fillStyle = 'rgba(0, 0, 0, 0.75)';
@@ -147,6 +211,11 @@ export default {
       this.context.arc(this.x, this.y, this.getJoystickRadius(), 0, 2 * Math.PI);
       this.context.fill();
     },
+    /**
+     * Draws the background.
+     *
+     * @public
+     */
     drawBackground() {
       const centerX = this.getCenterX();
       const centerY = this.getCenterY();
@@ -214,22 +283,52 @@ export default {
       this.context.lineTo(rightTriangleStartX - pointOffset, centerY + halfPointOffset);
       this.context.fill();
     },
+    /**
+     * Resizes the canvas.
+     *
+     * @public
+     */
     setCanvasSize() {
       this.canvas.width = this.joystickElement.clientWidth;
       this.canvas.height = this.joystickElement.clientHeight;
     },
+    /**
+     * Gets the middle of the canvas, X axis.
+     *
+     * @public
+     */
     getCenterX() {
       return this.canvas.width / 2;
     },
+    /**
+     * Gets the middle of the canvas, Y axis.
+     *
+     * @public
+     */
     getCenterY() {
       return this.canvas.height / 2;
     },
+    /**
+     * Gets the canavs radius.
+     *
+     * @public
+     */
     getCanvasRadius() {
       return (this.radiusRatio * Math.min(this.canvas.width, this.canvas.height)) / 2;
     },
+    /**
+     * Gets the joystick radius.
+     *
+     * @public
+     */
     getJoystickRadius() {
       return this.getCanvasRadius() / 6;
     },
+    /**
+     * Sends the joystick position to the robot.
+     *
+     * @public
+     */
     emitJoystickPosition() {
       const event = {
         x: ((this.x - this.getCenterX()) * this.absoluteMaxX)

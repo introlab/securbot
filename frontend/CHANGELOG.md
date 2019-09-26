@@ -2,6 +2,15 @@
 > Changelog file for securbot frontend. Created on September 17th on version 0.1.0.
 
 ## SEC-500
+> Version: 0.2.1
+
+- Added code documentation and updated them.
+- Changed from jsdoc-vue to styleguide to generate documentation
+  - Removed jsdoc and related packages from the project
+  - Updated the frontend doc files
+  - Edited the /docs index.html to call the new files
+  - Edited other this to fit the new doc generator
+
 > Version: 0.2.0
 
 - Added easyrtc api calls into the store. The store is the only thing using the api and the components need to use actions (dispatches) to ask the store to call the api. What has been changed for that:

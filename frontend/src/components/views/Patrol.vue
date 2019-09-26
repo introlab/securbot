@@ -73,16 +73,26 @@
 
 
 <script>
-/**
- * @author Valerie Gauthier <valerie.gauthier@usherbrooke.ca>
- * @author Edouard Legare <edouard.legare@usherbrooke.ca>
- * @version 1.0.0
- */
 import { mapState } from 'vuex';
 import PatrolMap from '../widgets/PatrolMap';
 import WaypointTable from '../widgets/WaypointTable';
 import SaveLoad from '../widgets/SaveLoad';
 
+/**
+ * The Patrol Planning Page. This page allows the operator to plan a patrol for the robot. The
+ * operator can click the map to add waypoints (with orientation) to the patrol. All waypoints
+ * are shown in the tables allowing the operator to remove unwanted waypoints. When a patrol is
+ * planned, the operator can save it to the database and/or send it to the robot for it to execute.
+ * All the patrols on the databse can be loaded and modified at any time.
+ *
+ * Authors:
+ *
+ *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
+ *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
+ *
+ * @version 2.0.0
+ * @displayName Patrol Planner View
+ */
 export default {
   name: 'patrol',
   components: {
@@ -99,20 +109,45 @@ export default {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    /**
+     * Gets the patrol from the database.
+     *
+     * @public
+     */
     getSavedPatrols() {
     },
+    /**
+     * Sends the patrol to the robot.
+     *
+     * @public
+     */
     sendPatrol() {
       console.log('Sendig patrolPlan:');
       if (this.waypointList.length) {
         this.$store.dispatch('sendPatrol', this.waypointList);
       }
     },
+    /**
+     * Saves the patrol on the database.
+     *
+     * @public
+     */
     savePatrols() {
       this.$store.dispatch('savePatrols', this.patrolList);
     },
+    /**
+     * Removes all waypoints from the patrol.
+     *
+     * @public
+     */
     clearWaypointList() {
       this.$store.commit('clearWaypointList');
     },
+    /**
+     * Removes all patrols from the server.
+     *
+     * @public
+     */
     clearPatrolList() {
       this.$store.commit('clearPatrol');
     },
