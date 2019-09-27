@@ -43,7 +43,7 @@ export default {
     easyrtc.disconnect();
   },
   handleRobotsInRoomNext({ commit }, occupants) {
-    console.log(occupants);
+    commit('clearRobotList');
     if (Object.keys(occupants).length) {
       for (const occupant in occupants) {
         if ('type' in occupants[occupant].apiField && occupants[occupant].apiField.type.fieldValue.includes('robot')) {

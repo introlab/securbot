@@ -3,10 +3,7 @@
     id="operator-layout"
     class="vh-100"
   >
-    <navbar
-      :my-id="myId"
-      :robot-list="robotList"
-    />
+    <navbar />
     <div style="height:calc(100% - 64px)">
       <router-view />
     </div>
@@ -37,23 +34,33 @@ export default {
 
 <style>
 /* Changes to the bootstrap CSS */
-.jumbotron{
+.jumbotron {
   margin-bottom: 0;
 }
-.container-fluid{
+.container-fluid {
   height: 100%
 }
 /*Custom CSS element (SecurBot)*/
-.shadow-sb{
+.shadow-sb {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 54, 5, 0.19);
 }
-.bg-black-sb{
+.bg-black-sb {
   background-color: black;
 }
-.bg-green-sb{
+.bg-green-sb {
   background-color:#00A759
 }
-.b-collapse-sb{
+.b-collapse-sb {
   border-collapse: collapse;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3);
 }
 </style>

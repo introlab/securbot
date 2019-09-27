@@ -48,7 +48,13 @@
             </button>
           </div>
           <div style="height: calc(100% - 40px - 0.25rem)">
-            <waypoint-table />
+            <!--waypoint-table /-->
+            <securbot-table
+              :headers="headers"
+              :list="waypointList"
+              :removable="true"
+              @removeRow="removeRow"
+            />
           </div>
         </b-row>
         <!-- Save-load patrol table -->
@@ -75,8 +81,9 @@
 <script>
 import { mapState } from 'vuex';
 import PatrolMap from '../widgets/PatrolMap';
-import WaypointTable from '../widgets/WaypointTable';
+// import WaypointTable from '../widgets/WaypointTable';
 import SaveLoad from '../widgets/SaveLoad';
+import SecurbotTable from '../generic/Table';
 
 /**
  * The Patrol Planning Page. This page allows the operator to plan a patrol for the robot. The
@@ -97,12 +104,14 @@ export default {
   name: 'patrol',
   components: {
     PatrolMap,
-    WaypointTable,
+    // WaypointTable,
     SaveLoad,
+    SecurbotTable,
   },
   computed: mapState({
     waypointList: state => state.patrol.waypointList,
     patrolList: state => state.patrol.patrolList,
+    headers: state => state.patrol.waypointHeaders,
   }),
   mounted() {
     this.$store.dispatch('getPatrols');
@@ -134,6 +143,14 @@ export default {
      */
     savePatrols() {
       this.$store.dispatch('savePatrols', this.patrolList);
+    },
+    /**
+     * Removes a row from the waypoint list.
+     *
+     * @public
+     */
+    removeRow(index) {
+      this.$store.commit('removeWaypoint', index);
     },
     /**
      * Removes all waypoints from the patrol.

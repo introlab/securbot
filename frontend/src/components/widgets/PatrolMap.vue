@@ -272,12 +272,12 @@ export default {
       if (this.isMouseDown) {
         // Write waypoint to list of waypoints
         console.log('MouseUP');
-        const date = new Date();
+        // const date = new Date();
         const wp = this.waypointList[this.waypointList.length - 1];
         const coord = this.getVideoCoordinatesOfEvent(event);
 
         wp.yaw = -Math.atan2(coord.y - wp.y, coord.x - wp.x) * 180 / Math.PI;
-        wp.dateTime = date.getTime();
+        // wp.dateTime = date.getTime();
         this.updateWaypoint(wp);
         this.isMouseDown = false;
       }
