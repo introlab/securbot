@@ -4,7 +4,8 @@
   "description": "Securbot database API",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "docker-compose -f mongo_only.yml up -d && nodemon ."
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,11 @@
   },
   "homepage": "https://github.com/introlab/securbot#readme",
   "dependencies": {
-    "mongodb": "^3.3.2"
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
   }
 }
