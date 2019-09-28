@@ -25,9 +25,22 @@ const EventSchema = new mongoose.Schema({
         d: Number
     },
     tags: [String],
-    alert: Boolean,
-    viewed: Boolean
+    alert: {
+        type: Boolean,
+        default: false
+    },
+    viewed: {
+        type: Boolean,
+        default: false
+    }
 });
 
+// Index for text searches
+EventSchema.index( {
+    object: 'text',
+    context: 'text',
+    description_text: 'text',
+    tags: 'text'
+})
 
 module.exports = mongoose.model('Event', EventSchema);

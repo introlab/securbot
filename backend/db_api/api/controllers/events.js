@@ -1,13 +1,62 @@
 const mongoose = require('mongoose')
 const Model = require('../models/event')
+const { matchedData, validationResult } = require('express-validator')
+
 
 
 exports.list = function (req, res) {
-    Model.find({robot: req.robot}, (err, documents) => {
-        if (err)
-            res.status(500).send(err)
-        res.json(documents)
-    })
+
+    // Input error check
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() })
+        return
+    }
+
+    // Input results
+    filters = matchedData(req)
+
+
+    // Building query
+    query = {
+        robot: req.robot
+    }
+
+    if (filters.tag_and)
+        query.tags = { $all: filters.tag_and }
+    if (filters.tag_or) {
+        query.tags = query.tags || {}
+        query.tags.$in = filters.tag_or
+    }
+    if (filters.tag_not) {
+        query.tags = query.tags || {}
+        query.tags.$nin = filters.tag_not
+    }
+
+    if (filters.search_expression)
+        query.$text = { $search: filters.search_expression }
+
+    if ('alert' in filters)
+        query.alert = filters.alert
+    if ('viewed' in filters)
+        query.viewed = filters.viewed
+
+    if (filters.before)
+        query.time = { $lte: filters.before }
+    if (filters.after) {
+        query.time = query.time || {}
+        query.time.$gte = filters.after
+    }
+
+
+    Model.find(query)
+        .sort('-time')
+        .select('object time alert viewed')
+        .exec((err, documents) => {
+            if (err)
+                res.status(500).send(err)
+            res.json(documents)
+        })
 }
 
 exports.publish = function (req, res) {
@@ -26,7 +75,15 @@ exports.publish = function (req, res) {
 }
 
 exports.markAsRead = function (req, res) {
-    Model.findOneAndUpdate({_id: req.params.eventId}, req.body, {new: true}, (err, savedDocument) => {
+
+    // Input error check
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() })
+        return
+    }
+
+    Model.findOneAndUpdate({_id: req.params.eventId}, { viewed: true }, {new: true}, (err, savedDocument) => {
         if (err)
             res.status(500).send(err)
         res.json(savedDocument)
@@ -34,9 +91,17 @@ exports.markAsRead = function (req, res) {
 }
 
 exports.read = function (req, res) {
-    Model.findById(req.params.robotId, (err, document) => {
+    Model.findById(req.params.eventId, (err, document) => {
         if (err)
             res.status(500).send(err)
         res.json(document)
+    })
+}
+
+exports.listTags = function (req, res) {
+    Model.distinct('tags', { robot: req.robot }, (err, tagList) => {
+        if (err)
+            res.status(500).send(err)
+        res.json(tagList)
     })
 }
