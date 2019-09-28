@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-
+const paramSelector = require('request-param')
 
 
 
@@ -20,7 +20,13 @@ const DB_URI = `mongodb://${DB_HOST}:${DB_PORT}/securbot`
 // Database connection
 console.log(`Attempting connection to ${DB_URI}`)
 mongoose.Promise = global.Promise
-mongoose.connect(DB_URI, {useNewUrlParser: true, useFindAndModify: false})
+// Deprecated methods disabled
+mongoose.connect(DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+});
 
 
 
@@ -32,6 +38,9 @@ app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+
+app.use(paramSelector({ order: ['query', 'body', 'params'] }))
+
 
 // API routes
 const routeRobots = require('./api/routes/robots')
