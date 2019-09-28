@@ -55,6 +55,10 @@ exports.list = function (req, res) {
         .exec((err, documents) => {
             if (err)
                 res.status(500).send(err)
+
+            if (! documents)
+                res.status(404)
+
             res.json(documents)
         })
 }
@@ -86,6 +90,10 @@ exports.markAsRead = function (req, res) {
     Model.findOneAndUpdate({_id: req.params.eventId}, { viewed: true }, {new: true}, (err, savedDocument) => {
         if (err)
             res.status(500).send(err)
+
+        if (! savedDocument)
+            res.status(404)
+
         res.json(savedDocument)
     })
 }
@@ -94,6 +102,10 @@ exports.read = function (req, res) {
     Model.findById(req.params.eventId, (err, document) => {
         if (err)
             res.status(500).send(err)
+
+        if (! document)
+            res.status(404)
+
         res.json(document)
     })
 }
@@ -102,6 +114,10 @@ exports.listTags = function (req, res) {
     Model.distinct('tags', { robot: req.robot }, (err, tagList) => {
         if (err)
             res.status(500).send(err)
+
+        if (! tagList)
+            res.status(404)
+
         res.json(tagList)
     })
 }

@@ -5,13 +5,16 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const WaypointSchema = new mongoose.Schema({
     quaternion: {
-        a: Number,
-        b: Number,
-        c: Number,
-        d: Number,
+        type: {
+            a: Number,
+            b: Number,
+            c: Number,
+            d: Number,
+        },
         required: true
     },
-    hold_time_s: Number
+    hold_time_s: Number,
+    _id: false
 });
 
 const PatrolSchema = new mongoose.Schema({
@@ -25,7 +28,7 @@ const PatrolSchema = new mongoose.Schema({
     },
     description_text: String,
     last_modified: {
-        type: String,
+        type: Date,
         default: Date.now
     },
     waypoints: {

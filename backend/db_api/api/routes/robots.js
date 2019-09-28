@@ -11,8 +11,14 @@ module.exports = function (app) {
         .get(robots.read)
 
     const router = require('express').Router()
+
     const routeEvents = require('./events')
     routeEvents(router)
+
+    const routePatrols = require('./patrols')
+    routePatrols(router)
+
+
     app.use('/robots/:robotId', (req, res, next) => {
         req.robot = req.params.robotId
         next()
