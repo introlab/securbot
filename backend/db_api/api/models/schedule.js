@@ -1,5 +1,6 @@
 const mongoose = require ('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
+const cron = require('cron-validator')
 
 
 
@@ -10,11 +11,15 @@ const ScheduleSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    description_text: String,
-    last_modified: {
+    description_text: {
         type: String,
+        trim: true
+    },
+    last_modified: {
+        type: Date,
         default: Date.now
     },
     patrol: {
@@ -23,7 +28,15 @@ const ScheduleSchema = new mongoose.Schema({
     },
     cron: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        validate: {
+            validator: cron.isValidCron,
+            alias: true,
+            seconds: false,
+            propsParameter: true,
+            message: 'Must be a valid Cron syntax'
+        }
     },
     timeout_s: Number,
     repetitions: Number,
