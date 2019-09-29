@@ -18,6 +18,9 @@ module.exports = function (app) {
     const routePatrols = require('./patrols')
     routePatrols(router)
 
+    const routeSchedules = require('./schedules')
+    routeSchedules(router)
+
 
     app.use('/robots/:robotId', (req, res, next) => {
         req.robot = req.params.robotId
