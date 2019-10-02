@@ -13,51 +13,64 @@ I2C* I2C::instance(i2c_port_t bus_num)
 
 esp_err_t I2C::begin()
 {
+    // Prepare configuration
     i2c_config_t config;
     config.mode = I2C_MODE_MASTER;
 
-    if (_bus_num == I2C_NUM_0)
+    if (_bus_num == I2C_NUM_0)  // We are initializing first driver
     {
         config.sda_io_num = (gpio_num_t)I2C_NUM_0_SDA_PIN;
         config.scl_io_num = (gpio_num_t)I2C_NUM_0_SCL_PIN;
     }
-    else if (_bus_num == I2C_NUM_1)
+    else if (_bus_num == I2C_NUM_1) // We are initializing second driver
     {
         config.sda_io_num = (gpio_num_t)I2C_NUM_1_SDA_PIN;
         config.scl_io_num = (gpio_num_t)I2C_NUM_1_SCL_PIN;
     }
+
+    // There is already pull ups on the board
     config.sda_pullup_en = GPIO_PULLUP_DISABLE;
     config.scl_pullup_en = GPIO_PULLUP_DISABLE;
 
     config.master.clk_speed = I2C_CLK_SPEED;
-    i2c_param_config(_bus_num, &config);
+    i2c_param_config(_bus_num, &config);    // Fill config with remaining default
 
+    // Actually start the driver using config
     return i2c_driver_install(_bus_num, config.mode, 0, 0, 0);
 }
 
 esp_err_t I2C::read(uint8_t address, uint8_t data[], size_t size, bool send_register_address, uint8_t register_address)
 {
-    if (size == 0)
+    if (size == 0)  // No read required
     {
         return ESP_OK;
     }
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
+    // Create transaction handle
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+
+    // Tell handle we will add steps
     i2c_master_start(cmd);
 
+    // Write device address and read write bit
     i2c_master_write_byte(cmd, (address << 1 ) | I2C_MASTER_READ, true);
-    if (send_register_address)
+    if (send_register_address)  // Write register address
     {
         i2c_master_write_byte(cmd, register_address, true);
     }
-    if (size > 1) {
+    if (size > 1) { // More then one byte to read
         i2c_master_read(cmd, data, size-1, I2C_MASTER_ACK);
     }
+
+    // Read the last byte. No aknowledge on the last read.
     i2c_master_read_byte(cmd, data+size-1, I2C_MASTER_NACK);
 
+    // Tell handle there is no more steps
     i2c_master_stop(cmd);
+
+    // Perform the transaction then delete handle
     esp_err_t ret = i2c_master_cmd_begin(_bus_num, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
 
@@ -70,18 +83,28 @@ esp_err_t I2C::write(uint8_t address, uint8_t data[], size_t size, bool send_reg
 {
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
+    // Create transaction handle
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    
+    // Tell handle we will add steps
     i2c_master_start(cmd);
 
+    // Write device address and read write bit
     i2c_master_write_byte(cmd, (address << 1) | I2C_MASTER_WRITE, true);
-    if (send_register_address)
+    if (send_register_address)  // Write register address
     {
         i2c_master_write_byte(cmd, register_address, true);
     }
+
+    // Write data and check for aknowledge bit
     i2c_master_write(cmd, data, size, true);
 
+    // Tell handle there is no more steps
     i2c_master_stop(cmd);
+
+    // Perform the transaction then delete handle
     esp_err_t ret = i2c_master_cmd_begin(_bus_num, cmd, 1000 / portTICK_RATE_MS);
+    i2c_cmd_link_delete(_mutex);
 
     xSemaphoreGive(_mutex);
 
