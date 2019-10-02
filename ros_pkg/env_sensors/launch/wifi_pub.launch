@@ -1,0 +1,8 @@
+<!--
+    Publish the wifi signal of the robot to RTABMap
+-->
+
+<launch>
+	<node pkg="env_sensors" type="wifi_node.py" name="wifi_node">
+	</node>
+</launch>
