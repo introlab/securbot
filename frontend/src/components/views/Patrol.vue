@@ -71,7 +71,21 @@
         class="mh-100"
       >
         <!-- Map -->
-        <patrol-map />
+        <div class="h-100 w-100 m-auto position-relative">
+          <video-box
+            :show="true"
+            :video-id="patrolId"
+          />
+          <waypoint-overlay
+            :is-active="true"
+            :is-clickable="true"
+            :show="true"
+            :list="waypointList"
+            :nb-of-waypoint="-1"
+            :video-element="patrolElement"
+            @newWaypoint="addWaypointToList"
+          />
+        </div>
       </b-col>
     </b-row>
   </b-jumbotron>
@@ -80,10 +94,10 @@
 
 <script>
 import { mapState } from 'vuex';
-import PatrolMap from '../widgets/PatrolMap';
-// import WaypointTable from '../widgets/WaypointTable';
+import VideoBox from '../widgets/VideoBox';
 import SaveLoad from '../widgets/SaveLoad';
 import SecurbotTable from '../generic/Table';
+import WaypointOverlay from '../generic/WaypointOverlay';
 
 /**
  * The Patrol Planning Page. This page allows the operator to plan a patrol for the robot. The
@@ -103,15 +117,17 @@ import SecurbotTable from '../generic/Table';
 export default {
   name: 'patrol',
   components: {
-    PatrolMap,
-    // WaypointTable,
+    VideoBox,
     SaveLoad,
     SecurbotTable,
+    WaypointOverlay,
   },
   computed: mapState({
     waypointList: state => state.patrol.waypointList,
     patrolList: state => state.patrol.patrolList,
     headers: state => state.patrol.waypointHeaders,
+    patrolId: state => state.htmlElement.patrolId,
+    patrolElement: state => state.htmlElement.patrol,
   }),
   mounted() {
     this.$store.dispatch('getPatrols');
@@ -151,6 +167,14 @@ export default {
      */
     removeRow(index) {
       this.$store.commit('removeWaypoint', index);
+    },
+    /**
+     * Add a waypoint list to the list.
+     *
+     * @public
+     */
+    addWaypointToList(wp) {
+      this.$store.commit('addWaypoint', { wp });
     },
     /**
      * Removes all waypoints from the patrol.

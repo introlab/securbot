@@ -2,6 +2,7 @@
 
 - [Frontend](#frontend)
   - [Summary](#summary)
+  - [Components](#components)
   - [Environment Variables](#environment-variables)
   - [Changelog](#changelog)
   - [Project commands](#project-commands)
@@ -20,6 +21,8 @@ The frontend is been develop using the Vue.js framework with bootstrap toolbox a
 The interface is there to offer an easy way for operators to connect to any robot in services and perform some specific actions on them.
 
 > We currently do not support mobile devices.
+
+## Components
 
 ## Environment Variables
 The UI, through Vue/webpack, uses environment variables to set come variables used during execution. The variables are set inside a [.env file](https://cli.vuejs.org/guide/mode-and-env.html#modes).

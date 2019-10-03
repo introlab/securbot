@@ -10,7 +10,7 @@
           :key="index"
           type="button"
           class="list-group-item-action list-group-item d-flex justify-content-between
-            align-items-center peer-item"
+            align-items-center item"
           @click="$emit('click', el)"
         >
           <div
@@ -54,6 +54,10 @@ export default {
 </script>
 
 <style scoped>
+.item{
+  min-width: 300px;
+  min-height: 30px;
+}
 .list-container {
   min-width: 320px;
   margin: 0 auto 0 auto;

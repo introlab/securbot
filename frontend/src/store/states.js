@@ -22,7 +22,7 @@ export default {
   patrol: {
     enable: false,
     waypointList: [],
-    waypointHeaders: ['X','Y','Yaw'],
+    waypointHeaders: ['X', 'Y', 'Yaw'],
     patrolList: JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]'),
   },
 };
