@@ -39,8 +39,6 @@ def wifiPub():
 		pub.publish(dataMsg)
 		rate.sleep()
 
-#def wifisub():
-
 
 if __name__ == '__main__':
 	try:
