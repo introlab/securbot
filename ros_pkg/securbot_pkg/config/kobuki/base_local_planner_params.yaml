@@ -11,9 +11,9 @@ TrajectoryPlannerROS:
   acc_lim_theta: 1.5
   acc_lim_x: 0.5
 
-  pdist_scale: 0.8
-  gdist_scale: 1.2
-  occdist_scale: 0.01
+  pdist_scale: 24.0
+  gdist_scale: 32.0
+  occdist_scale: 0.005
 
   holonomic_robot: false
 
