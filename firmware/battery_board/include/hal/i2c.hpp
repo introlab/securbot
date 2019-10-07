@@ -27,9 +27,9 @@ class I2C
 public:
     /**
      * @brief Get an i2c instance
-     * Return an i2c instance. Create one if it doesn't exist.
+     * Return the i2c instance. Create it if itdoesn't exist.
      * @param bus_num i2c bus number
-     * @return I2C* pointer to an i2c object
+     * @return I2C* pointer to the i2c object
      */
     static I2C* instance(i2c_port_t bus_num);
 
@@ -42,27 +42,25 @@ public:
 
     /**
      * @brief Read byte(s) from an i2c slave
-     * Perform a full read from an i2c slave. Optionally sends a register address after the slave address
+     * Perform a full read from an i2c slave.
+     * Thread-safe
      * @param address i2c slave address
      * @param data buffer where to store the data
      * @param size how many byte to read
-     * @param send_register_address wheter to send the register address 
-     * @param register_address register address
      * @return esp_err_t read opeation success. Check against ESP_OK
      */
-    esp_err_t read(uint8_t address, uint8_t data[], size_t size, bool send_register_address = false, uint8_t register_address = 0);
+    esp_err_t read(uint8_t address, uint8_t data[], size_t size);
 
     /**
      * @brief Write byte(s) to an i2c slave
-     * Perform a full write to an i2c slave. Optionally sends a register address after the slave address
+     * Perform a full write to an i2c slave.
+     * Thread-safe
      * @param address i2c slave address
      * @param data data buffer from which to retrieve the data
      * @param size how many byte to write
-     * @param send_register_address wheter to send the register address
-     * @param register_address register address
      * @return esp_err_t write operation success. Check against ESP_OK
      */
-    esp_err_t write(uint8_t address, uint8_t data[], size_t size, bool send_register_address = false, uint8_t register_address = 0);
+    esp_err_t write(uint8_t address, uint8_t data[], size_t size);
 
 private:
     /**

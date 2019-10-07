@@ -1,9 +1,21 @@
+/**
+ * @file i2c.cpp
+ * @author Cedric Godin
+ * @brief I2C driver
+ * @version 0.1
+ * @date 2019-10-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "hal/i2c.hpp"
 
 I2C* I2C::_instance[I2C_NUM_MAX] = {NULL};
 
 I2C* I2C::instance(i2c_port_t bus_num)
 {
+    // Create an instance if it is the first call
     if (I2C::_instance[bus_num] == NULL)
     {
         I2C::_instance[bus_num] = new I2C(bus_num);
@@ -39,7 +51,7 @@ esp_err_t I2C::begin()
     return i2c_driver_install(_bus_num, config.mode, 0, 0, 0);
 }
 
-esp_err_t I2C::read(uint8_t address, uint8_t data[], size_t size, bool send_register_address, uint8_t register_address)
+esp_err_t I2C::read(uint8_t address, uint8_t data[], size_t size)
 {
     if (size == 0)  // No read required
     {
@@ -56,10 +68,6 @@ esp_err_t I2C::read(uint8_t address, uint8_t data[], size_t size, bool send_regi
 
     // Write device address and read write bit
     i2c_master_write_byte(cmd, (address << 1 ) | I2C_MASTER_READ, true);
-    if (send_register_address)  // Write register address
-    {
-        i2c_master_write_byte(cmd, register_address, true);
-    }
     if (size > 1) { // More then one byte to read
         i2c_master_read(cmd, data, size-1, I2C_MASTER_ACK);
     }
@@ -79,7 +87,7 @@ esp_err_t I2C::read(uint8_t address, uint8_t data[], size_t size, bool send_regi
     return ret;
 }
 
-esp_err_t I2C::write(uint8_t address, uint8_t data[], size_t size, bool send_register_address, uint8_t register_address)
+esp_err_t I2C::write(uint8_t address, uint8_t data[], size_t size)
 {
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
@@ -91,10 +99,6 @@ esp_err_t I2C::write(uint8_t address, uint8_t data[], size_t size, bool send_reg
 
     // Write device address and read write bit
     i2c_master_write_byte(cmd, (address << 1) | I2C_MASTER_WRITE, true);
-    if (send_register_address)  // Write register address
-    {
-        i2c_master_write_byte(cmd, register_address, true);
-    }
 
     // Write data and check for aknowledge bit
     i2c_master_write(cmd, data, size, true);

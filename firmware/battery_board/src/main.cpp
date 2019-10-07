@@ -17,6 +17,7 @@
 #include "defines.hpp"
 
 #include "hal/i2c.hpp"
+#include "hal/analogInput.hpp"
 
 /**
  * @brief Blink LED task function
@@ -50,6 +51,10 @@ void hardware_init(void)
     // Initialize ADCs i2c driver
     I2C* i2c = I2C::instance(ADS1015_I2C_NUM);
     i2c->begin();
+
+    // Initialize analog inputs driver
+    AnalogInput* analogIn = AnalogInput::instance();
+    analogIn->begin();
 }
 
 /**
