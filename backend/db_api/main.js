@@ -47,6 +47,10 @@ routeRobots(router)
 
 app.use(API_PATH, router)
 
+app.use((req, res) => {
+    res.status(404).send({error: req.originalUrl + ' not found'})
+})
+
 
 
 app.listen(API_PORT)

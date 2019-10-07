@@ -3,15 +3,20 @@ version: '2'
 services:
   mongodb:
     image: mongo
-    ports:
-      - '27017:27017'
     volumes:
       - ./.data:/data/db
 
   api:
     build: .
+    ports:
+      - '8080:8080'
+    links:
+      - 'mongodb'
     depends_on:
       - 'mongodb'
     environment:
-      - DB_HOST=localhost
+      - DB_HOST=mongodb
       - DB_PORT=27017
+      - API_PORT=8080
+      - API_PATH=/
+      - WAIT_HOSTS=mongodb:27017
