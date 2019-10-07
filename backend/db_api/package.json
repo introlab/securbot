@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "docker-compose -f mongo_only.yml up -d && sleep 1s && nodemon ."
+    "dev": "docker-compose -f mongo_only.yml up -d && sleep 1s && nodemon .",
+    "start": "node ."
   },
   "repository": {
     "type": "git",
