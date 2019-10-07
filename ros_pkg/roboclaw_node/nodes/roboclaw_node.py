@@ -70,15 +70,13 @@ class EncoderOdom:
         return vel_x, vel_theta
 
     def update_publish(self, enc_right, enc_left):
-        # 2106 per 0.1 seconds is max speed, error in the 16th bit is 32768
-        # TODO lets find a better way to deal with this error
-        if abs(enc_left - self.last_enc_left) > 20000:
-            rospy.logerr("Ignoring left encoder jump: cur %d, last %d" % (enc_left, self.last_enc_left))
-        elif abs(enc_right - self.last_enc_right) > 20000:
-            rospy.logerr("Ignoring right encoder jump: cur %d, last %d" % (enc_right, self.last_enc_right))
-        else:
-            vel_x, vel_theta = self.update(enc_left, enc_right)
-            self.publish_odom(self.cur_x, self.cur_y, self.cur_theta, vel_x, vel_theta)
+        # 22000 per 0.13 seconds is max speed
+        if abs(enc_left - self.last_enc_left) > 30000:
+            rospy.logwarn("Encoder jump: cur %d, last %d" % (enc_left, self.last_enc_left))
+        if abs(enc_right - self.last_enc_right) > 30000:
+            rospy.logwarn("Encoder jump: cur %d, last %d" % (enc_right, self.last_enc_right))
+        vel_x, vel_theta = self.update(enc_left, enc_right)
+        self.publish_odom(self.cur_x, self.cur_y, self.cur_theta, vel_x, vel_theta)
 
     def publish_odom(self, cur_x, cur_y, cur_theta, vx, vth):
         quat = tf.transformations.quaternion_from_euler(0, 0, cur_theta)
@@ -190,7 +188,7 @@ class Node:
         self.encodm = EncoderOdom(self.TICKS_PER_METER, self.BASE_WIDTH)
         self.last_set_speed_time = rospy.get_rostime()
 
-        rospy.Subscriber("cmd_vel", Twist, self.cmd_vel_callback)
+        rospy.Subscriber("cmd_vel", Twist, self.cmd_vel_callback, queue_size=1, tcp_nodelay=True)
 
         rospy.sleep(1)
 
@@ -227,6 +225,7 @@ class Node:
 		mutex.acquire()
                 status1, enc1, crc1 = roboclaw.ReadEncM1(self.address)
             except ValueError:
+		rospy.logwarn("Error in Enc1 value")
                 pass
             except OSError as e:
                 rospy.logwarn("ReadEncM1 OSError: %d", e.errno)
@@ -238,6 +237,7 @@ class Node:
 		mutex.acquire()
                 status2, enc2, crc2 = roboclaw.ReadEncM2(self.address)
             except ValueError:
+		rospy.logwarn("Error in Enc2 value")
                 pass
             except OSError as e:
                 rospy.logwarn("ReadEncM2 OSError: %d", e.errno)
@@ -245,7 +245,7 @@ class Node:
 	    finally:
 	        mutex.release()
 
-            if ('enc1' in vars()) and ('enc2' in vars()):
+            if (enc1 is not None) and (enc2 is not None):
                 rospy.logdebug(" Encoders %d %d" % (enc1, enc2))
                 self.encodm.update_publish(enc1, enc2)
 
