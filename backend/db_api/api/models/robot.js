@@ -8,7 +8,7 @@ const RobotSchema = new mongoose.Schema({
     },
     platform: {
         OS: String,
-        RSO: String,
+        ROS: String,
         CPU: String,
         GPU: String,
         Batteries: String,

@@ -6,6 +6,7 @@ const paramSelector = require('request-param')
 
 
 // REST API environment variables
+const API_PATH = process.env.API_PATH || '/'
 const API_PORT = process.env.API_PORT || 8080
 
 
@@ -13,7 +14,6 @@ const API_PORT = process.env.API_PORT || 8080
 const DB_HOST = process.env.DB_HOST || 'localhost'
 const DB_PORT = process.env.DB_PORT || '27017'
 const DB_URI = `mongodb://${DB_HOST}:${DB_PORT}/securbot`
-
 
 
 
@@ -30,8 +30,6 @@ mongoose.connect(DB_URI, {
 
 
 
-
-
 // REST API server
 console.log('Starting REST server on port: ' + API_PORT)
 app = express()
@@ -43,8 +41,11 @@ app.use(paramSelector({ order: ['query', 'body', 'params'] }))
 
 
 // API routes
+const router = express.Router()
 const routeRobots = require('./api/routes/robots')
-routeRobots(app)
+routeRobots(router)
+
+app.use(API_PATH, router)
 
 
 
