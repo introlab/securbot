@@ -1,5 +1,5 @@
 /**
- * @file ADS1015.hpp
+ * @file ADS1015.cpp
  * @author your Cedric Godin (cedric.godin@me.com)
  * @brief Driver for the ADS1015 ADC
  * @version 0.1

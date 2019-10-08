@@ -1,5 +1,5 @@
 /**
- * @file analogInput.hpp
+ * @file analogInput.cpp
  * @author Cedric Godin (cedric.godin@me.com)
  * @brief Driver to read analog inputs
  * @version 0.1
