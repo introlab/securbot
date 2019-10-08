@@ -60,7 +60,7 @@
                 <!-- Connection -->
                 <interactive-list
                   :list="robotList"
-                  object-key="robotName"
+                  display-key="robotName"
                   @click="handleConnection"
                 >
                   <template v-slot:header>
