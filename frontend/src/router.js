@@ -9,10 +9,11 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Layout from '@/components/Layout';
-import Teleop from '@/components/pages/Teleop';
-import Patrol from '@/components/pages/Patrol';
-import Events from '@/components/pages/Events';
-import Testing2 from '@/components/pages/Testing2';
+import Teleop from '@/components/views/Teleop';
+import Patrol from '@/components/views/Patrol';
+import Events from '@/components/views/Events';
+import Testing from '@/components/views/Testing';
+import Testing2 from '@/components/views/Testing2';
 
 Vue.use(Router);
 
@@ -53,19 +54,20 @@ export default new Router({
           path: 'teleop',
           name: 'SecurBot Teleoperation',
           component: Teleop,
-          props: true,
         },
         {
           path: 'patrol',
           name: 'SecurBot Patrol Planner',
           component: Patrol,
-          props: true,
         },
         {
           path: 'logs',
           name: 'SecurBot Event Logging',
           component: Events,
-          props: true,
+        },
+        {
+          path: 'testing',
+          component: Testing,
         },
       ],
     },
