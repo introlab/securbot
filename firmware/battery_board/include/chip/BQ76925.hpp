@@ -364,6 +364,15 @@ public:
     esp_err_t getStatus(status_register_map &status);
 
     /**
+     * @brief Set monitoring mode
+     * Enable chip peripheral and set comparator polarity according to required operation mode
+     * @param monitor 1 for monitoring, 0 for standby
+     * @param charge 1 for charge, 0 for discharge
+     * @return esp_err_t operation success, check against ESP_OK
+     */
+    esp_err_t setMonitorMode(uint8_t monitor, uint8_t charge);
+
+    /**
      * @brief Write configuration to the chip
      * Write the configuration prepared when building the object to the chip
      * @return esp_err_t operation success, check against ESP_OK
