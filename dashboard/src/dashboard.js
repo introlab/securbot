@@ -1,8 +1,9 @@
 const puppeteer = require('puppeteer');
 const bigpic = require('./BigPic/node-big-pic.js');
 const pdf = require('./pdf.js');
-const worklog = require('./worklog.js')
+const worklog = require('./worklog.js');
 const burndown = require('./burndown.js');
+const sleep = require('await-sleep');
 
 module.exports.saveDashboard = async function (settings){
 
@@ -14,7 +15,7 @@ module.exports.saveDashboard = async function (settings){
         console.error(e);
         console.groupEnd();
         console.log('Terminating dashboard export');
-        return;
+        throw "Failed to compute worklog";
     }
     console.groupEnd();
 
@@ -26,7 +27,7 @@ module.exports.saveDashboard = async function (settings){
         console.error(e);
         console.groupEnd();
         console.log('Terminating dashboard export');
-        return;
+        throw "Failed to render";
     }
     console.groupEnd();
 
@@ -80,11 +81,13 @@ async function renderDashboard(settings, worklogP){
 
         console.log('Waiting for Worklogs ...');
         var worklogFrame = page.frames().find(frame => frame.url().includes('worklog'));
-        await worklogFrame.waitForSelector('#worklogs_main>div>div.main-content', {timeout: 60000});
+        await worklogFrame.waitForSelector('table.sc-fAjcbJ.hduqMu', {timeout: 60000});
+        await sleep(1000);
 
         // Apply the BigPic extension
         console.log('Adjusting picture size')
         await page.evaluate(bigpic)
+        await sleep(500);
 
         // Clearing burndown legend from graph
         console.log('Adjusting burndown legend');
