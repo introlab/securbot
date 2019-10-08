@@ -31,9 +31,9 @@ esp_err_t AnalogInput::begin()
     return ESP_OK;  // no actual error management for now
 }
 
-double AnalogInput::read(uint8_t channel_number)
+esp_err_t AnalogInput::read(uint8_t channel_number, double &value)
 {
-    double value;
+    esp_err_t ret;
 
     // Which adc doest the channel belong to
     uint8_t adc_number = channel_number / 4;
@@ -45,20 +45,33 @@ double AnalogInput::read(uint8_t channel_number)
     xSemaphoreTake(_mutex[adc_number], portMAX_DELAY);
 
     // Enable ADC for the desired channel
-    _adcs[adc_number]->startReading(channel_number);
+    ret = _adcs[adc_number]->startReading(channel_number);
+    if (ret != ESP_OK)  // start reading fail. We unlock and return.
+    {
+        xSemaphoreGive(_mutex[adc_number]);
+        return ret;
+    }
     
+    bool reading = true;
     do  // Poll ADC to check for reading completion
     {
         vTaskDelay(100 / portTICK_RATE_MS);
-    } while (_adcs[adc_number]->isReading());
+        ret = _adcs[adc_number]->isReading(reading);
+        if (ret != ESP_OK)  // cannot check status. give up.
+        {
+            xSemaphoreGive(_mutex[adc_number]);
+            return ret;
+        }
+
+    } while (reading);
     
     // Retrieve value from ADC
-    value = _adcs[adc_number]->getValue();
+    ret = _adcs[adc_number]->getValue(value);
 
     // unlock the ADC
     xSemaphoreGive(_mutex[adc_number]);
 
-    return value;
+    return ret;
 }
 
 AnalogInput::AnalogInput()

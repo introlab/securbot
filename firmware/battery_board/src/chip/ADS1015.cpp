@@ -11,29 +11,27 @@
 
 #include "chip/ADS1015.hpp"
 
-void ADS1015::configure()
+esp_err_t ADS1015::configure()
 {
     // Set address pointer to configuration register
     address_pointer_register_map map;
     map.fields.P = 1;
 
     // Write to config register
-    writeRegister(map, _config.bytes);
+    return writeRegister(map, _config.bytes);
 }
 
-void ADS1015::startReading(uint8_t channel_number)
+esp_err_t ADS1015::startReading(uint8_t channel_number)
 {
     // Set mux to proper channel
     _config.fields.MUX_channel = channel_number;
 
     // Write config
-    configure();
+    return configure();
 }
 
-bool ADS1015::isReading()
+esp_err_t ADS1015::isReading(bool &value)
 {
-    bool isReading = false;
-
     // Set address pointer to config register
     address_pointer_register_map map;
     map.fields.P = 1;
@@ -41,17 +39,16 @@ bool ADS1015::isReading()
     config_register_map config; // Temp config to store red value
 
     // read config
-    readRegister(map, config.bytes);
+    esp_err_t ret = readRegister(map, config.bytes);
 
     // extract OS bit and NOT (OS low is currently reading)
-    isReading = !(bool)config.fields.OS;
+    value = !(bool)config.fields.OS;
     
-    return isReading;
+    return ret;
 }
 
-double ADS1015::getValue()
+esp_err_t ADS1015::getValue(double &value)
 {
-    double value = 0;
 
     // Set address pointer to conversion register
     address_pointer_register_map map;
@@ -60,17 +57,17 @@ double ADS1015::getValue()
     conversion_register_map conversion; // Temp conversion to store raw
 
     // read conversion
-    readRegister(map, conversion.bytes);
+    esp_err_t ret = readRegister(map, conversion.bytes);
 
     double FS = 4.096;  // scale is -4.096 to 4.096 volts
     
     // convert to volt with full scale range and raw value
     value = FS * (((2^11) - 1)/(2^11)) * (double)conversion.fields.D;
 
-    return value;
+    return ret;
 }
 
-void ADS1015::writeRegister(address_pointer_register_map address, uint8_t value[2])
+esp_err_t ADS1015::writeRegister(ADS1015::address_pointer_register_map address, uint8_t value[2])
 {
     uint8_t buffer[3];
 
@@ -78,18 +75,26 @@ void ADS1015::writeRegister(address_pointer_register_map address, uint8_t value[
     buffer[1] = value[1];   // Send MSB first
     buffer[2] = value[0];   // Then LSB
 
-    _i2c->write(_i2c_address, buffer, 3);
+    return _i2c->write(_i2c_address, buffer, 3);
 }
 
-void ADS1015::readRegister(address_pointer_register_map address, uint8_t value[2])
+esp_err_t ADS1015::readRegister(ADS1015::address_pointer_register_map address, uint8_t value[2])
 {
     uint8_t buffer[2];
 
-    _i2c->write(_i2c_address, address.bytes, 1);    // Request config register
-    _i2c->read(_i2c_address, buffer, 2);    // Read register
+    esp_err_t ret;
+
+    ret = _i2c->write(_i2c_address, address.bytes, 1);    // Request config register
+    if (ret != ESP_OK)  // Writing address failed so no need to read
+    {
+        return ret;
+    }
+    ret = _i2c->read(_i2c_address, buffer, 2);    // Read register
 
     value[1] = buffer[0];   // MSB received first
     value[0] = buffer[1];   // Then LSB
+
+    return ret;
 }
 
 ADS1015::ADS1015(uint8_t i2c_address)

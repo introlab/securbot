@@ -24,42 +24,6 @@ class ADS1015
 {
 public:
     /**
-     * @brief Construct a new ADS1015 object
-     * Construct an object interfacing with the chip at the specified address
-     * @param i2c_address target chip i2c address
-     */
-    ADS1015(uint8_t i2c_address);
-
-    /**
-     * @brief Write current config to configuration register
-     * Write current config to the chip configuration register
-     */
-    void configure();
-
-    /**
-     * @brief Start reading the specified channel
-     * Start a reading on the ADC by writing the proper channel in mux register
-     * @param channel_number Channel to read (0-3)
-     */
-    void startReading(uint8_t channel_number);
-
-    /**
-     * @brief Check is ADC is making a measurement
-     * Return config register OS bit as bool to check if a reading is in progress
-     * @return true ADC is measuring voltage
-     * @return false ADC is sleeping
-     */
-    bool isReading();
-
-    /**
-     * @brief Get the latest reading
-     * Reads the value in the conversion register and parse it according to configured scale
-     * @return double voltage (volts)
-     */
-    double getValue();
-
-private:
-    /**
      * @brief address pointer register mapping
      * maps address pointer register bitfields to register bits
      */
@@ -191,13 +155,53 @@ private:
     };
 
     /**
+     * @brief Construct a new ADS1015 object
+     * Construct an object interfacing with the chip at the specified address
+     * @param i2c_address target chip i2c address
+     */
+    ADS1015(uint8_t i2c_address);
+
+    /**
+     * @brief Write current config to configuration register
+     * Write current config to the chip configuration register
+     * @return esp_err_t did operation succeed. Check against ESP_OK
+     */
+    esp_err_t configure();
+
+    /**
+     * @brief Start reading the specified channel
+     * Start a reading on the ADC by writing the proper channel in mux register
+     * @param channel_number Channel to read (0-3)
+     * @return esp_err_t did operation succeed. Check against ESP_OK
+     */
+    esp_err_t startReading(uint8_t channel_number);
+
+    /**
+     * @brief Check is ADC is making a measurement
+     * Return config register OS bit as bool to check if a reading is in progress
+     * @param value set to true if ADC is measuring voltage. Else set to false
+     * @return esp_err_t did operation succeed. Check against ESP_OK
+     */
+    esp_err_t isReading(bool &value);
+
+    /**
+     * @brief Get the latest reading
+     * Reads the value in the conversion register and parse it according to configured scale
+     * @param value voltage (volts)
+     * @return esp_err_t did operation succeed. Check against ESP_OK 
+     */
+    esp_err_t getValue(double &value);
+
+private:
+    /**
      * @brief utility to write ADS1015 register
      * Utility function to write to ADS1015 registers. It manages the byte order so that value[0] is LSB and value[1] is MSB.
      * Can directly write register map bytes field to the chip
      * @param address address_pointer_register_map configured to point to the desired register
      * @param value two byte array containing the value to write
+     * @return esp_err_t did operation succeed. Check against ESP_OK 
      */
-    void writeRegister(address_pointer_register_map address, uint8_t value[2]);
+    esp_err_t writeRegister(address_pointer_register_map address, uint8_t value[2]);
 
     /**
      * @brief utility to read ADS1015 registers
@@ -205,8 +209,9 @@ private:
      * Can directly read register map bytes field from the chip
      * @param address address_pointer_register_map configured to point to the desired register
      * @param value two byte array where to store the red value
+     * @return esp_err_t did operation succeed. Check against ESP_OK 
      */
-    void readRegister(address_pointer_register_map address, uint8_t value[2]);
+    esp_err_t readRegister(address_pointer_register_map address, uint8_t value[2]);
 
     /**
      * @brief i2c address of the chip

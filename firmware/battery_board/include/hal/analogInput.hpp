@@ -42,11 +42,12 @@ public:
     /**
      * @brief Read a channel
      * Reads the voltage between the specified channel and ground
-     * Thread-safe
+     * Thread safe
      * @param channel_number The channel number (0-7)
-     * @return double Channel voltage (V)
+     * @param value channel voltage (V)
+     * @return esp_err_t operation success. Check agaist ESP_OK
      */
-    double read(uint8_t channel_number);
+    esp_err_t read(uint8_t channel_number, double &value);
 
 private:
     /**
