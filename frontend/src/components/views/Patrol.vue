@@ -111,6 +111,7 @@ import WaypointOverlay from '../generic/WaypointOverlay';
  *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  * @since 0.1.0
+ * @version 1.0.0
  * @displayName Patrol Planner View
  */
 export default {

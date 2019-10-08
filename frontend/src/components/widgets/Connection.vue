@@ -71,6 +71,7 @@ import { mapState } from 'vuex';
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>,
  *    - Anthony Parris - <anthony.parris@usherbrooke.ca>,
  * @since 0.1.0
+ * @version 0.2.0
  * @displayName Connection
  */
 export default {

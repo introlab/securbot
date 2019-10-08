@@ -84,6 +84,7 @@ import { mapState } from 'vuex';
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  * @displayName Waypoint Table
  * @since 0.1.0
+ * @version 0.2.0
  * @deprecated Since 0.2.2 in profit of the generic/Table component.
  */
 export default {

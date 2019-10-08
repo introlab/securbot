@@ -11,6 +11,7 @@
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>
  * @since 0.1.0
  * @displayName Events and Logging View
+ * @version 0.1.0
  */
 export default {
   name: 'event-page',

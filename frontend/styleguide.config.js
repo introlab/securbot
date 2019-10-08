@@ -13,7 +13,7 @@ module.exports = {
 	pagePerSection: true,
 	sections: [
 		{
-	    name: 'Introduction',
+	    name: 'Securbot Frontend',
 	    content: 'README.md'
 		},
 		{
@@ -24,8 +24,16 @@ module.exports = {
 					components: 'src/components/views/[A-Z]*.vue'
 				},
 				{
-					name: 'Widget',
+					name: 'Widgets',
 					components: 'src/components/widgets/[A-Z]*.vue'
+				},
+				{
+					name: 'Generics',
+					components: 'src/components/generic/[A-Z]*.vue'
+				},
+				{
+					name: 'Customizables',
+					components: 'src/components/custom/[A-Z]*.vue'
 				},
 			],
 			sectionDepth: 3

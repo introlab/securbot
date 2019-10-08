@@ -114,6 +114,7 @@ import InteractiveList from '../custom/InteractiveList';
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  *
  * @since 0.1.0
+ * @version 1.0.0
  * @displayName Navbar
  */
 export default {

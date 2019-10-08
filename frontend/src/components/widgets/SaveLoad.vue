@@ -125,6 +125,7 @@ import { mapState } from 'vuex';
  *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  * @since 0.1.0
+ * @version 0.2.0
  * @displayName Patrol List
  */
 export default {

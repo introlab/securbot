@@ -19,6 +19,7 @@ import Navbar from './widgets/Navbar';
  * routing is done here.
  *
  * @since 0.1.0
+ * @version 1.0.0
  * @displayName Layout
  */
 export default {

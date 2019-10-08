@@ -27,6 +27,7 @@
  *
  * @displayName Waypoint Overlay
  * @since 0.2.2
+ * @version 1.0.0
  */
 export default {
   name: 'waypoint-overlay',
@@ -354,6 +355,11 @@ export default {
      * @public
      */
     emitWaypoint() {
+      /**
+       * The new waypoint event.
+       *
+       * @type {Object} The valid internal waypoint.
+       */
       this.$emit('newWaypoint', this.currentWaypoint);
     },
     /**

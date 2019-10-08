@@ -1,10 +1,25 @@
 # Changelog
 > Changelog file for securbot frontend. Created on September 17th on version 0.1.0.
 
+## SEC-509
+> Version 0.2.2
+
+- Added some generic components and integrated them in the code replacing others
+  - Added a generic Table component
+    - A html table enhanced using Vue.js directive
+    - Replaced the _Waypoint Table_ component
+  - Added a generic _Waypoint Overlay_ component
+    - A canvas acting as a clickable overlay for the videobox component
+    - Replaced the _Patrol Map_ component
+  - Added a customizable _Interactive List_ component
+    - A button list that has 2 slot, one for a header/title and one for a tag on the right of each button
+    - Replaced the _Connection_ component
+- Added some doc comments
+
 ## SEC-500
 > Version: 0.2.1
 
-- Added code documentation and updated them.
+- Added code documentation and updated them
 - Changed from jsdoc-vue to styleguide to generate documentation
   - Removed jsdoc and related packages from the project
   - Updated the frontend doc files
@@ -55,11 +70,11 @@
 ## SEC-510
 > Version: 0.1.1
 
-- Added Navbar component, replaced the code in layout by a call the to compenent.
-- Revert the patrol map id and fix and fixed a typo inside the getVideoOffsetAndScale method.
+- Added Navbar component, replaced the code in layout by a call the to compenent
+- Revert the patrol map id and fix and fixed a typo inside the getVideoOffsetAndScale method
 
 ## v0.1.0
 > 17-09-2019
 
-- Creation of the changelog file.
-- Added changelog and Env Variables sections to README.
+- Creation of the changelog file
+- Added changelog and Env Variables sections to README

@@ -36,6 +36,7 @@ import VideoBox from './VideoBox';
  *
  * @displayName Patrol Planner Overlay
  * @since 0.1.0
+ * @version 0.2.0
  * @deprecated Since 0.2.2 in profit of the generic/WaypointOverlay component.
  */
 export default {
