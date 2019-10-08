@@ -18,7 +18,7 @@
 #include "defines.hpp"
 
 /**
- * @brief I2C driver class
+ * @brief I2C driver class.
  * Wrapper around ESP IDF API
  * Allow thread-safe read and write operation to both i2c bus
  */
@@ -26,7 +26,7 @@ class I2C
 {
 public:
     /**
-     * @brief Get an i2c instance
+     * @brief Get an i2c instance.
      * Return the i2c instance. Create it if itdoesn't exist.
      * @param bus_num i2c bus number
      * @return I2C* pointer to the i2c object
@@ -34,14 +34,14 @@ public:
     static I2C* instance(i2c_port_t bus_num);
 
     /**
-     * @brief Initialize the i2c driver
+     * @brief Initialize the i2c driver.
      * Initialize the i2c driver. Must be called before any read or write operation.
      * @return esp_err_t driver installation result. Check against ESP_OK
      */
     esp_err_t begin();
 
     /**
-     * @brief Read byte(s) from an i2c slave
+     * @brief Read byte(s) from an i2c slave.
      * Perform a full read from an i2c slave.
      * Thread-safe
      * @param address i2c slave address
@@ -52,7 +52,7 @@ public:
     esp_err_t read(uint8_t address, uint8_t data[], size_t size);
 
     /**
-     * @brief Write byte(s) to an i2c slave
+     * @brief Write byte(s) to an i2c slave.
      * Perform a full write to an i2c slave.
      * Thread-safe
      * @param address i2c slave address
@@ -64,7 +64,7 @@ public:
 
 private:
     /**
-     * @brief Construct a new I2C object
+     * @brief Construct a new I2C object.
      * Construct a new I2C object which use the specified bus number
      * Is called automatically when an instance is requested
      * @param bus_num i2c bus number
@@ -72,20 +72,20 @@ private:
     I2C(i2c_port_t bus_num);
 
     /**
-     * @brief Pointer to I2C object instance
+     * @brief Pointer to I2C object instance.
      * I2C object pointer array. There is one object with its own pointer for each bus.
      * All object methods are called on the same object.
      */
     static I2C* _instance[I2C_NUM_MAX];
 
     /**
-     * @brief i2c bus number
+     * @brief i2c bus number.
      * The i2c bus used by this instance of I2C bus
      */
     i2c_port_t _bus_num;
 
     /**
-     * @brief i2c bus mutex
+     * @brief i2c bus mutex.
      * i2c mutex to make read and write operations thread-safe
      */
     SemaphoreHandle_t _mutex;
