@@ -4,13 +4,6 @@
   >
     <h2>Component Testing</h2>
     <div
-      style="height:480px; width:704px;"
-    >
-      <waypoint-overlay
-        component-name="test-component"
-      />
-    </div>
-    <div
       style="height:480px; width:704px; margin-top: 25px"
     >
       <interactive-list
@@ -56,7 +49,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import WaypointOverlay from '../widgets/Videobox&WaypointOverlay';
 import InteractiveList from '../custom/InteractiveList';
 
 /* global easyrtc */
@@ -64,7 +56,6 @@ import InteractiveList from '../custom/InteractiveList';
 export default {
   name: 'testing',
   components: {
-    WaypointOverlay,
     InteractiveList,
   },
   data() {
