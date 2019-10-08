@@ -62,12 +62,15 @@ import { mapState } from 'vuex';
 
 /**
  * A component generating a list of button that the operator can click to connect to a robot.
+ * NOTE: This componenent will be changed to fit the new /custom/InteractiveList componenent. It
+ * will serve the same purpose the layout component serves for the views, aka mostly html and css
+ * rules for the underlying/child components.
  *
  * Authors:
  *
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>,
  *    - Anthony Parris - <anthony.parris@usherbrooke.ca>,
- * @version 2.0.0
+ * @since 0.1.0
  * @displayName Connection
  */
 export default {
@@ -75,6 +78,8 @@ export default {
   props: {
     /**
      * The id to display.
+     *
+     * @public
      */
     selfId: {
       type: String,

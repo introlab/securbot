@@ -34,8 +34,9 @@ import VideoBox from './VideoBox';
  *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  *
- * @version 2.0.0
  * @displayName Patrol Planner Overlay
+ * @since 0.1.0
+ * @deprecated Since 0.2.2 in profit of the generic/WaypointOverlay component.
  */
 export default {
   name: 'patrol-map',

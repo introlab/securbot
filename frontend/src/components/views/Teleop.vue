@@ -110,7 +110,7 @@ import WaypointOverlay from '../generic/WaypointOverlay';
  * Authors:
  *
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>,
- * @version 2.0.0
+ * @since 0.1.0
  * @displayName Teleoperation View
  */
 export default {

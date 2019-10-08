@@ -14,6 +14,13 @@
 import { mapState } from 'vuex';
 import Navbar from './widgets/Navbar';
 
+/**
+ * This component is the main root component (after the app). It includes the navbar and the view
+ * routing is done here.
+ *
+ * @since 0.1.0
+ * @displayName Layout
+ */
 export default {
   name: 'layout',
   components: {

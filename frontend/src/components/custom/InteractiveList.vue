@@ -14,10 +14,10 @@
           @click="$emit('click', el)"
         >
           <div
-            v-if="objectKey"
+            v-if="displayKey"
             class="float-left"
           >
-            {{ el[objectKey] }}
+            {{ el[displayKey] }}
           </div>
           <div
             v-else
@@ -38,14 +38,33 @@
 </template>
 
 <script>
+/**
+ * An interactive list (list of button that emit events) component with 2 slots, a header/title
+ * slot and a tag slot on each button (a html element that is added at the right of the button).
+ *
+ * NOTE: The displayed content of the buttons can be configured through the displayKey. The vue
+ * html will call the displayKey as a property on each element, usefull if the elements of the the
+ * list are objects:
+ * ```javascript
+ * {{ listElement[displayKey] }}
+ * ```
+ * @displayName Interactive List
+ * @since 0.2.2
+ */
 export default {
   name: 'interactive-list',
   props: {
+    /**
+     * The list of element to "transform" into buttons.
+     */
     list: {
       type: Array,
       required: true,
     },
-    objectKey: {
+    /**
+     * The property to display inside the button -> same as list[i].[displayName]
+     */
+    displayKey: {
       type: String,
       default: '',
     },

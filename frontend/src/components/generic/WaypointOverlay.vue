@@ -15,6 +15,19 @@
 </template>
 
 <script>
+/**
+ * An overlay component for the videobox component that allows an operator to click the video to
+ * add a waypoint while also drawing all the waypoints from a list given as a prop.
+ *
+ * NOTE: This component do not add waypoints into the prop list to assure compatibility with Vuex's
+ * state behavior. Instead, the component draws the prop list as waypoint plus a local waypoint
+ * that gets its coordinates from an operator click (otherwise is it not drawn). If the operator
+ * click was deemed valid, the local waypoint is then emitted through a component event and is the
+ * parent component responsability to add to the waypoint prop list.
+ *
+ * @displayName Waypoint Overlay
+ * @since 0.2.2
+ */
 export default {
   name: 'waypoint-overlay',
   props: {

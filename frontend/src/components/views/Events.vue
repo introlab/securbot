@@ -9,7 +9,7 @@
  * those elements and should refresh when new data where sent to the database.
  *
  * @author Edouard Legare <edouard.legare@usherbrooke.ca>
- * @version 1.0.0
+ * @since 0.1.0
  * @displayName Events and Logging View
  */
 export default {

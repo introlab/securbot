@@ -113,7 +113,7 @@ import InteractiveList from '../custom/InteractiveList';
  *
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  *
- * @version 1.0.0
+ * @since 0.1.0
  * @displayName Navbar
  */
 export default {
@@ -129,6 +129,14 @@ export default {
     isConnected: state => state.client.connectionState.robot === 'connected',
   }),
   methods: {
+    /**
+     * When the interactive list is clicked, this method handles the connection state.
+     *
+     * @public
+     * @param {Object} robot The robot object that includes its id and name.
+     * @since 1.1.0
+     * @deprecated Will soon be deprecated in profit of a store action.
+     */
     handleConnection(robot) {
       const { robotId } = robot;
       if (this.isConnected && robotId === this.robotId) {
