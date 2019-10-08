@@ -1,6 +1,6 @@
 /**
  * @file ADS1015.hpp
- * @author your Cédric Godin (cedric.godin@me.com)
+ * @author your Cedric Godin (cedric.godin@me.com)
  * @brief Driver for the ADS1015 ADC
  * @version 0.1
  * @date 2019-10-02
@@ -157,9 +157,10 @@ public:
     /**
      * @brief Construct a new ADS1015 object
      * Construct an object interfacing with the chip at the specified address
+     * @param i2c_bus target chip i2c bus number
      * @param i2c_address target chip i2c address
      */
-    ADS1015(uint8_t i2c_address);
+    ADS1015(i2c_port_t i2c_bus, uint8_t i2c_address);
 
     /**
      * @brief Write current config to configuration register

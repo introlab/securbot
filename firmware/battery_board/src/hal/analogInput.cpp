@@ -77,8 +77,8 @@ esp_err_t AnalogInput::read(uint8_t channel_number, double &value)
 AnalogInput::AnalogInput()
 {
     // Get ADC instances
-    _adcs[0] = new ADS1015(ADC0_I2C_ADDRESS);
-    _adcs[1] = new ADS1015(ADC1_I2C_ADDRESS);
+    _adcs[0] = new ADS1015(ADS1015_I2C_NUM, ADC0_I2C_ADDRESS);
+    _adcs[1] = new ADS1015(ADS1015_I2C_NUM, ADC1_I2C_ADDRESS);
 
     // Create ADC mutexes
     _mutex[0] = xSemaphoreCreateMutex();

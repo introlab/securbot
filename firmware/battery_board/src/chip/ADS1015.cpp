@@ -1,6 +1,6 @@
 /**
  * @file ADS1015.hpp
- * @author your Cédric Godin (cedric.godin@me.com)
+ * @author your Cedric Godin (cedric.godin@me.com)
  * @brief Driver for the ADS1015 ADC
  * @version 0.1
  * @date 2019-10-02
@@ -11,11 +11,14 @@
 
 #include "chip/ADS1015.hpp"
 
+#define CONFIG_REG_ADR 1    // Config register P value
+#define CONV_REG_ADR 0      // Conversion register P value
+
 esp_err_t ADS1015::configure()
 {
     // Set address pointer to configuration register
     address_pointer_register_map map;
-    map.fields.P = 1;
+    map.fields.P = CONFIG_REG_ADR;
 
     // Write to config register
     return writeRegister(map, _config.bytes);
@@ -34,7 +37,7 @@ esp_err_t ADS1015::isReading(bool &value)
 {
     // Set address pointer to config register
     address_pointer_register_map map;
-    map.fields.P = 1;
+    map.fields.P = CONFIG_REG_ADR;
 
     config_register_map config; // Temp config to store red value
 
@@ -52,7 +55,7 @@ esp_err_t ADS1015::getValue(double &value)
 
     // Set address pointer to conversion register
     address_pointer_register_map map;
-    map.fields.P = 0;
+    map.fields.P = CONV_REG_ADR;
 
     conversion_register_map conversion; // Temp conversion to store raw
 
@@ -97,11 +100,11 @@ esp_err_t ADS1015::readRegister(ADS1015::address_pointer_register_map address, u
     return ret;
 }
 
-ADS1015::ADS1015(uint8_t i2c_address)
+ADS1015::ADS1015(i2c_port_t i2c_bus, uint8_t i2c_address)
 {
     // i2c bus and address
     _i2c_address = i2c_address;
-    _i2c = I2C::instance(ADS1015_I2C_NUM);
+    _i2c = I2C::instance(i2c_bus);
 
     // default configuration
     _config.fields.OS = 0;          // sleep
