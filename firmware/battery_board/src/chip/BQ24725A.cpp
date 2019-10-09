@@ -1,5 +1,5 @@
 /**
- * @file BQ24725A.hpp
+ * @file BQ24725A.cpp
  * @author Cedric Godin (cedric.godin@me.com)
  * @brief Driver for the BQ24725A chip
  * @version 0.1
