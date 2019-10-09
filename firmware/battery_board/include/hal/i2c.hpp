@@ -75,6 +75,19 @@ public:
      */
     esp_err_t write(uint8_t address, uint8_t data[], size_t size);
 
+    /**
+     * @brief Write byte(s) to a smbus slave.
+     * Perform a full write opertion to a smbus slave.
+     * Preceeds the write with the command.
+     * Thread safe
+     * @param address smbus slave address
+     * @param cmd command byte
+     * @param data buffer containing data to be sent
+     * @param size how many byte to write
+     * @return esp_err_t operation success. Check against ESP_OK
+     */
+    esp_err_t smwrite(uint8_t address, uint8_t cmd, uint8_t data[], size_t size);
+
 private:
     /**
      * @brief Construct a new I2C object.

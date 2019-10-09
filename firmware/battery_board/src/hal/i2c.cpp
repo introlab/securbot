@@ -156,7 +156,40 @@ esp_err_t I2C::write(uint8_t address, uint8_t data[], size_t size)
 
     // Perform the transaction then delete handle
     esp_err_t ret = i2c_master_cmd_begin(_bus_num, cmd, 1000 / portTICK_RATE_MS);
-    i2c_cmd_link_delete(_mutex);
+    i2c_cmd_link_delete(cmd);
+
+    xSemaphoreGive(_mutex);
+
+    return ret;
+}
+
+esp_err_t I2C::smwrite(uint8_t address, uint8_t cmd, uint8_t data[], size_t size)
+{
+    esp_err_t ret;
+
+    xSemaphoreTake(_mutex, portMAX_DELAY);
+
+    // Create transaction handle
+    i2c_cmd_handle_t trans = i2c_cmd_link_create();
+
+    // Apply start condition on bus
+    i2c_master_start(trans);
+
+    // Write device address and write bit
+    i2c_master_write_byte(trans, (address << 1) | I2C_MASTER_WRITE, true);
+
+    // Write command byte
+    i2c_master_write_byte(trans, cmd, true);
+
+    // Write data
+    i2c_master_write(trans, data, size, true);
+
+    // Apply stop condition on the bus
+    i2c_master_stop(trans);
+
+    // Perform the transaction then delete the handle
+    ret = i2c_master_cmd_begin(_bus_num, trans, 1000 / portTICK_RATE_MS);
+    i2c_cmd_link_delete(trans);
 
     xSemaphoreGive(_mutex);
 
