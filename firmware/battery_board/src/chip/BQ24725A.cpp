@@ -81,7 +81,7 @@ esp_err_t BQ24725A::setInputCurrent(uint8_t current)
     }
 
     input_current_register_map map;
-    map.fields.DACIN = current;
+    map.fields.DACIIN = current;
 
     return _i2c->smwrite(CHIP_ADR, INPUT_CURRENT_CMD, map.bytes, 2);
 }

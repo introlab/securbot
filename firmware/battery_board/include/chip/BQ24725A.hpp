@@ -170,9 +170,9 @@ public:
             uint8_t :7;
             /**
              * @brief Charger input current.
-             * Charger input current DACIN * 128mA 
+             * Charger input current DACIIN * 128mA 
              */
-            uint8_t DACIN:6;
+            uint8_t DACIIN:6;
             uint8_t :3;
         } fields;
         /**
