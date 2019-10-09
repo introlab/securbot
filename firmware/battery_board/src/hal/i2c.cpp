@@ -33,18 +33,21 @@ esp_err_t I2C::begin()
     {
         config.sda_io_num = (gpio_num_t)I2C_NUM_0_SDA_PIN;
         config.scl_io_num = (gpio_num_t)I2C_NUM_0_SCL_PIN;
+
+        config.master.clk_speed = I2C_CLK_SPEED;
     }
     else if (_bus_num == I2C_NUM_1) // We are initializing second driver
     {
         config.sda_io_num = (gpio_num_t)I2C_NUM_1_SDA_PIN;
         config.scl_io_num = (gpio_num_t)I2C_NUM_1_SCL_PIN;
+
+        config.master.clk_speed = SMBUS_CLK_SPEED;
     }
 
     // There is already pull ups on the board
     config.sda_pullup_en = GPIO_PULLUP_DISABLE;
     config.scl_pullup_en = GPIO_PULLUP_DISABLE;
 
-    config.master.clk_speed = I2C_CLK_SPEED;
     i2c_param_config(_bus_num, &config);    // Fill config with remaining default
 
     // Actually start the driver using config
@@ -81,6 +84,51 @@ esp_err_t I2C::read(uint8_t address, uint8_t data[], size_t size)
     // Perform the transaction then delete handle
     esp_err_t ret = i2c_master_cmd_begin(_bus_num, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
+
+    xSemaphoreGive(_mutex);
+
+    return ret;
+}
+
+esp_err_t I2C::smread(uint8_t address, uint8_t cmd, uint8_t data[], size_t size)
+{
+    if (size == 0) // No read required
+    {
+        return ESP_OK;
+    }
+
+    xSemaphoreTake(_mutex, portMAX_DELAY);
+
+    // Create transaction handle
+    i2c_cmd_handle_t trans = i2c_cmd_link_create();
+
+    // Start condition on bus
+    i2c_master_start(trans);
+
+    // Write device address and write bit
+    i2c_master_write_byte(trans, (address << 1) | I2C_MASTER_WRITE, true);
+
+    // Write command byte
+    i2c_master_write_byte(trans, cmd, true);
+
+    // Repeated start condition on bus
+    i2c_master_start(trans);
+
+    // Write device address and read write bit
+    i2c_master_write_byte(trans, (address << 1 ) | I2C_MASTER_READ, true);
+    if (size > 1) { // More then one byte to read
+        i2c_master_read(trans, data, size-1, I2C_MASTER_ACK);
+    }
+
+    // Read the last byte. No aknowledge on the last read.
+    i2c_master_read_byte(trans, data+size-1, I2C_MASTER_NACK);
+
+    // Stop condition on bus
+    i2c_master_stop(trans);
+
+    // Perform the transaction then delete handle
+    esp_err_t ret = i2c_master_cmd_begin(_bus_num, trans, 1000 / portTICK_RATE_MS);
+    i2c_cmd_link_delete(trans);
 
     xSemaphoreGive(_mutex);
 

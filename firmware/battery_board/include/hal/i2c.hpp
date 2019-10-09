@@ -52,6 +52,19 @@ public:
     esp_err_t read(uint8_t address, uint8_t data[], size_t size);
 
     /**
+     * @brief Read byte(s) from a smbus slave.
+     * Perform a full read from a smbus slave.
+     * Preceeds the read with the command and repeated start condition.
+     * Thread-safe
+     * @param address smbus slave address
+     * @param cmd command byte
+     * @param data buffer where to store the data
+     * @param size how many byte to read
+     * @return esp_err_t operation success. Check against ESP_OK
+     */
+    esp_err_t smread(uint8_t address, uint8_t cmd, uint8_t data[], size_t size);
+
+    /**
      * @brief Write byte(s) to an i2c slave.
      * Perform a full write to an i2c slave.
      * Thread-safe
