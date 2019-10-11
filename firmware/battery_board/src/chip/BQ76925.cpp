@@ -29,8 +29,21 @@ BQ76925::BQ76925(i2c_port_t i2c_bus)
 {
     _i2c = I2C::instance(i2c_bus);
 
+    _config1.fields.I_THRESH = 0x7;
+    _config1.fields.I_COMP_POL = 0;
+    _config1.fields.I_AMP_CAL = 0;
+    _config1.fields.I_GAIN = 0;
+
+    _config2.fields.CRC_EN = 0;
+    _config2.fields.REF_SEL = 1;
+
     _power.fields.REF_EN = 1;       // reference should always be active
     _power.fields.SLEEP_DIS = 1;    // we never want to sleep
+
+    _power.fields.I_AMP_EN = 1;
+    _power.fields.I_COMP_EN = 1;
+    _power.fields.VC_AMP_EN = 1;
+    _power.fields.VTB_EN = 1;
 }
 
 esp_err_t BQ76925::selectCell(uint8_t cell_number)

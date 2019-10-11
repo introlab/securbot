@@ -228,6 +228,14 @@ public:
      */
     esp_err_t setInputCurrent(uint8_t current);
 
+    /**
+     * @brief Sets IOUT configuration bit
+     * Select if IOUT is 20x adapter current (0) or 20x charge current (1)
+     * @param iout IOUT config bit value
+     * @return esp_err_t operation success, check against ESP_OK
+     */
+    esp_err_t selectIOUT(uint8_t iout);
+
 private:
     /**
      * @brief i2c bus instance.
