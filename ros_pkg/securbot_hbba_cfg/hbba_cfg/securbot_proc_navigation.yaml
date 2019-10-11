@@ -1,0 +1,15 @@
+hbba_conf:
+
+- procmodule:
+    name: rtabmap
+    launch: {pkg: 'securbot_pkg', path:'launch/includes/rtabmap_bringup.launch'}
+    input:
+        -
+    output:
+
+- procmodule:
+    name: apriltag
+    launch: {pkg: '', path: ''}
+    input:
+        -
+    output:
