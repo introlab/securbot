@@ -94,7 +94,8 @@ export default {
       easyrtc.setOnStreamClosed(this.closePeerVideo);
       easyrtc.setAcceptChecker(this.acceptCall);
 
-      easyrtc.setRoomApiField('default', 'type', 'robot_testing2');
+      const id = Math.round(Math.random() * 1000);
+      easyrtc.setRoomApiField('default', 'type', `robot_testing_${id}`);
       easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
       easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
 

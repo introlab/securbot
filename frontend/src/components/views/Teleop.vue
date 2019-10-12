@@ -22,6 +22,15 @@
             :show="showStream"
             :video-id="cameraId"
           />
+          <waypoint-overlay
+            :is-active="true"
+            :is-clickable="true"
+            :show="true"
+            :list="demoWP"
+            :nb-of-waypoint="1"
+            :video-element="cameraElement"
+            @newWaypoint="demo"
+          />
         </div>
       </b-col>
       <!-- Map and joystick column -->
@@ -92,6 +101,7 @@ import { ToggleButton } from 'vue-js-toggle-button';
 import { mapState } from 'vuex';
 import VideoBox from '../widgets/VideoBox';
 import Joystick from '../widgets/Joystick';
+import WaypointOverlay from '../generic/WaypointOverlay';
 
 /**
  * The teleoperation page. Allow an operator to control a robot through the joystick and see what
@@ -100,7 +110,8 @@ import Joystick from '../widgets/Joystick';
  * Authors:
  *
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>,
- * @version 2.0.0
+ * @since 0.1.0
+ * @version 1.0.0
  * @displayName Teleoperation View
  */
 export default {
@@ -109,6 +120,7 @@ export default {
     VideoBox,
     Joystick,
     ToggleButton,
+    WaypointOverlay,
   },
   data() {
     return {
@@ -122,11 +134,14 @@ export default {
         unchecked: '#808080',
         disabled: '#E8E8E8',
       },
+      demoWP: [],
     };
   },
   computed: mapState({
     cameraId: state => state.htmlElement.cameraId,
     mapId: state => state.htmlElement.mapId,
+    waypointList: state => state.patrol.waypointList,
+    cameraElement: state => state.htmlElement.camera,
     showStream: state => state.showStreams,
     joystickEnabled: state => state.joystickEnabled,
     connectedToRobot: state => state.client.connectionState.robot === 'connected',
@@ -147,6 +162,9 @@ export default {
     window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
+    demo(event) {
+      this.demoWP[0] = event;
+    },
     /**
      * Enables/disables the sending of joystick data.
      *

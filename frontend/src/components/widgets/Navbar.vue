@@ -58,10 +58,41 @@
               <!-- Connection container -->
               <div class="px-2 py-1">
                 <!-- Connection -->
-                <connection
-                  :self-id="myId"
-                  :robot-list="robotList"
-                />
+                <interactive-list
+                  :list="robotList"
+                  display-key="robotName"
+                  @click="handleConnection"
+                >
+                  <template v-slot:header>
+                    <!-- <h5
+                      id="who-am-i"
+                      class="text-muted ml-1"
+                    >
+                      I am: {{ myId }}
+                    </h5> -->
+                    <h5 class="ml-1 mb-0 mt-0">
+                      List of Robots:
+                    </h5>
+                  </template>
+                  <template v-slot:tag="robot">
+                    <span
+                      v-if="robot.item.robotId === robotId && connectionState === 'connecting'"
+                      class="spinner-border spinner-border-sm text-warning"
+                    />
+                    <span
+                      v-else-if="robot.item.robotId === robotId"
+                      class="badge badge-success"
+                    >
+                      Connected
+                    </span>
+                    <span
+                      v-else
+                      class="badge badge-secondary"
+                    >
+                      Not Connected
+                    </span>
+                  </template>
+                </interactive-list>
               </div>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -72,7 +103,8 @@
 </template>
 
 <script>
-import Connection from './Connection';
+import { mapState } from 'vuex';
+import InteractiveList from '../custom/InteractiveList';
 
 /**
  * The navigation bar used to change views.
@@ -81,29 +113,44 @@ import Connection from './Connection';
  *
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  *
+ * @since 0.1.0
  * @version 1.0.0
  * @displayName Navbar
  */
-
 export default {
   name: 'navbar',
   components: {
-    Connection,
+    InteractiveList,
   },
-  props: {
+  computed: mapState({
+    myId: state => state.client.myId,
+    robotId: state => state.client.robotId,
+    robotList: state => state.client.robotList,
+    connectionState: state => state.client.connectionState.robot,
+    isConnected: state => state.client.connectionState.robot === 'connected',
+  }),
+  methods: {
     /**
-     * The operator id to display
+     * When the interactive list is clicked, this method handles the connection state.
+     *
+     * @public
+     * @param {Object} robot The robot object that includes its id and name.
+     * @since 1.1.0
+     * @deprecated Will soon be deprecated in profit of a store action.
      */
-    myId: {
-      type: String,
-      required: true,
-    },
-    /**
-     * The list of robots that the operator can call.
-     */
-    robotList: {
-      type: Array,
-      required: true,
+    handleConnection(robot) {
+      const { robotId } = robot;
+      if (this.isConnected && robotId === this.robotId) {
+        console.log('Disconnecting...');
+        this.$store.commit('disableJoystick');
+        this.$store.dispatch('client/disconnectFromRobot');
+      } else if (this.isConnected && this.robotId) {
+        console.log('Already connected to someone...');
+      } else if (this.connectionState === 'connecting') {
+        console.log('Waiting for state...');
+      } else {
+        this.$store.dispatch('client/connectToRobot', robotId);
+      }
     },
   },
 };

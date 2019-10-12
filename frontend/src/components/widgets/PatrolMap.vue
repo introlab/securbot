@@ -34,8 +34,10 @@ import VideoBox from './VideoBox';
  *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  *
- * @version 2.0.0
  * @displayName Patrol Planner Overlay
+ * @since 0.1.0
+ * @version 0.2.0
+ * @deprecated Since 0.2.2 in profit of the generic/WaypointOverlay component.
  */
 export default {
   name: 'patrol-map',
@@ -272,12 +274,12 @@ export default {
       if (this.isMouseDown) {
         // Write waypoint to list of waypoints
         console.log('MouseUP');
-        const date = new Date();
+        // const date = new Date();
         const wp = this.waypointList[this.waypointList.length - 1];
         const coord = this.getVideoCoordinatesOfEvent(event);
 
         wp.yaw = -Math.atan2(coord.y - wp.y, coord.x - wp.x) * 180 / Math.PI;
-        wp.dateTime = date.getTime();
+        // wp.dateTime = date.getTime();
         this.updateWaypoint(wp);
         this.isMouseDown = false;
       }
