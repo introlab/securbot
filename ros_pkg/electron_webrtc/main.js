@@ -6,7 +6,6 @@
  * @author Edouard Legare <>
  */
 
-
 const { app, BrowserWindow, ipcMain } = require('electron');
 const events = require('events');
 const rosnodejs = require('rosnodejs');
@@ -46,7 +45,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    show: false,
+    show: true,
     webPreferences: {
       nodeIntegration: false,
       preload: path.join(__dirname, 'ipcInit.js'),
