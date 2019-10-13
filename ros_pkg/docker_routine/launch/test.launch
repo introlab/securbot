@@ -1,10 +1,28 @@
 <launch>
+    <arg name="camera_name" default="usb_cam" />
+    <arg name="image_topic" default="image_raw" />
+
     <!-- Webcam -->
     <include file="$(find securbot_pkg)/launch/includes/sensors/c920.launch" />
 
     <!-- April Tags -->
     <include file="$(find securbot_pkg)/launch/includes/sensors/apriltag.launch">
-        <arg name="image_topic" value="cam_c920" />
+        <arg name="camera_name" value="$(arg camera_name)" />
+        <arg name="image_topic" value="$(arg image_topic)" />
     </include>
+
+
+
+    <!-- Image viewers for debugging -->
+    <!--
+    <node name="input_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="$(arg camera_name)/$(arg image_topic)"/>
+        <param name="autosize" value="true" />
+    </node>
+    -->
+    <node name="output_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="/tag_detections_image"/>
+        <param name="autosize" value="true" />
+    </node>
 </launch>
 
