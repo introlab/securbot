@@ -13,6 +13,14 @@
 
 
 
+    <!-- Docking planner -->
+    <node name="dock" pkg="dock" type="dock_node" output="screen">
+        <remap from="detect_array" to="tag_detections"/>
+        <param name="tag_id" value="0" />
+    </node>
+
+
+
     <!-- Image viewers for debugging -->
     <!--
     <node name="input_view" pkg="image_view" type="image_view" respawn="false" output="screen">
