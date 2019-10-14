@@ -17,6 +17,24 @@
 #define ONBOARD_LED_PIN 13
 
 /**
+ * @brief BQ24725A VCC enable GPIO.
+ * GPIO number to U4 which apply power to the VCC pin
+ */
+#define BQ24725A_EN_GPIO 25
+
+/**
+ * @brief Relay CMD GPIO.
+ * GPIO number that controls the relay providing power to the robot
+ */
+#define CMD_RELAY_GPIO 26
+
+/**
+ * @brief Fan CMD GPIO
+ * GPIO number that controls the fan to cooldown the batterie
+ */
+#define CMD_FAN_GPIO 23
+
+/**
  * @brief i2c 0 SDA pin.
  * i2c bus 0 SDA pin number
  */
