@@ -28,6 +28,6 @@ hbba_conf:
 # Initial desires
 - desire: 
     id: nav_static
-    type: Navigation
+    type: Static
     utility: 1
     security: False
