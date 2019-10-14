@@ -191,7 +191,7 @@ public:
      * @param value voltage (volts)
      * @return esp_err_t did operation succeed. Check against ESP_OK 
      */
-    esp_err_t getValue(double &value);
+    esp_err_t getValue(float &value);
 
 private:
     /**

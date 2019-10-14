@@ -50,7 +50,7 @@ esp_err_t ADS1015::isReading(bool &value)
     return ret;
 }
 
-esp_err_t ADS1015::getValue(double &value)
+esp_err_t ADS1015::getValue(float &value)
 {
 
     // Set address pointer to conversion register
@@ -62,10 +62,10 @@ esp_err_t ADS1015::getValue(double &value)
     // read conversion
     esp_err_t ret = readRegister(map, conversion.bytes);
 
-    double FS = 4.096;  // scale is -4.096 to 4.096 volts
+    float FS = 4.096;  // scale is -4.096 to 4.096 volts
     
     // convert to volt with full scale range and raw value
-    value = FS * (((2^11) - 1)/(2^11)) * (double)conversion.fields.D;
+    value = FS * (((2^11) - 1)/(2^11)) * (float)conversion.fields.D;
 
     return ret;
 }

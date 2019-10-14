@@ -23,6 +23,12 @@
 #define BQ24725A_EN_GPIO 25
 
 /**
+ * @brief BQ24725A ACOK GPIO.
+ * GPIO number to BQ24725A which indicate if the external power adapter is present
+ */
+#define BQ24725A_ACOK_GPIO 18
+
+/**
  * @brief Relay CMD GPIO.
  * GPIO number that controls the relay providing power to the robot
  */

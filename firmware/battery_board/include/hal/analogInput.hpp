@@ -47,7 +47,7 @@ public:
      * @param value channel voltage (V)
      * @return esp_err_t operation success. Check agaist ESP_OK
      */
-    esp_err_t read(uint8_t channel_number, double &value);
+    esp_err_t read(uint8_t channel_number, float &value);
 
 private:
     /**

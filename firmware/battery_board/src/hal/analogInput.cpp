@@ -31,7 +31,7 @@ esp_err_t AnalogInput::begin()
     return ESP_OK;  // no actual error management for now
 }
 
-esp_err_t AnalogInput::read(uint8_t channel_number, double &value)
+esp_err_t AnalogInput::read(uint8_t channel_number, float &value)
 {
     esp_err_t ret;
 
