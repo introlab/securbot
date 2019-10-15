@@ -8,5 +8,6 @@
 -->
     <param name="pixel_format" value="mjpeg" />
     <param name="io_method" value="mmap"/>
+    <param name="camera_frame_id" value="camera_link"/>
   </node>
 </launch>
