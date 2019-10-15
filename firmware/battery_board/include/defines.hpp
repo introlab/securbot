@@ -17,6 +17,12 @@
 #define ONBOARD_LED_PIN 13
 
 /**
+ * @brief BQ76925 alert GPIO.
+ * GPIO connected to the BQ76925 overcurrent alert pin
+ */
+#define BQ76925PWR_ALERT_GPIO 22
+
+/**
  * @brief BQ24725A VCC enable GPIO.
  * GPIO number to U4 which apply power to the VCC pin
  */
