@@ -7,10 +7,10 @@
 
 ### With Shell
 ```bash
-ssh -L 1183:localhost:1183 CIP@server.addr.ca
+ssh -L 1194:localhost:1194 CIP@server.addr.ca
 ```
 
 ### Without Shell
 ```bash
-ssh -nNT -L 1183:localhost:1183 CIP@server.addr.ca
+ssh -nNT -L 1194:localhost:1194 CIP@server.addr.ca
 ```
