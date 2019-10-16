@@ -1,14 +1,20 @@
-FROM node
+FROM node:12
 
-ENV PORT 8080
+ENV NODE_ENV production
+ENV API_PORT 3000
 
-COPY package*.json main.js ./
-COPY api ./api
+WORKDIR /opt/api
 
-RUN npm install --production
+COPY ["package*.json", "./"]
+
+RUN npm install --production --silent
+
+COPY . .
+
+EXPOSE 3000
 
 # MongoDB waiter
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
-RUN chmod +x /wait
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait ./wait
+RUN chmod +x ./wait
 
-CMD /wait && npm start
+CMD ./wait && npm start
