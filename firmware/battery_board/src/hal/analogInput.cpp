@@ -25,10 +25,14 @@ AnalogInput* AnalogInput::instance()
 
 esp_err_t AnalogInput::begin()
 {
-    _adcs[0]->configure();
-    _adcs[1]->configure();
+    esp_err_t ret;
+    ret = _adcs[0]->configure();
+    if (ret!=ESP_OK)
+    {
+        return ret;
+    }
 
-    return ESP_OK;  // no actual error management for now
+    return _adcs[1]->configure();
 }
 
 esp_err_t AnalogInput::read(uint8_t channel_number, float &value)

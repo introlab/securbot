@@ -62,34 +62,86 @@ void blink_task_fn( void *pvParameters )
  */
 void hardware_init(void)
 {
+    esp_err_t ret;
+
     // Initialize LED GPIO
     gpio_pad_select_gpio(ONBOARD_LED_PIN);
-    gpio_set_direction((gpio_num_t)ONBOARD_LED_PIN, GPIO_MODE_OUTPUT);
-    ESP_LOGD(TAG, "Onboard LED initialized");
+    ret = gpio_set_direction((gpio_num_t)ONBOARD_LED_PIN, GPIO_MODE_OUTPUT);
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "%s setting onboard led pin", esp_err_to_name(ret));
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Onboard LED initialized");
+    }
     
     // Initialize ADCs i2c driver
-    I2C::instance(ADS1015_I2C_NUM)->begin();
-    ESP_LOGD(TAG, "ADC i2c bus initialized");
+    ret = I2C::instance(ADS1015_I2C_NUM)->begin();
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "%s initializing ADC i2c bus", esp_err_to_name(ret));
+    }
+    else
+    {
+        ESP_LOGI(TAG, "ADC i2c bus initialized");
+    }
+    
 
     // Initialize BQ24725A chip i2c driver
-    I2C::instance(BQ24725A_I2C_NUM)->begin();
-    ESP_LOGD(TAG, "BQ24725A i2c bus initialized");
+    ret = I2C::instance(BQ24725A_I2C_NUM)->begin();
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "%s initializing BQ24725A i2c bus", esp_err_to_name(ret));
+    }
+    else
+    {
+        ESP_LOGI(TAG, "BQ24725A i2c bus initialized");
+    }
 
     // Initialize analog inputs driver
-    AnalogInput::instance()->begin();
-    ESP_LOGD(TAG, "Analog inputs initialized");
+    ret = AnalogInput::instance()->begin();
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "%s initializing analog inputs", esp_err_to_name(ret));
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Analog inputs initialized");
+    }
 
     // Initialize power switches
-    Switches::instance()->begin();
-    ESP_LOGD(TAG, "Power switches initialized");
+    ret = Switches::instance()->begin();
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "%s initializing power switches", esp_err_to_name(ret));
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Power switches initialized");
+    }
 
     // Initialize front end
-    Frontend::instance()->begin();
-    ESP_LOGD(TAG, "Analog front end initialized");
+    ret = Frontend::instance()->begin();
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "%s initializing analog front end", esp_err_to_name(ret));
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Analog front end initialized");
+    }
 
     // Initialize charger
-    Charger::instance()->begin();
-    ESP_LOGD(TAG, "Battery charger initialized");
+    ret = Charger::instance()->begin();
+    if (ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "%s initializing battery charger", esp_err_to_name(ret));
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Battery charger initialized");
+    }
 }
 
 /**
@@ -108,13 +160,13 @@ extern "C" void app_main(void)
 
     // Starts monitor
     ESP_LOGI(TAG, "Monitoring task started");
-    xTaskCreate(monitor::monitorTask_fn, "Monitor", 1024, NULL, 1, NULL);
+    xTaskCreate(monitor::monitorTask_fn, "Monitor", 2048, NULL, 1, NULL);
 
     // Starts serial
-    ESP_LOGI(TAG, "Serial task started");
+    //ESP_LOGI(TAG, "Serial task started");
     
     // Starts control
-    ESP_LOGI(TAG, "Control task started");
+    //ESP_LOGI(TAG, "Control task started");
     
     // Start blinky
     xTaskCreate(blink_task_fn, "Blinky", 512, NULL, 0, NULL);
