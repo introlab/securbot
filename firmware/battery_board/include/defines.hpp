@@ -125,3 +125,9 @@
  * analog channel connected to BQ24725A IOUT
  */
 #define BQ24725A_IOUT_CHANNEL 4
+
+/**
+ * @brief battery monitoring rate.
+ * configures the rate at which the firmware reads the battery board state
+ */
+#define MONITOR_PERIOD_MS 100

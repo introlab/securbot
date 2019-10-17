@@ -56,6 +56,24 @@ esp_err_t Frontend::getBatteryCurrent(float current)
     return ret;
 }
 
+esp_err_t Frontend::getBatteryVoltage(float voltage)
+{
+    esp_err_t ret;
+
+    xSemaphoreTake(_mutex, portMAX_DELAY);
+
+    ret = _bq76.selectCell(5);
+    if (ret != ESP_OK)
+    {
+        xSemaphoreGive(_mutex);
+        return ret;
+    }
+    ret = _analog->read(VCOUT_BMS_CHANNEL, voltage);
+
+    xSemaphoreGive(_mutex);
+    return ret;
+}
+
 esp_err_t Frontend::setCurrentPolarity(uint8_t charging)
 {
     esp_err_t ret;

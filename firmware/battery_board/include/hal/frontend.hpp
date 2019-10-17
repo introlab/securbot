@@ -51,6 +51,15 @@ public:
     esp_err_t getBatteryCurrent(float current);
 
     /**
+     * @brief Get the Battery Voltage.
+     * Reads the battery voltage trough the analog front end.
+     * Thread safe, doesnt require AC power
+     * @param voltage the battery voltage
+     * @return esp_err_t operation success, check against ESP_OK
+     */
+    esp_err_t getBatteryVoltage(float voltage);
+
+    /**
      * @brief Set the Current Polarity.
      * Configure the front end to monitor either charge or discharge.
      * Thread safe
