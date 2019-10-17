@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+  frontend:
+    image: frontend:0.2.2
+    build: .
+    ports:
+      - 8001:80

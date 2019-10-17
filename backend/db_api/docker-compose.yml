@@ -7,16 +7,17 @@ services:
       - ./.data:/data/db
 
   api:
+    image: db-api
     build: .
     ports:
-      - '8080:8080'
+      - '3000:3000'
     links:
       - 'mongodb'
     depends_on:
       - 'mongodb'
     environment:
-      - DB_HOST=mongodb
-      - DB_PORT=27017
-      - API_PORT=8080
-      - API_PATH=/
-      - WAIT_HOSTS=mongodb:27017
+      DB_HOST: mongodb
+      DB_PORT: 27017
+      API_PORT: 3000
+      API_PATH: /
+      WAIT_HOSTS: mongodb:27017
