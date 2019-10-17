@@ -120,7 +120,7 @@ private:
      * @brief BQ76925 driver.
      * Driver to communicate with the analog front end chip.
      */
-    BQ76925 _bq76 {BQ24725A_I2C_NUM};
+    BQ76925 _bq76 {ADS1015_I2C_NUM};
 
     /**
      * @brief Analog input driver instance.

@@ -71,7 +71,7 @@
  * @brief i2c clock speed.
  * i2c master clock speed. Maximum 1 Mhz.
  */
-#define I2C_CLK_SPEED 400000
+#define I2C_CLK_SPEED 100000
 /**
  * @brief smbus clock speed.
  * smbus master clock speed. Maxumum 100 khz.
