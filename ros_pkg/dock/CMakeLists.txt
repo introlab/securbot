@@ -136,6 +136,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(target_node
     src/target_node.cpp)
+add_executable(planner_node
+    src/planner_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -146,11 +148,13 @@ add_executable(target_node
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(target_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(planner_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(target_node
-  ${catkin_LIBRARIES}
-)
+  ${catkin_LIBRARIES})
+target_link_libraries(planner_node
+  ${catkin_LIBRARIES})
 
 #############
 ## Install ##

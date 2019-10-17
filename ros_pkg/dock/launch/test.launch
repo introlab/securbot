@@ -17,10 +17,14 @@
 
 
 
-    <!-- Docking planner -->
+    <!-- Docking -->
     <node name="target" pkg="dock" type="target_node" output="screen">
         <remap from="detect_array" to="tag_detections"/>
         <param name="tag_id" value="0" />
+    </node>
+    <node name="planner" pkg="dock" type="planner_node" output="screen">
+        <param name="target_frame_id" value="target"/>
+        <param name="base_frame_id" value="base_footprint"/>
     </node>
 
 
@@ -37,6 +41,6 @@
         <param name="autosize" value="true" />
     </node>
 
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find dock)/config.rviz" />
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find dock)/config/config.rviz" />
 </launch>
 

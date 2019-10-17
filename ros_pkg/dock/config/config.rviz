@@ -83,6 +83,29 @@ Visualization Manager:
             {}
       Update Interval: 0
       Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 25; 255; 0
+      Enabled: true
+      Head Diameter: 0.300000012
+      Head Length: 0.200000003
+      Length: 0.300000012
+      Line Style: Lines
+      Line Width: 0.0299999993
+      Name: Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.0299999993
+      Shaft Diameter: 0.100000001
+      Shaft Length: 0.100000001
+      Topic: approach_plan
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -108,25 +131,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.08793235
+      Distance: 1.55919802
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.454804182
-        Y: -0.0359077342
-        Z: 0.131751016
+        X: 0.295053422
+        Y: -0.0965316445
+        Z: 0.0104274303
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.295398444
+      Pitch: 0.720398307
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.86039698
+      Yaw: 3.95539498
     Saved: ~
 Window Geometry:
   Displays:
@@ -144,5 +167,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 548
-  Y: 62
+  X: 530
+  Y: 61
