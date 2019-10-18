@@ -25,6 +25,7 @@
     <node name="planner" pkg="dock" type="planner_node" output="screen">
         <param name="target_frame_id" value="target"/>
         <param name="base_frame_id" value="base_footprint"/>
+        <param name="dx" value="0.05" />
     </node>
 
 

@@ -7,12 +7,11 @@
 #include <cmath>
 
 
-
+double g_dx;
 tf2_ros::Buffer g_tfBuffer;
 ros::Publisher g_pathPublisher;
 std::string g_target_frame_id;
 std::string g_base_frame_id;
-
 
 void ComputeTrajectory()
 {
@@ -35,7 +34,7 @@ void ComputeTrajectory()
 
     // Compute path
     nav_msgs::Path plan;
-    double dx = 0.05,
+    double dx = g_dx,
            x1 = robotTransform.transform.translation.x,
            y1 = robotTransform.transform.translation.y,
            a = y1 / x1 / x1;
@@ -78,6 +77,7 @@ int main (int argc, char **argv)
     // Parameters
     nh.param("target/target_frame_id", g_target_frame_id, std::string("target"));
     nh.param("target/base_frame_id", g_base_frame_id, std::string("base_footprint"));
+    nh.param("target/dx", g_dx, 0.05);
 
 
     // Initializing the transform buffer
@@ -87,8 +87,6 @@ int main (int argc, char **argv)
     // Init publisher
     g_pathPublisher = nh.advertise<nav_msgs::Path>("approach_plan", 10);
 
-
-    ros::Time lastTimeStamp;
 
     ros::Rate rate(100.0);
     while(nh.ok())
