@@ -379,6 +379,14 @@ public:
      */
     esp_err_t configure();
 
+    /**
+     * @brief Read the chip id.
+     * Reads the chip's chip id register. usefull for debugging
+     * @param id the red chip id
+     * @return esp_err_t operation success, check against ESP_OK
+     */
+    esp_err_t readChipId(uint8_t &id);
+
 private:
     /**
      * @brief Write to chip register.

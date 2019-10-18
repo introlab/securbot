@@ -23,6 +23,12 @@
 #define BQ76925PWR_ALERT_GPIO 22
 
 /**
+ * @brief BQ76925 chip id.
+ * Id that sould be returned when the chip id is red
+ */
+#define BQ76925_CHIP_ID 0x10
+
+/**
  * @brief BQ24725A VCC enable GPIO.
  * GPIO number to U4 which apply power to the VCC pin
  */

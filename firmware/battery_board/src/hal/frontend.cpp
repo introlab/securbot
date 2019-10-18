@@ -36,6 +36,18 @@ esp_err_t Frontend::begin()
     gpio_pad_select_gpio(BQ76925PWR_ALERT_GPIO);
     gpio_set_direction((gpio_num_t)BQ76925PWR_ALERT_GPIO, GPIO_MODE_INPUT);
 
+    // check if we can read the chip id
+    uint8_t id;
+    ret = _bq76.readChipId(id);
+    if (ret != ESP_OK)
+    {
+        return ret;
+    }
+    if (id != BQ76925_CHIP_ID)
+    {
+        return ESP_ERR_INVALID_RESPONSE;
+    }
+
     ret = _bq76.configure();          // configure front end chip
     if (ret != ESP_OK)
     {

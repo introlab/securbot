@@ -19,6 +19,7 @@
 #define CONFIG_1_REG_ADR 3  // config 1 register address
 #define CONFIG_2_REG_ADR 4  // config 2 register address
 #define POWER_CTL_REG_ADR 5 // power ctl register address
+#define CHIP_ID_REG_ADR 7   // chip id register address
 
 #define VCOUT_VSS 0
 #define VCOUT_VCn 1
@@ -131,4 +132,14 @@ esp_err_t BQ76925::readRegister(uint8_t address, uint8_t value[1])
 
     // actual read operation
     return _i2c->read(adr.address, value, 1);
+}
+
+esp_err_t BQ76925::readChipId(uint8_t &id)
+{
+    address_map adr;
+    adr.fields.CHIP = CHIP_ADR;                // chip address
+    adr.fields.REGISTER = CHIP_ID_REG_ADR;  // register address
+
+    // actual read operation
+    return _i2c->read(adr.address, &id, 1);
 }
