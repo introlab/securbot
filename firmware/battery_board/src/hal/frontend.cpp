@@ -11,6 +11,11 @@
 
 #include "hal/frontend.hpp"
 
+namespace
+{
+    const char* TAG = "Frontend";
+}
+
 Frontend* Frontend::_instance = NULL;
 
 Frontend* Frontend::instance()
@@ -31,14 +36,15 @@ Frontend::Frontend()
 esp_err_t Frontend::begin()
 {
     esp_err_t ret;
+    uint8_t id;
     
     // set alert pin as input
     gpio_pad_select_gpio(BQ76925PWR_ALERT_GPIO);
     gpio_set_direction((gpio_num_t)BQ76925PWR_ALERT_GPIO, GPIO_MODE_INPUT);
 
     // check if we can read the chip id
-    uint8_t id;
     ret = _bq76.readChipId(id);
+    ESP_LOGD(TAG, "BQ76925 chip id is 0x%02x", id);
     if (ret != ESP_OK)
     {
         return ret;
@@ -53,6 +59,7 @@ esp_err_t Frontend::begin()
     {
         return ret;
     }
+
     return _bq76.setMonitorMode(1, 0); // default to monitoring discharge
 }
 

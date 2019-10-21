@@ -381,7 +381,7 @@ public:
 
     /**
      * @brief Read the chip id.
-     * Reads the chip's chip id register. usefull for debugging
+     * Reads the chip's chip id register. useful for debugging
      * @param id the red chip id
      * @return esp_err_t operation success, check against ESP_OK
      */

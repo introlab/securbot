@@ -114,6 +114,16 @@ esp_err_t BQ76925::configure()
     return ret; // we must return status wether success or failure
 }
 
+esp_err_t BQ76925::readChipId(uint8_t &id)
+{
+    address_map adr;
+    adr.fields.CHIP = CHIP_ADR;                // chip address
+    adr.fields.REGISTER = CHIP_ID_REG_ADR;  // register address
+
+    // actual read operation
+    return _i2c->read(adr.address, &id, 1);
+}
+
 esp_err_t BQ76925::writeRegister(uint8_t address, uint8_t value[1])
 {
     address_map adr;
@@ -132,14 +142,4 @@ esp_err_t BQ76925::readRegister(uint8_t address, uint8_t value[1])
 
     // actual read operation
     return _i2c->read(adr.address, value, 1);
-}
-
-esp_err_t BQ76925::readChipId(uint8_t &id)
-{
-    address_map adr;
-    adr.fields.CHIP = CHIP_ADR;                // chip address
-    adr.fields.REGISTER = CHIP_ID_REG_ADR;  // register address
-
-    // actual read operation
-    return _i2c->read(adr.address, &id, 1);
 }
