@@ -193,6 +193,14 @@ public:
      */
     esp_err_t getValue(float &value);
 
+    /**
+     * @brief Get the chip current configuration.
+     * Read the current value of the configuration register and fill up the mapping
+     * @param map configuration mapping to fill
+     * @return esp_err_t operation success, check against ESP_OK
+     */
+    esp_err_t getConfig(ADS1015::config_register_map &map);
+
 private:
     /**
      * @brief utility to write ADS1015 register.

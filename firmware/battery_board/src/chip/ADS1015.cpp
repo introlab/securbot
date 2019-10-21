@@ -52,7 +52,6 @@ esp_err_t ADS1015::isReading(bool &value)
 
 esp_err_t ADS1015::getValue(float &value)
 {
-
     // Set address pointer to conversion register
     address_pointer_register_map map;
     map.fields.P = CONV_REG_ADR;
@@ -68,6 +67,15 @@ esp_err_t ADS1015::getValue(float &value)
     value = FS * (((2^11) - 1)/(2^11)) * (float)conversion.fields.D;
 
     return ret;
+}
+
+esp_err_t ADS1015::getConfig(ADS1015::config_register_map &map)
+{
+    // Set address pointer to configuration register
+    address_pointer_register_map adr;
+    adr.fields.P = CONFIG_REG_ADR;
+
+    return readRegister(adr, map.bytes);
 }
 
 esp_err_t ADS1015::writeRegister(ADS1015::address_pointer_register_map address, uint8_t value[2])

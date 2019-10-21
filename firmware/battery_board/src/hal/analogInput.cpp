@@ -11,6 +11,19 @@
 
 #include "hal/analogInput.hpp"
 
+/**
+ * @brief Analog input anonymous namespace.
+ * Namespace to hide analog input global variables
+ */
+namespace
+{
+    /**
+     * @brief Analog input log tag.
+     * Tag to use when logging from the analog input file
+     */
+    const char* TAG = "Analog Input";
+}
+
 AnalogInput* AnalogInput::_instance = NULL;
 
 AnalogInput* AnalogInput::instance()
@@ -26,12 +39,32 @@ AnalogInput* AnalogInput::instance()
 esp_err_t AnalogInput::begin()
 {
     esp_err_t ret;
+    ADS1015::config_register_map config;
+
+    // Print ADC 0 default configuration
+    ret = _adcs[0]->getConfig(config);
+    if (ret!=ESP_OK)
+    {
+        return ret;
+    }
+    ESP_LOGD(TAG, "ADC 0 default config 0x%02x%02x", config.bytes[1], config.bytes[0]);
+
+    // Print ADC 1 default configuration
+    ret = _adcs[1]->getConfig(config);
+    if (ret!=ESP_OK)
+    {
+        return ret;
+    }
+    ESP_LOGD(TAG, "ADC 1 default config 0x%02x%02x", config.bytes[1], config.bytes[0]);
+
+    // Configure ADC 0
     ret = _adcs[0]->configure();
     if (ret!=ESP_OK)
     {
         return ret;
     }
 
+    // Configure ADC 1
     return _adcs[1]->configure();
 }
 

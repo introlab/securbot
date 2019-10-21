@@ -11,8 +11,16 @@
 
 #include "hal/frontend.hpp"
 
+/**
+ * @brief frontend anonymous namespace.
+ * Namespace to hide global variables related to the analog frontend
+ */
 namespace
 {
+    /**
+     * @brief logging tag.
+     * Tag to use when logging from the analog frontend
+     */
     const char* TAG = "Frontend";
 }
 
