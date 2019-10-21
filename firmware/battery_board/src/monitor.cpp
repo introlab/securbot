@@ -36,12 +36,6 @@ namespace
     Frontend* _frontend;
 
     /**
-     * @brief updating state.
-     * Temporary state used to store updated values
-     */
-    state::BoardStatus _upState;
-
-    /**
      * @brief notification subscribers.
      * Vector containing task handle to be notified on each run
      */
@@ -55,7 +49,7 @@ namespace
      */
     bool checkState()
     {
-        if (!_upState.batteryOk)    // battery is never ok if a reading failed
+        if (state::current.batteryOk)    // battery is never ok if a reading failed
         {
             return false;
         }
@@ -80,88 +74,84 @@ void monitor::monitorTask_fn( void* pvParameters )
         // Run the monitor loop at the correct rate
         vTaskDelayUntil(&lastRead, MONITOR_PERIOD_MS / portTICK_PERIOD_MS);
 
-        // Create a state working copy while we update
+        // Lock the state before the update
         state::lock();
-        _upState = state::current;
-        state::unlock();
 
         // Define battery ok to be true
         // it will be used to check for monitoring errors
-        _upState.batteryOk = true;
+        state::current.batteryOk = true;
 
         // Check if the power adapter is connected
-        _upState.isAdapterConnected = _charger->isAdapterPresent() == 1;
+        state::current.isAdapterConnected = _charger->isAdapterPresent() == 1;
 
-        if (!_upState.isAdapterConnected) // No power adapter connected
+        if (!state::current.isAdapterConnected) // No power adapter connected
         {
             // the charger must be off and the battery not charging
-            _upState.isChargerBooted = false;
-            _upState.isCharging = false;
+            state::current.isChargerBooted = false;
+            state::current.isCharging = false;
         }
 
         // Read voltage, current and temperature from the analog frontend
-        ret = _frontend->getBatteryVoltage(_upState.batteryVoltage);
+        ret = _frontend->getBatteryVoltage(state::current.batteryVoltage);
         if (ret != ESP_OK)
         {
-            _upState.batteryOk = false;
+            state::current.batteryOk = false;
             ESP_LOGE(TAG, "%s reading battery voltage", esp_err_to_name(ret));
         }
-        ret = _frontend->getCellsVoltage(_upState.cellVoltages);
+        ret = _frontend->getCellsVoltage(state::current.cellVoltages);
         if (ret != ESP_OK)
         {
-            _upState.batteryOk = false;
+            state::current.batteryOk = false;
             ESP_LOGE(TAG, "%s reading cell voltage", esp_err_to_name(ret));
         }
-        ret = _frontend->getBoardTemperature(_upState.boardTemperatures);
+        ret = _frontend->getBoardTemperature(state::current.boardTemperatures);
         if (ret != ESP_OK)
         {
-            _upState.batteryOk = false;
+            state::current.batteryOk = false;
             ESP_LOGE(TAG, "%s reading board temperature", esp_err_to_name(ret));
         }
-        ret = _frontend->getBatteryCurrent(_upState.bmsBatteryCurrent);
+        ret = _frontend->getBatteryCurrent(state::current.bmsBatteryCurrent);
         if (ret != ESP_OK)
         {
-            _upState.batteryOk = false;
+            state::current.batteryOk = false;
             ESP_LOGE(TAG, "%s reading frontend battery current", esp_err_to_name(ret));
         }
 
-        if (_upState.isChargerBooted) // the charger is configured by the control task
+        if (state::current.isChargerBooted) // the charger is configured by the control task
         {
-            ret = _charger->getBatteryCurrent(_upState.chargerBatteryCurrent);
+            ret = _charger->getBatteryCurrent(state::current.chargerBatteryCurrent);
             if (ret != ESP_OK)
             {
-                _upState.batteryOk = false;
-                _upState.isChargerBooted = false;
-                ESP_LOGE(TAG, "%s reading charger battery current", esp_err_to_name(ret));
+                state::current.isChargerBooted = false;
+                state::current.chargerBatteryCurrent = 0.0;
+                ESP_LOGW(TAG, "%s reading charger battery current", esp_err_to_name(ret));
             }
-            ret = _charger->getAdapterCurrent(_upState.chargerAdapterCurrent);
+            ret = _charger->getAdapterCurrent(state::current.chargerAdapterCurrent);
             if (ret != ESP_OK)
             {
-                _upState.batteryOk = false;
-                _upState.isChargerBooted = false;
-                ESP_LOGE(TAG, "%s reading charger adapter current", esp_err_to_name(ret));
+                state::current.isChargerBooted = false;
+                state::current.chargerAdapterCurrent = 0.0;
+                ESP_LOGW(TAG, "%s reading charger adapter current", esp_err_to_name(ret));
             }
-            ret = _charger->getRobotCurrent(_upState.chargerRobotCurrent);
+            ret = _charger->getRobotCurrent(state::current.chargerRobotCurrent);
             if (ret != ESP_OK)
             {
-                _upState.batteryOk = false;
-                _upState.isChargerBooted = false;
-                ESP_LOGE(TAG, "%s reading charger robot current", esp_err_to_name(ret));
+                state::current.isChargerBooted = false;
+                state::current.chargerRobotCurrent = 0.0;
+                ESP_LOGW(TAG, "%s reading charger robot current", esp_err_to_name(ret));
             }
         }
         else    // The charger is not configured
         {
-            _upState.chargerBatteryCurrent = 0.0;
-            _upState.chargerAdapterCurrent = 0.0;
-            _upState.chargerRobotCurrent = 0.0;
+            state::current.chargerBatteryCurrent = 0.0;
+            state::current.chargerAdapterCurrent = 0.0;
+            state::current.chargerRobotCurrent = 0.0;
         }
 
         // check if the current state is ok
-        _upState.batteryOk = checkState();
+        state::current.batteryOk = checkState();
 
-        // Lock the state before updating it
-        state::lock();
-        state::current = _upState;
+        // Unlock the state when update is done
         state::unlock();
 
         // Notify subscribers that we have an update
