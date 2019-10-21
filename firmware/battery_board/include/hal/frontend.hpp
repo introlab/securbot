@@ -112,6 +112,15 @@ private:
     Frontend();
 
     /**
+     * @brief Read a single cell voltage.
+     * Read a cell voltage. Scale the ADC reading per VREF
+     * @param num cell number (0-5)
+     * @param voltage cell voltage
+     * @return esp_err_t operation success, check against ESP_OK
+     */
+    esp_err_t readCell(uint8_t num, float &voltage);
+
+    /**
      * @brief The unique front end instance.
      * Pointer to the unique front end instance.
      */

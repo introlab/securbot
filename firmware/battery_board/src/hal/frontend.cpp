@@ -81,20 +81,7 @@ esp_err_t Frontend::getBatteryCurrent(float current)
 
 esp_err_t Frontend::getBatteryVoltage(float voltage)
 {
-    esp_err_t ret;
-
-    xSemaphoreTake(_mutex, portMAX_DELAY);
-
-    ret = _bq76.selectCell(5);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-    ret = _analog->read(VCOUT_BMS_CHANNEL, voltage);
-
-    xSemaphoreGive(_mutex);
-    return ret;
+    return readCell(5, voltage);
 }
 
 esp_err_t Frontend::setCurrentPolarity(uint8_t charging)
@@ -121,13 +108,7 @@ esp_err_t Frontend::getCellsVoltage(float voltage[4])
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
     // Read cumulative at cell 1
-    ret = _bq76.selectCell(0);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-    ret = _analog->read(VCOUT_BMS_CHANNEL, cumul[0]);
+    ret = readCell(0, cumul[0]);
     if (ret != ESP_OK)
     {
         xSemaphoreGive(_mutex);
@@ -135,13 +116,7 @@ esp_err_t Frontend::getCellsVoltage(float voltage[4])
     }
 
     // Read cumulative at cell 2
-    ret = _bq76.selectCell(1);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-    ret = _analog->read(VCOUT_BMS_CHANNEL, cumul[1]);
+    ret = readCell(1, cumul[1]);
     if (ret != ESP_OK)
     {
         xSemaphoreGive(_mutex);
@@ -149,13 +124,7 @@ esp_err_t Frontend::getCellsVoltage(float voltage[4])
     }
 
     // Read cumulative at cell 3
-    ret = _bq76.selectCell(2);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-    ret = _analog->read(VCOUT_BMS_CHANNEL, cumul[2]);
+    ret = readCell(2, cumul[2]);
     if (ret != ESP_OK)
     {
         xSemaphoreGive(_mutex);
@@ -163,13 +132,7 @@ esp_err_t Frontend::getCellsVoltage(float voltage[4])
     }
 
     // Read cumulative at cell 6
-    ret = _bq76.selectCell(5);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-    ret = _analog->read(VCOUT_BMS_CHANNEL, cumul[3]);
+    ret = readCell(5, cumul[3]);
     if (ret != ESP_OK)
     {
         xSemaphoreGive(_mutex);
@@ -239,5 +202,29 @@ esp_err_t Frontend::setBalance(uint8_t cell)
     ret = _bq76.balanceCell(balance);
     xSemaphoreGive(_mutex);
 
+    return ret;
+}
+
+esp_err_t Frontend::readCell(uint8_t num, float &voltage)
+{
+    esp_err_t ret;
+
+    xSemaphoreTake(_mutex, portMAX_DELAY);
+
+    // Select the cell on VCOUT
+    ret = _bq76.selectCell(num);
+    if (ret != ESP_OK)
+    {
+        xSemaphoreGive(_mutex);
+        return ret;
+    }
+
+    // Read VCOUT
+    ret = _analog->read(VCOUT_BMS_CHANNEL, voltage);
+
+    // VCOUT is VREF (0.6) * VCell
+    voltage = voltage / 0.6;
+
+    xSemaphoreGive(_mutex);
     return ret;
 }
