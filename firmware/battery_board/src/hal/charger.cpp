@@ -11,8 +11,30 @@
 
 #include "hal/charger.hpp"
 
+/**
+ * @brief IOUT reads adapter current.
+ * IOUT bit value to read the adapter current
+ */
 #define IOUT_ADAPTER 0
+
+/**
+ * @brief IOUT reads charge current.
+ * IOUT bit value to read the battery charge current
+ */
 #define IOUT_CHARGE 1
+
+/**
+ * @brief Charger anonymous namespace.
+ * Namespace to hide charge global variables
+ */
+namespace
+{
+    /**
+     * @brief Charger logging tag.
+     * Tag to use when logging from the charger file
+     */
+    const char* TAG = "Charger";
+}
 
 Charger* Charger::_instance = NULL;
 
@@ -46,11 +68,23 @@ int Charger::isAdapterPresent()
 esp_err_t Charger::postAdapterInit()
 {
     esp_err_t ret;
+    uint16_t id;
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
-    ret = _bq24.configure();
-    xSemaphoreGive(_mutex);
 
+    // Read the chip id
+    ret = _bq24.getChipId(id);
+    if (ret != ESP_OK)
+    {
+        xSemaphoreGive(_mutex);
+        return ret;
+    }
+    ESP_LOGD(TAG, "BQ24725A chip id 0x%04x", id);
+
+    // configure the charger
+    ret = _bq24.configure();
+
+    xSemaphoreGive(_mutex);
     return ret;
 }
 

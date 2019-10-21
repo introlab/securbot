@@ -162,13 +162,13 @@ void monitor::monitorTask_fn( void* pvParameters )
         // Lock the state before updating it
         state::lock();
         state::current = _upState;
+        state::unlock();
 
         // Notify subscribers that we have an update
         for (auto i = _subscribers.begin(); i < _subscribers.end(); i++)
         {
             xTaskNotify(*i, 0, eSetValueWithOverwrite);
         }
-        state::unlock();
     }
 }
 

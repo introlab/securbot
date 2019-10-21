@@ -229,12 +229,20 @@ public:
     esp_err_t setInputCurrent(uint8_t current);
 
     /**
-     * @brief Sets IOUT configuration bit
+     * @brief Sets IOUT configuration bit.
      * Select if IOUT is 20x adapter current (0) or 20x charge current (1)
      * @param iout IOUT config bit value
      * @return esp_err_t operation success, check against ESP_OK
      */
     esp_err_t selectIOUT(uint8_t iout);
+
+    /**
+     * @brief Get the Chip Id.
+     * Read the device id.
+     * @param id where to store the id
+     * @return esp_err_t operation success, check against ESP_OK
+     */
+    esp_err_t getChipId(uint16_t &id);
 
 private:
     /**

@@ -17,6 +17,7 @@
 #define INPUT_CURRENT_CMD 0x3F  // access input current register
 #define CHARGE_VOLTAGE_CMD 0x15 // access charge voltage register
 #define CHARGE_CURRENT_CMD 0x14 // access charge current register
+#define DEVICE_ID_CMD 0xFF      // access device id register
 
 BQ24725A::BQ24725A(i2c_port_t i2c_bus)
 {
@@ -107,4 +108,20 @@ esp_err_t BQ24725A::selectIOUT(uint8_t iout)
     _chg_opt.fields.IOUT = iout;
 
     return configure();
+}
+
+esp_err_t BQ24725A::getChipId(uint16_t &id)
+{
+    esp_err_t ret;
+
+    union id_map
+    {
+        uint16_t id;
+        uint8_t bytes[2];
+    } map;
+
+    ret =  _i2c->smread(CHIP_ADR, DEVICE_ID_CMD, map.bytes, 2);
+    id = map.id;
+
+    return ret;
 }
