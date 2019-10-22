@@ -1,11 +1,10 @@
 hbba_conf:
 
 - behavior:
-    name:planner
+    name: planner
     launch: {pkg: 'securbot_pkg', path: 'launch/navigation.launch'}
     priority: 30
     input:
-        -
-
+        - move_base_simple/goal: {src: planner_goal, filtered: true}
     output:
-        
+        - cmd_vel        
