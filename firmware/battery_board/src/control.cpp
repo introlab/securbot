@@ -40,48 +40,6 @@ namespace
      * Analog frontend to balance cells
      */
     Frontend* _frontend;
-
-    /**
-     * @brief Finds the highest voltage among cells.
-     * Utility function to find the cell with the highest voltage among the array
-     * @param v cell voltage array
-     * @param high highest voltage
-     * @param index highest cell index
-     */
-    void findHighest(float v[4], float &high, uint8_t &index)
-    {
-        high = 0.0;
-
-        for (uint8_t i = 0; i < 4; i++)
-        {
-            if (v[i] > high)
-            {
-                high = v[i];
-                index = i;
-            }
-        }
-    }
-
-    /**
-     * @brief Finds the lowest voltage among cells.
-     * Utility function to find the cell with the lowest voltage among the array
-     * @param v cell voltage array
-     * @param low lowest voltage
-     * @param index lowest cell index
-     */
-    void findLowest(float v[4], float &low, uint8_t &index)
-    {
-        low = VMAX;
-
-        for (uint8_t i = 0; i < 4; i++)
-        {
-            if (v[i] < low)
-            {
-                low = v[i];
-                index = i;
-            }
-        }
-    }
 }
 
 void control::controlTask_fn( void* pvParameters)
@@ -140,8 +98,8 @@ void control::controlTask_fn( void* pvParameters)
             if (state::current.isChargerBooted)
             {
                 // find highest and lowest cell
-                findHighest(state::current.cellVoltages, vHigh, iHigh);
-                findLowest(state::current.cellVoltages, vLow, iLow);
+                state::findHighestCell(state::current.cellVoltages, vHigh, iHigh);
+                state::findLowestCell(state::current.cellVoltages, vLow, iLow);
 
                 if ( vHigh >= VMAX || state::current.isCharged)   // battery is charged
                 {

@@ -49,8 +49,35 @@ namespace
      */
     bool checkState()
     {
+        float vmax;
+        float vmin;
+        uint8_t imax;
+        uint8_t imin;
+
         if (state::current.batteryOk)    // battery is never ok if a reading failed
         {
+            ESP_LOGW(TAG, "Reading failed. Battery unsafe");
+            return false;
+        }
+
+        state::findHighestCell(state::current.cellVoltages, vmax, imax);
+        state::findLowestCell(state::current.cellVoltages, vmin, imin);
+
+        if (vmax >= VMAX + VMARGE)  // cells are too charged
+        {
+            ESP_LOGW(TAG, "Cell %d overcharged at %4.2fV", imax+1, vmax);
+            return false;
+        }
+
+        if (vmin <= VMIN - VMARGE)  // cells are not charged enough
+        {
+            ESP_LOGW(TAG, "Cell %d undercharged at %4.2fV", imin+1, vmin);
+            return false;
+        }
+
+        if (vmax - vmin >= VDELTA_MAX)  // cells are dangerously unbalanced
+        {
+            ESP_LOGW(TAG, "Cell %d and %d charge disparity %4.2fV", imax, imin, vmax-vmin);
             return false;
         }
 

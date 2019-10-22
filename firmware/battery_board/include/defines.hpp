@@ -163,7 +163,25 @@
 #define BALANCE_CURRENT 10
 
 /**
+ * @brief Min cell voltage
+ * Minimum single battery cell voltage
+ */
+#define VMIN 2.0
+
+/**
  * @brief Max cell voltage.
  * Maximum single battery cell voltage
  */
 #define VMAX 4.2
+
+/**
+ * @brief Max safe cell delta.
+ * Maximum delta between highest and lowest cell considered safe
+ */
+#define VDELTA_MAX 0.9
+
+/**
+ * @brief Voltage safety margin.
+ * Margin applied to voltage safety check
+ */
+#define VMARGE 0.1

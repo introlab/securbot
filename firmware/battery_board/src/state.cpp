@@ -66,3 +66,31 @@ void state::unlock()
 {
     xSemaphoreGive(_mutex);
 }
+
+void state::findHighestCell(float v[4], float &high, uint8_t &index)
+{
+    high = 0.0;
+
+    for (uint8_t i = 0; i < 4; i++)
+    {
+        if (v[i] > high)
+        {
+            high = v[i];
+            index = i;
+        }
+    }
+}
+
+void state::findLowestCell(float v[4], float &low, uint8_t &index)
+{
+    low = VMAX;
+
+    for (uint8_t i = 0; i < 4; i++)
+    {
+        if (v[i] < low)
+        {
+            low = v[i];
+            index = i;
+        }
+    }
+}

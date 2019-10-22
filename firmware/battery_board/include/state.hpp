@@ -15,6 +15,8 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 
+#include "defines.hpp"
+
 /**
  * @brief Battery board state namespace.
  * Hold all definitions and global variables relative to the battery board state
@@ -112,14 +114,34 @@ namespace state
      * Initialize the current board status structure
      */
     void create();
+
     /**
      * @brief Lock the current status.
      * Acquire the board status mutex
      */
     void lock();
+
     /**
      * @brief Unlock the current status.
      * Release the board status mutex
      */
     void unlock();
+
+    /**
+     * @brief Finds the highest voltage among cells.
+     * Utility function to find the cell with the highest voltage among the array
+     * @param v cell voltage array
+     * @param high highest voltage
+     * @param index highest cell index
+     */
+    void findHighestCell(float v[4], float &high, uint8_t &index);
+
+    /**
+     * @brief Finds the lowest voltage among cells.
+     * Utility function to find the cell with the lowest voltage among the array
+     * @param v cell voltage array
+     * @param low lowest voltage
+     * @param index lowest cell index
+     */
+    void findLowestCell(float v[4], float &low, uint8_t &index);
 }
