@@ -81,6 +81,7 @@ namespace
             return false;
         }
 
+        ESP_LOGI(TAG, "Battery OK");
         return true;
     }
 }
@@ -189,13 +190,13 @@ void monitor::monitorTask_fn( void* pvParameters )
 
         // check if the current state is ok
         state::current.batteryOk = checkState();
-/*
+
         // Notify subscribers that we have an update
         for (auto i = _subscribers.begin(); i < _subscribers.end(); i++)
         {
             xTaskNotify(*i, 0, eSetValueWithOverwrite);
         }
-*/
+
         // Unlock the state when update is done
         state::unlock();
     }
