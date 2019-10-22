@@ -30,7 +30,7 @@ namespace monitor
     /**
      * @brief Monitoring task function.
      * Task function that monitor the battery
-     * @param pvParameters parameters to pass to the function
+     * @param pvParameters parameters to pass to the function (not used)
      */
     void monitorTask_fn( void* pvParameters );
 

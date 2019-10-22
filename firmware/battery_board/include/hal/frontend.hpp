@@ -49,7 +49,7 @@ public:
      * @param current the battery current
      * @return esp_err_t operation success, check against ESP_OK
      */
-    esp_err_t getBatteryCurrent(float current);
+    esp_err_t getBatteryCurrent(float &current);
 
     /**
      * @brief Get the Battery Voltage.
@@ -58,7 +58,7 @@ public:
      * @param voltage the battery voltage
      * @return esp_err_t operation success, check against ESP_OK
      */
-    esp_err_t getBatteryVoltage(float voltage);
+    esp_err_t getBatteryVoltage(float &voltage);
 
     /**
      * @brief Set the Current Polarity.

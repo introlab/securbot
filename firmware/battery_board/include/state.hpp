@@ -39,6 +39,16 @@ namespace state
          */
         bool isCharging;
         /**
+         * @brief balancing.
+         * Indicate charge is coming to an end and the cells are balancing
+         */
+        bool isBalancing;
+        /**
+         * @brief charged.
+         * Indicate charge is complete
+         */
+        bool isCharged;
+        /**
          * @brief charger booted.
          * Indicate that the battery charger ic is powered on and configured
          */

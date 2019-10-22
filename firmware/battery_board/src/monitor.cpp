@@ -89,6 +89,8 @@ void monitor::monitorTask_fn( void* pvParameters )
             // the charger must be off and the battery not charging
             state::current.isChargerBooted = false;
             state::current.isCharging = false;
+            state::current.isBalancing = false;
+            state::current.isCharged = false;
         }
 
         // Read voltage, current and temperature from the analog frontend
@@ -151,14 +153,14 @@ void monitor::monitorTask_fn( void* pvParameters )
         // check if the current state is ok
         state::current.batteryOk = checkState();
 
-        // Unlock the state when update is done
-        state::unlock();
-
         // Notify subscribers that we have an update
         for (auto i = _subscribers.begin(); i < _subscribers.end(); i++)
         {
             xTaskNotify(*i, 0, eSetValueWithOverwrite);
         }
+
+        // Unlock the state when update is done
+        state::unlock();
     }
 }
 

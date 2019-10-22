@@ -31,6 +31,8 @@ void state::create()
     current.batteryOk = false;
 
     current.isCharging = false;
+    current.isBalancing = false;
+    current.isCharged = false;
     current.isChargerBooted = false;
     current.isAdapterConnected = false;
 

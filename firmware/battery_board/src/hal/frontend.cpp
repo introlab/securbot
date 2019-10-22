@@ -67,19 +67,21 @@ esp_err_t Frontend::begin()
     return _bq76.setMonitorMode(1, 0); // default to monitoring discharge
 }
 
-esp_err_t Frontend::getBatteryCurrent(float current)
+esp_err_t Frontend::getBatteryCurrent(float &current)
 {
     esp_err_t ret;
+    float viout;
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
-    ret = _analog->read(BQ24725A_IOUT_CHANNEL, current);
-    // TODO: voltage to current conversion
+    ret = _analog->read(BQ24725A_IOUT_CHANNEL, viout);
     xSemaphoreGive(_mutex);
+
+    current = (viout-2.5) * 14.675 + 7.35;
 
     return ret;
 }
 
-esp_err_t Frontend::getBatteryVoltage(float voltage)
+esp_err_t Frontend::getBatteryVoltage(float &voltage)
 {
     return readCell(5, voltage);
 }
@@ -176,7 +178,7 @@ esp_err_t Frontend::getBoardTemperature(float temperature[2])
     
     for (uint8_t i = 0; i < 2; i++) // convert voltage to temperature
     {
-        temperature[i] = voltage[i];    // TODO: volt to Celsius conversion
+        temperature[i] = (voltage[i] - 1.28) * 41.4 + 25;
     }
 
     return ESP_OK;
@@ -208,6 +210,7 @@ esp_err_t Frontend::setBalance(uint8_t cell)
 esp_err_t Frontend::readCell(uint8_t num, float &voltage)
 {
     esp_err_t ret;
+    float vcout;
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
@@ -220,10 +223,10 @@ esp_err_t Frontend::readCell(uint8_t num, float &voltage)
     }
 
     // Read VCOUT
-    ret = _analog->read(VCOUT_BMS_CHANNEL, voltage);
+    ret = _analog->read(VCOUT_BMS_CHANNEL, vcout);
 
     // VCOUT is VREF (0.6) * VCell
-    voltage = voltage / 0.6;
+    voltage = vcout / 0.6;
 
     xSemaphoreGive(_mutex);
     return ret;

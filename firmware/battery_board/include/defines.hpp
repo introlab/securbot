@@ -137,3 +137,33 @@
  * configures the rate at which the firmware reads the battery board state
  */
 #define MONITOR_PERIOD_MS 100
+
+/**
+ * @brief Maximum adapter current.
+ * Sets the maximum adapter current *128mA = 8.064A
+ */
+#define ADAPTER_CURRENT 63
+
+/**
+ * @brief Battery final charge voltage.
+ * Battery voltage at end of charge *16mV = 16.8V
+ */
+#define CHARGE_VOLTAGE 1050
+
+/**
+ * @brief Battery main charge current.
+ * Battery current during main charge *64mA = 3.392A
+ */
+#define CHARGE_CURRENT 53
+
+/**
+ * @brief Battery balancing charge current.
+ * Battery current during balance charge *64mA = 0.64A
+ */
+#define BALANCE_CURRENT 10
+
+/**
+ * @brief Max cell voltage.
+ * Maximum single battery cell voltage
+ */
+#define VMAX 4.2

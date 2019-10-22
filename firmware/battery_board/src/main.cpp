@@ -23,6 +23,7 @@
 #include "hal/frontend.hpp"
 
 #include "monitor.hpp"
+#include "control.hpp"
 
 /**
  * @brief main program private namespace.
@@ -159,14 +160,17 @@ extern "C" void app_main(void)
     ESP_LOGI(TAG, "Starting tasks");
 
     // Starts monitor
-    ESP_LOGI(TAG, "Monitoring task started");
     xTaskCreate(monitor::monitorTask_fn, "Monitor", 2048, NULL, 1, NULL);
+    ESP_LOGI(TAG, "Monitoring task started");
 
     // Starts serial
     //ESP_LOGI(TAG, "Serial task started");
     
     // Starts control
-    //ESP_LOGI(TAG, "Control task started");
+    TaskHandle_t controlHandle;
+    xTaskCreate(control::controlTask_fn, "Control", 2048, NULL, 1, &controlHandle);
+    monitor::smashThatSubscribeButton(controlHandle);
+    ESP_LOGI(TAG, "Control task started");
     
     // Start blinky
     xTaskCreate(blink_task_fn, "Blinky", 512, NULL, 0, NULL);
