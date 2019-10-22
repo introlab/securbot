@@ -50,9 +50,11 @@ esp_err_t Frontend::begin()
     gpio_pad_select_gpio(BQ76925PWR_ALERT_GPIO);
     gpio_set_direction((gpio_num_t)BQ76925PWR_ALERT_GPIO, GPIO_MODE_INPUT);
 
+    xSemaphoreTake(_mutex, portMAX_DELAY);
+
     // Read the chip id
     ret = _bq76.readChipId(id);
-    ESP_LOGD(TAG, "BQ76925 chip id is 0x%02x", id);
+    ESP_LOGI(TAG, "BQ76925 chip id is 0x%02x", id);
     if (ret != ESP_OK)
     {
         return ret;
@@ -64,7 +66,11 @@ esp_err_t Frontend::begin()
         return ret;
     }
 
-    return _bq76.setMonitorMode(1, 0); // default to monitoring discharge
+    ret = _bq76.setMonitorMode(1, 0); // default to monitoring discharge
+
+    xSemaphoreGive(_mutex);
+
+    return ret;
 }
 
 esp_err_t Frontend::getBatteryCurrent(float &current)
@@ -179,6 +185,7 @@ esp_err_t Frontend::getBoardTemperature(float temperature[2])
     for (uint8_t i = 0; i < 2; i++) // convert voltage to temperature
     {
         temperature[i] = (voltage[i] - 1.28) * 41.4 + 25;
+        ESP_LOGI(TAG, "Temp %d is %02.5fC", i+1, temperature[i]);
     }
 
     return ESP_OK;
@@ -212,8 +219,6 @@ esp_err_t Frontend::readCell(uint8_t num, float &voltage)
     esp_err_t ret;
     float vcout;
 
-    xSemaphoreTake(_mutex, portMAX_DELAY);
-
     // Select the cell on VCOUT
     ret = _bq76.selectCell(num);
     if (ret != ESP_OK)
@@ -227,7 +232,7 @@ esp_err_t Frontend::readCell(uint8_t num, float &voltage)
 
     // VCOUT is VREF (0.6) * VCell
     voltage = vcout / 0.6;
+    ESP_LOGI(TAG, "Cell no %d is %4.2fV", num+1, voltage);
 
-    xSemaphoreGive(_mutex);
     return ret;
 }

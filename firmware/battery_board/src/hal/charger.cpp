@@ -79,7 +79,7 @@ esp_err_t Charger::postAdapterInit()
         xSemaphoreGive(_mutex);
         return ret;
     }
-    ESP_LOGD(TAG, "BQ24725A chip id 0x%04x", id);
+    ESP_LOGI(TAG, "BQ24725A chip id 0x%04x", id);
 
     // configure the charger
     ret = _bq24.configure();

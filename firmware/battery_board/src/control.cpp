@@ -74,7 +74,7 @@ void control::controlTask_fn( void* pvParameters)
             // boot charger if required (first run since AC went live)
             if (!state::current.isChargerBooted) 
             {
-                ESP_LOGD(TAG, "Booting BQ24725A");
+                ESP_LOGI(TAG, "Booting BQ24725A");
                 uint8_t attempts = 3;
                 do  // in case power just went live do a few attempts
                 {

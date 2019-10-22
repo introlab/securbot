@@ -47,7 +47,7 @@ esp_err_t AnalogInput::begin()
     {
         return ret;
     }
-    ESP_LOGD(TAG, "ADC 0 default config 0x%02x%02x", config.bytes[1], config.bytes[0]);
+    ESP_LOGI(TAG, "ADC 0 default config 0x%02x%02x", config.bytes[1], config.bytes[0]);
 
     // Print ADC 1 default configuration
     ret = _adcs[1]->getConfig(config);
@@ -55,7 +55,7 @@ esp_err_t AnalogInput::begin()
     {
         return ret;
     }
-    ESP_LOGD(TAG, "ADC 1 default config 0x%02x%02x", config.bytes[1], config.bytes[0]);
+    ESP_LOGI(TAG, "ADC 1 default config 0x%02x%02x", config.bytes[1], config.bytes[0]);
 
     // Configure ADC 0
     ret = _adcs[0]->configure();

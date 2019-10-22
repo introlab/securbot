@@ -54,7 +54,7 @@ namespace
         uint8_t imax;
         uint8_t imin;
 
-        if (state::current.batteryOk)    // battery is never ok if a reading failed
+        if (!state::current.batteryOk)    // battery is never ok if a reading failed
         {
             ESP_LOGW(TAG, "Reading failed. Battery unsafe");
             return false;
@@ -146,6 +146,16 @@ void monitor::monitorTask_fn( void* pvParameters )
             ESP_LOGE(TAG, "%s reading frontend battery current", esp_err_to_name(ret));
         }
 
+        if (!state::current.batteryOk)
+        {
+            ESP_LOGW(TAG, "Reconfiguring analog frontend");
+            ret = _frontend->begin();
+            if (ret != ESP_OK)
+            {
+                ESP_LOGE(TAG, "Frontend reconfigure failed %s", esp_err_to_name(ret));
+            }
+        }
+
         if (state::current.isChargerBooted) // the charger is configured by the control task
         {
             ret = _charger->getBatteryCurrent(state::current.chargerBatteryCurrent);
@@ -179,13 +189,13 @@ void monitor::monitorTask_fn( void* pvParameters )
 
         // check if the current state is ok
         state::current.batteryOk = checkState();
-
+/*
         // Notify subscribers that we have an update
         for (auto i = _subscribers.begin(); i < _subscribers.end(); i++)
         {
             xTaskNotify(*i, 0, eSetValueWithOverwrite);
         }
-
+*/
         // Unlock the state when update is done
         state::unlock();
     }

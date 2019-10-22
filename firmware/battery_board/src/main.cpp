@@ -152,6 +152,8 @@ void hardware_init(void)
 extern "C" void app_main(void)
 {
     ESP_LOGI(TAG, "Hello World!");
+    ESP_LOGI(TAG, "Hello World!");
+    ESP_LOGI(TAG, "Hello World!");
 
     // Prepare hardware
     ESP_LOGI(TAG, "Initializing hardware");
