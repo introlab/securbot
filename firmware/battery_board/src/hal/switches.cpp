@@ -44,7 +44,20 @@ esp_err_t Switches::begin()
 
     // Fan control
     gpio_pad_select_gpio(CMD_FAN_GPIO);
-    return gpio_set_direction((gpio_num_t)CMD_FAN_GPIO, GPIO_MODE_OUTPUT);
+    ret = gpio_set_direction((gpio_num_t)CMD_FAN_GPIO, GPIO_MODE_OUTPUT);
+    if (ret != ESP_OK)
+    {
+        return ret;
+    }
+
+    if (ret == ESP_OK)
+    {
+        setBQ24725APower(0);
+        setRobotPower(0);
+        setFanPower(0);
+    }
+
+    return ret;
 }
 
 esp_err_t Switches::setBQ24725APower(uint32_t enabled)

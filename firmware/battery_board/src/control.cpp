@@ -49,6 +49,7 @@ void control::controlTask_fn( void* pvParameters)
     float vLow = 0.0;
     uint8_t iHigh = 0;
     uint8_t iLow = 0;
+    uint16_t okCount = 0;
 
     // Get handle to unique instances
     _switches = Switches::instance();
@@ -64,12 +65,21 @@ void control::controlTask_fn( void* pvParameters)
         state::lock();
 
         // power the robot if battery is ok
-        uint32_t pwr = state::current.batteryOk;
+        if (state::current.batteryOk)
+        {
+            okCount = okCount < 10 ? okCount+1 : 10;
+        }
+        else
+        {
+            okCount = 0;
+        }
+        
+        uint32_t pwr = okCount == 10;
         _switches->setRobotPower(pwr);
         _switches->setBQ24725APower(pwr);
 
         // on AC power and good battery
-        if (state::current.isAdapterConnected && state::current.batteryOk)
+        if (state::current.isAdapterConnected && pwr == 1)
         {
             // boot charger if required (first run since AC went live)
             if (!state::current.isChargerBooted) 
