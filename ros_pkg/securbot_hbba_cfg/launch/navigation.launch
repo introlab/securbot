@@ -6,7 +6,7 @@
     <group>
         <remap from="base_scan" to="/scan"/>
         <remap from="map" to="/rtabmap/grid_map"/>
-        # <remap from="/planner_goal" to="/move_base_simple/goal" />
+       # <remap from="/planner_goal" to="/move_base_simple/goal" />
         <remap from="/odom" to="/rtabmap/odom"  />
 
 		<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">

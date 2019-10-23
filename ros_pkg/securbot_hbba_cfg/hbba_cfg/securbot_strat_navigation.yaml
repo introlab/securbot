@@ -1,2 +1,9 @@
 hbba_conf:
 
+- strat:
+    name: idle
+    class: Static
+    utility: 1
+    cost:
+        robotic_base: 1
+    

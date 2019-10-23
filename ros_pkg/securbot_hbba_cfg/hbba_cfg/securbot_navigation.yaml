@@ -4,7 +4,7 @@ hbba_conf:
 
 # Global launches
 - include: {pkg: 'hbba_synth', file: 'common.yaml'}
-- launch: {pkg: 'securbot_pkg', path: 'launch/securbot_bringup.launch'}
+- launch: {pkg: 'securbot_pkg', path: 'launch/includes/securbot_bringup.launch'}
 
 # Global remaps
 
