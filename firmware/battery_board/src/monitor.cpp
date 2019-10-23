@@ -54,6 +54,7 @@ namespace
         uint8_t imax;
         uint8_t imin;
 
+
         if (!state::current.batteryOk)    // battery is never ok if a reading failed
         {
             ESP_LOGW(TAG, "Reading failed. Battery unsafe");
@@ -102,6 +103,7 @@ void monitor::monitorTask_fn( void* pvParameters )
     _frontend = Frontend::instance();
 
     esp_err_t ret;
+    bool bmsBooted = true;
     TickType_t lastRead = xTaskGetTickCount();
 
     while (1)
@@ -129,7 +131,37 @@ void monitor::monitorTask_fn( void* pvParameters )
             state::current.isCharged = false;
         }
 
+        // reinit bms if previously failed
+        if (!bmsBooted)
+        {
+            ESP_LOGW(TAG, "Reconfiguring analog frontend");
+            ret = _frontend->begin();
+            if (ret != ESP_OK)
+            {
+                ESP_LOGE(TAG, "Frontend reconfigure failed %s", esp_err_to_name(ret));
+            }
+        }
+
         // Read voltage, current and temperature from the analog frontend
+        if (state::current.isCharging)
+        {
+            ret = _frontend->setCurrentPolarity(1);
+            if (ret != ESP_OK)
+            {
+                state::current.batteryOk = false;
+                ESP_LOGE(TAG, "%s setting BMS to charge", esp_err_to_name(ret));
+            }
+        }
+        else
+        {
+            ret = _frontend->setCurrentPolarity(0);
+            if (ret != ESP_OK)
+            {
+                state::current.batteryOk = false;
+                ESP_LOGE(TAG, "%s setting BMS to discharge", esp_err_to_name(ret));
+            }
+        }
+
         ret = _frontend->getBatteryVoltage(state::current.batteryVoltage);
         if (ret != ESP_OK)
         {
@@ -154,16 +186,9 @@ void monitor::monitorTask_fn( void* pvParameters )
             state::current.batteryOk = false;
             ESP_LOGE(TAG, "%s reading frontend battery current", esp_err_to_name(ret));
         }
+        ESP_LOGI(TAG, "BMS battery current %5.2f A", state::current.bmsBatteryCurrent);
 
-        if (!state::current.batteryOk)
-        {
-            ESP_LOGW(TAG, "Reconfiguring analog frontend");
-            ret = _frontend->begin();
-            if (ret != ESP_OK)
-            {
-                ESP_LOGE(TAG, "Frontend reconfigure failed %s", esp_err_to_name(ret));
-            }
-        }
+        bmsBooted = state::current.batteryOk;
 
         if (state::current.isChargerBooted) // the charger is configured by the control task
         {
