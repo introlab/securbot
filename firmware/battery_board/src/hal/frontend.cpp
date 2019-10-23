@@ -111,52 +111,22 @@ int Frontend::getOvercurrentAlert()
 esp_err_t Frontend::getCellsVoltage(float voltage[4])
 {
     esp_err_t ret;
-    float cumul[4];
+    uint8_t cells[4] = {0, 1, 2, 5};
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
-    // Read cumulative at cell 1
-    ret = readCell(0, cumul[0]);
-    if (ret != ESP_OK)
+    for (uint8_t i = 0; i < 4; i++)
     {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-
-    // Read cumulative at cell 2
-    ret = readCell(1, cumul[1]);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-
-    // Read cumulative at cell 3
-    ret = readCell(2, cumul[2]);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
-    }
-
-    // Read cumulative at cell 6
-    ret = readCell(5, cumul[3]);
-    if (ret != ESP_OK)
-    {
-        xSemaphoreGive(_mutex);
-        return ret;
+        ret = readCell(cells[i], voltage[i]);
+        if (ret != ESP_OK)
+        {
+            xSemaphoreGive(_mutex);
+            return ret;
+        }
+        ESP_LOGI(TAG, "Cell %d is %4.2fV at VC%d", i+1, voltage[i], cells[i]+1);
     }
 
     xSemaphoreGive(_mutex);
-
-    float previous = 0;
-    for (uint8_t i = 0; i < 4; i++)
-    {
-        voltage[i] = cumul[i] - previous;
-        previous = voltage[i];
-        ESP_LOGI(TAG, "Cell %d is %4.2fV", i+1, voltage[i]);
-    }
-
     return ESP_OK;
 }
 

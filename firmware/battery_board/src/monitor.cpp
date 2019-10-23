@@ -77,7 +77,7 @@ namespace
 
         if (vmax - vmin >= VDELTA_MAX)  // cells are dangerously unbalanced
         {
-            ESP_LOGW(TAG, "Cell %d and %d charge disparity %4.2fV", imax, imin, vmax-vmin);
+            ESP_LOGW(TAG, "Cell %d and %d charge disparity %4.2fV", imax+1, imin+1, vmax-vmin);
             return false;
         }
 
@@ -111,6 +111,7 @@ void monitor::monitorTask_fn( void* pvParameters )
 
         // Check if the power adapter is connected
         state::current.isAdapterConnected = _charger->isAdapterPresent() == 1;
+        ESP_LOGI(TAG, "AC OK is %d", state::current.isAdapterConnected);
 
         if (!state::current.isAdapterConnected) // No power adapter connected
         {
