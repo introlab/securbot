@@ -20,4 +20,4 @@ services:
       DB_PORT: 27017
       API_PORT: 3000
       API_PATH: /
-      WAIT_HOSTS: mongodb:27017
+#      WAIT_HOSTS: mongodb:27017
