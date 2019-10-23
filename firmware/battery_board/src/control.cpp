@@ -77,8 +77,10 @@ void control::controlTask_fn( void* pvParameters)
         uint32_t pwr = okCount == 10;
         _switches->setRobotPower(pwr);
         _switches->setBQ24725APower(pwr);
+        ESP_LOGI(TAG, "Robot power is %d", pwr);
 
         // on AC power and good battery
+        
         if (state::current.isAdapterConnected && pwr == 1)
         {
             // boot charger if required (first run since AC went live)
@@ -99,6 +101,11 @@ void control::controlTask_fn( void* pvParameters)
                 
                 if (ret == ESP_OK)  // boot is successful
                 {
+                    ret = _charger->setAdapterCurrent(ADAPTER_CURRENT);
+                    if (ret != ESP_OK)
+                    {
+                        ESP_LOGE(TAG, "Error setting adapter current");
+                    }
                     ESP_LOGI(TAG, "Charger booted");
                     state::current.isChargerBooted = true;
                 }
@@ -113,51 +120,115 @@ void control::controlTask_fn( void* pvParameters)
 
                 if ( vHigh >= VMAX || state::current.isCharged)   // battery is charged
                 {
+                    ESP_LOGI(TAG, "Battery is charged");
                     state::current.isCharged = true;
                     state::current.isCharging = false;
                     state::current.isBalancing = false;
 
                     // current and voltage are all zero
-                    _charger->inhibitCharge(1);
-                    _charger->setAdapterCurrent(0);
-                    _charger->setChargeVoltage(0);
-                    _charger->setChargeCurrent(0);
+                    ret = _charger->inhibitCharge(1);
+                    if (ret != ESP_OK)
+                    {
+                        ESP_LOGE(TAG, "Error setting charge enable");
+                    }
+                    ret = _charger->setAdapterCurrent(0);
+                    if (ret != ESP_OK)
+                    {
+                        ESP_LOGE(TAG, "Error setting adapter current");
+                    }
+                    ret = _charger->setChargeVoltage(ADAPTER_CURRENT);
+                    if (ret != ESP_OK)
+                    {
+                        ESP_LOGE(TAG, "Error setting charge voltage");
+                    }
+                    ret = _charger->setChargeCurrent(0);
+                    if (ret != ESP_OK)
+                    {
+                        ESP_LOGE(TAG, "Error setting charge current");
+                    }
 
                     // No bypassed cell
                     _frontend->setBalance(0);
+                    if (ret != ESP_OK)
+                    {
+                        ESP_LOGE(TAG, "Error setting balance");
+                    }
                 }
                 else
                 {
                     // balance when lowest cell is at catch up limit
                     if ( 3*vHigh-2*vLow >= VMAX || state::current.isBalancing)
                     {
+                        ESP_LOGI(TAG, "Battery is balancing");
                         state::current.isCharged = false;
                         state::current.isCharging = true;
                         state::current.isBalancing = true;
 
-                        // full charge current
-                        _charger->inhibitCharge(0);
-                        _charger->setAdapterCurrent(ADAPTER_CURRENT);
-                        _charger->setChargeVoltage(CHARGE_VOLTAGE);
-                        _charger->setChargeCurrent(BALANCE_CURRENT);
+                        // balance charge current
+                        ret = _charger->inhibitCharge(0);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting charge enable");
+                        }
+                        ret = _charger->setAdapterCurrent(ADAPTER_CURRENT);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting adapter current");
+                        }
+                        ret = _charger->setChargeVoltage(CHARGE_VOLTAGE);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting charge voltage");
+                        }
+                        ret = _charger->setChargeCurrent(BALANCE_CURRENT);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting charge current");
+                        }
 
                         // Bypass highest cell
                         _frontend->setBalance(iHigh + 1);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting balance");
+                        }
                     }
                     // charge at high speed
                     else
                     {
+                        ESP_LOGI(TAG, "Battery is charging");
                         state::current.isCharged = false;
                         state::current.isCharging = true;
                         state::current.isBalancing = false;
 
-                        _charger->inhibitCharge(0);
-                        _charger->setAdapterCurrent(ADAPTER_CURRENT);
-                        _charger->setChargeVoltage(CHARGE_VOLTAGE);
-                        _charger->setChargeCurrent(CHARGE_CURRENT);
+                        // full charge current
+                        ret = _charger->inhibitCharge(0);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting charge enable");
+                        }
+                        ret = _charger->setAdapterCurrent(ADAPTER_CURRENT);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting adapter current");
+                        }
+                        ret = _charger->setChargeVoltage(CHARGE_VOLTAGE);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting charge voltage");
+                        }
+                        ret = _charger->setChargeCurrent(CHARGE_CURRENT);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting charge current");
+                        }
 
                         // No bypassed cell
-                        _frontend->setBalance(0);
+                        ret = _frontend->setBalance(0);
+                        if (ret != ESP_OK)
+                        {
+                            ESP_LOGE(TAG, "Error setting balance");
+                        }
                     }
                     
                 }

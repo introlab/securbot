@@ -141,6 +141,7 @@ esp_err_t Charger::getBatteryCurrent(float &current)
     ret = _bq24.selectIOUT(IOUT_CHARGE);    // set IOUT to battery
     if (ret != ESP_OK)
     {
+        xSemaphoreGive(_mutex);
         return ret;
     }
     ret = _analog->read(BQ24725A_IOUT_CHANNEL, current);    // read IOUT
@@ -160,6 +161,7 @@ esp_err_t Charger::getAdapterCurrent(float &current)
     ret = _bq24.selectIOUT(IOUT_ADAPTER);   // set IOUT to adapter
     if (ret != ESP_OK)
     {
+        xSemaphoreGive(_mutex);
         return ret;
     }
     ret = _analog->read(BQ24725A_IOUT_CHANNEL, current);    // read IOUT

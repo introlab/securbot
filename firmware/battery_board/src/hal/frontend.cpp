@@ -57,12 +57,15 @@ esp_err_t Frontend::begin()
     ESP_LOGI(TAG, "BQ76925 chip id is 0x%02x", id);
     if (ret != ESP_OK)
     {
+        
+        xSemaphoreGive(_mutex);
         return ret;
     }
 
     ret = _bq76.configure();          // configure front end chip
     if (ret != ESP_OK)
     {
+        xSemaphoreGive(_mutex);
         return ret;
     }
 
@@ -79,10 +82,12 @@ esp_err_t Frontend::getBatteryCurrent(float &current)
     float viout;
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
-    ret = _analog->read(BQ24725A_IOUT_CHANNEL, viout);
+    ret = _analog->read(VIOUT_BMS_CHANNEL, viout);
     xSemaphoreGive(_mutex);
 
-    current = (viout-2.5) * 14.675 + 7.35;
+    current = (viout-2.53477) * 14.675 + 7.35;
+
+    ESP_LOGI(TAG, "VIOUT = %4.2f V", viout);
 
     return ret;
 }
