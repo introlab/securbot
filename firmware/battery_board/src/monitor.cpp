@@ -81,6 +81,13 @@ namespace
             return false;
         }
 
+        // cells are too hot
+        if (state::current.boardTemperatures[0] > TMAX || state::current.boardTemperatures[1] > TMAX)
+        {
+            ESP_LOGW(TAG, "Board too hot");
+            return false;
+        }
+
         ESP_LOGI(TAG, "Battery OK");
         return true;
     }

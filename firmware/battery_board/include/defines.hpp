@@ -178,10 +178,16 @@
  * @brief Max safe cell delta.
  * Maximum delta between highest and lowest cell considered safe
  */
-#define VDELTA_MAX 0.9
+#define VDELTA_MAX 0.7
 
 /**
  * @brief Voltage safety margin.
  * Margin applied to voltage safety check
  */
 #define VMARGE 0.1
+
+/**
+ * @brief Max cell temperature.
+ * Maximum safe temperature reading
+ */
+#define TMAX 60.0

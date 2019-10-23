@@ -155,8 +155,8 @@ esp_err_t Frontend::getBoardTemperature(float temperature[2])
     
     for (uint8_t i = 0; i < 2; i++) // convert voltage to temperature
     {
-        temperature[i] = (voltage[i] - 1.28) * 41.4 + 25;
-        ESP_LOGI(TAG, "Temp %d is %02.5fC", i+1, temperature[i]);
+        temperature[i] = -(voltage[i] - 2.10) * 41.4 + 22;
+        ESP_LOGI(TAG, "Temp %d is %05.2fC", i+1, temperature[i]);
     }
 
     return ESP_OK;
