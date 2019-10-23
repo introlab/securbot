@@ -149,6 +149,7 @@ include_directories(
 # )
 
 add_hbba_cfg(securbot_navigation hbba_cfg/securbot_navigation.yaml)
+add_hbba_cfg(securbot_navigation_distant hbba_cfg/securbot_navigation_distant.yaml)
 
 #############
 ## Install ##

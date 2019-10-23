@@ -1,0 +1,35 @@
+# Basic implementation of the SecurBot navigation with HBBA
+
+hbba_conf:
+
+# Global launches
+- launch: {pkg: 'securbot_hbba_cfg', path: 'launch/machine_bringup.launch'}
+- include: {pkg: 'hbba_synth', file: 'common.yaml'}
+- launch: {pkg: 'securbot_pkg', path: 'launch/includes/securbot_bringup.launch'}
+
+# Global remaps
+
+# Available resources
+- resources:
+    robotic_base: 1
+    CPU: 100
+
+# Proc Modules
+- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_proc_navigation.yaml'}
+
+# Behavior Modules
+- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_bhvr_navigation.yaml'}
+
+# Motivations
+# No motivation layer yet
+
+# Strategies
+- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_strat_navigation.yaml'}
+
+# Initial desires
+- desire: 
+    id: nav_static
+    type: Static
+    utility: 1
+    security: False
+    intensity: 1
