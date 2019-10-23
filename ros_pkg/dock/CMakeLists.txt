@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(dock)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++17)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -11,7 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   genmsg
-  apriltag_ros
+  tf2
+  tf2_ros
+  base_local_planner
+  dwa_local_planner
 )
 
 ## System dependencies are found with CMake's conventions

@@ -1,13 +1,8 @@
 <launch>
-    <arg name="camera_name" default="usb_cam" />
-    <arg name="image_topic" default="image_raw" />
-
     <node pkg="tf" type="static_transform_publisher" name="station_transform" args="0 -0.12 0.15 -0.5 0.5 0.5 0.5 tag_0 station_0 50" />
 
     <!-- April Tags -->
     <include file="$(find securbot_pkg)/launch/includes/sensors/apriltag.launch">
-        <arg name="camera_name" value="$(arg camera_name)" />
-        <arg name="image_topic" value="$(arg image_topic)" />
     </include>
 
 
@@ -21,6 +16,8 @@
         <param name="target_frame_id" value="target"/>
         <param name="base_frame_id" value="base_footprint"/>
         <param name="dx" value="0.05" />
+    </node>
+    <node name="guidance" pkg="dock" type="guidance_node" output="screen">
     </node>
 
 
