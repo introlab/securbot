@@ -154,6 +154,7 @@ esp_err_t Frontend::getCellsVoltage(float voltage[4])
     {
         voltage[i] = cumul[i] - previous;
         previous = voltage[i];
+        ESP_LOGI(TAG, "Cell %d is %4.2fV", i+1, voltage[i]);
     }
 
     return ESP_OK;
@@ -232,7 +233,6 @@ esp_err_t Frontend::readCell(uint8_t num, float &voltage)
 
     // VCOUT is VREF (0.6) * VCell
     voltage = vcout / 0.6;
-    ESP_LOGI(TAG, "Cell no %d is %4.2fV", num+1, voltage);
 
     return ret;
 }

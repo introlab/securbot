@@ -28,6 +28,7 @@ esp_err_t ADS1015::startReading(uint8_t channel_number)
 {
     // Set mux to proper channel
     _config.fields.MUX_channel = channel_number;
+    _config.fields.OS = 1;
 
     // Write config
     return configure();
@@ -64,7 +65,7 @@ esp_err_t ADS1015::getValue(float &value)
     float FS = 4.096;  // scale is -4.096 to 4.096 volts
     
     // convert to volt with full scale range and raw value
-    value = FS * (((2^11) - 1)/(2^11)) * (float)conversion.fields.D;
+    value =  FS * (float)conversion.fields.D / 2048.0;
 
     return ret;
 }
