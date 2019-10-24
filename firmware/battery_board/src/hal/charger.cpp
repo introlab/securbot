@@ -135,6 +135,7 @@ esp_err_t Charger::inhibitCharge(uint8_t inhibited)
 esp_err_t Charger::getBatteryCurrent(float &current)
 {
     esp_err_t ret;
+    float viout;
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
@@ -144,8 +145,8 @@ esp_err_t Charger::getBatteryCurrent(float &current)
         xSemaphoreGive(_mutex);
         return ret;
     }
-    ret = _analog->read(BQ24725A_IOUT_CHANNEL, current);    // read IOUT
-    current = current / 20.0;   // IOUT is 20x battery current
+    ret = _analog->read(BQ24725A_IOUT_CHANNEL, viout);    // read IOUT
+    current = (viout / 20.0) / 0.010;   // IOUT is 20x battery current
 
     xSemaphoreGive(_mutex);
 
@@ -155,6 +156,7 @@ esp_err_t Charger::getBatteryCurrent(float &current)
 esp_err_t Charger::getAdapterCurrent(float &current)
 {
     esp_err_t ret;
+    float viout;
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
 
@@ -164,8 +166,8 @@ esp_err_t Charger::getAdapterCurrent(float &current)
         xSemaphoreGive(_mutex);
         return ret;
     }
-    ret = _analog->read(BQ24725A_IOUT_CHANNEL, current);    // read IOUT
-    current = current / 20.0;   // IOUT is 20x adapter current
+    ret = _analog->read(BQ24725A_IOUT_CHANNEL, viout);    // read IOUT
+    current = (viout / 20.0) / 0.010;   // IOUT is 20x adapter current
 
     xSemaphoreGive(_mutex);
 

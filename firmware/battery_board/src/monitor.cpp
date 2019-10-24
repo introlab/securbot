@@ -213,6 +213,9 @@ void monitor::monitorTask_fn( void* pvParameters )
                 state::current.chargerRobotCurrent = 0.0;
                 ESP_LOGW(TAG, "%s reading charger robot current", esp_err_to_name(ret));
             }
+
+            ESP_LOGI(TAG, "Charger battery current %5.2f A", state::current.chargerBatteryCurrent);
+            ESP_LOGI(TAG, "Charger adapter current %5.2f A", state::current.chargerAdapterCurrent);
         }
         else    // The charger is not configured
         {
