@@ -25,6 +25,8 @@ BQ24725A::BQ24725A(i2c_port_t i2c_bus)
     _i2c = I2C::instance(i2c_bus);
 
     // chip config
+    _chg_opt.bytes[0] = 0;
+    _chg_opt.bytes[1] = 0;
     _chg_opt.fields.ACOK = 1;           // 1.3s ACOK pin deglitch time
     _chg_opt.fields.WATCHDOG = 0b11;    // 175s WATCHDOG timer
     _chg_opt.fields.BAT = 0;            // 59.19% of voltage regulation limit (~2.486V/cell)
@@ -64,6 +66,8 @@ esp_err_t BQ24725A::setChargeVoltage(uint16_t voltage)
     }
 
     charge_voltage_register_map map;
+    map.bytes[0] = 0;
+    map.bytes[1] = 0;
     map.fields.DACV = voltage;
 
     return _i2c->smwrite(CHIP_ADR, CHARGE_VOLTAGE_CMD, map.bytes, 2);
@@ -78,6 +82,8 @@ esp_err_t BQ24725A::setChargeCurrent(uint8_t current)
     }
 
     charge_current_register_map map;
+    map.bytes[0] = 0;
+    map.bytes[1] = 0;
     map.fields.DACICHG = current;
 
     return _i2c->smwrite(CHIP_ADR, CHARGE_CURRENT_CMD, map.bytes, 2);
@@ -92,6 +98,8 @@ esp_err_t BQ24725A::setInputCurrent(uint8_t current)
     }
 
     input_current_register_map map;
+    map.bytes[0] = 0;
+    map.bytes[1] = 0;
     map.fields.DACIIN = current;
 
     return _i2c->smwrite(CHIP_ADR, INPUT_CURRENT_CMD, map.bytes, 2);

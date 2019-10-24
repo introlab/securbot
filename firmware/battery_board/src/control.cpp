@@ -131,7 +131,7 @@ void control::controlTask_fn( void* pvParameters)
                     {
                         ESP_LOGE(TAG, "Error setting charge enable");
                     }
-                    ret = _charger->setAdapterCurrent(0);
+                    ret = _charger->setAdapterCurrent(ADAPTER_CURRENT);
                     if (ret != ESP_OK)
                     {
                         ESP_LOGE(TAG, "Error setting adapter current");

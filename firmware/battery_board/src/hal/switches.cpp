@@ -67,7 +67,7 @@ esp_err_t Switches::setBQ24725APower(uint32_t enabled)
 
 esp_err_t Switches::setRobotPower(uint32_t enabled)
 {
-    return gpio_set_level((gpio_num_t)CMD_RELAY_GPIO, enabled);
+    return gpio_set_level((gpio_num_t)CMD_RELAY_GPIO, !enabled & 1);
 }
 
 esp_err_t Switches::setFanPower(uint32_t enabled)

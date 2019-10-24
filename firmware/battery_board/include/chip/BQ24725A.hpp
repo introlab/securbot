@@ -113,13 +113,13 @@ public:
          */
         struct
         {
-            uint8_t :6;
-            /**
+            uint16_t :6;
+            /*
              * @brief Charge current.
              * Charge current DACICHG * 64mA
              */
-            uint8_t DACICHG:7;
-            uint8_t :3;
+            uint16_t DACICHG:7;
+            uint16_t :3;
         } fields;
         /**
          * @brief Battery charge current register value as bytes.
@@ -140,13 +140,13 @@ public:
          */
         struct
         {
-            uint8_t :4;
+            uint16_t :4;
             /**
              * @brief Charge voltage.
              * Charge voltage DACV * 16 mV
              */
             uint16_t DACV:11;
-            uint8_t :1;
+            uint16_t :1;
         } fields;
         /**
          * @brief Charge voltage register value as bytes.
@@ -167,13 +167,13 @@ public:
          */
         struct
         {
-            uint8_t :7;
+            uint16_t :7;
             /**
              * @brief Charger input current.
              * Charger input current DACIIN * 128mA 
              */
-            uint8_t DACIIN:6;
-            uint8_t :3;
+            uint16_t DACIIN:6;
+            uint16_t :3;
         } fields;
         /**
          * @brief Input current register bytes.
