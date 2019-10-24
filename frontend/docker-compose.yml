@@ -6,6 +6,12 @@ services:
     build: .
     ports:
       - 8080:8080
+    links:
+      - api
+      - easyrtc
+    depends_on: 
+      - api
+      - easyrtc
 
   mongodb:
     image: mongo
@@ -25,7 +31,7 @@ services:
       DB_HOST: mongodb
       DB_PORT: 27017
       API_PORT: 3000
-      API_PATH: /api/
+      API_PATH: /db/
 
   easyrtc:
     image: easyrtc-server
