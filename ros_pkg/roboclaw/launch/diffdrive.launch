@@ -1,0 +1,19 @@
+<launch>
+
+    <include file="$(find roboclaw)/launch/roboclaw_single.launch"/>
+
+    <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">
+        <param name="~roboclaws" value="1"/>
+        <param name="~steps_per_meter" value="78000"/>
+        <param name="~base_width" value="0.315"/>
+        <param name="~swap_motors" value="false"/>
+        <param name="~invert_motor_1" value="false"/>
+        <param name="~invert_motor_2" value="false"/>
+
+        <param name="~var_pos_x" value="0.01"/>
+        <param name="~var_pos_y" value="0.01"/>
+        <param name="~var_theta_z" value="0.01"/>
+
+    </node>
+
+</launch>

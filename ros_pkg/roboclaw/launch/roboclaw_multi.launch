@@ -1,0 +1,19 @@
+<launch>
+
+    <!--
+        Roboclaw 0x80 Index: 0
+        Roboclaw 0x81 Index: 1
+        Roboclaw 0x82 Index: 2
+        Roboclaw 0x83 Index: 3
+        Roboclaw 0x84 Index: 4
+        Roboclaw 0x85 Index: 5
+        Roboclaw 0x86 Index: 6
+        Roboclaw 0x87 Index: 7
+    -->
+    <node pkg="roboclaw" type="roboclaw_node" name="roboclaw" output="screen">
+        <param name="~serial_port" value="/dev/ttyS0"/>
+        <param name="~baudrate" value="115200"/>
+        <param name="~roboclaws" value="8"/>
+    </node>
+
+</launch>

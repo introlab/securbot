@@ -1,0 +1,3 @@
+int32 index
+int32 mot1_enc_steps
+int32 mot2_enc_steps
