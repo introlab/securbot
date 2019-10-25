@@ -6,7 +6,7 @@
 speed_lim_v: 0.5
 speed_lim_w: 1.0
 
-accel_lim_v: 0.3
+accel_lim_v: 0.8
 accel_lim_w: 1.5
 
 # Optional parameters
