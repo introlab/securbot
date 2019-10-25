@@ -37,6 +37,10 @@
     <arg name="x_origin_param" default="$(eval arg('resolution_param') * arg('width_param') / 2)"/>
     <arg name="y_origin_param" default="$(eval arg('resolution_param') * arg('height_param') / 2)"/>
     <arg name="robot_frame_param" default="base_footprint"/>
+
+    <!-- Virtual Map dimension for the virtual map -->
+    <arg name="image_width_param" default="$(eval arg('x_origin_param') *  2)"/>
+    <arg name="image_height_param" default="$(eval arg('y_origin_param') *  2)"/>
     
     <!-- Colors -->
     <arg name="wall_color_param" default="0 0 0"/> <!-- 0 0 0 -->
@@ -69,8 +73,8 @@
     <node pkg="image_capture" type="virtualcam_node" name="virtual_Map" output="screen">
         <param name="image_topic" value="/map_image_generator/image"/>
         <param name="virtual_dev" value="/dev/video5" />
-        <param name="image_width" type="int" value="1000"/>
-        <param name="image_height" type="int" value="1000"/>
+        <param name="image_width" type="int" value="$(arg image_width_param)"/>
+        <param name="image_height" type="int" value="$(arg image_height_param)"/>
     </node>
 
     <!-- Map Image Generator and its parameters -->
