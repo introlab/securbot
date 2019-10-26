@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(dock)
+project(dock CXX)
 
-## Compile as C++11, supported in ROS Kinetic and newer
+## Compile as C++17
 add_compile_options(-std=c++17)
 
 ## Find catkin macros and libraries
@@ -13,8 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
   tf2
   tf2_ros
-  base_local_planner
-  dwa_local_planner
 )
 
 ## System dependencies are found with CMake's conventions
@@ -121,13 +119,11 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
+  include/dock
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/dock.cpp
-# )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -140,9 +136,9 @@ include_directories(
 add_executable(target_node
     src/target_node.cpp)
 add_executable(planner_node
-    src/planner_node.cpp)
-add_executable(guidance_node
-    src/guidance_node.cpp)
+    src/planner_node.cpp
+    include/dock/ApproachPath.h
+    src/ApproachPath.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -154,15 +150,12 @@ add_executable(guidance_node
 ## same as for the library above
 add_dependencies(target_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(planner_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(guidance_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(target_node
   ${catkin_LIBRARIES})
 target_link_libraries(planner_node
-  ${catkin_LIBRARIES})
-target_link_libraries(guidance_node
-  ${catkin_LIBRARIES})
+    ${catkin_LIBRARIES})
 
 #############
 ## Install ##

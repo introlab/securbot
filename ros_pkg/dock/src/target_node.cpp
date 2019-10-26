@@ -39,10 +39,13 @@ bool ComputeTarget(geometry_msgs::TransformStamped * targetTransform)
 
     stationTransform.transform.rotation = tf2::toMsg(quat_tf);
 
+    if (stationTransform.header.stamp != targetTransform->header.stamp)
+    {
+        *targetTransform = stationTransform;
+        return true;
+    }
 
-    *targetTransform = stationTransform;
-
-    return true;
+    return false;
 }
 
 
@@ -68,23 +71,25 @@ int main (int argc, char **argv)
 
 
 
-
-    ros::Time lastTimeStamp;
+    geometry_msgs::TransformStamped targetTransform;
+    geometry_msgs::TransformStamped constantTransform;
 
     ros::Rate rate(100.0);
+    while(nh.ok() && !ComputeTarget(&targetTransform))
+    {   // Waiting for the first transform
+        rate.sleep();
+    }
+
+    constantTransform = targetTransform;
+
     while(nh.ok())
     {
-        geometry_msgs::TransformStamped targetTransform;
+        ++constantTransform.header.seq;
+        constantTransform.header.stamp = ros::Time::now();
 
         if (ComputeTarget(&targetTransform))
-        {
-            if (targetTransform.header.stamp != lastTimeStamp)
-            {
-                lastTimeStamp = targetTransform.header.stamp;
-
-                br.sendTransform(targetTransform);
-            }
-        }
+            constantTransform.transform = targetTransform.transform;
+        br.sendTransform(constantTransform);
 
         rate.sleep();
     }

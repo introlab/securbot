@@ -2,7 +2,7 @@
   <arg name="launch_prefix" default="" />
   <arg name="node_namespace" default="apriltags2_ros_continuous_node" />
   <arg name="camera_name" default="camera/rgb" />
-  <arg name="camera_frame" default="camera/rgb" />
+  <arg name="camera_frame" default="camera_color_optical_frame" />
   <arg name="image_topic" default="image_rect_color" />
 
   <!-- Set parameters -->
