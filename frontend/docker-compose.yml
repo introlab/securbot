@@ -7,8 +7,8 @@ services:
       - /data:/data/db
 
   api:
-    image: db-api
-    build: ../backend/db-api
+    image: db_api
+    build: ../backend/db_api
     ports:
       - '3000:3000'
     links:
@@ -33,10 +33,5 @@ services:
     image: frontend
     build: .
     ports:
-      - 80:80
-    links:
-      - 'api'
-      - 'easyrtc'
-    depends_on:
-      - 'api'
-      - 'easyrtc'
+      - 8080:8080
+    network_mode: "host"
