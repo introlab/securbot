@@ -1,12 +1,6 @@
 version: '2.1'
 
 services:
-  sec-nginx:
-    image: frontend
-    build: .
-    ports:
-      - 8080:8080
-
   mongodb:
     image: mongo
     volumes:
@@ -25,7 +19,7 @@ services:
       DB_HOST: mongodb
       DB_PORT: 27017
       API_PORT: 3000
-      API_PATH: /api/
+      API_PATH: /db/
 
   easyrtc:
     image: easyrtc-server
@@ -34,3 +28,15 @@ services:
       PORT: 8000
     ports:
       - 8000:8000
+
+  sec-nginx:
+    image: frontend
+    build: .
+    ports:
+      - 80:80
+    links:
+      - 'api'
+      - 'easyrtc'
+    depends_on:
+      - 'api'
+      - 'easyrtc'
