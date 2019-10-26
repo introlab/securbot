@@ -1,7 +1,7 @@
 FROM node:12
 
 ENV NODE_ENV production
-ENV PORT 8080
+ENV PORT 8000
 
 WORKDIR /opt/web_rtc
 
@@ -11,6 +11,6 @@ RUN npm install --production --silent
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 8000
 
 CMD npm start
