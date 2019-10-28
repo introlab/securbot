@@ -7,3 +7,20 @@ hbba_conf:
     cost:
         robotic_base: 1
     
+- strat:
+    name: Move_base_planner
+    class: GoTo
+    utility: 1
+    cost:
+        robotic_base: 1
+    modules:
+        - planner
+
+- strat:
+    name: Move_base_teleop
+    class: Teleop
+    utility: 1
+    cost:
+        robotic_base: 1
+    modules:
+        - teleop

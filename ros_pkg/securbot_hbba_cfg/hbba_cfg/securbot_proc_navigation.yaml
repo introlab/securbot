@@ -1,13 +1,8 @@
 hbba_conf:
 
-- procmodule:
-    name: rtabmap
-    launch: {pkg: 'securbot_pkg', path: 'launch/includes/rtabmap_bringup.launch'}
-    input:
-        - camera_info: {src: camera/rgb/camera_info, filtered: false}
-        - image_rect_color: {src: camera/rgb/camera_rect_color, filtered: false}
-    output:
-        - tf
+#- procmodule:
+#    name: rtabmap
+#    launch: {pkg: 'securbot_pkg', path: 'launch/includes/rtabmap_bringup.launch'}
 
 #- procmodule:
 #    name: apriltag

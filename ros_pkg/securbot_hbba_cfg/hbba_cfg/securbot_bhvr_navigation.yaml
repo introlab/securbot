@@ -5,6 +5,20 @@ hbba_conf:
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/navigation.launch'}
     priority: 30
     input:
-        - planner_goal: {src: move_base_simple/goal, filtered: true}
+        - move_base_simple/goal: {src: move_base_simple/goal, filtered: false}
+        - odom: {src: rtabmap/odom, filtered: false}
+        - map: {src: rtabmap/grid_map, filtered: false}
+        - base_scan: {src: scan, filtered: false}
     output:
         - cmd_vel        
+
+- behavior:
+    name: teleop
+    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/teleop.launch'}
+    priority: 50
+    input:
+        - cmd_vel_teleop
+    output:
+        - cmd_vel
+
+
