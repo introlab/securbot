@@ -1,3 +1,0 @@
-<launch>
-  <machine name="pc" user="alex" address="10.8.0.10" default="true"/>
-</launch>
