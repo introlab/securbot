@@ -5,7 +5,7 @@
 
 <launch>
     <!-- The nodes to draw the image from -->
-    <arg name="input_occupancy_grid_topic" default="/map"/>
+    <arg name="input_occupancy_grid_topic" default="/rtabmap/grid_map"/>
     <arg name="input_global_path_topic" default="/move_base/NavfnROS/plan"/>
     <arg name="input_goal_topic" default="/move_base_simple/goal"/>
     <arg name="input_laser_scan_topic" default="/scan"/>
@@ -32,7 +32,7 @@
     <!-- Parameters used to generate the image (resize and position) -->
     <arg name="refresh_rate_param" default="1.0"/>
     <arg name="resolution_param" default="40"/>
-    <arg name="width_param" default="25"/>
+    <arg name="width_param" default="60"/>
     <arg name="height_param" default="$(arg width_param)"/>
     <arg name="x_origin_param" default="$(eval arg('resolution_param') * arg('width_param') / 2)"/>
     <arg name="y_origin_param" default="$(eval arg('resolution_param') * arg('height_param') / 2)"/>
@@ -61,12 +61,12 @@
     <!-- <node pkg="securbot_pkg" type="virtualDevices.bash" name="v4l2_map"></node> -->
 
     <!-- Camera virtual device -->
-    <!-- <node pkg="image_capture" type="virtualcam_node" name="virtual_Camera" output="screen">
-    <param name="image_topic" value="/camera/rgb/image_rect_color" />
-    <param name="virtual_dev" value="/dev/video4" />
-    <param name="image_width" value="1280"/>
-    <param name="image_height" value="720"/>
-    </node> -->
+    <node pkg="image_capture" type="virtualcam_node" name="virtual_Camera" output="screen">
+        <param name="image_topic" value="/camera/rgb/image_rect_color" />
+        <param name="virtual_dev" value="/dev/video4" />
+        <param name="image_width" value="640"/>
+        <param name="image_height" value="360"/>
+    </node>
 
     <!-- Map virtual device -->
     <!-- Image to video -->
