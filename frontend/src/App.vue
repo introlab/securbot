@@ -23,6 +23,9 @@ export default {
   computed: mapState({
     darkMode: state => state.darkMode,
   }),
+  mounted() {
+    this.$store.dispatch('database/initLocalData');
+  },
 };
 </script>
 

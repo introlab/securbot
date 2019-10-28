@@ -1,0 +1,37 @@
+GET http://localhost:3000/db/robots
+
+###
+
+POST http://localhost:3000/db/robots HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Robot1",
+  "platform": {
+      "OS": "Ubuntu 16.04",
+      "ROS": "Kinetic",
+      "CPU": "Cortex-A57 MPCore",
+      "GPU": "Nvidia Pascal",
+      "Batteries": "40000 mAh",
+      "Frame": "turtlebot"
+  }
+}
+
+###
+
+POST http://localhost:3000/db/robots HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Robot2",
+  "platform": {
+      "OS": "Ubuntu 18.04",
+      "ROS": "Melodic",
+      "CPU": "Cortex-A57 MPCore",
+      "GPU": "Nvidia Pascal",
+      "Batteries": "40000 mAh",
+      "Frame": "pioneer"
+  }
+}
+
+###
