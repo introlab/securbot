@@ -1,0 +1,32 @@
+{
+  "name": "db_api",
+  "version": "1.0.0",
+  "description": "Securbot database API",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "docker-compose -f mongo_only.yml up -d && sleep 1s && nodemon .",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/introlab/securbot.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/introlab/securbot/issues"
+  },
+  "homepage": "https://github.com/introlab/securbot#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cron-validator": "^1.0.2",
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "mongoose": "^5.7.3",
+    "request-param": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
+  }
+}
