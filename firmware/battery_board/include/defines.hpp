@@ -154,13 +154,15 @@
  * @brief Battery main charge current.
  * Battery current during main charge *64mA = 3.392A
  */
-#define CHARGE_CURRENT 53
+//#define CHARGE_CURRENT 53
+#define CHARGE_CURRENT 25
 
 /**
  * @brief Battery balancing charge current.
  * Battery current during balance charge *64mA = 0.64A
  */
-#define BALANCE_CURRENT 10
+//#define BALANCE_CURRENT 10
+#define BALANCE_CURRENT 5
 
 /**
  * @brief Min cell voltage

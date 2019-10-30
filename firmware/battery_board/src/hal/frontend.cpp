@@ -85,9 +85,7 @@ esp_err_t Frontend::getBatteryCurrent(float &current)
     ret = _analog->read(VIOUT_BMS_CHANNEL, viout);
     xSemaphoreGive(_mutex);
 
-    current = (viout-2.53477) * 14.675 + 7.35;
-
-    ESP_LOGI(TAG, "VIOUT = %4.2f V", viout);
+    current = (viout-2.03604) / (0.017 * 4.0);
 
     return ret;
 }

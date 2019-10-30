@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['mapimagecallback',['mapImageCallBack',['../classpatrol__test_1_1_patrol_test_suite.html#ac700339fe0fa93255d39ab43097579f2',1,'patrol_test::PatrolTestSuite']]],
-  ['mapimageoutput',['mapImageOutput',['../classpatrol__test_1_1_patrol_test_suite.html#a258037f1e2d52246fdca15a2d8cb023d',1,'patrol_test::PatrolTestSuite']]]
+  ['hardware_5finit_496',['hardware_init',['../main_8cpp.html#a47191dfa6786da2498eb49ae28f8d361',1,'main.cpp']]]
 ];

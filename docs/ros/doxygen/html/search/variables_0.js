@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['aborted',['ABORTED',['../classpatrol_executive_1_1_status.html#a167d82c2acdb71531dda8996ea65ace2',1,'patrolExecutive::Status']]],
-  ['actionclient',['actionClient',['../namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99',1,'patrolExecutive']]],
-  ['actionserver',['actionServer',['../classpatrol__test_1_1_patrol_test_suite.html#ae0e6164681386ad8d7d2402b65e0fe6c',1,'patrol_test::PatrolTestSuite']]],
-  ['active',['ACTIVE',['../classpatrol_executive_1_1_status.html#a62f3f83f1beb93629548f78797043b1d',1,'patrolExecutive::Status']]]
+  ['_5f_5fpad0_5f_5f_785',['__pad0__',['../union_b_q24725_a_1_1charge__option__register__map.html#ac841651fb85c65f9f17b60cf1dad0c28',1,'BQ24725A::charge_option_register_map::__pad0__()'],['../union_b_q24725_a_1_1charge__current__register__map.html#a91a1b04d0a14fddb46fa842201480757',1,'BQ24725A::charge_current_register_map::__pad0__()'],['../union_b_q24725_a_1_1charge__voltage__register__map.html#a668b068c4fcc823c8aedf605d592db0f',1,'BQ24725A::charge_voltage_register_map::__pad0__()'],['../union_b_q24725_a_1_1input__current__register__map.html#a70bc8bd72d2a65696734e7a326846b50',1,'BQ24725A::input_current_register_map::__pad0__()']]],
+  ['_5f_5fpad1_5f_5f_786',['__pad1__',['../union_b_q24725_a_1_1charge__current__register__map.html#aa19db5f31d6cfea93609fb497ed99293',1,'BQ24725A::charge_current_register_map::__pad1__()'],['../union_b_q24725_a_1_1charge__voltage__register__map.html#acd994caf7ba3cb86fe43682ec2d9d1ed',1,'BQ24725A::charge_voltage_register_map::__pad1__()'],['../union_b_q24725_a_1_1input__current__register__map.html#ae927fa0c675daf76972e32bb2d72b19c',1,'BQ24725A::input_current_register_map::__pad1__()']]]
 ];

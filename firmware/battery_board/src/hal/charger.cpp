@@ -80,6 +80,7 @@ esp_err_t Charger::postAdapterInit()
         return ret;
     }
     ESP_LOGI(TAG, "BQ24725A chip id 0x%04x", id);
+    _bq24.printRegisters();
 
     // configure the charger
     ret = _bq24.configure();
@@ -94,6 +95,7 @@ esp_err_t Charger::setChargeCurrent(uint8_t current)
 
     xSemaphoreTake(_mutex, portMAX_DELAY);
     ret = _bq24.setChargeCurrent(current);
+    _bq24.printRegisters();
     xSemaphoreGive(_mutex);
 
     return ret;

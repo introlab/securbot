@@ -1,12 +1,13 @@
 var indexSectionsWithContent =
 {
-  0: "_acefgilmprstvw",
-  1: "ps",
-  2: "ep",
-  3: "epr",
-  4: "_gimprstw",
-  5: "acfilmprstvw",
-  6: "s"
+  0: "_abcdefghilmoprstuvw",
+  1: "abcfips",
+  2: "cemps",
+  3: "abcdefimprs",
+  4: "_abcfghilmprstuw",
+  5: "_abcdefilmoprstvw",
+  6: "abcdimopstv",
+  7: "s"
 };
 
 var indexSectionNames =
@@ -17,7 +18,8 @@ var indexSectionNames =
   3: "files",
   4: "functions",
   5: "variables",
-  6: "pages"
+  6: "defines",
+  7: "pages"
 };
 
 var indexSectionLabels =
@@ -28,6 +30,7 @@ var indexSectionLabels =
   3: "Files",
   4: "Functions",
   5: "Variables",
-  6: "Pages"
+  6: "Macros",
+  7: "Pages"
 };
 

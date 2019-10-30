@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['electronteleop',['electronTeleop',['../namespaceelectron_teleop.html',1,'']]]
+  ['control_678',['control',['../namespacecontrol.html',1,'']]]
 ];

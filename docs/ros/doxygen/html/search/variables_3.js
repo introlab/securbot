@@ -1,5 +1,19 @@
 var searchData=
 [
-  ['interrupt_5ftrue_5fjson',['INTERRUPT_TRUE_JSON',['../namespacepatrol__test.html#ab5f464844af9693189a5ad77f8972b6f',1,'patrol_test']]],
-  ['islooped',['isLooped',['../namespacepatrol_executive.html#afffb19bc289301a6eb58e0edca10391e',1,'patrolExecutive']]]
+  ['cell_5fsel_808',['CELL_SEL',['../union_b_q76925_1_1cell__ctl__register__map.html#aba10cba874308e6d743625fa5792151e',1,'BQ76925::cell_ctl_register_map']]],
+  ['cellvoltages_809',['cellVoltages',['../structstate_1_1_board_status.html#a814092c3f0dae0f2764c175ce64d0a8e',1,'state::BoardStatus']]],
+  ['charge_5finhibit_810',['CHARGE_INHIBIT',['../union_b_q24725_a_1_1charge__option__register__map.html#aa7e4423109dda9448fd97a36058a4f16',1,'BQ24725A::charge_option_register_map']]],
+  ['chargeradaptercurrent_811',['chargerAdapterCurrent',['../structstate_1_1_board_status.html#afae525accef350a06d31421bf239e63e',1,'state::BoardStatus']]],
+  ['chargerbatterycurrent_812',['chargerBatteryCurrent',['../structstate_1_1_board_status.html#adab30dac3889afab9f8007a607508037',1,'state::BoardStatus']]],
+  ['chargerrobotcurrent_813',['chargerRobotCurrent',['../structstate_1_1_board_status.html#aeddb8b29f1a0fd0bc75b10470952efd0',1,'state::BoardStatus']]],
+  ['chip_814',['CHIP',['../union_b_q76925_1_1address__map.html#a29571dd915e83f0f677d40bd28a37d8f',1,'BQ76925::address_map']]],
+  ['comp_5flat_815',['COMP_LAT',['../union_a_d_s1015_1_1config__register__map.html#a67afc5029e2149358be9c472255866ac',1,'ADS1015::config_register_map']]],
+  ['comp_5fmode_816',['COMP_MODE',['../union_a_d_s1015_1_1config__register__map.html#a3bc1bc53cd0d341349b0834a41c9a8b7',1,'ADS1015::config_register_map']]],
+  ['comp_5fpol_817',['COMP_POL',['../union_a_d_s1015_1_1config__register__map.html#a442889df36cb54bc548cecdca760eb8d',1,'ADS1015::config_register_map']]],
+  ['comp_5fque_818',['COMP_QUE',['../union_a_d_s1015_1_1config__register__map.html#a5b9b473684556b26619557eac4ee6e9c',1,'ADS1015::config_register_map']]],
+  ['conversionrequests_819',['conversionRequests',['../classpatrol__test_1_1_patrol_test_suite.html#a17017ec163f1ea6c8ab95441d3ee9578',1,'patrol_test::PatrolTestSuite']]],
+  ['crc_5fen_820',['CRC_EN',['../union_b_q76925_1_1config__2__register__map.html#a737748961ad10f60f5b1bd94c0f38127',1,'BQ76925::config_2_register_map']]],
+  ['crc_5ferr_821',['CRC_ERR',['../union_b_q76925_1_1status__register__map.html#ad1ec42cce418714a2b1d708f639c54a9',1,'BQ76925::status_register_map']]],
+  ['current_822',['current',['../namespacestate.html#a8883de5ce3189397edef2ac845c2e93b',1,'state']]],
+  ['currentwaypointindex_823',['currentWaypointIndex',['../namespacepatrol_executive.html#a8ad7674bddfa1ae554aba971d3fc60ca',1,'patrolExecutive']]]
 ];

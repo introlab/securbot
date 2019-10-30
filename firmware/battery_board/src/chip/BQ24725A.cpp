@@ -18,6 +18,10 @@
 #define CHARGE_VOLTAGE_CMD 0x15 // access charge voltage register
 #define CHARGE_CURRENT_CMD 0x14 // access charge current register
 #define DEVICE_ID_CMD 0xFF      // access device id register
+#define MANUFACTURER_ID_CMD 0xFE
+
+#include <esp_log.h>
+const char* TAG = "BQ24725A";
 
 BQ24725A::BQ24725A(i2c_port_t i2c_bus)
 {
@@ -28,15 +32,15 @@ BQ24725A::BQ24725A(i2c_port_t i2c_bus)
     _chg_opt.bytes[0] = 0;
     _chg_opt.bytes[1] = 0;
     _chg_opt.fields.ACOK = 1;           // 1.3s ACOK pin deglitch time
-    _chg_opt.fields.WATCHDOG = 0b11;    // 175s WATCHDOG timer
+    _chg_opt.fields.WATCHDOG = 0;    // 175s WATCHDOG timer
     _chg_opt.fields.BAT = 0;            // 59.19% of voltage regulation limit (~2.486V/cell)
-    _chg_opt.fields.EMI_FREQ = 0;       // Reduce PWM frequency by 18%
-    _chg_opt.fields.EMI_EN = 0;         // Disable PWM frequency adjustment
+    _chg_opt.fields.EMI_FREQ = 1;       // Reduce PWM frequency by 18%
+    _chg_opt.fields.EMI_EN = 1;         // Disable PWM frequency adjustment
     _chg_opt.fields.IFAULT_HI = 0;      // disabled
     _chg_opt.fields.IFAULT_LOW = 0;     // 135mv
     _chg_opt.fields.LEARN = 0;          // Disable learn cycle
-    _chg_opt.fields.IOUT = 1;           // 20x charge current
-    _chg_opt.fields.ACOC = 1;           // 3.33x input current regulation limit
+    _chg_opt.fields.IOUT = 0;           // 20x charge current
+    _chg_opt.fields.ACOC = 0;           // 3.33x input current regulation limit
     _chg_opt.fields.CHARGE_INHIBIT = 1; // disable charge
 }
 
@@ -128,8 +132,26 @@ esp_err_t BQ24725A::getChipId(uint16_t &id)
         uint8_t bytes[2];
     } map;
 
+    ret = _i2c->smread(CHIP_ADR, MANUFACTURER_ID_CMD, map.bytes, 2);
     ret =  _i2c->smread(CHIP_ADR, DEVICE_ID_CMD, map.bytes, 2);
     id = map.id;
 
     return ret;
+}
+
+void BQ24725A::printRegisters()
+{
+    uint8_t data[2];
+
+    _i2c->smread(CHIP_ADR, CHARGE_OPTION_CMD, data, 2);
+    ESP_LOGI(TAG, "CHG OPT 0x%02x%02x", data[1], data[0]);
+
+    _i2c->smread(CHIP_ADR, CHARGE_CURRENT_CMD, data, 2);
+    ESP_LOGI(TAG, "CHG CUR 0x%02x%02x", data[1], data[0]);
+
+    _i2c->smread(CHIP_ADR, CHARGE_VOLTAGE_CMD, data, 2);
+    ESP_LOGI(TAG, "CHG VOL 0x%02x%02x", data[1], data[0]);
+
+    _i2c->smread(CHIP_ADR, INPUT_CURRENT_CMD, data, 2);
+    ESP_LOGI(TAG, "INP CUR 0x%02x%02x", data[1], data[0]);
 }

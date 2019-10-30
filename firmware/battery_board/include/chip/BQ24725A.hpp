@@ -244,6 +244,8 @@ public:
      */
     esp_err_t getChipId(uint16_t &id);
 
+    void printRegisters();
+
 private:
     /**
      * @brief i2c bus instance.
