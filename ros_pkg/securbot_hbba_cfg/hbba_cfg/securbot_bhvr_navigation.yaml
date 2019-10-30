@@ -5,19 +5,21 @@ hbba_conf:
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/navigation.launch'}
     priority: 30
     input:
-        - move_base_simple/goal: {src: move_base_simple/goal, filtered: false}
+        - move_base_simple/goal: {src: patrol_manager/goal, filtered: false}
         - odom: {src: rtabmap/odom, filtered: false}
         - map: {src: rtabmap/grid_map, filtered: false}
         - base_scan: {src: scan, filtered: false}
+        - move_base/goal: {filtered: false}
+        - move_base/cancel: {filtered: false}
     output:
         - cmd_vel        
 
 - behavior:
-    name: teleop
-    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/teleop.launch'}
+    name: teleop_manager
+    launch: {pkg: 'securbot_pkg', path: 'launch/teleop.launch'}
     priority: 50
     input:
-        - cmd_vel_teleop
+        - fromElectron: {src: fromElectron, filtered: false}
     output:
         - cmd_vel
 

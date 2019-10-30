@@ -23,4 +23,4 @@ hbba_conf:
     cost:
         robotic_base: 1
     modules:
-        - teleop
+        - teleop_manager

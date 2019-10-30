@@ -1,0 +1,5 @@
+
+<launch>
+    <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" output="screen">
+    </node>
+</launch>

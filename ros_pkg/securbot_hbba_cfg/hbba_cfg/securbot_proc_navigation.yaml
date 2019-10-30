@@ -10,3 +10,19 @@ hbba_conf:
 #    input:
 #        -
 #    output:
+
+- procmodule:
+    name: patrol_manager
+    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/patrolExecutive.launch'}
+    input:
+        - fromMapImageGenerator: {src: /map_image_generator/output_goal, filtered: false}
+        - fromElectronInterrupt: {src: /electron/patrol_halt, filtered: false}
+        - fromElectronWaypoints: {src: /electron/patrol, filtered: false}
+        - move_base/feedback
+        - move_base/result
+        - move_base/status
+    output:
+        - move_base/goal  
+        - move_base/cancel
+        - toElectron
+        - toMapImageGenerator
