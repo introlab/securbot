@@ -40,10 +40,11 @@ class EventDetection:
 
         rospy.spin()
 
-    def stampEventNameDateTime(eConfig):
+    def stampEventNameDateTime(eConfig, probability):
         #Date and time's format as ISO 8601
         eventStamp = {
                         "event_name": eConfig["event_name"]
+                        "probability" : probability
                         "date" : date.today().strftime("%Y/%m/%d")
                         "time" : datetime.now().time().strftime("%H:%M:%S")
                      }
@@ -67,7 +68,7 @@ class EventDetection:
                     for bboxDict in bboxDictList:
                         #Check if threshold reached
                         if(eConfig["threshold"] == bboxDict["class"]):
-                            triggeredEvent = self.stampEventNameDateTime(eConfig)
+                            triggeredEvent = self.stampEventNameDateTime(eConfig, bboxDict["probability"])
                             self.t_eventDetection.pulish(json.dumps(triggeredEvent))
                             self.hasDetectedVisual = True
 
