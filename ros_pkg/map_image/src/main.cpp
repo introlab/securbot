@@ -26,7 +26,17 @@ int main(int argc, char **argv)
     image_transport::Publisher mapImagePublisher = imageTransport.advertise("map_image", 1);
     sensor_msgs::Image mapImage;
 
+    ROS_INFO("MapImage initialized, starting image generation after first cycle...");
+
     ros::Rate loop_rate(parameters.refreshRate());
+    if (ros::ok())
+    {
+        loop_rate.sleep();
+        ros::spinOnce();
+    }
+
+    ROS_INFO("Skipped first cycle...");
+
     while(ros::ok())
     {
         mapImageGenerator.generate(mapImage);
