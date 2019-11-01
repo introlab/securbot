@@ -11,18 +11,19 @@ hbba_conf:
 #        -
 #    output:
 
-- procmodule:
-    name: patrol_manager
-    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/patrolExecutive.launch'}
-    input:
-        - fromMapImageGenerator: {src: /map_image_generator/output_goal, filtered: false}
-        - fromElectronInterrupt: {src: /electron/patrol_halt, filtered: false}
-        - fromElectronWaypoints: {src: /electron/patrol, filtered: false}
-        - move_base/feedback
-        - move_base/result
-        - move_base/status
-    output:
-        - move_base/goal  
-        - move_base/cancel
-        - toElectron
-        - toMapImageGenerator
+#- procmodule:
+#    name: patrol_manager
+#    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/patrolExecutive.launch'}
+#    input:
+#        - fromMapImageGenerator: {src: map_image_generator/output_goal, filtered: false}
+#        - fromElectronInterrupt: {src: electron/patrol_halt, filtered: false}
+#        - fromElectronWaypoints: {src: electron/patrol, filtered: True}
+#        - move_base/feedback: {src: move_base/feedback, filtered: false}
+#        - move_base/result: {src: move_base/result, filtered: false}
+#        - move_base/status: {src: move_base/status, filtered: false}
+#        - toMapImageGenerator: {src: map_image_generator/input_goal, filtered: false}
+#    output:
+#        - move_base/goal  
+#        - move_base/cancel
+#        - toElectron
+

@@ -2,4 +2,11 @@
 <launch>
     <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" output="screen">
     </node>
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find securbot_pkg)/config/$(env SECURBOT_BASE)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find securbot_pkg)/config/$(env SECURBOT_BASE)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find securbot_pkg)/config/$(env SECURBOT_BASE)/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find securbot_pkg)/config/$(env SECURBOT_BASE)/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find securbot_pkg)/config/$(env SECURBOT_BASE)/base_local_planner_params.yaml" command="load" />
+    </node>
 </launch>

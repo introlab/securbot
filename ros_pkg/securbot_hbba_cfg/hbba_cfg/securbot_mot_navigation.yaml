@@ -1,0 +1,12 @@
+hbba_conf:
+
+- remap: {from: goto_goal, to: /move_base_simple/goal}
+- motivation:
+    name: goto_motivation
+    launch: {pkg: "securbot_hbba_cfg", path: "launch/goto_motivation.launch"}    
+    input:
+        - goto_goal
+
+- motivation:
+    name: patrol_motivation
+    launch: {pkg: "securbot_hbba_cfg", path: "launch/patrol_motivation.launch"}

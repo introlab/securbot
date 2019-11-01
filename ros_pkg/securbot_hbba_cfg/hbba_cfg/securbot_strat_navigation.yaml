@@ -1,26 +1,35 @@
 hbba_conf:
 
-- strat:
-    name: idle
-    class: Static
-    utility: 1
-    cost:
-        robotic_base: 1
+#- strat:
+#    name: idle
+#    class: Static
+#    utility: 1
+#    cost:
+#        robotic_base: 1
     
 - strat:
-    name: Move_base_planner
+    name: goto
     class: GoTo
     utility: 1
     cost:
         robotic_base: 1
     modules:
         - planner
+    custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
+
+#- strat:
+#    name: patrol
+#    class: patrol
+#    utility: 2
+#    cost:
+#        robotic_base: 1
+#    modules:
+#        - patrol_planner
+#        - patrol_manager
 
 - strat:
     name: Move_base_teleop
     class: Teleop
     utility: 1
-    cost:
-        robotic_base: 1
     modules:
         - teleop_manager
