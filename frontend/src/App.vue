@@ -10,14 +10,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 /**
- * This is the main Vue component use to call all the other using the router-view element.
+ * This is the main Vue component used to call all the other using the router-view element.
  *
  * @module App
+ * @version 1.0.0
 */
 
 export default {
   name: 'app',
+  computed: mapState({
+    darkMode: state => state.darkMode,
+  }),
 };
 </script>
 

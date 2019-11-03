@@ -14,7 +14,7 @@ from std_msgs.msg import String
 
 vel_msg = Twist()
 
-publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
 ## Starts the ros node and subscribes to the electron node.
 #

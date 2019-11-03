@@ -1,10 +1,44 @@
 hbba_conf:
 
+#- behavior:
+#    name: patrol_planner
+#    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/navigation.launch'}
+#    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/patrolExecutive.launch'}
+#    priority: 30
+#    input:
+#        - odom: {src: rtabmap/odom, filtered: false}
+#        - map: {src: rtabmap/grid_map, filtered: false}
+#        - base_scan: {src: scan, filtered: false}
+#        - move_base/goal: {filtered: false}
+#        - move_base/cancel: {filtered: false}
+#        - move_base/feedback: {filtered: false}
+#        - move_base/result: {filtered: false}
+#        - move_base/status: {filtered: false}
+#        - fromMapImageGenerator: {src: map_image_generator/output_goal, filtered: false}
+#        - fromElectronInterrupt: {src: electron/patrol_halt, filtered: false}
+#        - fromElectronWaypoints: {src: electron/patrol, filtered: True} 
+#        - toMapImageGenerator: {src: map_image_generator/input_goal, filtered: false}
+#    output:
+#        - cmd_vel
+#        - toElectron        
+
+- behavior:
+    name: teleop_manager
+    launch: {pkg: 'securbot_pkg', path: 'launch/teleop.launch'}
+    priority: 2
+    input:
+        - fromElectron: {src: fromElectron, filtered: false}
+    output:
+        - cmd_vel
+
 - behavior:
     name: planner
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/navigation.launch'}
-    priority: 30
+    priority: 1
     input:
-        - planner_goal: {src: move_base_simple/goal, filtered: true}
+        - move_base_simple/goal: {src: planner_goal, filtered: false}
+        - odom: {src: rtabmap/odom, filtered: false}
+        - map: {src: rtabmap/grid_map, filtered: false}
+        - base_scan: {src: scan, filtered: false}
     output:
-        - cmd_vel        
+        - cmd_vel

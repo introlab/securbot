@@ -4,7 +4,13 @@ hbba_conf:
 
 # Global launches
 - include: {pkg: 'hbba_synth', file: 'common.yaml'}
-- launch: {pkg: 'securbot_pkg', path: 'launch/includes/securbot_bringup.launch'}
+- launch: {pkg: 'securbot_pkg', path: 'launch/mapping.launch'}
+- launch: {pkg: 'securbot_pkg', path: 'launch/includes/virtualDevices.launch'}
+- launch: 
+    pkg: 'electron_webrtc'
+    path: 'launch/electron_webrtc.launch'
+    args:
+        webrtc_server_url_param:  
 
 # Global remaps
 
@@ -20,7 +26,7 @@ hbba_conf:
 - include: {pkg: 'securbot_hbba_cfg', file: 'securbot_bhvr_navigation.yaml'}
 
 # Motivations
-# No motivation layer yet
+- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_mot_navigation.yaml'}
 
 # Strategies
 - include: {pkg: 'securbot_hbba_cfg', file: 'securbot_strat_navigation.yaml'}
@@ -28,7 +34,7 @@ hbba_conf:
 # Initial desires
 - desire: 
     id: nav_static
-    type: Static
+    type: Teleop
     utility: 1
     security: False
     intensity: 1

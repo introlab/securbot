@@ -1,13 +1,8 @@
 hbba_conf:
 
-- procmodule:
-    name: rtabmap
-    launch: {pkg: 'securbot_pkg', path: 'launch/includes/rtabmap_bringup.launch'}
-    input:
-        - camera_info: {src: camera/rgb/camera_info, filtered: false}
-        - image_rect_color: {src: camera/rgb/camera_rect_color, filtered: false}
-    output:
-        - tf
+#- procmodule:
+#    name: rtabmap
+#    launch: {pkg: 'securbot_pkg', path: 'launch/includes/rtabmap_bringup.launch'}
 
 #- procmodule:
 #    name: apriltag
@@ -15,3 +10,20 @@ hbba_conf:
 #    input:
 #        -
 #    output:
+
+#- procmodule:
+#    name: patrol_manager
+#    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/patrolExecutive.launch'}
+#    input:
+#        - fromMapImageGenerator: {src: map_image_generator/output_goal, filtered: false}
+#        - fromElectronInterrupt: {src: electron/patrol_halt, filtered: false}
+#        - fromElectronWaypoints: {src: electron/patrol, filtered: True}
+#        - move_base/feedback: {src: move_base/feedback, filtered: false}
+#        - move_base/result: {src: move_base/result, filtered: false}
+#        - move_base/status: {src: move_base/status, filtered: false}
+#        - toMapImageGenerator: {src: map_image_generator/input_goal, filtered: false}
+#    output:
+#        - move_base/goal  
+#        - move_base/cancel
+#        - toElectron
+
