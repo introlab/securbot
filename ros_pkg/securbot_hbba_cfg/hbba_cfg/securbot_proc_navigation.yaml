@@ -27,3 +27,13 @@ hbba_conf:
 #        - move_base/cancel
 #        - toElectron
 
+- procmodule:
+    name: apriltag
+    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/apriltag.launch'}
+    input:
+        - image_rect: {src: camera/rgb/image_rect_color}
+        - camera_info: {src: camera/rgb/camera_info}
+    output:
+        - tf
+        - tag_detections
+        - tag_detections_image

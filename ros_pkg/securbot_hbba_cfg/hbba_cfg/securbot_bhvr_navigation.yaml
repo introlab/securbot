@@ -25,7 +25,7 @@ hbba_conf:
 - behavior:
     name: teleop_manager
     launch: {pkg: 'securbot_pkg', path: 'launch/teleop.launch'}
-    priority: 2
+    priority: 10
     input:
         - fromElectron: {src: fromElectron, filtered: false}
     output:
@@ -41,4 +41,14 @@ hbba_conf:
         - map: {src: rtabmap/grid_map, filtered: false}
         - base_scan: {src: scan, filtered: false}
     output:
+        - cmd_vel
+
+- behavior:
+    name: docker
+    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/docker.launch'}
+    priority: 2
+    input:
+        - detect_array: {src: tag_detections}
+    output:
+        - approach_plan
         - cmd_vel

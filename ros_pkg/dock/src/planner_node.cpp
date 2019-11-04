@@ -98,7 +98,7 @@ void DockRoutine()
     // Obtain robot transform
     if (! GetRobotTransform(&robotTransform))
     {
-        ROS_INFO("No transform to target");
+        ROS_INFO_THROTTLE(10, "No transform to target");
         return;
     }
 
@@ -140,7 +140,7 @@ int main (int argc, char **argv)
 
     // Init publisher
     g_pathPublisher = nh.advertise<nav_msgs::Path>("approach_plan", 10);
-    g_commandPublisher = nh.advertise<geometry_msgs::Twist>("dock_command", 10);
+    g_commandPublisher = nh.advertise<geometry_msgs::Twist>("cmd_vel", 10);
 
 
     ros::Rate rate(1/(g_dt_ms/1000.0));

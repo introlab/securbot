@@ -17,6 +17,16 @@ hbba_conf:
         - planner
     custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 
+- strat:
+    name: dock
+    class: Dock
+    utility: 1
+    cost:
+        robotic_base: 1
+    modules:
+        - apriltag
+        - docker
+
 #- strat:
 #    name: patrol
 #    class: patrol
