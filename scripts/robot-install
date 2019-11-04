@@ -28,6 +28,10 @@ then
     BASEDIR=$PWD/$BASEDIR
 fi
 
+# Downloading submodules if not already done
+git -C "$BASEDIR" submodule init
+git -C "$BASEDIR" submodule update
+
 # Script must be run as root
 [ `id -u` -eq 0 ] || exec sudo -E "$0" "$@"
 
@@ -43,7 +47,7 @@ curl -sL https://deb.nodesource.com/setup_11.x | bash -
 echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
 
 # Key setup
-apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 
 # Install
 apt-get update
@@ -76,7 +80,8 @@ rm -rf $CATK_WS/src
 ln -fs $BASEDIR/../ros_pkg $CATK_WS/src
 
 # Catkin Make
-catkin_make --directory $CATK_WS
+rosdep install --from-paths "$CATK_WS/src" --ignore-src -r -y
+catkin_make_isolated --directory $CATK_WS
 
 # Adding environment variables from the workspace
 if ! grep -Fxq "source $CATK_WS/devel/setup.sh" ~/.bashrc
@@ -84,6 +89,11 @@ then
     echo "source $CATK_WS/devel/setup.sh" >> ~/.bashrc
 fi
 source $CATK_WS/devel/setup.sh
+if ! grep -Fxq "source $CATK_WS/devel_isolated/setup.sh" ~/.bashrc
+then
+    echo "source $CATK_WS/devel_isolated/setup.sh" >> ~/.bashrc
+fi
+source $CATK_WS/devel_isolated/setup.sh
 
 # Creating ros usergroup
 groupadd $ROBOT_GROUP
