@@ -149,7 +149,7 @@ export default {
     sendPatrol() {
       console.log('Sendig patrolPlan:');
       if (this.waypointList.length) {
-        this.$store.dispatch('sendPatrol', this.waypointList);
+        this.$store.dispatch('sendPatrol', { patrol: this.waypointList });
       }
     },
     /**
