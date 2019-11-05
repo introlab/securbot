@@ -24,7 +24,9 @@ hbba_conf:
     cost:
         robotic_base: 1
     modules:
-        - apriltag
+        - apriltag:
+            - camera_rgb_image_rect_color: 1
+            - camera_rgb_camera_info: 1
         - docker
 
 #- strat:
