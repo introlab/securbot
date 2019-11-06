@@ -244,7 +244,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import SecurbotTable from '../generic/Table';
 
 /**
