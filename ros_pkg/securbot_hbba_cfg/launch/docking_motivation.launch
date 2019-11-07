@@ -1,5 +1,12 @@
 <launch>
     <node name="docking_motiv" pkg="dock" type="dock_generator.py" output="screen">
+        <rosparam>
+            approach:
+                x: 1.32
+                y: -2.767
+                t: -1.665
+                frame_id: map
+        </rosparam>
     </node>
 </launch>
 

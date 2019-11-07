@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
   std_msgs
   sensor_msgs
+  geometry_msgs
   hbba_msgs
   genmsg
   tf2
