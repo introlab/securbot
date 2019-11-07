@@ -9,7 +9,7 @@ import darknet_ros
 class EventDetection:
     def __init__(self):
         # Visual event detection flag for forwading a capture of the video feed
-        self.hasDetectedVisual = False
+        self.hasDetectedVisualEvent = False
 
         # Events Config List
         self.eventsConfigDictList = list()
@@ -70,22 +70,31 @@ class EventDetection:
                         if(eConfig["threshold"] == bboxDict["class"]):
                             triggeredEvent = self.stampEventNameDateTime(eConfig, bboxDict["probability"])
                             self.t_eventDetection.pulish(json.dumps(triggeredEvent))
-                            self.hasDetectedVisual = True
+                            self.hasDetectedVisualEvent = True
 
     def detectionImageCallback(img):
-        #TODO
-        self.hasDetectedVisual = False
+        if(self.hasDetectedVisualEvent == True):
+            self.t_detectionFrame.publish(img)
+            self.hasDetectedVisualEvent = False
+
+    def addEventConfig(eConfig):
+        hasSameEventName = False
+        for ecd in self.eventsConfigDictList:
+            if(ecd["event_name"] == eConfig["event_name"]):
+                hasSameEventName = True
+        if(hasSameEventName == False)
+            self.eventsConfigDictList.append(eConfig)
 
     def modifyEventConfig(eConfig):
         for ecd in self.eventsConfigDictList:
             if(ecd["event_name"] == eConfig["event_name"]):
                 #Check if the name needs to change
-                if(eConfig.get("new_event_name") == None):
+                if(eConfig.get("modify_event_name") == None):
                     ecd = eConfig
                 else:
-                    newName = eConfig.get("new_event_name")
-                    ecd = eConfig.pop("new_event_name")#Copy without new name
-                    ecd["event_name"] = newName
+                    modifiedName = eConfig.get("modify_event_name")
+                    ecd = eConfig.pop("modify_event_name")#Copy without new name
+                    ecd["event_name"] = modifiedName
 
     def deleteEventConfig(eConfig):
         for ecd in self.eventsConfigDictList:
@@ -97,7 +106,7 @@ class EventDetection:
         if(eConfig.get("config_type") != None):
             if(eConfig.get("event_name") != None):
                 if(eConfig["config_type"] == "add"):
-                    self.eventsConfigDictList.append(eConfig)
+                    self.addEventConfig(eConfig)
                 elif(eConfig["config_type"] == "modify"):
                     self.modifyEventConfig(eConfig)
                 elif(eConfig["config_type"] == "delete"):
