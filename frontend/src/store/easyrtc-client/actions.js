@@ -183,6 +183,10 @@ export default {
       console.log('Setting patrol stream...');
       easyrtc.setVideoObjectSrc(htmlElement.patrol, state.mapStream);
     }
+    if (htmlElement.event && state.mapStream) {
+      console.log('Setting patrol stream...');
+      easyrtc.setVideoObjectSrc(htmlElement.event, state.mapStream);
+    }
   },
   resetStreams(_, htmlElement) {
     if (htmlElement.camera) {

@@ -1,8 +1,5 @@
-GET http://localhost:3000/db/robots
-
-###
-
-POST http://localhost:3000/db/robots HTTP/1.1
+### To be used with the rest-client extension of vscode
+POST http://localhost:8080/db/robots HTTP/1.1
 content-type: application/json
 
 {
@@ -19,7 +16,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3000/db/robots HTTP/1.1
+POST http://localhost:8080/db/robots HTTP/1.1
 content-type: application/json
 
 {
@@ -35,3 +32,212 @@ content-type: application/json
 }
 
 ###
+
+GET http://localhost:8080/db/robots
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/patrols
+content-type: application/json
+
+{
+  "name": "Patrol 1",
+  "robot": "5dc459e1fb74890014b89689",
+  "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
+  "last_modified": "2019-11-07T06:52:19.831Z",
+  "waypoints": [
+    {"coordinate" : {"x": 15, "y": 20, "yaw": 15}, "hold_time_s": 10 },
+    {"coordinate" : {"x": 50, "y": 70, "yaw": 65}, "hold_time_s": 10 },
+    {"coordinate" : {"x": 65, "y": 100, "yaw": 92}, "hold_time_s": 10 }
+  ]
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/patrols
+content-type: application/json
+
+{
+  "robot": "5dc459e1fb74890014b89689",
+  "name": "Patrol 2",
+  "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
+  "last_modified": "2019-11-07T06:52:19.831Z",
+  "waypoints": [
+    {"coordinate" : {"x": 15, "y": 20, "yaw": 15}, "hold_time_s": 25 },
+    {"coordinate" : {"x": 50, "y": 70, "yaw": 65}, "hold_time_s": 25 },
+    {"coordinate" : {"x": 65, "y": 100, "yaw": 92}, "hold_time_s": 25 }
+  ]
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/patrols
+content-type: application/json
+
+{
+  "robot": "5dc459e7fb74890014b8968a",
+  "name": "Patrol A",
+  "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
+  "last_modified": "2019-11-07T06:52:19.831Z",
+  "waypoints": [
+    {"coordinate" : {"x": 15, "y": 20, "yaw": 15}, "hold_time_s": 0 },
+    {"coordinate" : {"x": 50, "y": 70, "yaw": 67}, "hold_time_s": 0 },
+    {"coordinate" : {"x": 65, "y": 100, "yaw": 10}, "hold_time_s": 0 }
+  ]
+}
+
+###
+
+GET http://localhost:8080/db/robots/5dc459e1fb74890014b89689/patrols
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
+content-type: application/json
+
+{
+    "robot": "5dc459e7fb74890014b8968a",
+    "object": "Event 1",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-11-07T06:52:19.831Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["red",],
+    "alert": false,
+    "viewed": false
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
+content-type: application/json
+
+{
+    "robot": "5dc459e7fb74890014b8968a",
+    "object": "Event 2",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-11-01T06:52:19.831Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["blue"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
+content-type: application/json
+
+{
+    "robot": "5dc459e7fb74890014b8968a",
+    "object": "Event 4",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-11-04T06:52:19.831Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["yellow"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
+content-type: application/json
+
+{
+  "robot": "5dc459e7fb74890014b8968a",
+  "object": "Event 5",
+  "description_text": "asdasdadsa",
+  "context": "night",
+  "time": "2019-11-04T06:52:19.831Z",
+  "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+  "tags": ["green"],
+  "alert": false,
+  "viewed": false
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
+content-type: application/json
+
+{
+    "robot": "5dc459e7fb74890014b8968a",
+    "object": "Event 10",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-10-23T00:00:00.999Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["a"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+GET http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
+
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
+content-type: application/json
+
+{
+    "robot": "5dc459e1fb74890014b89689",
+    "object": "Event 1",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-11-07T06:52:19.831Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["red"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
+content-type: application/json
+
+{
+  "robot": "5dc459e1fb74890014b89689",
+  "object": "Event 2",
+  "description_text": "asdasdadsa",
+  "context": "night",
+  "time": "2019-11-01T06:52:19.831Z",
+  "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+  "tags": ["b"],
+  "alert": false,
+  "viewed": false
+}
+
+###
+
+POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
+content-type: application/json
+
+{
+    "robot": "5dc459e1fb74890014b89689",
+    "object": "Event 3",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-10-23T00:00:00.999Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["c"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+GET http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
+content-type: application/json
+
+{
+  "after": "2019-10-31T22:04:07.921Z",
+  "before": "2019-11-07T22:04:07.921Z",
+  "search_expression": "",
+  "alert": false,
+  "viewed": false
+}

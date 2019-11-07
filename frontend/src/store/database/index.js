@@ -11,10 +11,104 @@ export default {
     headers: ['Robot', 'Object', 'Context', 'Description', 'Tags', 'DateTime', 'Image'],
     eventList: [],
     robots: [],
+    robotFilter: [],
     tagList: ['red', 'yellow', 'blue', 'green', 'a', 'b', 'c'],
+    defaultFilter: {
+      tag_and: [],
+      tag_not: [],
+      search_expression: '',
+      alert: '',
+      viewed: '',
+      before: new Date().toISOString(),
+      after: new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)).toISOString(),
+    },
+    predefFilters: [
+      {
+        name: 'Last 24 Hours',
+        filters: {
+          tag_and: [],
+          tag_not: [],
+          search_expression: '',
+          alert: '',
+          viewed: '',
+          before: new Date().toISOString(),
+          after: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString(),
+        },
+      },
+      {
+        name: 'Last 7 Days',
+        filters: {
+          tag_and: [],
+          tag_not: [],
+          search_expression: '',
+          alert: '',
+          viewed: '',
+          before: new Date().toISOString(),
+          after: new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)).toISOString(),
+        }
+      },
+      {
+        name: 'Last 30 Days',
+        filters: {
+          tag_and: [],
+          tag_not: [],
+          search_expression: '',
+          alert: '',
+          viewed: '',
+          before: new Date().toISOString(),
+          after: new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString(),
+        },
+      },
+      {
+        name: 'Alerts from Last 30 Days',
+        filters: {
+          tag_and: [],
+          tag_not: [],
+          search_expression: '',
+          alert: true,
+          viewed: '',
+          before: new Date().toISOString(),
+          after: new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString(),
+        },
+      },
+      {
+        name: 'New Events from Last 30 Days',
+        filters: {
+          tag_and: [],
+          tag_not: [],
+          search_expression: '',
+          alert: '',
+          viewed: false,
+          before: new Date().toISOString(),
+          after: new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString(),
+        },
+      },
+      {
+        name: 'Current Month',
+        filters: {
+          tag_and: [],
+          tag_not: [],
+          search_expression: '',
+          alert: false,
+          viewed: false,
+          before: new Date().toISOString(),
+          after: new Date(new Date().setDate(1)).toISOString(),
+        },
+      },
+    ],
+    currentFilter: {
+      tag_and: [],
+      tag_not: [],
+      search_expression: '',
+      alert: false,
+      viewed: false,
+      before: '',
+      after: '',
+    },
   },
   getters: {
     uri: state => `http://${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
+    // uri: state => `http://localhost:3000${state.apiPath}`,
   },
   mutations: {
     queryStarted(state) {
@@ -35,9 +129,35 @@ export default {
     addEvent(state, event) {
       state.events.push(event);
     },
+    resetEvent(state) {
+      state.events.splice(0, state.events.length - 1);
+    },
+    setRobotFilters(state, robot) {
+      if (robot === 'all') {
+        state.robotFilter = state.robots;
+      } else {
+        for (const r of state.robots) {
+          if (r.id === robot) {
+            state.robotFilter = [r];
+          }
+        }
+      }
+    },
+    setEventFilters(state, filters) {
+      const f = {
+        tag_and: (filters.includeTags ? filters.includeTags : []),
+        tag_not: (filters.excludeTags ? filters.excludeTags : []),
+        search_expression: (filters.textSearch ? filters.textSearch : ''),
+        alert: (filters.other.notify ? true : ''),
+        viewed: (filters.other.onlyNew ? true : ''),
+        before: (filters.beforeDate ? new Date(filters.beforeDate).toISOString() : ''),
+        after: (filters.afterDate ? new Date(filters.afterDate).toISOString() : ''),
+      };
+      state.currentFilter = f;
+    },
   },
   actions: {
-    initLocalData({ commit, dispatch }) {
+    initLocalData({ state, commit, dispatch }) {
       /**
        * Steps
        *
@@ -49,7 +169,8 @@ export default {
       commit('queryStarted');
       dispatch('queryRobots')
         .then(() => {
-          dispatch('queryEvents')
+          commit('setRobotFilters', 'all');
+          dispatch('queryEvents', { filters: state.defaultFilter })
             .then(() => {
               commit('queryFinished');
             }).catch((err) => {
@@ -57,6 +178,20 @@ export default {
               commit('errorDuringQuery');
               commit('queryFinished');
             });
+        }).catch((err) => {
+          console.log(err);
+          commit('errorDuringQuery');
+          commit('queryFinished');
+        });
+    },
+    filterEvents({ state, commit, dispatch }) {
+      commit('resetEvents');
+      commit('queryStarted');
+      console.log(state.currentFilter);
+      console.log(state.events);
+      dispatch('queryEvents', { filters: state.currentFilter })
+        .then(() => {
+          commit('queryFinished');
         }).catch((err) => {
           console.log(err);
           commit('errorDuringQuery');
@@ -153,39 +288,56 @@ export default {
     querySchedules() {
     },
     // eslint-disable-next-line object-curly-newline
-    queryEvents({ state, getters, commit, dispatch }, index) {
-      let _index = (!index ? 0 : index);
+    queryEvents({ state, dispatch }, filters) {
+      const robots = state.robotFilter;
+      const options = {
+        robots,
+        index: 0,
+        filters: filters.filters,
+      };
+      console.log(options);
       return new Promise((resolve, reject) => {
-        // All events for each robots have been queried
-        if (_index >= state.robots.length) {
+        dispatch('_queryEvents', options)
+          .then(() => {
+            resolve();
+          }).catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    _queryEvents({ getters, commit, dispatch }, options) {
+      return new Promise((resolve, reject) => {
+        const _options = {};
+        Object.assign(_options, options);
+        if (_options.index >= _options.robots.length) {
           resolve();
-        } else {
-          // Query robot
-          const robot = state.robots[_index];
-          const req = {
-            uri: `${getters.uri}/robots/${robot.id}/events`,
-            headers: {
-              'User-Agent': 'Request-Promise',
-            },
-            json: true,
-          };
-          // Request
-          request(req)
-            .then((result) => {
-              result.forEach((event) => {
-                commit('addEvent', event);
-              });
-              _index += 1;
-              return dispatch('queryEvents', _index)
-                .then(() => {
-                  resolve();
-                }).catch((err) => {
-                  reject(err);
-                });
-            }).catch((err) => {
-              reject(err);
-            });
         }
+        const currentRobot = options.robots[options.index];
+        _options.index += 1;
+        const req = {
+          uri: `${getters.uri}/robots/${currentRobot.id}/events`,
+          body: options.filters,
+          headers: {
+            'User-Agent': 'Request-Promise',
+          },
+          json: true,
+        };
+        console.log(req);
+        // Request
+        request(req)
+          .then((result) => {
+            result.forEach((event) => {
+              commit('addEvent', event);
+            });
+            return dispatch('_queryEvents', _options)
+              .then(() => {
+                resolve();
+              }).catch((err) => {
+                reject(err);
+              });
+          }).catch((err) => {
+            reject(err);
+          });
       });
     },
   },
