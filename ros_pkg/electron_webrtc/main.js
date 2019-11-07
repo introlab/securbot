@@ -9,7 +9,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const events = require('events');
 const rosnodejs = require('rosnodejs');
-// eslint-disable-next-line camelcase
 const std_msgs = rosnodejs.require('std_msgs').msg;
 const path = require('path');
 
@@ -124,34 +123,6 @@ function startApp() {
  */
 function startNode() {
   rosnodejs.initNode('/electron_webrtc').then(async (nodeHandle) => {
-    /** @member {String} */
-    let webRtcServerUrl;
-    // let videoDeviceLabel;
-
-    try {
-      webRtcServerUrl = await nodeHandle.getParam('/electron_webrtc/webrtc_server_url');
-      // var videoDeviceLabel = await nodeHandle.getParam('/electron_webrtc/video_device_label')
-    } catch (e) {
-      console.error('Failed to retreive parameters');
-      app.quit();
-    }
-
-    /** @member {String} */
-    const parameters = { webRtcServerUrl }; // videoDeviceLabel
-    console.log(parameters);
-
-    if (win) { win.webContents.send('parameters_response', parameters); }
-
-    /**
-     * Respond to the parameter_request event with the parameter
-     * @event parameters_response
-     * @type {object}
-     * @property {String} parameters - Parameters set in the launch file
-     */
-    ipcMain.on('parameters_request', (event) => {
-      event.sender.send('parameters_response', parameters);
-    });
-
     /**
      * Fires after receiving data from ROS
      * @event data

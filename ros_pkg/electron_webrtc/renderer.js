@@ -1,4 +1,4 @@
-/* global easyrtc, ipc */
+/* global easyrtc, ipc, virtualDeviceNames, webrtcServerUrl, robotName */
 /**
  * Renderer for this application.
  * @module Renderer
@@ -13,12 +13,6 @@
  * @type {number}
  */
 let operatorID = null;
-
-/**
- * Virtual devices names.
- * @type {Array}
- */
-const virtualDevicesName = ['virtual_map', 'virtual_camera'];
 
 /**
  * Array to keep track of the virtual devices corrected name.
@@ -79,23 +73,6 @@ function streamRequestCallback(easyrtcid, msgType, msgData) {
 }
 
 /**
- * Use to fetch the parameters from main
- * @function fetchParameters
- */
-function fetchParameters() {
-  return new Promise((resolve) => {
-    console.log('Fetching parameters');
-    ipc.once('parameters_response', (event, params) => {
-      console.log('Got parameters');
-      console.log(params);
-      resolve(params);
-    });
-
-    ipc.send('parameters_request');
-  });
-}
-
-/**
  * Callback of the accept checker of easyrtc
  * @callback acceptCall
  * @param {number} easyrtcid - Id of the peer sending data.
@@ -119,11 +96,9 @@ function acceptCall(easyrtcid, acceptor) {
  * server and configure the 2 video stream.
  * @function myInit
  */
-async function myInit() {
-  const parameters = await fetchParameters();
-
-  easyrtc.setRoomApiField('default', 'type', 'robot');
-  easyrtc.setSocketUrl(parameters.webRtcServerUrl);
+function myInit() {
+  easyrtc.setRoomApiField('default', 'type', `robot-${robotName}`);
+  easyrtc.setSocketUrl(webrtcServerURL);
 
   easyrtc.setAutoInitUserMedia(false);
 
@@ -154,8 +129,9 @@ async function myInit() {
   console.log('Getting video sources');
   easyrtc.getVideoSourceList((device) => {
     console.log('Devices:');
-    console.log(device);
-    for (const deviceName of virtualDevicesName) {
+    console.log(virtualDeviceNames);
+    for (const deviceName of virtualDeviceNames) {
+      console.log(`Finding ${deviceName} stream...`);
       // eslint-disable-next-line max-len
       const videoSource = device.find((source) => source.label.toString().trim() === deviceName.trim());
 
