@@ -18,7 +18,7 @@
           style="max-height: 100%"
         >
           <h4 class="m-3">
-            <u>Filters:</u>
+            Filters
           </h4>
           <div
             id="inner-filter-container"
