@@ -52,12 +52,15 @@ export default {
     state.patrol.patrolList.push(patrol);
   },
   updatePatrol(state, update) {
-    state.patrol.waypointList.splice(update.index, 1, update.patrol);
+    state.patrol.patrolList.splice(update.index, 1, update.patrol);
   },
   removePatrol(state, index) {
     state.patrol.patrolList.splice(index, 1);
   },
   clearPatrol(state) {
     state.patrol.patrolList = [];
+  },
+  fillPatrolList(state, waypointList) {
+    state.patrol.patrolList = waypointList;
   },
 };
