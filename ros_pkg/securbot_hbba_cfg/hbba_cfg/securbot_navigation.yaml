@@ -6,11 +6,11 @@ hbba_conf:
 - include: {pkg: 'hbba_synth', file: 'common.yaml'}
 - launch: {pkg: 'securbot_pkg', path: 'launch/mapping.launch'}
 - launch: {pkg: 'securbot_pkg', path: 'launch/includes/virtualDevices.launch'}
-- launch: 
+- launch:
     pkg: 'electron_webrtc'
     path: 'launch/electron_webrtc.launch'
     args:
-        webrtc_server_url_param:  
+        webrtc_server_url_param:
 
 # Global remaps
 
@@ -30,11 +30,3 @@ hbba_conf:
 
 # Strategies
 - include: {pkg: 'securbot_hbba_cfg', file: 'securbot_strat_navigation.yaml'}
-
-# Initial desires
-- desire: 
-    id: nav_static
-    type: Teleop
-    utility: 1
-    security: False
-    intensity: 1

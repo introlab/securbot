@@ -1,0 +1,5 @@
+<launch>
+    <node name="docking_motiv" pkg="dock" type="dock_generator.py" output="screen">
+    </node>
+</launch>
+

@@ -25,7 +25,7 @@ hbba_conf:
 - behavior:
     name: teleop_manager
     launch: {pkg: 'securbot_pkg', path: 'launch/teleop.launch'}
-    priority: 10
+    priority: 3
     input:
         - fromElectron: {src: fromElectron, filtered: false}
     output:
@@ -34,7 +34,7 @@ hbba_conf:
 - behavior:
     name: planner
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/navigation.launch'}
-    priority: 1
+    priority: 2
     input:
         - move_base_simple/goal: {src: planner_goal, filtered: false}
         - odom: {src: rtabmap/odom, filtered: false}
@@ -46,7 +46,7 @@ hbba_conf:
 - behavior:
     name: docker
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/docker.launch'}
-    priority: 2
+    priority: 1
     input:
         - detect_array: {src: tag_detections}
     output:

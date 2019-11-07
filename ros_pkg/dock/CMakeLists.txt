@@ -8,8 +8,12 @@ add_compile_options(-std=c++17)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  rospy
   roscpp
+  actionlib
   std_msgs
+  sensor_msgs
+  hbba_msgs
   genmsg
   tf2
   tf2_ros

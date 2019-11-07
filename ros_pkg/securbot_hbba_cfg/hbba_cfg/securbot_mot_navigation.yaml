@@ -7,6 +7,12 @@ hbba_conf:
     input:
         - goto_goal
 
+- motivation:
+    name: teleop_motivation
+    launch: {pkg: "securbot_hbba_cfg", path: "launch/teleop_motivation.launch"}
+    input:
+        - fromElectron
+
 - remap: {from: fromElectronWaypoints, to: /electron/patrol}
 - remap: {from: fromMapImageGenerator, to: /map_image_generator/output_goal}
 - remap: {from: toElectron, to: /toElectron}
@@ -20,3 +26,11 @@ hbba_conf:
     output:
         - toElectron
         - toMapImageGenerator
+
+- motivation:
+    name: docking_motivation
+    launch: {pkg: "securbot_hbba_cfg", path: "launch/docking_motivation.launch"}
+    input:
+        - force_docking
+        - battery_state
+    
