@@ -288,8 +288,8 @@
             <waypoint-overlay
               :is-active="true"
               :is-clickable="false"
-              :list="waypointList"
-              :nb-of-waypoint="waypointList.length"
+              :list="eventsWaypoints"
+              :nb-of-waypoint="eventsWaypoints.length"
               :video-element="eventElement"
             />
           </div>
@@ -303,7 +303,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { ToggleButton } from 'vue-js-toggle-button';
 import SecurbotTable from '../generic/Table';
 import VideoBox from '../widgets/VideoBox';
@@ -342,7 +342,6 @@ export default {
       },
       selectedFilter: '',
       viewMap: false,
-      isConnected: true,
       switchColor: {
         checked: '#00A759',
         unchecked: '#00A759',
@@ -351,11 +350,13 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('database', [
+      'eventsWaypoints',
+    ]),
     ...mapState({
-      waypointList: state => state.patrol.waypointList,
       eventId: state => state.htmlElement.eventId,
       eventElement: state => state.htmlElement.event,
-      // isConnected: state => state.client.connectionState.robot === 'connected',
+      isConnected: state => state.client.connectionState.robot === 'connected',
     }),
     ...mapState('database', {
       headers: state => state.headers,
@@ -379,12 +380,13 @@ export default {
     }),
   },
   mounted() {
+    this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
     setLocalFilters(event) {
       const f = {
         includeTags: (event.tag_and ? event.tag_and : []),
-        excludeTags: (event.tag_not ? event.tag_not  : []),
+        excludeTags: (event.tag_not ? event.tag_not : []),
         textSearch: (event.search_expression ? event.search_expression : ''),
         other: {
           onlyNew: event.viewed ? true : '',
@@ -397,6 +399,9 @@ export default {
     },
     changeMapView(event) {
       this.viewMap = event.value;
+      this.$nextTick(() => {
+        this.$store.dispatch('updateHTMLVideoElements');
+      });
     },
     isIncludeTagSelected(tag) {
       return this.filters.includeTags.includes(tag);

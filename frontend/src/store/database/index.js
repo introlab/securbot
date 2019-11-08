@@ -9,7 +9,6 @@ export default {
     errorDuringQuery: false,
     events: [],
     headers: ['Robot', 'Object', 'Context', 'Description', 'Tags', 'DateTime', 'Image'],
-    eventList: [],
     robots: [],
     robotFilter: [],
     tagList: ['red', 'yellow', 'blue', 'green', 'a', 'b', 'c'],
@@ -104,8 +103,15 @@ export default {
     },
   },
   getters: {
-    uri: state => `http://${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
+    uri: state => `${(process.env.VUE_APP_SERVER_URL.startsWith('http') ? '' : 'http://')}${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
     // uri: state => `http://localhost:3000${state.apiPath}`,
+    eventsWaypoints: (state) => {
+      const wpl = [];
+      for (const event of state.events) {
+        wpl.push(event.location_coordinate);
+      }
+      return wpl;
+    },
   },
   mutations: {
     queryStarted(state) {
