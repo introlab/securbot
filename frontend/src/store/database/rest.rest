@@ -1,4 +1,6 @@
 ### To be used with the rest-client extension of vscode
+
+### Create Robot 1
 POST http://localhost:8080/db/robots HTTP/1.1
 content-type: application/json
 
@@ -14,8 +16,7 @@ content-type: application/json
   }
 }
 
-###
-
+### Create Robot 2
 POST http://localhost:8080/db/robots HTTP/1.1
 content-type: application/json
 
@@ -31,18 +32,21 @@ content-type: application/json
   }
 }
 
-###
-
+### Get Robots
 GET http://localhost:8080/db/robots
 
-###
 
-POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/patrols
+###
+@robot1 = 5dc59e1db7217d0014134503
+@robot2  = 5dc59f3eb7217d0014134504
+
+### Patrols
+
+POST http://localhost:8080/db/robots/{{robot1}}/patrols
 content-type: application/json
 
 {
   "name": "Patrol 1",
-  "robot": "5dc459e1fb74890014b89689",
   "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
   "last_modified": "2019-11-07T06:52:19.831Z",
   "waypoints": [
@@ -52,13 +56,10 @@ content-type: application/json
   ]
 }
 
-###
-
-POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/patrols
+POST http://localhost:8080/db/robots/{{robot1}}/patrols
 content-type: application/json
 
 {
-  "robot": "5dc459e1fb74890014b89689",
   "name": "Patrol 2",
   "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
   "last_modified": "2019-11-07T06:52:19.831Z",
@@ -69,13 +70,10 @@ content-type: application/json
   ]
 }
 
-###
-
-POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/patrols
+POST http://localhost:8080/db/robots/{{robot2}}/patrols
 content-type: application/json
 
 {
-  "robot": "5dc459e7fb74890014b8968a",
   "name": "Patrol A",
   "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
   "last_modified": "2019-11-07T06:52:19.831Z",
@@ -86,106 +84,13 @@ content-type: application/json
   ]
 }
 
-###
+GET http://localhost:8080/db/robots/{{robot1}}/patrols
 
-GET http://localhost:8080/db/robots/5dc459e1fb74890014b89689/patrols
-
-###
-
-POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
+### Create events for the first robot
+POST http://localhost:8080/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
-    "robot": "5dc459e7fb74890014b8968a",
-    "object": "Event 1",
-    "description_text": "asdasdadsa",
-    "context": "night",
-    "time": "2019-11-07T06:52:19.831Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
-    "tags": ["red",],
-    "alert": false,
-    "viewed": false
-}
-
-###
-
-POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
-content-type: application/json
-
-{
-    "robot": "5dc459e7fb74890014b8968a",
-    "object": "Event 2",
-    "description_text": "asdasdadsa",
-    "context": "night",
-    "time": "2019-11-01T06:52:19.831Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
-    "tags": ["blue"],
-    "alert": false,
-    "viewed": false
-}
-
-###
-
-POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
-content-type: application/json
-
-{
-    "robot": "5dc459e7fb74890014b8968a",
-    "object": "Event 4",
-    "description_text": "asdasdadsa",
-    "context": "night",
-    "time": "2019-11-04T06:52:19.831Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
-    "tags": ["yellow"],
-    "alert": false,
-    "viewed": false
-}
-
-###
-
-POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
-content-type: application/json
-
-{
-  "robot": "5dc459e7fb74890014b8968a",
-  "object": "Event 5",
-  "description_text": "asdasdadsa",
-  "context": "night",
-  "time": "2019-11-04T06:52:19.831Z",
-  "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
-  "tags": ["green"],
-  "alert": false,
-  "viewed": false
-}
-
-###
-
-POST http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
-content-type: application/json
-
-{
-    "robot": "5dc459e7fb74890014b8968a",
-    "object": "Event 10",
-    "description_text": "asdasdadsa",
-    "context": "night",
-    "time": "2019-10-23T00:00:00.999Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
-    "tags": ["a"],
-    "alert": false,
-    "viewed": false
-}
-
-###
-GET http://localhost:8080/db/robots/5dc459e7fb74890014b8968a/events
-
-
-###
-
-POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
-content-type: application/json
-
-{
-    "robot": "5dc459e1fb74890014b89689",
     "object": "Event 1",
     "description_text": "asdasdadsa",
     "context": "night",
@@ -197,13 +102,91 @@ content-type: application/json
 }
 
 ###
-
-POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
+POST http://localhost:8080/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
-  "robot": "5dc459e1fb74890014b89689",
-  "object": "Event 2",
+    "object": "Event 2",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-11-01T06:52:19.831Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["blue"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+POST http://localhost:8080/db/robots/{{robot1}}/events
+content-type: application/json
+
+{
+    "object": "Event 3",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-11-04T06:52:19.831Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["yellow"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+POST http://localhost:8080/db/robots/{{robot1}}/events
+content-type: application/json
+
+{
+  "object": "Event 4",
+  "description_text": "asdasdadsa",
+  "context": "night",
+  "time": "2019-11-04T06:52:19.831Z",
+  "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+  "tags": ["green"],
+  "alert": false,
+  "viewed": false
+}
+
+###
+POST http://localhost:8080/db/robots/{{robot1}}/events
+content-type: application/json
+
+{
+    "object": "Event 5",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-10-23T00:00:00.999Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["a"],
+    "alert": false,
+    "viewed": false
+}
+
+### Get robot 1 event
+GET http://localhost:8080/db/robots/{{robot1}}/events
+
+
+### Create events for the second robot
+POST http://localhost:8080/db/robots/{{robot2}}/events
+content-type: application/json
+
+{
+    "object": "Event 10",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2019-11-07T06:52:19.831Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["red"],
+    "alert": false,
+    "viewed": false
+}
+
+###
+POST http://localhost:8080/db/robots/{{robot2}}/events
+content-type: application/json
+
+{
+  "robot": "{{robot2}}",
+  "object": "Event 11",
   "description_text": "asdasdadsa",
   "context": "night",
   "time": "2019-11-01T06:52:19.831Z",
@@ -214,13 +197,11 @@ content-type: application/json
 }
 
 ###
-
-POST http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
+POST http://localhost:8080/db/robots/{{robot2}}/events
 content-type: application/json
 
 {
-    "robot": "5dc459e1fb74890014b89689",
-    "object": "Event 3",
+    "object": "Event 12",
     "description_text": "asdasdadsa",
     "context": "night",
     "time": "2019-10-23T00:00:00.999Z",
@@ -231,12 +212,42 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:8080/db/robots/5dc459e1fb74890014b89689/events
+POST http://localhost:8080/db/robots/{{robot2}}/events
 content-type: application/json
 
 {
-  "after": "2019-10-31T22:04:07.921Z",
-  "before": "2019-11-07T22:04:07.921Z",
+    "object": "Event 12",
+    "description_text": "asdasdadsa",
+    "context": "night",
+    "time": "2018-10-23T00:00:00.999Z",
+    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "tags": ["c"],
+    "alert": false,
+    "viewed": false
+}
+
+### Get robot 2 events
+GET http://localhost:8080/db/robots/{{robot2}}/events
+
+### Get last 30 days events for robot 1
+GET http://localhost:8080/db/robots/{{robot1}}/events
+content-type: application/json
+
+{
+  "after": "2019-10-11T22:04:07.921Z",
+  "before": "2019-11-08T22:04:07.921Z",
+  "search_expression": "",
+  "alert": false,
+  "viewed": false
+}
+
+### Get last 30 days events for robot 2
+GET http://localhost:8080/db/robots/{{robot2}}/events
+content-type: application/json
+
+{
+  "after": "2019-10-11T22:04:07.921Z",
+  "before": "2019-11-08T22:04:07.921Z",
   "search_expression": "",
   "alert": false,
   "viewed": false

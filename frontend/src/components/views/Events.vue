@@ -394,7 +394,6 @@ export default {
         afterDate: (event.after ? event.after.slice(0, 10) : ''),
       };
       Object.assign(this.filters, f);
-      console.log(this.filters);
     },
     changeMapView(event) {
       this.viewMap = event.value;
@@ -423,7 +422,7 @@ export default {
     },
     applyFilter() {
       const { filters } = this;
-      this.$store.commit('database/resetEvents');;
+      this.$store.commit('database/resetEvents');
       this.$store.commit('database/setRobotFilters', filters);
       this.$store.commit('database/setEventFilters', filters);
       this.$store.dispatch('database/filterEvents');

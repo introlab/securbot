@@ -14,13 +14,10 @@ export default {
     robotFilter: [],
     tagList: ['red', 'yellow', 'blue', 'green', 'a', 'b', 'c'],
     defaultFilter: {
-      tag_and: [],
-      tag_not: [],
-      search_expression: '',
-      alert: '',
-      viewed: '',
       before: new Date().toISOString(),
       after: new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)).toISOString(),
+      viewed: false,
+      alert: true,
     },
     predefFilters: [
       {
@@ -129,8 +126,8 @@ export default {
     addEvent(state, event) {
       state.events.push(event);
     },
-    resetEvent(state) {
-      state.events.splice(0, state.events.length - 1);
+    resetEvents(state) {
+      state.events = [];
     },
     setRobotFilters(state, robot) {
       if (robot === 'all') {
@@ -148,8 +145,8 @@ export default {
         tag_and: (filters.includeTags ? filters.includeTags : []),
         tag_not: (filters.excludeTags ? filters.excludeTags : []),
         search_expression: (filters.textSearch ? filters.textSearch : ''),
-        alert: (filters.other.notify ? true : ''),
-        viewed: (filters.other.onlyNew ? true : ''),
+        alert: !!filters.other.notify,
+        viewed: !!filters.other.onlyNew,
         before: (filters.beforeDate ? new Date(filters.beforeDate).toISOString() : ''),
         after: (filters.afterDate ? new Date(filters.afterDate).toISOString() : ''),
       };
@@ -187,8 +184,6 @@ export default {
     filterEvents({ state, commit, dispatch }) {
       commit('resetEvents');
       commit('queryStarted');
-      console.log(state.currentFilter);
-      console.log(state.events);
       dispatch('queryEvents', { filters: state.currentFilter })
         .then(() => {
           commit('queryFinished');
@@ -288,14 +283,14 @@ export default {
     querySchedules() {
     },
     // eslint-disable-next-line object-curly-newline
-    queryEvents({ state, dispatch }, filters) {
+    queryEvents({ state, commit, dispatch }, filters) {
+      commit('resetEvents');
       const robots = state.robotFilter;
       const options = {
         robots,
         index: 0,
         filters: filters.filters,
       };
-      console.log(options);
       return new Promise((resolve, reject) => {
         dispatch('_queryEvents', options)
           .then(() => {
@@ -316,13 +311,12 @@ export default {
         _options.index += 1;
         const req = {
           uri: `${getters.uri}/robots/${currentRobot.id}/events`,
-          body: options.filters,
           headers: {
             'User-Agent': 'Request-Promise',
           },
           json: true,
         };
-        console.log(req);
+        Object.assign(req.headers, options.filters);
         // Request
         request(req)
           .then((result) => {
