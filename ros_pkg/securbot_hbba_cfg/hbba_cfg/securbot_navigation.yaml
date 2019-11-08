@@ -4,13 +4,13 @@ hbba_conf:
 
 # Global launches
 - include: {pkg: 'hbba_synth', file: 'common.yaml'}
-- launch: {pkg: 'securbot_pkg', path: 'launch/mapping.launch'}
+- launch: {pkg: 'securbot_pkg', path: 'launch/localization.launch'}
 - launch: {pkg: 'securbot_pkg', path: 'launch/includes/virtualDevices.launch'}
 - launch:
     pkg: 'electron_webrtc'
     path: 'launch/electron_webrtc.launch'
     args:
-        webrtc_server_url_param:
+        webrtc_server_url_param: 'http://securbot.gel.usherbrooke.ca:8080'
 
 # Global remaps
 

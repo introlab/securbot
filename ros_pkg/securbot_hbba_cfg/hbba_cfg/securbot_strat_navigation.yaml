@@ -6,11 +6,11 @@ hbba_conf:
 #    utility: 1
 #    cost:
 #        robotic_base: 1
-    
+
 - strat:
     name: goto
     class: GoTo
-    utility: 2
+    utility: 4
     cost:
         robotic_base: 1
     modules:
@@ -20,7 +20,7 @@ hbba_conf:
 - strat:
     name: dock
     class: Dock
-    utility: 1
+    utility: 3
     cost:
         robotic_base: 1
     modules:
@@ -31,21 +31,28 @@ hbba_conf:
         - planner
     custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 
-#- strat:
-#    name: patrol
-#    class: patrol
-#    utility: 2
-#    cost:
-#        robotic_base: 1
-#    modules:
-#        - patrol_planner
-#        - patrol_manager
+- strat:
+    name: patrol
+    class: Patrol
+    utility: 1
+    cost:
+        robotic_base: 1
+    modules:
+        - planner
+    custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 
 - strat:
     name: Move_base_teleop
     class: Teleop
-    utility: 3
+    utility: 5
     cost:
         robotic_base: 1
     modules:
         - teleop_manager
+
+- strat:
+    name: loiter
+    class: Loiter
+    utility: 2
+    cost:
+        robotic_base: 1

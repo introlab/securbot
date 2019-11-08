@@ -2,6 +2,7 @@
 
 import rospy
 import json
+from threading import Lock
 from std_msgs.msg import String
 from hbba_msgs.msg import Desire
 from hbba_msgs.srv import AddDesires
@@ -17,7 +18,7 @@ class TeleopGenerator:
         self.teleop_desire.type = 'Teleop'
         self.teleop_desire.utility = 1
         self.teleop_desire.security = False
-        self.teleop_desire.intensity = rospy.get_param('~des_intensity', 1)
+        self.teleop_desire.intensity = rospy.get_param('~des_intensity', 2)
 
         self.add_desires = rospy.ServiceProxy(
             'add_desires',
@@ -28,16 +29,36 @@ class TeleopGenerator:
             RemoveDesires
         )
 
+        self.last = rospy.Time.now()
+        self.last_mutex = Lock()
+
         rospy.Subscriber('fromElectron', String, self.electron_callback)
+        rospy.Timer(rospy.Duration(2), self.timer_callback)
+
         rospy.spin()
 
-    def electron_callback(self, msg):
-        data = json.loads(msg.data)
+    def timer_callback(self, event):
+        self.last_mutex.acquire()
+        last = self.last
+        self.last_mutex.release()
 
-        if data['enabled']:
-            self.add_desires([self.teleop_desire])
-        else:
+        delay = rospy.Time.now() - last
+
+        if delay.to_sec() > 10:
             self.remove_desires([self.teleop_desire.id])
+
+    def electron_callback(self, msg):
+        self.last_mutex.acquire()
+        self.last = rospy.Time.now()
+        self.last_mutex.release()
+
+        data = json.loads(msg.data)
+        self.add_desires([self.teleop_desire])
+
+        # if data['enabled']:
+        #     self.add_desires([self.teleop_desire])
+        # else:
+        #     self.remove_desires([self.teleop_desire.id])
 
 
 if __name__ == '__main__':

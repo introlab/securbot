@@ -16,11 +16,11 @@ hbba_conf:
 #        - move_base/status: {filtered: false}
 #        - fromMapImageGenerator: {src: map_image_generator/output_goal, filtered: false}
 #        - fromElectronInterrupt: {src: electron/patrol_halt, filtered: false}
-#        - fromElectronWaypoints: {src: electron/patrol, filtered: True} 
+#        - fromElectronWaypoints: {src: electron/patrol, filtered: True}
 #        - toMapImageGenerator: {src: map_image_generator/input_goal, filtered: false}
 #    output:
 #        - cmd_vel
-#        - toElectron        
+#        - toElectron
 
 - behavior:
     name: teleop_manager
