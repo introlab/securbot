@@ -51,7 +51,7 @@ exports.list = function (req, res) {
 
     Model.find(query)
         .sort('-time')
-        .select('object time alert viewed')
+        .select(filters.minimized ? 'object time alert viewed' : '')
         .exec((err, documents) => {
             if (err)
                 res.status(500).send(err)

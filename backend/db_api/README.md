@@ -161,6 +161,7 @@ The following filters are available:
  - `viewed`: Boolean, Filters for events that have/haven't been marked as read
  - `before`: Date, only list events before this time
  - `afer` : Date, only list events after this time
+ - `minimized` : Boolean, if true, only the `object`, `time`, `alert` and `viewed` fields will be listed
 
 ##### POST /API_PATH/robots/`robotId`/events
 Upload the event contained in request body.
