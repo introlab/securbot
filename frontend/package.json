@@ -17,6 +17,8 @@
     "bootstrap-vue": "^2.0.0-rc.28",
     "core-js": "^2.6.9",
     "open-iconic": "git+https://github.com/iconic/open-iconic.git",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "socket.io": "^1.4.5",
     "vue": "^2.6.6",
     "vue-js-toggle-button": "^1.3.2",

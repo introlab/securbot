@@ -1,4 +1,4 @@
-/* global easyrtc, ipc */
+/* global easyrtc, ipc, virtualDeviceNames, webrtcServerUrl, robotName */
 /**
  * Renderer for this application.
  * @module Renderer
@@ -15,12 +15,6 @@
 let operatorID = null;
 
 /**
- * Virtual devices names.
- * @type {Array}
- */
-const virtualDevicesName = ['virtual_map', 'virtual_camera'];
-
-/**
  * Array to keep track of the virtual devices corrected name.
  * @type {Array}
  */
@@ -32,34 +26,10 @@ const streamNames = [];
  * @param {String} data - Data comming from ROS to send to server.
  * @listens rosdata
  */
-ipc.on('rosdata', (emitter, data) => {
+ipc.on('robot-status', (_, data) => {
   console.log(data);
-  if (operatorID != null) { easyrtc.sendDataP2P(operatorID, 'rosdata', data); }
+  if (operatorID != null) { easyrtc.sendDataP2P(operatorID, 'robot-status', data); }
 });
-
-/**
- * Callback for the patrol-plan data channel from easyrtc.
- * @callback patrolReceivedCallback
- * @param {number} easyrtcId - Id of the peer sending data.
- * @param {String} msgType - Data channel the data are comming from.
- * @param {String} patrolJsonString - JSON string of the patrol data.
- */
-function patrolReceivedCallback(easyrtcId, msgType, patrolJsonString) {
-  console.log(`Received new patrol plan: ${patrolJsonString}`);
-  ipc.send('patrol-plan', patrolJsonString);
-}
-
-/**
- * Callback for the joystick-position data channel from easyrtc.
- * @callback teleopCallback
- * @param {number} easyrtc - Id of the peer sending data.
- * @param {String} msgType - Data channel the data are comming from.
- * @param {String} msgData - JSON string of the teleop datas.
- */
-function teleopCallback(easyrtcid, msgType, msgData) {
-  console.log(msgData);
-  ipc.send('msg', msgData);
-}
 
 /**
  * Callback for the request-feed data channel msg from easyrtc.
@@ -76,23 +46,6 @@ function streamRequestCallback(easyrtcid, msgType, msgData) {
     });
     console.log(`Stream ${msgData} added to call`);
   }
-}
-
-/**
- * Use to fetch the parameters from main
- * @function fetchParameters
- */
-function fetchParameters() {
-  return new Promise((resolve) => {
-    console.log('Fetching parameters');
-    ipc.once('parameters_response', (event, params) => {
-      console.log('Got parameters');
-      console.log(params);
-      resolve(params);
-    });
-
-    ipc.send('parameters_request');
-  });
 }
 
 /**
@@ -119,11 +72,9 @@ function acceptCall(easyrtcid, acceptor) {
  * server and configure the 2 video stream.
  * @function myInit
  */
-async function myInit() {
-  const parameters = await fetchParameters();
-
-  easyrtc.setRoomApiField('default', 'type', 'robot');
-  easyrtc.setSocketUrl(parameters.webRtcServerUrl);
+function myInit() {
+  easyrtc.setRoomApiField('default', 'type', `robot-${robotName}`);
+  easyrtc.setSocketUrl(webrtcServerURL);
 
   easyrtc.setAutoInitUserMedia(false);
 
@@ -134,11 +85,10 @@ async function myInit() {
   easyrtc.enableAudioReceive(false);
   easyrtc.enableDataChannels(true);
 
-  easyrtc.setPeerListener((id, type, data) => {
-    console.log(`Receive ${data} from ${id} of type ${type}`);
+  // Forward all received data to main process
+  easyrtc.setPeerListener((_, type, data) => {
+    ipc.send(type, data)
   });
-  easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan');
-  easyrtc.setPeerListener(teleopCallback, 'joystick-position');
 
   easyrtc.setAcceptChecker(acceptCall);
 
@@ -154,8 +104,9 @@ async function myInit() {
   console.log('Getting video sources');
   easyrtc.getVideoSourceList((device) => {
     console.log('Devices:');
-    console.log(device);
-    for (const deviceName of virtualDevicesName) {
+    console.log(virtualDeviceNames);
+    for (const deviceName of virtualDeviceNames) {
+      console.log(`Finding ${deviceName} stream...`);
       // eslint-disable-next-line max-len
       const videoSource = device.find((source) => source.label.toString().trim() === deviceName.trim());
 

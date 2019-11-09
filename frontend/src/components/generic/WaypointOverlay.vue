@@ -321,6 +321,8 @@ export default {
           y: -1,
           yaw: 0,
         };
+
+        this.drawCanvas();
       }
     },
     /**

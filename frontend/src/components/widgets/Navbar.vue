@@ -44,7 +44,7 @@
             <b-nav-item to="logs">
               Logs
             </b-nav-item>
-            <b-nav-item to="testing">
+            <b-nav-item to="next">
               .
             </b-nav-item>
           </b-navbar-nav>

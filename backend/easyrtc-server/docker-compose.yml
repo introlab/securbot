@@ -6,5 +6,6 @@ services:
     build: .
     environment:
       NODE_ENV: production
+      PORT: 8000
     ports:
-      - 8080:8080
+      - 8000:8000

@@ -86,6 +86,7 @@
                 :enable="joystickEnabled"
                 :absolute-max-x="1"
                 :absolute-max-y="1"
+                @onPosition="sendJoystickPosition"
               />
             </div>
           </div>
@@ -176,6 +177,7 @@ export default {
         this.$store.commit('enableJoystick');
       } else {
         this.$store.commit('disableJoystick');
+        this.$store.dispatch('stopTeleop');
       }
     },
     /**
@@ -194,6 +196,9 @@ export default {
           height: 0,
         };
       }
+    },
+    sendJoystickPosition(event) {
+      this.$store.dispatch('sendJoystickPosition', event);
     },
   },
 };

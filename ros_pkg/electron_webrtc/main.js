@@ -9,7 +9,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const events = require('events');
 const rosnodejs = require('rosnodejs');
-// eslint-disable-next-line camelcase
 const std_msgs = rosnodejs.require('std_msgs').msg;
 const path = require('path');
 
@@ -24,13 +23,6 @@ let win;
  * @type {events.EventEmitter}
  */
 const hub = new events.EventEmitter();
-
-/**
- * Interface between the msg data in ipc and hub
- */
-ipcMain.on('msg', (event, arg) => {
-  hub.emit('msg', arg);
-});
 
 /**
  * Create the window, loads the html into it and set events.
@@ -68,8 +60,8 @@ function createWindow() {
    * @type {object}
    * @property {String} data - Data coming from ROS to be sent to the server.
    */
-  hub.on('rosdata', (data) => {
-    win.webContents.send('rosdata', data);
+  hub.on('robot-status', (data) => {
+    win.webContents.send('robot-status', data);
   });
 
   /**
@@ -79,7 +71,7 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    hub.removeAllListeners('rosdata');
+    hub.removeAllListeners('robot-status');
     win = null;
   });
 }
@@ -123,69 +115,50 @@ function startApp() {
  * @fires parameters_response
  */
 function startNode() {
-  rosnodejs.initNode('/electron_webrtc').then(async (nodeHandle) => {
-    /** @member {String} */
-    let webRtcServerUrl;
-    // let videoDeviceLabel;
-
-    try {
-      webRtcServerUrl = await nodeHandle.getParam('/electron_webrtc/webrtc_server_url');
-      // var videoDeviceLabel = await nodeHandle.getParam('/electron_webrtc/video_device_label')
-    } catch (e) {
-      console.error('Failed to retreive parameters');
-      app.quit();
-    }
-
-    /** @member {String} */
-    const parameters = { webRtcServerUrl }; // videoDeviceLabel
-    console.log(parameters);
-
-    if (win) { win.webContents.send('parameters_response', parameters); }
-
-    /**
-     * Respond to the parameter_request event with the parameter
-     * @event parameters_response
-     * @type {object}
-     * @property {String} parameters - Parameters set in the launch file
-     */
-    ipcMain.on('parameters_request', (event) => {
-      event.sender.send('parameters_response', parameters);
-    });
-
+  rosnodejs.initNode('electron_webrtc').then(async (nodeHandle) => {
     /**
      * Fires after receiving data from ROS
      * @event data
      * @type {object}
      * @property {String} data - Data received from ROS
      */
-    nodeHandle.subscribe('toElectron', std_msgs.String, (data) => {
-      hub.emit('data', data);
+    nodeHandle.subscribe('robot_status', std_msgs.String, (data) => {
+      hub.emit('robot-status', data);
     });
 
-    /** Advertise the fromElectron Node  */
-    const publisher = nodeHandle.advertise('fromElectron', std_msgs.String);
-
+    /** Advertise the teleop topic  */
+    const teleopPublisher = nodeHandle.advertise('teleop', std_msgs.String);
     /**
      * After receiving teleop command from server, publish it to the fromElectron Node
-     * @event msg
      * @type {object}
-     * @property {String} data - JSON string of the teleoperation command
+     * @property {String} joystickJsonString - JSON string of the teleoperation command
      */
-    hub.on('msg', (data) => {
-      publisher.publish({ data });
+    ipcMain.on('joystick-position', (_, joystickJsonString) => {
+      teleopPublisher.publish({ data: joystickJsonString});
     });
 
-    /** advertise the operatorNavGoal node */
-    const patrolPublisher = nodeHandle.advertise('/electron/patrol', std_msgs.String);
+    /** advertise the patrol topic */
+    const patrolPublisher = nodeHandle.advertise('patrol', std_msgs.String);
     /**
-     * After receiving a patrol from server, publish it to the operatorNavGoal Node
-     * @event patrol-plan
+     * After receiving a patrol from server, publish it to the patrol topic
      * @type {object}
      * @property {String} patrolJsonString - JSON object containing the patrol.
      */
-    ipcMain.on('patrol-plan', (event, patrolJsonString) => {
+    ipcMain.on('patrol-plan', (_, patrolJsonString) => {
       patrolPublisher.publish({ data: patrolJsonString });
     });
+
+    /** Publish received goto to ROS */
+    const gotoPublisher = nodeHandle.advertise('goto', std_msgs.String);
+    ipcMain.on('goto', (_, gotoString) => {
+      gotoPublisher.publish({ data: gotoString });
+    });
+
+    /** Publish received map zoom to ROS */
+    const zoomPublisher = nodeHandle.advertise('map_zoom', std_msgs.String);
+    ipcMain.on('changeMapZoom', (_, zoomString) => {
+      zoomPublisher.publish({ data: zoomString });
+    })
   });
 }
 

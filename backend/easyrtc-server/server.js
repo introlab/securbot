@@ -18,6 +18,8 @@ var webServer = http.createServer(app);
 // Start Socket.io so it attaches itself to Express server
 var socketServer = socketIo.listen(webServer, {"log level":1});
 
+easyrtc.setOption("demosEnable", "false");
+easyrtc.setOption("logLevel", "debug");
 easyrtc.setOption("logLevel", "debug");
 
 // Overriding the default easyrtcAuth listener, only so we can directly access its callback
@@ -48,6 +50,6 @@ var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
 });
 
 // Listen on port
-webServer.listen(app_port, function () {
+webServer.listen({port: app_port, path: '/easyrtc'}, function () {
     console.log(`listening on http://localhost:${app_port}`);
 });
