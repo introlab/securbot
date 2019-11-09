@@ -1,17 +1,10 @@
 hbba_conf:
 
-#- strat:
-#    name: idle
-#    class: Static
-#    utility: 1
-#    cost:
-#        robotic_base: 1
-
 - strat:
     name: goto
     class: GoTo
     utility: 4
-    cost:
+    costs:
         robotic_base: 1
     modules:
         - planner
@@ -21,7 +14,7 @@ hbba_conf:
     name: dock
     class: Dock
     utility: 3
-    cost:
+    costs:
         robotic_base: 1
     modules:
         - apriltag:
@@ -35,24 +28,24 @@ hbba_conf:
     name: patrol
     class: Patrol
     utility: 1
-    cost:
+    costs:
         robotic_base: 1
     modules:
         - planner
     custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 
 - strat:
-    name: Move_base_teleop
-    class: Teleop
-    utility: 5
-    cost:
-        robotic_base: 1
-    modules:
-        - teleop_manager
-
-- strat:
     name: loiter
     class: Loiter
     utility: 2
-    cost:
+    costs:
         robotic_base: 1
+
+- strat:
+    name: Move_base_teleop
+    class: Teleop
+    utility: 5
+    costs:
+        robotic_base: 1
+    modules:
+        - teleop_manager

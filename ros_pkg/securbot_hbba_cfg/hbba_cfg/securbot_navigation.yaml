@@ -9,8 +9,6 @@ hbba_conf:
 - launch:
     pkg: 'electron_webrtc'
     path: 'launch/electron_webrtc.launch'
-    args:
-        webrtc_server_url_param: 'http://securbot.gel.usherbrooke.ca:8080'
 
 # Global remaps
 

@@ -20,7 +20,7 @@ publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 #
 def teleopListener():
         rospy.init_node('electron_teleop', anonymous=True)
-        rospy.Subscriber('/fromElectron', String, teleopCallback)
+        rospy.Subscriber('fromElectron', String, teleopCallback)
 
         rospy.spin()
 

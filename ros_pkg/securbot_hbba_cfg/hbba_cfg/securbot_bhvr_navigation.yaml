@@ -27,7 +27,7 @@ hbba_conf:
     launch: {pkg: 'securbot_pkg', path: 'launch/teleop.launch'}
     priority: 3
     input:
-        - fromElectron: {src: fromElectron, filtered: false}
+        - fromElectron: {src: electron/teleop, filtered: false}
     output:
         - cmd_vel
 
