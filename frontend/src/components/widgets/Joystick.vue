@@ -224,7 +224,7 @@ export default {
       const radius = this.getCanvasRadius();
 
       // Draw the background circle
-      this.context.fillStyle = '#87CEEB';
+      this.context.fillStyle = '#00A759';
       this.context.beginPath();
       this.context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
       this.context.fill();
@@ -336,9 +336,10 @@ export default {
         / (this.getCanvasRadius() - this.getJoystickRadius()),
         y: ((this.y - this.getCenterY()) * this.absoluteMaxY)
         / (this.getCanvasRadius() - this.getJoystickRadius()),
+        enabled: this.enable,
       };
       if (this.enable) {
-        this.$store.dispatch('sendJoystickPosition', event);
+        this.$emit('onPosition', event);
       }
     },
   },
@@ -347,7 +348,7 @@ export default {
 
 <style>
 .inner-joystick-container{
-  padding:10px;
+  padding: 10px;
   height: 100%;
   width: 100%;
 }
