@@ -25,16 +25,16 @@ hbba_conf:
 - behavior:
     name: teleop_manager
     launch: {pkg: 'securbot_pkg', path: 'launch/teleop.launch'}
-    priority: 3
+    priority: 1
     input:
-        - fromElectron: {src: electron/teleop, filtered: false}
+        - fromElectron: {src: electron/teleop}
     output:
         - cmd_vel
 
 - behavior:
     name: planner
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/navigation.launch'}
-    priority: 2
+    priority: 3
     input:
         - move_base_simple/goal: {src: planner_goal, filtered: false}
         - odom: {src: rtabmap/odom, filtered: false}
@@ -46,9 +46,18 @@ hbba_conf:
 - behavior:
     name: docker
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/docker.launch'}
-    priority: 1
+    priority: 4
     input:
         - detect_array: {src: tag_detections}
     output:
         - approach_plan
+        - cmd_vel
+
+- behavior:
+    name: reverser
+    launch: {pkg: 'securbot_hbba_cfg', path: 'launch/reverser.launch'}
+    priority: 2
+    input:
+        - time: {src: /reverse_time, filtered: false}
+    output:
         - cmd_vel

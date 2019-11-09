@@ -77,6 +77,7 @@ class DockGenerator:
 
         self.min_percent = rospy.get_param('~min_percent', 30)
         self.charge_percent = rospy.get_param('~charge_percent', 80)
+        self.undock_time = rospy.get_param('~undock_time', 4.0)
 
         self.approach_goal = dict()
         self.approach_goal['x'] = rospy.get_param('~approach/x', 0.0)
@@ -99,6 +100,10 @@ class DockGenerator:
         self.loiter_desire.intensity = 1
         self.loiter_desire.utility = 1
         self.loiter_desire.security = False
+
+        params = dict()
+        params['t'] = self.undock_time
+        self.loiter_desire.params = json.dumps(params)
 
         rospy.spin()
 

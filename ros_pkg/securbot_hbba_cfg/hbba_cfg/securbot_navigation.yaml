@@ -28,3 +28,11 @@ hbba_conf:
 
 # Strategies
 - include: {pkg: 'securbot_hbba_cfg', file: 'securbot_strat_navigation.yaml'}
+
+# Initial desire
+- desire:
+    id: reverse_static
+    type: Reverse
+    utility: 1
+    intensity: 1.0
+    security: False
