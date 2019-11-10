@@ -25,7 +25,7 @@
             class="overlay-button"
             @click="switchHTMLIds"
           >
-            Swt
+            <font-awesome-icon icon="exchange-alt" />
           </b-button>
           <b-tooltip
             target="switch-video-button"
@@ -41,7 +41,14 @@
             class="overlay-button"
             @click="switchStreamState"
           >
-            On
+            <font-awesome-icon
+              v-if="showStream"
+              icon="eye-slash"
+            />
+            <font-awesome-icon
+              v-else
+              icon="eye"
+            />
           </b-button>
           <b-tooltip
             target="hide-stream-button"
@@ -55,11 +62,12 @@
             id="joystick-enable-button"
             squared
             class="overlay-button"
+            :class="{ 'overlay-button-active': joystickOverlayEnabled }"
             :pressed.sync="joystickOverlayEnabled"
             :disabled="!isDataChannelAvailable || gotoOverlayEnabled || keyboardCtrl.enabled"
             @click="changeJoystickState"
           >
-            J
+            <font-awesome-icon icon="gamepad" />
           </b-button>
           <b-tooltip
             target="joystick-enable-button"
@@ -73,11 +81,12 @@
             id="keyboard-enable-button"
             squared
             class="overlay-button"
+            :class="{ 'overlay-button-active': keyboardCtrl.enabled }"
             :pressed.sync="keyboardCtrl.enabled"
             :disabled="!isDataChannelAvailable || gotoOverlayEnabled || joystickOverlayEnabled"
             @click="changeJoystickState"
           >
-            W
+            <font-awesome-icon icon="keyboard" />
           </b-button>
           <b-tooltip
             target="keyboard-enable-button"
@@ -101,7 +110,7 @@
             :disabled="mainVideoId !== mapId"
             @click="increaseZoom"
           >
-            +
+            <font-awesome-icon icon="plus" />
           </b-button>
           <b-tooltip
             target="increase-zoom-button"
@@ -118,7 +127,7 @@
             :disabled="mainVideoId !== mapId"
             @click="decreaseZoom"
           >
-            -
+            <font-awesome-icon icon="minus" />
           </b-button>
           <b-tooltip
             target="decrease-zoom-button"
@@ -132,11 +141,12 @@
             id="goto-button"
             squared
             class="overlay-button"
+            :class="{ 'overlay-button-active': gotoOverlayEnabled }"
             :disabled="mainVideoId !== mapId || joystickOverlayEnabled || keyboardCtrl.enabled"
             :pressed.sync="gotoOverlayEnabled"
             @click="updateMainElement"
           >
-            Go
+            <font-awesome-icon icon="map-marker" />
           </b-button>
           <b-tooltip
             target="goto-button"
@@ -146,10 +156,46 @@
             {{ (gotoOverlayEnabled ? 'Cancel GoTo...' : 'Send a GoTo Request') }}
           </b-tooltip>
         </div>
-        <div
+        <!-- <div
           id="camera-button-container"
           class="overlay-button-container"
-        />
+        /> -->
+        <div
+          v-if="joystickOverlayEnabled || keyboardCtrl.enabled"
+          id="teleop-control-container"
+          class="overlay-button-container"
+        >
+          <b-button
+            id="increase-teleop-gain-button"
+            squared
+            class="overlay-button"
+            @click="increaseGain"
+          >
+            <font-awesome-icon icon="plus" />
+          </b-button>
+          <b-tooltip
+            target="increase-teleop-gain-button"
+            placement="left"
+            variant="secondary"
+          >
+            Increase Teleop Gain ({{ (teleopGain * 100).toFixed(0) }}%)
+          </b-tooltip>
+          <b-button
+            id="decrease-teleop-gain-button"
+            squared
+            class="overlay-button"
+            @click="decreaseGain"
+          >
+            <font-awesome-icon icon="minus" />
+          </b-button>
+          <b-tooltip
+            target="decrease-teleop-gain-button"
+            placement="left"
+            variant="secondary"
+          >
+            Decrease Teleop Gain ({{ (teleopGain * 100).toFixed(0) }}%)
+          </b-tooltip>
+        </div>
       </div>
       <div class="h-100 w-100 m-auto position-relative">
         <!-- Camera -->
@@ -163,6 +209,7 @@
           :show="true"
           :list="demoWP"
           :nb-of-waypoint="1"
+          wp-color="#00d456"
           :video-element="mainVideoElement"
           @newWaypoint="sendGoTo"
         />
@@ -177,7 +224,7 @@
       </div>
       <div
         v-if="joystickOverlayEnabled"
-        class="position-absolute overlay-joystick-container shadow-sb"
+        class="position-absolute overlay-joystick-container"
       >
         <joystick
           :enable="joystickEnabled"
@@ -268,28 +315,49 @@ export default {
     this.mainVideoId = this.mapId;
     this.overlayVideoId = this.cameraId;
 
-    this.mainVideoElement = document.getElementById(this.mainVideoId);
-    this.$store.dispatch('updateHTMLVideoElements');
+    this.$nextTick(() => {
+      this.updateMainElement();
+      this.$store.dispatch('updateHTMLVideoElements');
+    });
+
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('keyup', this.onKeyup);
     this.keyboardCtrlInterval = setInterval(this.sendKeyboardControl, this.keyboardCtrlSendTime);
   },
   destroyed() {
     clearInterval(this.keyboardCtrlInterval);
-    document.removeEventListener('keydown');
-    document.removeEventListener('keyup');
+    document.removeEventListener('keydown', this.onKeydown);
+    document.removeEventListener('keyup', this.onKeyup);
     console.log('Teleop have been destroyed');
   },
   methods: {
     demo(event) {
       this.demoWP[0] = event;
     },
+    increaseGain() {
+      this.teleopGain += 0.05;
+      this.saturateGain();
+    },
+    decreaseGain() {
+      this.teleopGain -= 0.05;
+      this.saturateGain();
+    },
+    saturateGain() {
+      this.teleopGain = Math.round(this.teleopGain * 100) / 100;
+      if (this.teleopGain > 1) {
+        this.teleopGain = 1;
+      } else if (this.teleopGain < 0) {
+        this.teleopGain = 0;
+      }
+    },
     sendKeyboardControl() {
       if (this.keyboardCtrl.enabled) {
         // eslint-disable-next-line max-len
         this.keyboardCtrl.x = (this.keyboardCtrlKeys.left ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.right ? this.teleopGain : 0);
+        this.keyboardCtrl.x = (this.keyboardCtrl.x ** 2).toFixed(2);
         // eslint-disable-next-line max-len
         this.keyboardCtrl.y = (this.keyboardCtrlKeys.up ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.down ? this.teleopGain : 0);
+        this.keyboardCtrl.y = (this.keyboardCtrl.y ** 2).toFixed(2);
         this.$store.dispatch('sendJoystickPosition', this.keyboardCtrl);
       }
     },
@@ -391,23 +459,33 @@ export default {
       }
     },
     sendJoystickPosition(event) {
-      this.$store.dispatch('sendJoystickPosition', event);
+      const pos = {};
+      Object.assign(pos, event);
+      pos.x = ((Math.abs(pos.x) * pos.x) * this.teleopGain).toFixed(2);
+      pos.y = ((Math.abs(pos.y) * pos.y) * this.teleopGain).toFixed(2);
+      this.$store.dispatch('sendJoystickPosition', pos);
     },
   },
 };
 </script>
 
 <style>
+.icon {
+  color: white;
+  height: 20px;
+  width: 20px;
+}
 .overlay-button {
   background-color: #b5b5b5;
   opacity: 40%;
   height: 60px !important;
   width: 60px !important;
 }
-.overlay-button:active {
-  opacity: 100%;
-  border: 2px;
-  border-color: black;
+.overlay-button-active {
+  opacity: 80%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #00A759 !important;
 }
 .overlay-button:disabled {
   opacity: 20%;
@@ -415,10 +493,10 @@ export default {
 }
 .overlay-button-container {
   padding: 7px;
-  background-color: rgba(194, 194, 194, 0.5);
-  border: solid;
-  border-color: black;
-  border-radius: 5px;
+  background-color: rgba(245, 245, 245, 0.75);
+  /* border: solid;
+  border-color: black; */
+  border-radius: 5px 0 0 5px;
   margin: auto;
   margin-bottom: 5px;
 }
@@ -447,7 +525,7 @@ export default {
   max-height: 300px;
 }
 .overlay-container {
-  top: 20px;
+  top: 5px;
   right: 15px;
   z-index: 100;
   max-width: 80px;
