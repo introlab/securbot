@@ -56,7 +56,7 @@
             squared
             class="overlay-button"
             :pressed.sync="joystickOverlayEnabled"
-            :disabled="!isDataChannelAvailable || gotoOverlayEnabled"
+            :disabled="!isDataChannelAvailable || gotoOverlayEnabled || keyboardCtrl.enabled"
             @click="changeJoystickState"
           >
             J
@@ -67,6 +67,26 @@
             variant="secondary"
           >
             {{ (joystickOverlayEnabled ? 'Deactivate Joystick' : 'Activate Joystick') }}
+          </b-tooltip>
+          <!-- Keyboard -->
+          <b-button
+            id="keyboard-enable-button"
+            squared
+            class="overlay-button"
+            :pressed.sync="keyboardCtrl.enabled"
+            :disabled="!isDataChannelAvailable || gotoOverlayEnabled || joystickOverlayEnabled"
+            @click="changeJoystickState"
+          >
+            W
+          </b-button>
+          <b-tooltip
+            target="keyboard-enable-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (joystickOverlayEnabled
+              ? 'Deactivate Keyboard Control'
+              : 'Activate Keyboard Control') }}
           </b-tooltip>
         </div>
         <div
@@ -112,7 +132,7 @@
             id="goto-button"
             squared
             class="overlay-button"
-            :disabled="mainVideoId !== mapId || joystickOverlayEnabled"
+            :disabled="mainVideoId !== mapId || joystickOverlayEnabled || keyboardCtrl.enabled"
             :pressed.sync="gotoOverlayEnabled"
             @click="updateMainElement"
           >
@@ -129,9 +149,7 @@
         <div
           id="camera-button-container"
           class="overlay-button-container"
-        >
-
-        </div>
+        />
       </div>
       <div class="h-100 w-100 m-auto position-relative">
         <!-- Camera -->
@@ -201,6 +219,20 @@ export default {
   },
   data() {
     return {
+      teleopGain: 0.5,
+      keyboardCtrlSendTime: 100,
+      keyboardCtrlInterval: '',
+      keyboardCtrlKeys: {
+        up: false,
+        down: false,
+        left: false,
+        right: false,
+      },
+      keyboardCtrl: {
+        x: 0,
+        y: 0,
+        enabled: false,
+      },
       showStream: true,
       mainVideoId: '',
       overlayVideoId: '',
@@ -238,20 +270,76 @@ export default {
 
     this.mainVideoElement = document.getElementById(this.mainVideoId);
     this.$store.dispatch('updateHTMLVideoElements');
-
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.setJoystickStyle);
-    });
-
-    this.setJoystickStyle();
+    document.addEventListener('keydown', this.onKeydown);
+    document.addEventListener('keyup', this.onKeyup);
+    this.keyboardCtrlInterval = setInterval(this.sendKeyboardControl, this.keyboardCtrlSendTime);
   },
   destroyed() {
+    clearInterval(this.keyboardCtrlInterval);
+    document.removeEventListener('keydown');
+    document.removeEventListener('keyup');
     console.log('Teleop have been destroyed');
-    window.removeEventListener('resize', this.setJoystickStyle);
   },
   methods: {
     demo(event) {
       this.demoWP[0] = event;
+    },
+    sendKeyboardControl() {
+      if (this.keyboardCtrl.enabled) {
+        // eslint-disable-next-line max-len
+        this.keyboardCtrl.x = (this.keyboardCtrlKeys.left ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.right ? this.teleopGain : 0);
+        // eslint-disable-next-line max-len
+        this.keyboardCtrl.y = (this.keyboardCtrlKeys.up ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.down ? this.teleopGain : 0);
+        this.$store.dispatch('sendJoystickPosition', this.keyboardCtrl);
+      }
+    },
+    onKeydown(event) {
+      if (!event.repeat && this.keyboardCtrl.enabled) {
+        switch (event.code) {
+          case 'KeyW':
+          case 'ArrowUp':
+            this.keyboardCtrlKeys.up = true;
+            break;
+          case 'KeyS':
+          case 'ArrowDown':
+            this.keyboardCtrlKeys.down = true;
+            break;
+          case 'KeyA':
+          case 'ArrowLeft':
+            this.keyboardCtrlKeys.left = true;
+            break;
+          case 'KeyD':
+          case 'ArrowRight':
+            this.keyboardCtrlKeys.right = true;
+            break;
+          default:
+            break;
+        }
+      }
+    },
+    onKeyup(event) {
+      if (!event.repeat && this.keyboardCtrl.enabled) {
+        switch (event.code) {
+          case 'KeyW':
+          case 'ArrowUp':
+            this.keyboardCtrlKeys.up = false;
+            break;
+          case 'KeyS':
+          case 'ArrowDown':
+            this.keyboardCtrlKeys.down = false;
+            break;
+          case 'KeyA':
+          case 'ArrowLeft':
+            this.keyboardCtrlKeys.left = false;
+            break;
+          case 'KeyD':
+          case 'ArrowRight':
+            this.keyboardCtrlKeys.right = false;
+            break;
+          default:
+            break;
+        }
+      }
     },
     increaseZoom() {
       this.updateMainElement();
@@ -300,23 +388,6 @@ export default {
       } else {
         this.$store.commit('disableJoystick');
         this.$store.dispatch('stopTeleop');
-      }
-    },
-    /**
-     * Dynamically sets the joystick height and width to fit the page size.
-     * @public
-     */
-    setJoystickStyle() {
-      let ratio = 1;
-      const e = document.getElementById('joystick-row');
-      if (e) {
-        ratio = ((e.clientHeight / e.clientWidth) < 1)
-          ? `${(((e.clientHeight / e.clientWidth) * 100) - 5)}%` : '95%';
-        this.joystickStyle = {
-          width: ratio,
-          'padding-top': ratio,
-          height: 0,
-        };
       }
     },
     sendJoystickPosition(event) {
