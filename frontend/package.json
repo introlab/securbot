@@ -13,10 +13,12 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/vue-fontawesome": "^0.1.8",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.28",
     "core-js": "^2.6.9",
-    "open-iconic": "git+https://github.com/iconic/open-iconic.git",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "socket.io": "^1.4.5",

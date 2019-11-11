@@ -40,6 +40,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    wpColor: {
+      type: String,
+      default: '#00FF00',
+    },
     show: {
       type: Boolean,
       default: true,
@@ -53,8 +57,8 @@ export default {
       default: -1,
     },
     videoElement: {
-      type: HTMLVideoElement,
-      required: true,
+      type: [String, HTMLVideoElement],
+      default: null,
     },
     refreshRate: {
       type: Number,
@@ -141,7 +145,7 @@ export default {
      * @public
      */
     drawWaypoint(wp, index) {
-      const wpColor = '#00FF00';
+      const { wpColor } = this;
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
       const wpRadius = 7;
@@ -163,7 +167,7 @@ export default {
      * @public
      */
     drawYawArrow(wp) {
-      const arrowColor = '#00FF00';
+      const { wpColor } = this;
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
       const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 15;
@@ -184,7 +188,7 @@ export default {
 
       this.context.lineCap = 'round';
       this.context.lineWidth = Math.max(1, arrowLength / 10);
-      this.context.strokeStyle = arrowColor;
+      this.context.strokeStyle = wpColor;
 
       this.context.beginPath();
       this.context.moveTo(coord.x, coord.y);
