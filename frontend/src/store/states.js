@@ -1,6 +1,7 @@
 export default {
   darkMode: true,
   showStreams: true,
+  mapZoom: 1,
   joystickEnabled: false,
   joystickConfig: {
     maxX: 0,

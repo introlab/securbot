@@ -15,7 +15,7 @@
         class="position-absolute overlay-container"
       >
         <div
-          id="general-button-container"
+          id="teleop-overlay-button-container"
           class="overlay-button-container"
         >
           <!-- Switch Video -->
@@ -201,6 +201,7 @@
         <!-- Camera -->
         <video-box
           :show="showStream"
+          :zoom="(mainVideoId === mapId ? mapZoom : 1)"
           :video-id="mainVideoId"
         />
         <waypoint-overlay
@@ -219,6 +220,7 @@
       >
         <video-box
           :show="showStream"
+          :zoom="(mainVideoId === mapId ? 1 : mapZoom)"
           :video-id="overlayVideoId"
         />
       </div>
@@ -301,6 +303,7 @@ export default {
   },
   computed: {
     ...mapState({
+      mapZoom: state => state.mapZoom,
       cameraId: state => state.htmlElement.cameraId,
       mapId: state => state.htmlElement.mapId,
       waypointList: state => state.patrol.waypointList,
@@ -354,10 +357,10 @@ export default {
       if (this.keyboardCtrl.enabled) {
         // eslint-disable-next-line max-len
         this.keyboardCtrl.x = (this.keyboardCtrlKeys.left ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.right ? this.teleopGain : 0);
-        this.keyboardCtrl.x = (this.keyboardCtrl.x ** 2).toFixed(2);
+        this.keyboardCtrl.x = Number((this.keyboardCtrl.x ** 2).toFixed(2));
         // eslint-disable-next-line max-len
         this.keyboardCtrl.y = (this.keyboardCtrlKeys.up ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.down ? this.teleopGain : 0);
-        this.keyboardCtrl.y = (this.keyboardCtrl.y ** 2).toFixed(2);
+        this.keyboardCtrl.y = Number((this.keyboardCtrl.y ** 2).toFixed(2));
         this.$store.dispatch('sendJoystickPosition', this.keyboardCtrl);
       }
     },
@@ -411,11 +414,11 @@ export default {
     },
     increaseZoom() {
       this.updateMainElement();
-      this.$store.dispatch('sendChangeMapZoom', 'increase');
+      this.$store.commit('increaseMapZoom');
     },
     decreaseZoom() {
       this.updateMainElement();
-      this.$store.dispatch('sendChangeMapZoom', 'decrease');
+      this.$store.commit('decreaseMapZoom');
     },
     switchStreamState() {
       this.showStream = !this.showStream;
@@ -461,15 +464,15 @@ export default {
     sendJoystickPosition(event) {
       const pos = {};
       Object.assign(pos, event);
-      pos.x = ((Math.abs(pos.x) * pos.x) * this.teleopGain).toFixed(2);
-      pos.y = ((Math.abs(pos.y) * pos.y) * this.teleopGain).toFixed(2);
+      pos.x = Number(((Math.abs(pos.x) * pos.x) * this.teleopGain).toFixed(2));
+      pos.y = Number(((Math.abs(pos.y) * pos.y) * this.teleopGain).toFixed(2));
       this.$store.dispatch('sendJoystickPosition', pos);
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .icon {
   color: white;
   height: 20px;

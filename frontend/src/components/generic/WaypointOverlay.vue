@@ -48,6 +48,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    zoom: {
+      type: Number,
+      default: 1,
+    },
     list: {
       type: Array,
       required: true,
@@ -213,12 +217,27 @@ export default {
      */
     getVideoCoordinatesOfEvent(event) {
       const offsetAndScale = this.getVideoOffsetAndScale();
-      const rect = this.videoElement.getBoundingClientRect();
+      const rect = this.canvas.getBoundingClientRect();
       const x = (event.clientX - rect.left - offsetAndScale.offsetX) / offsetAndScale.scale;
       const y = (event.clientY - rect.top - offsetAndScale.offsetY) / offsetAndScale.scale;
       return {
         x,
         y,
+      };
+    },
+    /**
+     * Converts video/map coordinates to canvas coordinates.
+     *
+     * @param {Number} x The value of the x coordinate.
+     * @param {Number} y The value of the y coordinate.
+     * @public
+     */
+    getCanvasCoordinatesFromVideo(x, y) {
+      const offsetAndScale = this.getVideoOffsetAndScale();
+
+      return {
+        x: (x * offsetAndScale.scale) + offsetAndScale.offsetX,
+        y: (y * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
     /**
@@ -237,35 +256,18 @@ export default {
      */
     getVideoOffsetAndScale() {
       const videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
-      let offsetX = 0;
-      let offsetY = 0;
-      let scale = 1;
-      if ((this.videoElement.offsetHeight * videoRatio) > this.videoElement.offsetWidth) {
-        scale = this.videoElement.offsetWidth / this.videoElement.videoWidth;
-        offsetY = (this.videoElement.offsetHeight - (this.videoElement.videoHeight * scale)) / 2;
-      } else {
-        scale = this.videoElement.offsetHeight / this.videoElement.videoHeight;
-        offsetX = (this.videoElement.offsetWidth - (this.videoElement.videoWidth * scale)) / 2;
-      }
+      const scale = (this.videoElement.offsetWidth / this.videoElement.offsetHeight < videoRatio
+        ? this.videoElement.offsetWidth / this.videoElement.videoWidth
+        : this.videoElement.offsetHeight / this.videoElement.videoHeight) * this.zoom;
+
+      // eslint-disable-next-line max-len
+      const offsetY = (this.videoElement.offsetHeight - (this.videoElement.videoHeight * scale)) / 2;
+      const offsetX = (this.videoElement.offsetWidth - (this.videoElement.videoWidth * scale)) / 2;
+
       return {
         offsetX,
         offsetY,
         scale,
-      };
-    },
-    /**
-     * Converts video/map coordinates to canvas coordinates.
-     *
-     * @param {Number} x The value of the x coordinate.
-     * @param {Number} y The value of the y coordinate.
-     * @public
-     */
-    getCanvasCoordinatesFromVideo(x, y) {
-      const offsetAndScale = this.getVideoOffsetAndScale();
-
-      return {
-        x: (x * offsetAndScale.scale) + offsetAndScale.offsetX,
-        y: (y * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
     /**
@@ -380,16 +382,6 @@ export default {
         && coord.y >= 0
         && coord.y < this.videoElement.videoHeight;
     },
-    // showOverlay() {
-    //   // Create gradient
-    //   const grd = this.context.createRadialGradient(75, 50, 5, 90, 60, 100);
-    //   grd.addColorStop(0, '#00000000');
-    //   grd.addColorStop(1, 'gray');
-
-    //   // Fill with gradient
-    //   this.context.fillStyle = grd;
-    //   this.context.fillRect(10, 10, 150, 80);
-    // },
   },
 };
 </script>

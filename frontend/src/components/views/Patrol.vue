@@ -74,17 +74,61 @@
         <div class="h-100 w-100 m-auto position-relative">
           <video-box
             :show="true"
+            :zoom="mapZoom"
             :video-id="patrolId"
           />
           <waypoint-overlay
             :is-active="true"
             :is-clickable="true"
             :show="true"
+            :zoom="mapZoom"
             :list="waypointList"
             :nb-of-waypoint="-1"
             :video-element="patrolElement"
             @newWaypoint="addWaypointToList"
           />
+        </div>
+        <div
+          v-if="isConnected"
+          class="position-absolute overlay-container"
+        >
+          <div
+            id="patrol-overlay-button-container"
+            class="overlay-button-container"
+          >
+            <!-- Zoom Map -->
+            <b-button
+              id="increase-zoom-button"
+              squared
+              class="overlay-button"
+              @click="increaseZoom"
+            >
+              <font-awesome-icon icon="plus" />
+            </b-button>
+            <b-tooltip
+              target="increase-zoom-button"
+              placement="left"
+              variant="secondary"
+            >
+              Increase Map Zoom
+            </b-tooltip>
+            <!-- Unzoom Map -->
+            <b-button
+              id="decrease-zoom-button"
+              squared
+              class="overlay-button"
+              @click="decreaseZoom"
+            >
+              <font-awesome-icon icon="minus" />
+            </b-button>
+            <b-tooltip
+              target="decrease-zoom-button"
+              placement="left"
+              variant="secondary"
+            >
+              Decrease Map Zoom
+            </b-tooltip>
+          </div>
         </div>
       </b-col>
     </b-row>
@@ -123,17 +167,25 @@ export default {
     WaypointOverlay,
   },
   computed: mapState({
+    mapZoom: state => state.mapZoom,
     waypointList: state => state.patrol.waypointList,
     patrolList: state => state.patrol.patrolList,
     headers: state => state.patrol.waypointHeaders,
     patrolId: state => state.htmlElement.patrolId,
     patrolElement: state => state.htmlElement.patrol,
+    isConnected: state => state.client.connectionState.robot === 'connected',
   }),
   mounted() {
     this.$store.dispatch('getPatrols');
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    increaseZoom() {
+      this.$store.commit('increaseMapZoom');
+    },
+    decreaseZoom() {
+      this.$store.commit('decreaseMapZoom');
+    },
     /**
      * Gets the patrol from the database.
      *
@@ -196,6 +248,31 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.overlay-button {
+  background-color: #b5b5b5;
+  opacity: 40%;
+  height: 60px !important;
+  width: 60px !important;
+}
+.overlay-button:disabled {
+  opacity: 20%;
+  background-color: grey;
+}
+.overlay-button-container {
+  padding: 7px;
+  background-color: rgba(245, 245, 245, 0.75);
+  /* border: solid;
+  border-color: black; */
+  border-radius: 5px 0 0 5px;
+  margin: auto;
+  margin-bottom: 5px;
+}
+.overlay-container {
+  top: 5px;
+  right: 15px;
+  z-index: 100;
+  max-width: 80px;
+  height: auto;
+}
 </style>
