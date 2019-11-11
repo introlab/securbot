@@ -357,10 +357,10 @@ export default {
       if (this.keyboardCtrl.enabled) {
         // eslint-disable-next-line max-len
         this.keyboardCtrl.x = (this.keyboardCtrlKeys.left ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.right ? this.teleopGain : 0);
-        this.keyboardCtrl.x = Number((this.keyboardCtrl.x ** 2).toFixed(2));
+        this.keyboardCtrl.x = Number((Math.abs(this.keyboardCtrl.x) * this.keyboardCtrl.x).toFixed(2));
         // eslint-disable-next-line max-len
         this.keyboardCtrl.y = (this.keyboardCtrlKeys.up ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.down ? this.teleopGain : 0);
-        this.keyboardCtrl.y = Number((this.keyboardCtrl.y ** 2).toFixed(2));
+        this.keyboardCtrl.y = Number((Math.abs(this.keyboardCtrl.y) * this.keyboardCtrl.y).toFixed(2));
         this.$store.dispatch('sendJoystickPosition', this.keyboardCtrl);
       }
     },
