@@ -117,7 +117,27 @@ export default {
      */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.drawGrid();
       this.drawWaypointList();
+    },
+    drawGrid() {
+      const h = this.canvas.width / 10;
+      const c = this.canvas.height / 10;
+      this.context.lineWidth = 1;
+      this.context.strokeStyle = 'gray';
+
+      for (let i = 0; i < 10; i++) {
+        this.context.beginPath();
+        this.context.moveTo(h * i, 1);
+        this.context.lineTo(h * i, this.canvas.height - 1);
+        this.context.stroke();
+      }
+      for (let i = 0; i < 10; i++) {
+        this.context.beginPath();
+        this.context.moveTo(1, c * i);
+        this.context.lineTo(this.canvas.width - 1, c * i);
+        this.context.stroke();
+      }
     },
     /**
      * Draws the points and arrows of each waypoint in the list.
