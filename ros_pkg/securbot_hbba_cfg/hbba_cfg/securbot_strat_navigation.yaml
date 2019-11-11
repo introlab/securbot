@@ -40,7 +40,7 @@ hbba_conf:
     utility: 2
     costs:
         robotic_base: 1
-    custom_bringdn: "pubFloat32('/reverse_time', 5.0);"
+    custom_bringdn: "pubFloat32('/reverse_time', params.t);"
 
 - strat:
     name: Move_base_teleop
