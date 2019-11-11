@@ -2,9 +2,9 @@
     <node name="docking_motiv" pkg="dock" type="dock_generator.py" output="screen">
         <rosparam>
             approach:
-                x: -3.533
-                y: 1.873
-                t: 2.372
+                x: -2.665
+                y: 1.484
+                t: 2.23
                 frame_id: map
         </rosparam>
     </node>

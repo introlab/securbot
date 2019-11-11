@@ -82,7 +82,7 @@ class DockGenerator:
         self.approach_goal = dict()
         self.approach_goal['x'] = rospy.get_param('~approach/x', 0.0)
         self.approach_goal['y'] = rospy.get_param('~approach/y', 0.0)
-        self.approach_goal['z'] = rospy.get_param('~approach/t', 0.0)
+        self.approach_goal['t'] = rospy.get_param('~approach/t', 0.0)
         self.approach_goal['frame_id'] = rospy.get_param(
             '~approach/frame_id',
             '')
