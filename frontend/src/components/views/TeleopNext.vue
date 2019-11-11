@@ -209,6 +209,7 @@
           :is-clickable="true"
           :show="true"
           :list="demoWP"
+          :zoom="mapZoom"
           :nb-of-waypoint="1"
           wp-color="#00d456"
           :video-element="mainVideoElement"
