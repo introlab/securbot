@@ -50,6 +50,7 @@
           </b-navbar-nav>
           <!-- Navbar left side content -->
           <b-navbar-nav class="ml-auto">
+            <robot-status />
             <!-- Dropdown with connection widget -->
             <b-nav-item-dropdown
               text="Connect to Robot"
@@ -105,6 +106,7 @@
 <script>
 import { mapState } from 'vuex';
 import InteractiveList from '../custom/InteractiveList';
+import RobotStatus from './RobotStatus';
 
 /**
  * The navigation bar used to change views.
@@ -121,6 +123,7 @@ export default {
   name: 'navbar',
   components: {
     InteractiveList,
+    RobotStatus,
   },
   computed: mapState({
     myId: state => state.client.myId,

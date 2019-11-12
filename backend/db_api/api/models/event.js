@@ -1,5 +1,6 @@
 const mongoose = require ('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
+const CoordinateSchema = require('./coordinate');
 
 
 
@@ -18,12 +19,7 @@ const EventSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    location_quaternion: {
-        a: Number,
-        b: Number,
-        c: Number,
-        d: Number
-    },
+    coordinate: CoordinateSchema,
     tags: [String],
     alert: {
         type: Boolean,
