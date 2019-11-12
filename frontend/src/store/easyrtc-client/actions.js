@@ -174,6 +174,7 @@ export default {
   handleRobotStatus({ state, commit }, msg) {
     if (state.robotId === msg.id) {
       const status = JSON.parse(msg.data);
+      console.log(`Got status ${status}`);
       commit('setRobotStatus', status);
     }
   },
