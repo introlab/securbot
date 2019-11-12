@@ -32,6 +32,17 @@ ipc.on('robot-status', (_, data) => {
 });
 
 /**
+ * Store map size from robot
+ */
+let mapSize = {
+  width: 0,
+  height: 0
+};
+ipc.on('map-size', (_, data) => {
+  mapSize = data;
+})
+
+/**
  * Callback for the request-feed data channel msg from easyrtc.
  * @callback streamRequestCallback
  * @param {number} easyrtc - Id of the peer sending data.
@@ -88,6 +99,13 @@ function myInit() {
   // Forward all received data to main process
   easyrtc.setPeerListener((_, type, data) => {
     ipc.send(type, data)
+  });
+
+  // Send map size when data channel opens
+  easyrtc.setDataChannelOpenListener((easyrtcid) => {
+    console.log('Data channel open');
+    easyrtc.sendDataP2P(easyrtcid, 'map-size', mapSize);
+    console.log(`Sent map size ${mapSize.width}x${mapSize.height}`);
   });
 
   easyrtc.setAcceptChecker(acceptCall);
