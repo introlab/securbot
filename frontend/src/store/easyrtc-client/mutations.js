@@ -68,4 +68,7 @@ export default {
   disableDataChannel(state) {
     state.isDataChannelAvailable = false;
   },
+  setRobotStatus(state, status) {
+    state.robotStatus = status;
+  },
 };

@@ -9,4 +9,5 @@ export default {
   mapStream: undefined,
   robotList: [],
   isDataChannelAvailable: false,
+  robotStatus: {},
 };
