@@ -71,4 +71,12 @@ module.exports = {
         toDate: true,
         errorMessage: '`after` must be a valid ISO 8601 date'
     },
+
+    // Minimized list contains fewer fields
+    minimized: {
+        optional: true,
+        isBoolean: true,
+        toBoolean: true,
+        errorMessage: '`minimized` muste be `true` or `false`'
+    }
 }
