@@ -235,6 +235,48 @@
           class="h-100 w-100 position-relative"
         >
           <div
+            v-if="isConnected && viewMap"
+            class="position-absolute overlay-container"
+          >
+            <div
+              id="event-overlay-button-container"
+              class="overlay-button-container"
+            >
+              <!-- Zoom Map -->
+              <b-button
+                id="increase-zoom-button"
+                squared
+                class="overlay-button"
+                @click="increaseZoom"
+              >
+                <font-awesome-icon icon="plus" />
+              </b-button>
+              <b-tooltip
+                target="increase-zoom-button"
+                placement="left"
+                variant="secondary"
+              >
+                Increase Map Zoom
+              </b-tooltip>
+              <!-- Unzoom Map -->
+              <b-button
+                id="decrease-zoom-button"
+                squared
+                class="overlay-button"
+                @click="decreaseZoom"
+              >
+                <font-awesome-icon icon="minus" />
+              </b-button>
+              <b-tooltip
+                target="decrease-zoom-button"
+                placement="left"
+                variant="secondary"
+              >
+                Decrease Map Zoom
+              </b-tooltip>
+            </div>
+          </div>
+          <div
             class="position-absolute"
             style="top:-35px;right:10px;z-index:10;"
           >
@@ -283,14 +325,18 @@
           >
             <video-box
               :show="true"
+              :zoom="mapZoom"
               :video-id="eventId"
             />
             <waypoint-overlay
               :is-active="true"
               :is-clickable="false"
               :list="eventsWaypoints"
+              :zoom="mapZoom"
+              :map-size="mapSize"
               :nb-of-waypoint="eventsWaypoints.length"
               :video-element="eventElement"
+              :refresh-rate="1"
             />
           </div>
           <div
@@ -354,6 +400,8 @@ export default {
       'eventsWaypoints',
     ]),
     ...mapState({
+      mapZoom: state => state.mapZoom,
+      mapSize: state => state.mapSize,
       eventId: state => state.htmlElement.eventId,
       eventElement: state => state.htmlElement.event,
       isConnected: state => state.client.connectionState.robot === 'connected',
@@ -383,6 +431,12 @@ export default {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    increaseZoom() {
+      this.$store.commit('increaseMapZoom');
+    },
+    decreaseZoom() {
+      this.$store.commit('decreaseMapZoom');
+    },
     setLocalFilters(event) {
       const f = {
         includeTags: (event.tag_and ? event.tag_and : []),
@@ -426,6 +480,7 @@ export default {
       }
     },
     applyFilter() {
+      this.viewMap = false;
       const { filters } = this;
       this.$store.commit('database/resetQuery');
       this.$store.commit('database/resetEvents');
@@ -437,5 +492,31 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.overlay-button {
+  background-color: #b5b5b5;
+  opacity: 0.4;
+  height: 60px !important;
+  width: 60px !important;
+}
+.overlay-button:disabled {
+  opacity: 0.2;
+  background-color: grey;
+}
+.overlay-button-container {
+  padding: 7px;
+  background-color: rgba(245, 245, 245, 0.75);
+  /* border: solid;
+  border-color: black; */
+  border-radius: 5px 0 0 5px;
+  margin: auto;
+  margin-bottom: 5px;
+}
+.overlay-container {
+  top: 5px;
+  right: 0px;
+  z-index: 100;
+  max-width: 80px;
+  height: auto;
+}
 </style>
