@@ -27,7 +27,6 @@ const streamNames = [];
  * @listens rosdata
  */
 ipc.on('robot-status', (_, data) => {
-  console.log(data);
   if (operatorID != null) { easyrtc.sendDataP2P(operatorID, 'robot-status', data); }
 });
 

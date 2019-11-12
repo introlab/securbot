@@ -126,8 +126,8 @@ function startNode() {
      * @type {object}
      * @property {String} data - Data received from ROS
      */
-    nodeHandle.subscribe('robot_status', std_msgs.String, (data) => {
-      hub.emit('robot-status', data);
+    nodeHandle.subscribe('robot_status', std_msgs.String, (msg) => {
+      hub.emit('robot-status', msg.data);
     });
 
     // Retrieves map size from parameter server
