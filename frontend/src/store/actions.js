@@ -18,6 +18,7 @@ export default {
     commit('setCameraHTMLElement', document.getElementById(state.htmlElement.cameraId));
     commit('setMapHTMLElement', document.getElementById(state.htmlElement.mapId));
     commit('setPatrolHTMLElement', document.getElementById(state.htmlElement.patrolId));
+    commit('setEventHTMLElement', document.getElementById(state.htmlElement.eventId));
   },
   updateHTMLVideoElements({ dispatch }) {
     dispatch('clearHTMLVideoElements');
@@ -29,6 +30,7 @@ export default {
     commit('clearCameraHTMLElement');
     commit('clearMapHTMLElement');
     commit('clearPatrolHTMLElement');
+    commit('clearEventHTMLElement');
   },
   stopTeleop({ state, dispatch }) {
     const end = {

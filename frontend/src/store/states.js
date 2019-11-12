@@ -23,6 +23,8 @@ export default {
     map: null,
     patrolId: 'patrol-videobox-html-id',
     patrol: null,
+    eventId: 'event-videobox-html-id',
+    event: null,
   },
   patrol: {
     enable: false,

@@ -29,6 +29,12 @@ export default {
   clearPatrolHTMLElement(state) {
     state.htmlElement.patrol = null;
   },
+  setEventHTMLElement(state, element) {
+    state.htmlElement.event = element;
+  },
+  clearEventHTMLElement(state) {
+    state.htmlElement.event = null;
+  },
   addWaypoint(state, add) {
     if ('index' in add) {
       state.patrol.waypointList.splice(add.index, 0, add.wp);
