@@ -13,6 +13,7 @@
  * @type {number}
  */
 let operatorID = null;
+let peerIDs = [];
 
 /**
  * Array to keep track of the virtual devices corrected name.
@@ -27,7 +28,16 @@ const streamNames = [];
  * @listens rosdata
  */
 ipc.on('robot-status', (_, data) => {
-  if (operatorID != null) { easyrtc.sendDataP2P(operatorID, 'robot-status', data); }
+  let toRemove = [];
+  peerIDs.forEach((peer) => {
+    try {
+      easyrtc.sendDataP2P(peer, 'robot-status', data);
+    }
+    catch(_) {
+      toRemove.push(peer);
+    }
+  });
+  peerIDs = peerIDs.filter(peer => toRemove.findIndex(peer) == -1);
 });
 
 /**
@@ -65,6 +75,7 @@ function streamRequestCallback(easyrtcid, msgType, msgData) {
  * @param {callback} acceptor - Need to be sets to access or refuse a call.
  */
 function acceptCall(easyrtcid, acceptor) {
+  peerIDs.push(easyrtcid);
   if (operatorID === null) {
     operatorID = easyrtcid;
     console.log(`Accepting call from ${easyrtcid}, this operator can control me!`);
