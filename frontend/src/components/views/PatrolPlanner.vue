@@ -1,7 +1,7 @@
 <template>
-  <!-- Patrol page -->
+  <!-- Patrol Config page -->
   <b-jumbotron
-    id="patrol-layout"
+    id="patrol-config-layout"
     :fluid="true"
     :container-fluid="true"
     class="h-100 w-100 bg-transparent"
@@ -13,57 +13,30 @@
         md="4"
         class="mh-100 d-flex flex-column"
       >
-        <!-- Waypoint list -->
-        <b-row class="h-50 m-0 mb-1 d-flex flex-column">
-          <!-- Waypoint list Container -->
-          <div
-            class="btn-toolbar mb-1 w-100 d-flex flex-row"
-            style="height:40px;"
-            role="toolbar"
-          >
-            <!-- Title -->
-            <h4
-              class="h-100 text-left"
-              style="flex:1;"
-            >
-              Patrol :
-            </h4>
-            <!-- Send button -->
-            <button
-              type="button"
-              class="btn btn-success h-100"
-              style="align-items:center; width:90px; min-width:80px;"
-              @click="sendPatrol()"
-            >
-              Send
-            </button>
-            <!-- Clear button -->
-            <button
-              type="button"
-              class="btn btn-danger h-100 ml-1"
-              style="align-items:center; width:90px; min-width:80px;"
-              @click="clearWaypointList()"
-            >
-              Reset
-            </button>
-          </div>
-          <div style="height: calc(100% - 40px - 0.25rem)">
-            <!--waypoint-table /-->
-            <securbot-table
-              :headers="headers"
-              :list="waypointList"
-              :removable="true"
-              @removeRow="removeRow"
-            />
-          </div>
-        </b-row>
-        <!-- Save-load patrol table -->
-        <b-row
-          class="m-0 d-flex flex-column"
-          style="flex:1"
+        <div
+          id="planner-container"
+          class="mh-100 h-100 w-100 border rounded shadow-sb"
         >
-          <save-load />
-        </b-row>
+          <!-- Title -->
+          <h4 class="m-3 w-100">
+            Patrol Planner
+          </h4>
+          <div
+            id="inner-planner-container"
+            class="border rounded mx-1 my-0 p-2"
+            style="height: calc( 100% - 60px );"
+          >
+            <div style="max-height: calc(100% - 0.25rem)">
+              <!--waypoint-table /-->
+              <securbot-table
+                :headers="headers"
+                :list="waypointList"
+                :removable="true"
+                @removeRow="removeRow"
+              />
+            </div>
+          </div>
+        </div>
       </b-col>
       <!-- Map column -->
       <b-col
@@ -145,22 +118,16 @@ import SecurbotTable from '../generic/Table';
 import WaypointOverlay from '../generic/WaypointOverlay';
 
 /**
- * The Patrol Planning Page. This page allows the operator to plan a patrol for the robot. The
- * operator can click the map to add waypoints (with orientation) to the patrol. All waypoints
- * are shown in the tables allowing the operator to remove unwanted waypoints. When a patrol is
- * planned, the operator can save it to the database and/or send it to the robot for it to execute.
- * All the patrols on the databse can be loaded and modified at any time.
  *
  * Authors:
  *
- *    - Valerie Gauthier - <valerie.gauthier@usherbrooke.ca>
  *    - Edouard Legare - <edouard.legare@usherbrooke.ca>
  * @since 0.1.0
  * @version 1.0.0
- * @displayName Patrol Planner View
+ * @displayName Patrol Config View
  */
 export default {
-  name: 'patrol',
+  name: 'patrol-planner',
   components: {
     VideoBox,
     SaveLoad,
@@ -178,7 +145,6 @@ export default {
     isConnected: state => state.client.connectionState.robot === 'connected',
   }),
   mounted() {
-    this.$store.dispatch('getPatrols');
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {

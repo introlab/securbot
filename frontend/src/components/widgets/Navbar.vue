@@ -37,8 +37,11 @@
               Teleoperation
             </b-nav-item>
             <!-- Patrol -->
-            <b-nav-item to="patrol">
+            <b-nav-item to="patrol-planner">
               Patrol Planner
+            </b-nav-item>
+            <b-nav-item to="patrol-config">
+              Patrol Config
             </b-nav-item>
             <!-- Event -->
             <b-nav-item to="logs">
