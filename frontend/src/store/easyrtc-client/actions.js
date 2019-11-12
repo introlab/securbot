@@ -16,7 +16,7 @@ export default {
 
     easyrtc.setDataChannelOpenListener(id => dispatch('openedDataChannelListener', id));
     easyrtc.setDataChannelCloseListener(() => commit('disableDataChannel'));
-    easyrtc.setPeerListener((id, channel, data) => commit('setMapSize', data, { global: true }, 'map-size'));
+    easyrtc.setPeerListener((id, channel, data) => commit('setMapSize', data, { root: true }), 'map-size');
     easyrtc.setPeerListener((id, channel, data) => dispatch('handleData', { id, channel, data }));
     easyrtc.setPeerClosedListener((id, other) => dispatch('handleRobotDisconnection', { id, other }));
 
