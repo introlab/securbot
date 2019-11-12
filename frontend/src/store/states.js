@@ -2,6 +2,10 @@ export default {
   darkMode: true,
   showStreams: true,
   mapZoom: 1,
+  mapSize: {
+    width: 2400,
+    height: 2400,
+  },
   joystickEnabled: false,
   joystickConfig: {
     maxX: 0,

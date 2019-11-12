@@ -77,4 +77,7 @@ export default {
       state.mapZoom = 1;
     }
   },
+  setMapSize(state, size) {
+    state.mapSize = size;
+  },
 };
