@@ -487,18 +487,18 @@ export default {
 }
 .overlay-button {
   background-color: #b5b5b5;
-  opacity: 40%;
+  opacity: 0.4;
   height: 60px !important;
   width: 60px !important;
 }
 .overlay-button-active {
-  opacity: 80%;
+  opacity: 0.8;
   border-style: solid;
   border-width: 2px;
   border-color: #00A759 !important;
 }
 .overlay-button:disabled {
-  opacity: 20%;
+  opacity: 0.2;
   background-color: grey;
 }
 .overlay-button-container {
@@ -516,7 +516,7 @@ export default {
 }
 .overlay-video-container {
   z-index: 100;
-  opacity: 60%;
+  opacity: 0.6;
   bottom: 20px;
   left: 40px;
   width: 320px;
@@ -526,7 +526,7 @@ export default {
 }
 .overlay-joystick-container {
   z-index: 100;
-  opacity: 50%;
+  opacity: 0.5;
   bottom: 0px;
   right: 70px;
   width: 300px;

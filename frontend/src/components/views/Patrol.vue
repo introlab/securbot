@@ -253,12 +253,12 @@ export default {
 <style scoped>
 .overlay-button {
   background-color: #b5b5b5;
-  opacity: 40%;
+  opacity: 0.4;
   height: 60px !important;
   width: 60px !important;
 }
 .overlay-button:disabled {
-  opacity: 20%;
+  opacity: 0.2;
   background-color: grey;
 }
 .overlay-button-container {
