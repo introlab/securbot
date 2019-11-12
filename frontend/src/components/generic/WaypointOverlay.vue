@@ -48,9 +48,22 @@ export default {
       type: Boolean,
       default: true,
     },
+    showGrid: {
+      type: Boolean,
+      default: false,
+    },
     zoom: {
       type: Number,
       default: 1,
+    },
+    mapSize: {
+      type: Object,
+      default() {
+        return {
+          width: 1000,
+          height: 1000,
+        };
+      },
     },
     list: {
       type: Array,
@@ -117,8 +130,12 @@ export default {
      */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.drawGrid();
-      this.drawWaypointList();
+      if (this.showGrid) {
+        this.drawGrid();
+      }
+      if (this.show) {
+        this.drawWaypointList();
+      }
     },
     drawGrid() {
       const h = this.canvas.width / 10;
@@ -238,11 +255,15 @@ export default {
     getVideoCoordinatesOfEvent(event) {
       const offsetAndScale = this.getVideoOffsetAndScale();
       const rect = this.canvas.getBoundingClientRect();
+      const mapAdjustment = {
+        width: this.mapSize.width / this.videoElement.videoWidth,
+        height: this.mapSize.height / this.videoElement.videoHeight,
+      };
       const x = (event.clientX - rect.left - offsetAndScale.offsetX) / offsetAndScale.scale;
       const y = (event.clientY - rect.top - offsetAndScale.offsetY) / offsetAndScale.scale;
       return {
-        x,
-        y,
+        x: x * mapAdjustment.width,
+        y: y * mapAdjustment.height,
       };
     },
     /**
@@ -254,10 +275,14 @@ export default {
      */
     getCanvasCoordinatesFromVideo(x, y) {
       const offsetAndScale = this.getVideoOffsetAndScale();
+      const mapAdjustment = {
+        width: this.mapSize.width / this.videoElement.videoWidth,
+        height: this.mapSize.height / this.videoElement.videoHeight,
+      };
 
       return {
-        x: (x * offsetAndScale.scale) + offsetAndScale.offsetX,
-        y: (y * offsetAndScale.scale) + offsetAndScale.offsetY,
+        x: ((x / mapAdjustment.width) * offsetAndScale.scale) + offsetAndScale.offsetX,
+        y: ((y / mapAdjustment.height) * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
     /**
@@ -398,9 +423,9 @@ export default {
      */
     isClickValid(coord) {
       return coord.x >= 0
-        && coord.x < this.videoElement.videoWidth
+        && coord.x < this.mapSize.width
         && coord.y >= 0
-        && coord.y < this.videoElement.videoHeight;
+        && coord.y < this.mapSize.height;
     },
   },
 };

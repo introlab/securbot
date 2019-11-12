@@ -208,8 +208,10 @@
           :is-active="gotoOverlayEnabled"
           :is-clickable="true"
           :show="true"
+          :show-grid="showGrid"
           :list="demoWP"
           :zoom="mapZoom"
+          :map-size="mapSize"
           :nb-of-waypoint="1"
           wp-color="#00d456"
           :video-element="mainVideoElement"
@@ -284,6 +286,7 @@ export default {
         enabled: false,
       },
       showStream: true,
+      showGrid: process.env.NODE_ENV !== 'production',
       mainVideoId: '',
       overlayVideoId: '',
       mainVideoElement: '',
@@ -305,6 +308,7 @@ export default {
   computed: {
     ...mapState({
       mapZoom: state => state.mapZoom,
+      mapSize: state => state.mapSize,
       cameraId: state => state.htmlElement.cameraId,
       mapId: state => state.htmlElement.mapId,
       waypointList: state => state.patrol.waypointList,
@@ -358,9 +362,11 @@ export default {
       if (this.keyboardCtrl.enabled) {
         // eslint-disable-next-line max-len
         this.keyboardCtrl.x = (this.keyboardCtrlKeys.left ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.right ? this.teleopGain : 0);
-        this.keyboardCtrl.x = Number((Math.abs(this.keyboardCtrl.x) * this.keyboardCtrl.x).toFixed(2));
+        // eslint-disable-next-line max-len
+        this.keyboardCtrl.x = Number(this.keyboardCtrl.x.toFixed(2));
         // eslint-disable-next-line max-len
         this.keyboardCtrl.y = (this.keyboardCtrlKeys.up ? -this.teleopGain : 0) + (this.keyboardCtrlKeys.down ? this.teleopGain : 0);
+        // eslint-disable-next-line max-len
         this.keyboardCtrl.y = Number((Math.abs(this.keyboardCtrl.y) * this.keyboardCtrl.y).toFixed(2));
         this.$store.dispatch('sendJoystickPosition', this.keyboardCtrl);
       }

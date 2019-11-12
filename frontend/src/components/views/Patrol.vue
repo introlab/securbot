@@ -80,8 +80,9 @@
           <waypoint-overlay
             :is-active="true"
             :is-clickable="true"
-            :show="true"
+            :show="isConnected"
             :zoom="mapZoom"
+            :map-size="mapSize"
             :list="waypointList"
             :nb-of-waypoint="-1"
             :video-element="patrolElement"
@@ -168,6 +169,7 @@ export default {
   },
   computed: mapState({
     mapZoom: state => state.mapZoom,
+    mapSize: state => state.mapSize,
     waypointList: state => state.patrol.waypointList,
     patrolList: state => state.patrol.patrolList,
     headers: state => state.patrol.waypointHeaders,
