@@ -16,6 +16,7 @@ export default {
 
     easyrtc.setDataChannelOpenListener(id => dispatch('openedDataChannelListener', id));
     easyrtc.setDataChannelCloseListener(() => commit('disableDataChannel'));
+    easyrtc.setPeerListener((id, channel, data) => commit('setMapSize', data, { root: true }), 'map-size');
     easyrtc.setPeerListener((id, channel, data) => dispatch('handleData', { id, channel, data }));
     easyrtc.setPeerClosedListener((id, other) => dispatch('handleRobotDisconnection', { id, other }));
 
@@ -182,6 +183,10 @@ export default {
     if (htmlElement.patrol && state.mapStream) {
       console.log('Setting patrol stream...');
       easyrtc.setVideoObjectSrc(htmlElement.patrol, state.mapStream);
+    }
+    if (htmlElement.event && state.mapStream) {
+      console.log('Setting patrol stream...');
+      easyrtc.setVideoObjectSrc(htmlElement.event, state.mapStream);
     }
   },
   resetStreams(_, htmlElement) {

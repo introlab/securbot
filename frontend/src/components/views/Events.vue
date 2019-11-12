@@ -27,6 +27,20 @@
           >
             <b-container fluid>
               <b-row>
+                <b-form-select
+                  v-model="selectedFilter"
+                  :options="predefFilters"
+                  text-field="name"
+                  value-field="filters"
+                  class="m-2"
+                  @change="setLocalFilters"
+                >
+                  <template v-slot:first>
+                    <option value="" disabled>-- Predefined filters... --</option>
+                  </template>
+                </b-form-select>
+              </b-row>
+              <b-row>
                 <b-col
                   sm="4"
                 >
@@ -202,6 +216,7 @@
                 variant="primary"
                 class="mr-2"
                 style="max-height: 35px"
+                :disabled="querying"
                 @click="applyFilter"
               >
                 Apply Filters
@@ -217,8 +232,21 @@
       >
         <div
           id="table-container"
-          class="h-100 w-100"
+          class="h-100 w-100 position-relative"
         >
+          <div
+            class="position-absolute"
+            style="top:-35px;right:10px;z-index:10;"
+          >
+            <toggle-button
+              :value="viewMap"
+              :color="switchColor"
+              :sync="true"
+              :labels="{checked: 'map', unchecked: 'list'}"
+              :disabled="!isConnected"
+              @change="changeMapView"
+            />
+          </div>
           <div
             v-if="querying"
             id="spinner-container"
@@ -231,11 +259,42 @@
               label="Spinning"
             />
           </div>
+          <div
+            v-else-if="queryError"
+            id="error-container"
+            style="background-color: crimson; opacity: 0.25;"
+            class="border rounded h-100 w-100 d-flex align-items-center justify-content-center"
+          >
+            <h3
+              style="color: crimson"
+            >
+              Something wrong happen...
+            </h3>
+          </div>
           <securbot-table
-            v-else
+            v-else-if="!viewMap"
             style="max-height: 100%"
             :headers="headers"
             :list="list"
+          />
+          <div
+            v-else-if="viewMap && isConnected"
+            class="h-100 w-100 m-auto position-relative"
+          >
+            <video-box
+              :show="true"
+              :video-id="eventId"
+            />
+            <waypoint-overlay
+              :is-active="true"
+              :is-clickable="false"
+              :list="eventsWaypoints"
+              :nb-of-waypoint="eventsWaypoints.length"
+              :video-element="eventElement"
+            />
+          </div>
+          <div
+            v-else
           />
         </div>
       </b-col>
@@ -244,8 +303,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
+import { ToggleButton } from 'vue-js-toggle-button';
 import SecurbotTable from '../generic/Table';
+import VideoBox from '../widgets/VideoBox';
+import WaypointOverlay from '../generic/WaypointOverlay';
 
 /**
  * This page will be used to show events from a database. It will allow the operator to filter
@@ -260,6 +322,9 @@ export default {
   name: 'event-page',
   components: {
     SecurbotTable,
+    VideoBox,
+    WaypointOverlay,
+    ToggleButton,
   },
   data() {
     return {
@@ -275,18 +340,35 @@ export default {
         excludeTags: [],
         textSearch: '',
       },
+      selectedFilter: '',
+      viewMap: false,
+      switchColor: {
+        checked: '#00A759',
+        unchecked: '#00A759',
+        disabled: '#E8E8E8',
+      },
     };
   },
   computed: {
+    ...mapGetters('database', [
+      'eventsWaypoints',
+    ]),
+    ...mapState({
+      eventId: state => state.htmlElement.eventId,
+      eventElement: state => state.htmlElement.event,
+      isConnected: state => state.client.connectionState.robot === 'connected',
+    }),
     ...mapState('database', {
       headers: state => state.headers,
-      list: state => state.eventList,
+      predefFilters: state => JSON.parse(JSON.stringify(state.predefFilters)),
+      list: state => state.events,
       robots: state => state.robots,
       tagList: state => state.tagList,
       querying: state => state.queryingDB,
+      queryError: state => state.errorDuringQuery,
       display: (state) => {
         // eslint-disable-next-line no-underscore-dangle
-        const _display = [];
+        const _display = [{ text: 'all', value: 'all' }];
         state.robots.forEach((robot) => {
           _display.push({
             text: robot.name,
@@ -298,8 +380,29 @@ export default {
     }),
   },
   mounted() {
+    this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    setLocalFilters(event) {
+      const f = {
+        includeTags: (event.tag_and ? event.tag_and : []),
+        excludeTags: (event.tag_not ? event.tag_not : []),
+        textSearch: (event.search_expression ? event.search_expression : ''),
+        other: {
+          onlyNew: event.viewed ? true : '',
+          notify: event.alert ? true : '',
+        },
+        beforeDate: (event.before ? event.before.slice(0, 10) : ''),
+        afterDate: (event.after ? event.after.slice(0, 10) : ''),
+      };
+      Object.assign(this.filters, f);
+    },
+    changeMapView(event) {
+      this.viewMap = event.value;
+      this.$nextTick(() => {
+        this.$store.dispatch('updateHTMLVideoElements');
+      });
+    },
     isIncludeTagSelected(tag) {
       return this.filters.includeTags.includes(tag);
     },
@@ -323,8 +426,11 @@ export default {
       }
     },
     applyFilter() {
-      const { filters } = this.filters;
-      this.$store.dispatch('filterEvents', filters);
+      const { filters } = this;
+      this.$store.commit('database/resetEvents');
+      this.$store.commit('database/setRobotFilters', filters);
+      this.$store.commit('database/setEventFilters', filters);
+      this.$store.dispatch('database/filterEvents');
     },
   },
 };

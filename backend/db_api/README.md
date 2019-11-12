@@ -73,9 +73,9 @@ Example of patrol document:
     description_text: "text",
     last_modified: "2019-10-07T06:52:19.831Z",
     waypoints: [ // required
-        { quaternion: {a:0, b:0, c:0, d:0}, hold_time_s: 10 },
-        { quaternion: {a:1, b:1, c:1, d:1}, hold_time_s: 10 },
-        { quaternion: {a:2, b:2, c:2, d:2}, hold_time_s: 10 }
+        { coordinate: {x: 0, y: 0, yaw: 180}, hold_time_s: 10 },
+        { coordinate: {x: 0, y: 0, yaw: 180}, hold_time_s: 10 },
+        { coordinate: {x: 0, y: 0, yaw: 180}, hold_time_s: 10 }
     ]
 }
 ```
@@ -139,7 +139,7 @@ Example of event document:
     description_text: "text",
     context: "text",
     time: "2019-10-07T06:52:19.831Z",
-    location_quaternion: {a:0, b:0, c:0, d:0},
+    coordinate: {x: 0, y: 0, yaw: 180},
     tags: ["red", "important", "category"],
     alert: false,
     viewed: false
@@ -161,6 +161,7 @@ The following filters are available:
  - `viewed`: Boolean, Filters for events that have/haven't been marked as read
  - `before`: Date, only list events before this time
  - `afer` : Date, only list events after this time
+ - `minimized` : Boolean, if true, only the `object`, `time`, `alert` and `viewed` fields will be listed
 
 ##### POST /API_PATH/robots/`robotId`/events
 Upload the event contained in request body.
