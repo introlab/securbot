@@ -427,6 +427,7 @@ export default {
     },
     applyFilter() {
       const { filters } = this;
+      this.$store.commit('database/resetQuery');
       this.$store.commit('database/resetEvents');
       this.$store.commit('database/setRobotFilters', filters);
       this.$store.commit('database/setEventFilters', filters);
