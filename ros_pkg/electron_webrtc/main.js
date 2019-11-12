@@ -64,6 +64,10 @@ function createWindow() {
     win.webContents.send('robot-status', data);
   });
 
+  hub.on('map-size', (data) => {
+    win.webContents.send('map-size', data);
+  });
+
   /**
    * Emitted when the window is closed, remove listener and remove the window.
    */
@@ -122,8 +126,31 @@ function startNode() {
      * @type {object}
      * @property {String} data - Data received from ROS
      */
-    nodeHandle.subscribe('robot_status', std_msgs.String, (data) => {
-      hub.emit('robot-status', data);
+    nodeHandle.subscribe('robot_status', std_msgs.String, (msg) => {
+      hub.emit('robot-status', msg.data);
+    });
+
+    // Retrieves map size from parameter server
+    let mapParam = {
+      resolution: 0,
+      width: 0,
+      height: 0
+    };
+    nodeHandle.getParam('/map_image_generator/resolution')
+    .then(resolution => {
+      mapParam.resolution = resolution;
+      return nodeHandle.getParam('/map_image_generator/width');
+    })
+    .then(width => {
+      mapParam.width = width;
+      return nodeHandle.getParam('/map_image_generator/height');
+    })
+    .then(height => {
+      mapParam.height = height;
+      hub.emit('map-size', {
+        height: mapParam.resolution * mapParam.height,
+        width: mapParam.resolution * mapParam.width
+      });
     });
 
     /** Advertise the teleop topic  */
