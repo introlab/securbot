@@ -41,7 +41,7 @@ export default {
           viewed: '',
           before: new Date().toISOString(),
           after: new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)).toISOString(),
-        }
+        },
       },
       {
         name: 'Last 30 Days',

@@ -1,7 +1,9 @@
 ### To be used with the rest-client extension of vscode
 
+@addr = http://localhost:3000
+
 ### Create Robot 1
-POST http://localhost:8080/db/robots HTTP/1.1
+POST {{addr}}/db/robots HTTP/1.1
 content-type: application/json
 
 {
@@ -17,7 +19,7 @@ content-type: application/json
 }
 
 ### Create Robot 2
-POST http://localhost:8080/db/robots HTTP/1.1
+POST {{addr}}/db/robots HTTP/1.1
 content-type: application/json
 
 {
@@ -33,7 +35,7 @@ content-type: application/json
 }
 
 ### Get Robots
-GET http://localhost:8080/db/robots
+GET {{addr}}/db/robots
 
 
 ###
@@ -42,7 +44,7 @@ GET http://localhost:8080/db/robots
 
 ### Patrols
 
-POST http://localhost:8080/db/robots/{{robot1}}/patrols
+POST {{addr}}/db/robots/{{robot1}}/patrols
 content-type: application/json
 
 {
@@ -56,7 +58,7 @@ content-type: application/json
   ]
 }
 
-POST http://localhost:8080/db/robots/{{robot1}}/patrols
+POST {{addr}}/db/robots/{{robot1}}/patrols
 content-type: application/json
 
 {
@@ -70,7 +72,7 @@ content-type: application/json
   ]
 }
 
-POST http://localhost:8080/db/robots/{{robot2}}/patrols
+POST {{addr}}/db/robots/{{robot2}}/patrols
 content-type: application/json
 
 {
@@ -84,10 +86,10 @@ content-type: application/json
   ]
 }
 
-GET http://localhost:8080/db/robots/{{robot1}}/patrols
+GET {{addr}}/db/robots/{{robot1}}/patrols
 
 ### Create events for the first robot
-POST http://localhost:8080/db/robots/{{robot1}}/events
+POST {{addr}}/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
@@ -102,7 +104,7 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8080/db/robots/{{robot1}}/events
+POST {{addr}}/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
@@ -117,7 +119,7 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8080/db/robots/{{robot1}}/events
+POST {{addr}}/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
@@ -132,7 +134,7 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8080/db/robots/{{robot1}}/events
+POST {{addr}}/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
@@ -147,7 +149,7 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8080/db/robots/{{robot1}}/events
+POST {{addr}}/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
@@ -162,11 +164,11 @@ content-type: application/json
 }
 
 ### Get robot 1 event
-GET http://localhost:8080/db/robots/{{robot1}}/events
+GET {{addr}}/db/robots/{{robot1}}/events
 
 
 ### Create events for the second robot
-POST http://localhost:8080/db/robots/{{robot2}}/events
+POST {{addr}}/db/robots/{{robot2}}/events
 content-type: application/json
 
 {
@@ -181,7 +183,7 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8080/db/robots/{{robot2}}/events
+POST {{addr}}/db/robots/{{robot2}}/events
 content-type: application/json
 
 {
@@ -197,7 +199,7 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8080/db/robots/{{robot2}}/events
+POST {{addr}}/db/robots/{{robot2}}/events
 content-type: application/json
 
 {
@@ -212,7 +214,7 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:8080/db/robots/{{robot2}}/events
+POST {{addr}}/db/robots/{{robot2}}/events
 content-type: application/json
 
 {
@@ -227,10 +229,10 @@ content-type: application/json
 }
 
 ### Get robot 2 events
-GET http://localhost:8080/db/robots/{{robot2}}/events
+GET {{addr}}/db/robots/{{robot2}}/events
 
 ### Get last 30 days events for robot 1
-GET http://localhost:8080/db/robots/{{robot1}}/events
+GET {{addr}}/db/robots/{{robot1}}/events
 content-type: application/json
 
 {
@@ -242,7 +244,7 @@ content-type: application/json
 }
 
 ### Get last 30 days events for robot 2
-GET http://localhost:8080/db/robots/{{robot2}}/events
+GET {{addr}}/db/robots/{{robot2}}/events
 content-type: application/json
 
 {
