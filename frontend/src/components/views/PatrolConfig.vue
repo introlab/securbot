@@ -21,6 +21,201 @@
           <h4 class="m-3">
             Patrol Config
           </h4>
+          <div
+            id="inner-patrol-config-container"
+            class="border rounded mx-1 my-0 p-2 overflow-auto"
+            style="height: calc( 100% - 60px - 0.25rem );"
+          >
+            <!-- Naming -->
+            <div
+              class="border rounded m-1 sb-container"
+            >
+              <div
+                class="sb-container-header"
+              >
+                <h5 class="m-0">
+                  <b>Patrol</b>
+                </h5>
+              </div>
+              <div
+                class="h-100 p-2"
+              >
+                <b-form-input
+                  id="patrol-name-input"
+                  v-model="patrolName"
+                  type="text"
+                  placeholder="Enter a name..."
+                />
+              </div>
+              <div
+                class="h-100 px-2 pb-2 pt-0"
+              >
+                <b-form-textarea
+                  id="patrol-desc-input"
+                  v-model="patrolDesc"
+                  placeholder="Enter a description..."
+                  rows="3"
+                  max-rows="3"
+                  no-resize
+                />
+              </div>
+            </div>
+            <!-- Waypoints -->
+            <div
+              class="border rounded m-1 sb-container"
+            >
+              <div
+                class="sb-container-header"
+              >
+                <h5 class="m-0">
+                  <b>Waypoints</b>
+                </h5>
+              </div>
+              <div
+                class="h-100 p-2"
+              >
+                <b-form-select
+                  id="patrol-name-input"
+                  v-model="selectedWaypointIndex"
+                  :options="waypointIndexes"
+                >
+                  <template v-slot:first>
+                    <option
+                      value=""
+                      disabled
+                    >
+                      Select a Waypoint
+                    </option>
+                  </template>
+                </b-form-select>
+              </div>
+              <div
+                class="h-100 px-2 pb-2 pt-0"
+              >
+                <b-form-input
+                  id="patrol-desc-input"
+                  v-model="waypointTimeouts[selectedWaypointIndex]"
+                  type="number"
+                  placeholder="Enter a time (sec) to hold there..."
+                />
+              </div>
+            </div>
+            <!-- Schedule -->
+            <div
+              class="border rounded m-1 sb-container"
+            >
+              <div
+                class="sb-container-header"
+              >
+                <h5 class="m-0">
+                  <b>Schedule</b>
+                </h5>
+              </div>
+              <div
+                class="p-2"
+              >
+                <b-form-input
+                  id="schedule-name-input"
+                  v-model="scheduleName"
+                  type="text"
+                  placeholder="Enter a name..."
+                />
+              </div>
+              <div
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-textarea
+                  id="schedule-desc-input"
+                  v-model="scheduleDesc"
+                  placeholder="Enter a description..."
+                  rows="3"
+                  max-rows="3"
+                  no-resize
+                />
+              </div>
+              <div
+                id="cron-interval-container"
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-select
+                  id="cron-interval-input"
+                  v-model="cronInterval"
+                  :options="cronOptions"
+                >
+                  <template v-slot:first>
+                    <option
+                      value=""
+                      disabled
+                    >
+                      Select Desired Occurency
+                    </option>
+                  </template>
+                </b-form-select>
+              </div>
+              <div
+                v-if="!cronInterval[0] && cronInterval.length"
+                id="cron-time-container"
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-input
+                  id="cron-time-input"
+                  v-model="cronTime"
+                  type="time"
+                />
+              </div>
+              <div
+                v-if="!cronInterval[2] && cronInterval.length"
+                id="cron-date-container"
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-input
+                  id="cron-time-input"
+                  v-model="cronTime"
+                  type="date"
+                />
+              </div>
+              <div
+                v-if="!cronInterval[0] && cronInterval.length && !cronInterval[4]"
+                id="cron-weekday-container"
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-select
+                  id="cron-time-input"
+                  v-model="cronWeekDay"
+                  :options="weekDayOptions"
+                />
+              </div>
+              <div>
+                <!-- Repetition + Timeout -->
+              </div>
+            </div>
+            <div
+              id="schedule-button-container"
+            >
+              <b-button
+                variant="danger"
+                class="float-right m-2"
+                @click="clearData"
+              >
+                Clear
+              </b-button>
+              <b-button
+                variant="success"
+                class="float-right m-2"
+                :disabled="!isConnected"
+                @click="sendToRobot"
+              >
+                Send
+              </b-button>
+            </div>
+            <b-button
+              variant="success"
+              class="float-right m-2"
+              @click="saveToDB"
+            >
+              Save
+            </b-button>
+          </div>
         </div>
       </b-col>
       <!-- Map column -->
@@ -44,7 +239,6 @@
             :list="waypointList"
             :nb-of-waypoint="-1"
             :video-element="patrolElement"
-            @newWaypoint="addWaypointToList"
           />
         </div>
         <div
@@ -98,8 +292,6 @@
 <script>
 import { mapState } from 'vuex';
 import VideoBox from '../widgets/VideoBox';
-import SaveLoad from '../widgets/SaveLoad';
-import SecurbotTable from '../generic/Table';
 import WaypointOverlay from '../generic/WaypointOverlay';
 
 /**
@@ -121,22 +313,118 @@ export default {
   name: 'patrol-config',
   components: {
     VideoBox,
-    SaveLoad,
-    SecurbotTable,
     WaypointOverlay,
   },
-  computed: mapState({
-    mapZoom: state => state.mapZoom,
-    mapSize: state => state.mapSize,
-    waypointList: state => state.patrol.waypointList,
-    patrolList: state => state.patrol.patrolList,
-    headers: state => state.patrol.waypointHeaders,
-    patrolId: state => state.htmlElement.patrolId,
-    patrolElement: state => state.htmlElement.patrol,
-    isConnected: state => state.client.connectionState.robot === 'connected',
-  }),
+  data() {
+    return {
+      errorSaveToDB: false,
+      patrol: {},
+      schedule: {},
+      patrolName: '',
+      patrolDesc: '',
+      scheduleName: '',
+      scheduleDesc: '',
+      scheduleTimeout: '',
+      scheduleRepetition: '',
+      selectedWaypointIndex: '',
+      waypointTimeouts: [],
+      cronTime: '',
+      cronDate: '',
+      cronWeekDay: '',
+      cronInterval: '',
+      cronOptions: [
+        {
+          text: 'Once',
+          value: ['', '', '', '', ''],
+        },
+        {
+          text: 'Every Hour',
+          value: ['', '*', '*', '*', '*'],
+        },
+        {
+          text: 'Every Day',
+          value: ['', '', '*', '*', '*'],
+        },
+        {
+          text: 'Every Week',
+          value: ['', '', '*', '*', ''],
+        },
+        {
+          text: 'Every Month',
+          value: ['', '', '', '*', '*'],
+        },
+        {
+          text: 'Every Year',
+          value: ['', '', '', '', '*'],
+        },
+      ],
+      weekDayOptions: [
+        {
+          text: 'SUNDAY',
+          value: 'SUN',
+        },
+        {
+          text: 'MONDAY',
+          value: 'MON',
+        },
+        {
+          text: 'TUESDAY',
+          value: 'TUE',
+        },
+        {
+          text: 'WEDNESDAY',
+          value: 'WED',
+        },
+        {
+          text: 'THURSDAY',
+          value: 'THU',
+        },
+        {
+          text: 'FRIDAY',
+          value: 'FRI',
+        },
+        {
+          text: 'SATURDAY',
+          value: 'SAT',
+        },
+      ],
+    };
+  },
+  computed: {
+    waypointIndexes() {
+      const ind = [];
+      for (let i = 0; i < this.waypointList.length; i++) {
+        ind[i] = {
+          text: `${i + 1}`,
+          value: i,
+        };
+      }
+      return ind;
+    },
+    waypointForDB() {
+      const wp4db = [];
+      const wpList = JSON.parse(JSON.stringify(this.waypointList));
+      for (let i = 0; i < wpList.length; i++) {
+        wp4db[i] = {
+          coordinate: wpList[i],
+          hold_time_s: (this.waypointTimeouts[i] ? this.waypointTimeouts[i] : 0),
+        };
+      }
+      return wp4db;
+    },
+    ...mapState({
+      currentRobot: state => state.currentRobot,
+      mapZoom: state => state.mapZoom,
+      mapSize: state => state.mapSize,
+      waypointList: state => state.patrol.waypointList,
+      patrolList: state => state.patrol.patrolList,
+      headers: state => state.patrol.waypointHeaders,
+      patrolId: state => state.htmlElement.patrolId,
+      patrolElement: state => state.htmlElement.patrol,
+      isConnected: state => state.client.connectionState.robot === 'connected',
+    }),
+  },
   mounted() {
-    this.$store.dispatch('getPatrols');
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
@@ -146,69 +434,81 @@ export default {
     decreaseZoom() {
       this.$store.commit('decreaseMapZoom');
     },
-    /**
-     * Gets the patrol from the database.
-     *
-     * @public
-     */
-    getSavedPatrols() {
+    clearData() {
+      this.patrolName = '';
+      this.patrolDesc = '';
+      this.scheduleName = '';
+      this.scheduleDesc = '';
+      this.scheduleTimeout = '';
+      this.selectedWaypointIndex = '';
+      this.waypointTimeouts = [];
+      this.cronTime = '';
+      this.cronDate = '';
+      this.cronWeekDay = '';
+      this.cronInterval = '';
+      this.patrol = {};
+      this.schedule = {};
     },
-    /**
-     * Sends the patrol to the robot.
-     *
-     * @public
-     */
-    sendPatrol() {
-      console.log('Sendig patrolPlan:');
-      if (this.waypointList.length) {
-        this.$store.dispatch('sendPatrol', { patrol: this.waypointList });
+    createPlan() {
+      if (this.scheduleName) {
+        this.createSchedule();
       }
+      this.createPatrol();
     },
-    /**
-     * Saves the patrol on the database.
-     *
-     * @public
-     */
-    savePatrols() {
-      this.$store.dispatch('savePatrols', this.patrolList);
+    createSchedule() {
+      const cron = '';
+      this.schedule = {
+        robot: this.currentRobot.id.db,
+        name: this.scheduleName,
+        description_text: this.scheduleDesc,
+        last_modified: new Date().toISOString(),
+        patrol: '',
+        cron,
+        timeout_s: this.scheduleTimeout,
+        repetitions: this.scheduleRepetitions,
+        enabled: true,
+      };
     },
-    /**
-     * Removes a row from the waypoint list.
-     *
-     * @public
-     */
-    removeRow(index) {
-      this.$store.commit('removeWaypoint', index);
+    createPatrol() {
+      this.patrol = {
+        robot: this.currentRobot.id.db,
+        name: this.patrolName,
+        description_text: this.patrolDesc,
+        last_modified: new Date().toISOString(),
+        waypoints: this.waypointForDB,
+      };
     },
-    /**
-     * Add a waypoint list to the list.
-     *
-     * @public
-     */
-    addWaypointToList(wp) {
-      this.$store.commit('addWaypoint', { wp });
+    saveToDB() {
+      console.log('Sendig patrolPlan:');
+      this.createPlan();
+      this.$store.dispatch('database/savePatrol', this.patrol)
+        .then(() => {
+          if (this.scheduleName) {
+            this.$store.dispatch('database/saveSchedule', this.schedule);
+          }
+        }).catch((err) => {
+          console.log(err);
+          this.errorSaveToDB = true;
+          setTimeout(() => {
+            this.errorSaveToDB = false;
+          }, 2000);
+        });
     },
-    /**
-     * Removes all waypoints from the patrol.
-     *
-     * @public
-     */
-    clearWaypointList() {
-      this.$store.commit('clearWaypointList');
-    },
-    /**
-     * Removes all patrols from the server.
-     *
-     * @public
-     */
-    clearPatrolList() {
-      this.$store.commit('clearPatrol');
+    sendToRobot() {
+      this.createPlan();
+      this.$store.dispatch('sendPatrol', this.patrol);
     },
   },
 };
 </script>
 
 <style scoped>
+.sb-container-header {
+  background-color: #00A759;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+}
 .overlay-button {
   background-color: #b5b5b5;
   opacity: 0.4;

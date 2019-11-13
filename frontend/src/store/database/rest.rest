@@ -23,7 +23,7 @@ POST {{addr}}/db/robots HTTP/1.1
 content-type: application/json
 
 {
-  "name": "Robot2",
+  "name": "Robot-Test",
   "platform": {
       "OS": "Ubuntu 18.04",
       "ROS": "Melodic",
@@ -39,7 +39,7 @@ GET {{addr}}/db/robots
 
 
 ###
-@robot1 = 5dc59e1db7217d0014134503
+@robot1 = 5dcc670a7ef420001b4682fd
 @robot2  = 5dc59f3eb7217d0014134504
 
 ### Patrols
@@ -86,6 +86,7 @@ content-type: application/json
   ]
 }
 
+###
 GET {{addr}}/db/robots/{{robot1}}/patrols
 
 ### Create events for the first robot

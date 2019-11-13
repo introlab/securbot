@@ -1,6 +1,13 @@
 export default {
   darkMode: true,
   showStreams: true,
+  currentRobot: {
+    name: '',
+    id: {
+      client: '',
+      db: '',
+    },
+  },
   mapZoom: 1,
   mapSize: {
     width: 2400,
@@ -29,7 +36,8 @@ export default {
   patrol: {
     enable: false,
     waypointList: [],
-    waypointHeaders: ['X', 'Y', 'Yaw'],
-    patrolList: JSON.parse('[{"Name":"Test","waypoints":[{"x":593.2924107142857,"y":323.21428571428567,"yaw":0},{"x":550.4352678571429,"y":303.57142857142856,"yaw":0},{"x":518.2924107142858,"y":435.71428571428567,"yaw":0}]}]'),
+    waypointHeaders: [{ key: 'index', label: '#' }, { key: 'x', label: 'X', formatter: 'fixFloat' }, { key: 'y', label: 'Y', formatter: 'fixFloat' }, { key: 'yaw', label: 'Yaw', formatter: 'fixFloat' }, { key: 'remove', label: 'Remove' }],
+    patrolList: [],
+    scheduleList: [],
   },
 };

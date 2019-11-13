@@ -1,4 +1,15 @@
 export default {
+  setConnectedRobot(state, robot) {
+    console.log('Setting Up robot');
+    state.currentRobot.id.db = '';
+    state.currentRobot.name = robot.robotName;
+    state.currentRobot.id.client = robot.robotId;
+    for (const r of state.database.robots) {
+      if (state.currentRobot.name === r.name) {
+        state.currentRobot.id.db = r.id;
+      }
+    }
+  },
   showStreams(state) {
     state.showStreams = true;
   },
@@ -63,11 +74,20 @@ export default {
   removePatrol(state, index) {
     state.patrol.patrolList.splice(index, 1);
   },
-  clearPatrol(state) {
+  clearPatrols(state) {
     state.patrol.patrolList = [];
   },
-  fillPatrolList(state, waypointList) {
-    state.patrol.patrolList = waypointList;
+  addSchedule(state, schedule) {
+    state.patrol.scheduleList.push(schedule);
+  },
+  updateSchedule(state, update) {
+    state.patrol.scheduleList.splice(update.index, 1, update.schedule);
+  },
+  removeSchedule(state, index) {
+    state.patrol.scheduleList.splice(index, 1);
+  },
+  clearSchedules(state) {
+    state.patrol.scheduleList = [];
   },
   increaseMapZoom(state) {
     if (state.mapZoom < 2) {

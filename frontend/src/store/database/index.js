@@ -8,7 +8,15 @@ export default {
     queryingDB: false,
     errorDuringQuery: false,
     events: [],
-    headers: ['Robot', 'Object', 'Context', 'Description', 'Tags', 'DateTime', 'Image'],
+    headers: [
+      { key: 'name', label: 'Robot' },
+      { key: 'object', label: 'Object' },
+      { key: 'context', label: 'Context' },
+      { key: 'description_text', label: 'Description' },
+      { key: 'tags', label: 'Tags' },
+      { key: 'time', label: 'DateTime' },
+      { key: 'image', label: 'Image' },
+    ],
     robots: [],
     robotFilter: [],
     tagList: ['red', 'yellow', 'blue', 'green', 'a', 'b', 'c'],
@@ -169,23 +177,36 @@ export default {
        * 3 - Get All Schedules (same as Patrols)
        * 4 - Get All Events
        */
-      commit('queryStarted');
-      dispatch('queryRobots')
-        .then(() => {
-          commit('setRobotFilters', 'all');
-          dispatch('queryEvents', { filters: state.defaultFilter })
-            .then(() => {
-              commit('queryFinished');
-            }).catch((err) => {
-              console.log(err);
-              commit('errorDuringQuery');
-              commit('queryFinished');
-            });
-        }).catch((err) => {
-          console.log(err);
-          commit('errorDuringQuery');
-          commit('queryFinished');
-        });
+      return new Promise((resolve, reject) => {
+        commit('queryStarted');
+        dispatch('queryRobots')
+          .then(() => {
+            commit('setRobotFilters', 'all');
+            dispatch('queryEvents', { filters: state.defaultFilter })
+              .then(() => {
+                commit('queryFinished');
+                dispatch('queryPatrols')
+                  .then(() => {
+                    dispatch('querySchedules')
+                      .then(() => {
+                        resolve();
+                      }).catch((err) => {
+                        reject(err);
+                      });
+                  }).catch((err) => {
+                    reject(err);
+                  });
+              }).catch((err) => {
+                reject(err);
+                commit('errorDuringQuery');
+                commit('queryFinished');
+              });
+          }).catch((err) => {
+            reject(err);
+            commit('errorDuringQuery');
+            commit('queryFinished');
+          });
+      });
     },
     filterEvents({ state, commit, dispatch }) {
       commit('resetEvents');
@@ -233,17 +254,35 @@ export default {
      * @returns
      */
     // eslint-disable-next-line object-curly-newline
-    queryPatrols({ state, getters, commit, dispatch }, index) {
-      let _index = (!index ? 0 : index);
+    queryPatrols({ state, commit, dispatch }) {
+      console.log('Querying Patrols');
+      const { robots } = state;
+      const options = {
+        robots,
+        index: 0,
+      };
+      commit('clearPatrols', '', { root: true });
       return new Promise((resolve, reject) => {
-        // All patrols for each robot have been queried
-        if (_index >= state.robots.length) {
+        dispatch('_queryPatrol', options)
+          .then(() => {
+            resolve();
+          }).catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    _queryPatrol({ getters, dispatch, commit }, options) {
+      return new Promise((resolve, reject) => {
+        const _options = {};
+        Object.assign(_options, options);
+        if (_options.index >= _options.robots.length) {
           resolve();
         }
-        // Query robot
-        const robot = state.robots[_index];
+        const currentRobot = options.robots[options.index];
+        console.log(currentRobot);
+        _options.index += 1;
         const req = {
-          uri: `${getters.uri}/robots/${robot.id}/patrols`,
+          uri: `${getters.uri}/robots/${currentRobot.id}/patrols`,
           headers: {
             'User-Agent': 'Request-Promise',
           },
@@ -253,10 +292,16 @@ export default {
         request(req)
           .then((result) => {
             result.forEach((patrol) => {
-              commit('addPatrol', { name: patrol.name, robot: patrol.robot, id: patrol._id });
+              const p = {
+                name: patrol.name,
+                info: {
+                  robotId: currentRobot.id,
+                  patrolId: patrol._id,
+                },
+              };
+              commit('addPatrol', p, { root: true });
             });
-            _index += 1;
-            return dispatch('queryPatrols', _index)
+            return dispatch('_queryPatrol', _options)
               .then(() => {
                 resolve();
               }).catch((err) => {
@@ -267,29 +312,59 @@ export default {
           });
       });
     },
-    queryPatrol({ getters, rootCommit }, patrol) {
-      const req = {
-        uri: `${getters.uri}/robots/${patrol.robot}/patrols/${patrol.id}`,
-        headers: {
-          'User-Agent': 'Request-Promise',
-        },
-        json: true,
+    querySchedules({ state, commit, dispatch }) {
+      console.log('Querying Schedules');
+      commit('clearSchedules', { root: true });
+      const { robots } = state;
+      const options = {
+        robots,
+        index: 0,
       };
       return new Promise((resolve, reject) => {
-        request(req)
-          .then((result) => {
-            const waypointList = result.waypoints;
-            rootCommit('fillWaypointList', waypointList);
+        dispatch('_querySchedule', options)
+          .then(() => {
             resolve();
           }).catch((err) => {
             reject(err);
           });
       });
     },
-    querySchedules() {
+    _querySchedule({ getters, dispatch, commit }, options) {
+      return new Promise((resolve, reject) => {
+        const _options = {};
+        Object.assign(_options, options);
+        if (_options.index >= _options.robots.length) {
+          resolve();
+        }
+        const currentRobot = options.robots[options.index];
+        _options.index += 1;
+        const req = {
+          uri: `${getters.uri}/robots/${currentRobot.id}/schedules`,
+          headers: {
+            'User-Agent': 'Request-Promise',
+          },
+          json: true,
+        };
+        // Request
+        request(req)
+          .then((result) => {
+            result.forEach((event) => {
+              commit('addSchedule', event, { root: true });
+            });
+            return dispatch('_querySchedule', _options)
+              .then(() => {
+                resolve();
+              }).catch((err) => {
+                reject(err);
+              });
+          }).catch((err) => {
+            reject(err);
+          });
+      });
     },
     // eslint-disable-next-line object-curly-newline
     queryEvents({ state, commit, dispatch }, filters) {
+      console.log('Querying Events');
       commit('resetEvents');
       const robots = state.robotFilter;
       const options = {
@@ -339,6 +414,60 @@ export default {
             reject(err);
           });
       });
+    },
+    savePatrol({ getters }, patrol) {
+      const req = {
+        uri: `${getters.uri}/robots/${patrol.robot}/patrols`,
+        method: 'POST',
+        headers: {
+          'User-Agent': 'Request-Promise',
+        },
+        json: true,
+        body: patrol,
+      };
+      request(req)
+        .then((result) => {
+          console.log(result);
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
+    saveSchedule({ getters }, schedule) {
+      const req = {
+        uri: `${getters.uri}/robots/${schedule.robot}/schedule`,
+        method: 'POST',
+        headers: {
+          'User-Agent': 'Request-Promise',
+        },
+        json: true,
+        body: schedule,
+      };
+      request(req)
+        .then((result) => {
+          console.log(result);
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
+    getPatrol({ getters, commit }, info) {
+      commit('clearWaypointList', '', { root: true });
+      const req = {
+        uri: `${getters.uri}/robots/${info.robotId}/patrols/${info.patrolId}`,
+        headers: {
+          'User-Agent': 'Request-Promise',
+        },
+        json: true,
+      };
+      request(req)
+        .then((result) => {
+          const wp = [];
+          for (const waypoint of result.waypoints) {
+            wp.push(waypoint.coordinate);
+          }
+          commit('fillWaypointList', wp, { root: true });
+        }).catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

@@ -11,11 +11,11 @@
       <!-- Table column -->
       <b-col
         md="4"
-        class="mh-100 d-flex flex-column"
+        class="mh-100"
       >
         <div
           id="planner-container"
-          class="mh-100 h-100 w-100 border rounded shadow-sb"
+          class="h-100 w-100 border rounded shadow-sb"
         >
           <!-- Title -->
           <h4 class="m-3 w-100">
@@ -24,17 +24,64 @@
           <div
             id="inner-planner-container"
             class="border rounded mx-1 my-0 p-2"
-            style="height: calc( 100% - 60px );"
+            style="height: calc( 100% - 60px - 0.25rem );"
           >
-            <div style="max-height: calc(100% - 0.25rem)">
-              <!--waypoint-table /-->
-              <securbot-table
-                :headers="headers"
-                :list="waypointList"
-                :removable="true"
-                @removeRow="removeRow"
-              />
+            <div
+              style="width: 100%; heigth: 60px"
+            >
+              <b-container fluid>
+                <b-row>
+                  <b-col
+                    sm="6"
+                  >
+                    <label
+                      for="patrol-select-input"
+                      class="mt-2"
+                    >
+                      Load a patrol:
+                    </label>
+                  </b-col>
+                  <b-col
+                    sm="6"
+                  >
+                    <b-form-select
+                      id="patrol-select-input"
+                      :options="robotPatrol"
+                      text-field="name"
+                      value-field="info"
+                      class="ml-2"
+                      @change="loadPatrol"
+                    />
+                  </b-col>
+                </b-row>
+              </b-container>
             </div>
+            <b-table
+              borderless
+              striped
+              hover
+              sticky-header="calc( 100% - 60px )"
+              table-class="m-0"
+              thead-class="text-center"
+              tbody-class="text-center"
+              fixed
+              :fields="headers"
+              :items="waypointList"
+            >
+              <template v-slot:cell(index)="data">
+                {{ data.index + 1 }}
+              </template>
+              <template v-slot:cell(remove)="data">
+                <button
+                  :id="'removeBtn'+data.index"
+                  type="button"
+                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-75"
+                  @click="removeRow(data.index)"
+                >
+                  <font-awesome-icon icon="trash" />
+                </button>
+              </template>
+            </b-table>
           </div>
         </div>
       </b-col>
@@ -113,8 +160,6 @@
 <script>
 import { mapState } from 'vuex';
 import VideoBox from '../widgets/VideoBox';
-import SaveLoad from '../widgets/SaveLoad';
-import SecurbotTable from '../generic/Table';
 import WaypointOverlay from '../generic/WaypointOverlay';
 
 /**
@@ -130,55 +175,42 @@ export default {
   name: 'patrol-planner',
   components: {
     VideoBox,
-    SaveLoad,
-    SecurbotTable,
     WaypointOverlay,
   },
-  computed: mapState({
-    mapZoom: state => state.mapZoom,
-    mapSize: state => state.mapSize,
-    waypointList: state => state.patrol.waypointList,
-    patrolList: state => state.patrol.patrolList,
-    headers: state => state.patrol.waypointHeaders,
-    patrolId: state => state.htmlElement.patrolId,
-    patrolElement: state => state.htmlElement.patrol,
-    isConnected: state => state.client.connectionState.robot === 'connected',
-  }),
+  computed: {
+    ...mapState({
+      currentRobot: state => state.currentRobot,
+      mapZoom: state => state.mapZoom,
+      mapSize: state => state.mapSize,
+      waypointList: state => state.patrol.waypointList,
+      patrolList: state => state.patrol.patrolList,
+      headers: state => state.patrol.waypointHeaders,
+      patrolId: state => state.htmlElement.patrolId,
+      patrolElement: state => state.htmlElement.patrol,
+      isConnected: state => state.client.connectionState.robot === 'connected',
+    }),
+    robotPatrol() {
+      const rp = [];
+      this.patrolList.forEach((p) => {
+        if (p.info.robotId === this.currentRobot.id.db) {
+          rp.push(p);
+        }
+      });
+      return rp;
+    },
+  },
   mounted() {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    fixFloat(value) {
+      return value.toFixed(1);
+    },
     increaseZoom() {
       this.$store.commit('increaseMapZoom');
     },
     decreaseZoom() {
       this.$store.commit('decreaseMapZoom');
-    },
-    /**
-     * Gets the patrol from the database.
-     *
-     * @public
-     */
-    getSavedPatrols() {
-    },
-    /**
-     * Sends the patrol to the robot.
-     *
-     * @public
-     */
-    sendPatrol() {
-      console.log('Sendig patrolPlan:');
-      if (this.waypointList.length) {
-        this.$store.dispatch('sendPatrol', { patrol: this.waypointList });
-      }
-    },
-    /**
-     * Saves the patrol on the database.
-     *
-     * @public
-     */
-    savePatrols() {
-      this.$store.dispatch('savePatrols', this.patrolList);
     },
     /**
      * Removes a row from the waypoint list.
@@ -204,19 +236,18 @@ export default {
     clearWaypointList() {
       this.$store.commit('clearWaypointList');
     },
-    /**
-     * Removes all patrols from the server.
-     *
-     * @public
-     */
-    clearPatrolList() {
-      this.$store.commit('clearPatrol');
+    loadPatrol(event) {
+      this.$store.dispatch('database/getPatrol', event);
     },
   },
 };
 </script>
 
-<style scoped>
+<style>
+.table-b-table-default {
+  background-color: #00A759 !important;
+  color: white !important;
+}
 .overlay-button {
   background-color: #b5b5b5;
   opacity: 0.4;
