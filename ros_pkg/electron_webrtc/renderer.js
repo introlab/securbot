@@ -13,6 +13,7 @@
  * @type {number}
  */
 let operatorID = null;
+let peerIDs = [];
 
 /**
  * Array to keep track of the virtual devices corrected name.
@@ -26,34 +27,29 @@ const streamNames = [];
  * @param {String} data - Data comming from ROS to send to server.
  * @listens rosdata
  */
-ipc.on('rosdata', (emitter, data) => {
-  console.log(data);
-  if (operatorID != null) { easyrtc.sendDataP2P(operatorID, 'rosdata', data); }
+ipc.on('robot-status', (_, data) => {
+  let toRemove = [];
+  peerIDs.forEach((peer) => {
+    try {
+      easyrtc.sendDataP2P(peer, 'robot-status', data);
+    }
+    catch(_) {
+      toRemove.push(peer);
+    }
+  });
+  peerIDs = peerIDs.filter(peer => toRemove.findIndex(peer) == -1);
 });
 
 /**
- * Callback for the patrol-plan data channel from easyrtc.
- * @callback patrolReceivedCallback
- * @param {number} easyrtcId - Id of the peer sending data.
- * @param {String} msgType - Data channel the data are comming from.
- * @param {String} patrolJsonString - JSON string of the patrol data.
+ * Store map size from robot
  */
-function patrolReceivedCallback(easyrtcId, msgType, patrolJsonString) {
-  console.log(`Received new patrol plan: ${patrolJsonString}`);
-  ipc.send('patrol-plan', patrolJsonString);
-}
-
-/**
- * Callback for the joystick-position data channel from easyrtc.
- * @callback teleopCallback
- * @param {number} easyrtc - Id of the peer sending data.
- * @param {String} msgType - Data channel the data are comming from.
- * @param {String} msgData - JSON string of the teleop datas.
- */
-function teleopCallback(easyrtcid, msgType, msgData) {
-  console.log(msgData);
-  ipc.send('msg', msgData);
-}
+let mapSize = {
+  width: 0,
+  height: 0
+};
+ipc.on('map-size', (_, data) => {
+  mapSize = data;
+})
 
 /**
  * Callback for the request-feed data channel msg from easyrtc.
@@ -79,6 +75,7 @@ function streamRequestCallback(easyrtcid, msgType, msgData) {
  * @param {callback} acceptor - Need to be sets to access or refuse a call.
  */
 function acceptCall(easyrtcid, acceptor) {
+  peerIDs.push(easyrtcid);
   if (operatorID === null) {
     operatorID = easyrtcid;
     console.log(`Accepting call from ${easyrtcid}, this operator can control me!`);
@@ -109,11 +106,17 @@ function myInit() {
   easyrtc.enableAudioReceive(false);
   easyrtc.enableDataChannels(true);
 
-  easyrtc.setPeerListener((id, type, data) => {
-    console.log(`Receive ${data} from ${id} of type ${type}`);
+  // Forward all received data to main process
+  easyrtc.setPeerListener((_, type, data) => {
+    ipc.send(type, data)
   });
-  easyrtc.setPeerListener(patrolReceivedCallback, 'patrol-plan');
-  easyrtc.setPeerListener(teleopCallback, 'joystick-position');
+
+  // Send map size when data channel opens
+  easyrtc.setDataChannelOpenListener((easyrtcid) => {
+    console.log('Data channel open');
+    easyrtc.sendDataP2P(easyrtcid, 'map-size', mapSize);
+    console.log(`Sent map size ${mapSize.width}x${mapSize.height}`);
+  });
 
   easyrtc.setAcceptChecker(acceptCall);
 

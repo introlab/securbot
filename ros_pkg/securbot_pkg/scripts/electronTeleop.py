@@ -14,13 +14,13 @@ from std_msgs.msg import String
 
 vel_msg = Twist()
 
-publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
 ## Starts the ros node and subscribes to the electron node.
 #
 def teleopListener():
         rospy.init_node('electron_teleop', anonymous=True)
-        rospy.Subscriber('/fromElectron', String, teleopCallback)
+        rospy.Subscriber('fromElectron', String, teleopCallback)
 
         rospy.spin()
 

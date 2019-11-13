@@ -6,8 +6,8 @@
 <launch>
     <!-- The nodes to draw the image from -->
     <arg name="input_occupancy_grid_topic" default="/rtabmap/grid_map"/>
-    <arg name="input_global_path_topic" default="/move_base/NavfnROS/plan"/>
-    <arg name="input_goal_topic" default="/move_base_simple/goal"/>
+    <arg name="input_global_path_topic" default="/planner/move_base/NavfnROS/plan"/>
+    <arg name="input_goal_topic" default="/planner_goal"/>
     <arg name="input_laser_scan_topic" default="/scan"/>
 
     <!-- What needs to be drawn -->
@@ -41,7 +41,7 @@
     <!-- Virtual Map dimension for the virtual map -->
     <arg name="image_width_param" default="$(eval arg('x_origin_param') *  2)"/>
     <arg name="image_height_param" default="$(eval arg('y_origin_param') *  2)"/>
-    
+
     <!-- Colors -->
     <arg name="wall_color_param" default="0 0 0"/> <!-- 0 0 0 -->
     <arg name="free_space_color_param" default="255 255 255"/> <!-- 255 255 255 -->

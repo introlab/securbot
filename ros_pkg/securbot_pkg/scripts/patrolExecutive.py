@@ -35,7 +35,7 @@ REAL_POSESTAMPED_INDEX = 2
 
 
 # Global action client used to sned waypoints to move_base
-actionClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+actionClient = actionlib.SimpleActionClient('goto', MoveBaseAction)
 
 # Global list of waypoints (2D with 4 columns) in different formats
 # (Strings, Pixel PoseStampeds, Real PoseStampeds), plus their

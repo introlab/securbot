@@ -40,9 +40,30 @@ export default {
       type: Boolean,
       default: true,
     },
+    wpColor: {
+      type: String,
+      default: '#00FF00',
+    },
     show: {
       type: Boolean,
       default: true,
+    },
+    showGrid: {
+      type: Boolean,
+      default: false,
+    },
+    zoom: {
+      type: Number,
+      default: 1,
+    },
+    mapSize: {
+      type: Object,
+      default() {
+        return {
+          width: 1000,
+          height: 1000,
+        };
+      },
     },
     list: {
       type: Array,
@@ -53,8 +74,8 @@ export default {
       default: -1,
     },
     videoElement: {
-      type: HTMLVideoElement,
-      required: true,
+      type: [String, HTMLVideoElement],
+      default: null,
     },
     refreshRate: {
       type: Number,
@@ -109,7 +130,31 @@ export default {
      */
     drawCanvas() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.drawWaypointList();
+      if (this.showGrid) {
+        this.drawGrid();
+      }
+      if (this.show) {
+        this.drawWaypointList();
+      }
+    },
+    drawGrid() {
+      const h = this.canvas.width / 10;
+      const c = this.canvas.height / 10;
+      this.context.lineWidth = 1;
+      this.context.strokeStyle = 'gray';
+
+      for (let i = 0; i < 10; i++) {
+        this.context.beginPath();
+        this.context.moveTo(h * i, 1);
+        this.context.lineTo(h * i, this.canvas.height - 1);
+        this.context.stroke();
+      }
+      for (let i = 0; i < 10; i++) {
+        this.context.beginPath();
+        this.context.moveTo(1, c * i);
+        this.context.lineTo(this.canvas.width - 1, c * i);
+        this.context.stroke();
+      }
     },
     /**
      * Draws the points and arrows of each waypoint in the list.
@@ -141,7 +186,7 @@ export default {
      * @public
      */
     drawWaypoint(wp, index) {
-      const wpColor = '#00FF00';
+      const { wpColor } = this;
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
       const wpRadius = 7;
@@ -163,7 +208,7 @@ export default {
      * @public
      */
     drawYawArrow(wp) {
-      const arrowColor = '#00FF00';
+      const { wpColor } = this;
       const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
 
       const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 15;
@@ -184,7 +229,7 @@ export default {
 
       this.context.lineCap = 'round';
       this.context.lineWidth = Math.max(1, arrowLength / 10);
-      this.context.strokeStyle = arrowColor;
+      this.context.strokeStyle = wpColor;
 
       this.context.beginPath();
       this.context.moveTo(coord.x, coord.y);
@@ -209,12 +254,35 @@ export default {
      */
     getVideoCoordinatesOfEvent(event) {
       const offsetAndScale = this.getVideoOffsetAndScale();
-      const rect = this.videoElement.getBoundingClientRect();
+      const rect = this.canvas.getBoundingClientRect();
+      const mapAdjustment = {
+        width: this.mapSize.width / this.videoElement.videoWidth,
+        height: this.mapSize.height / this.videoElement.videoHeight,
+      };
       const x = (event.clientX - rect.left - offsetAndScale.offsetX) / offsetAndScale.scale;
       const y = (event.clientY - rect.top - offsetAndScale.offsetY) / offsetAndScale.scale;
       return {
-        x,
-        y,
+        x: x * mapAdjustment.width,
+        y: y * mapAdjustment.height,
+      };
+    },
+    /**
+     * Converts video/map coordinates to canvas coordinates.
+     *
+     * @param {Number} x The value of the x coordinate.
+     * @param {Number} y The value of the y coordinate.
+     * @public
+     */
+    getCanvasCoordinatesFromVideo(x, y) {
+      const offsetAndScale = this.getVideoOffsetAndScale();
+      const mapAdjustment = {
+        width: this.mapSize.width / this.videoElement.videoWidth,
+        height: this.mapSize.height / this.videoElement.videoHeight,
+      };
+
+      return {
+        x: ((x / mapAdjustment.width) * offsetAndScale.scale) + offsetAndScale.offsetX,
+        y: ((y / mapAdjustment.height) * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
     /**
@@ -233,35 +301,18 @@ export default {
      */
     getVideoOffsetAndScale() {
       const videoRatio = this.videoElement.videoWidth / this.videoElement.videoHeight;
-      let offsetX = 0;
-      let offsetY = 0;
-      let scale = 1;
-      if ((this.videoElement.offsetHeight * videoRatio) > this.videoElement.offsetWidth) {
-        scale = this.videoElement.offsetWidth / this.videoElement.videoWidth;
-        offsetY = (this.videoElement.offsetHeight - (this.videoElement.videoHeight * scale)) / 2;
-      } else {
-        scale = this.videoElement.offsetHeight / this.videoElement.videoHeight;
-        offsetX = (this.videoElement.offsetWidth - (this.videoElement.videoWidth * scale)) / 2;
-      }
+      const scale = (this.videoElement.offsetWidth / this.videoElement.offsetHeight < videoRatio
+        ? this.videoElement.offsetWidth / this.videoElement.videoWidth
+        : this.videoElement.offsetHeight / this.videoElement.videoHeight) * this.zoom;
+
+      // eslint-disable-next-line max-len
+      const offsetY = (this.videoElement.offsetHeight - (this.videoElement.videoHeight * scale)) / 2;
+      const offsetX = (this.videoElement.offsetWidth - (this.videoElement.videoWidth * scale)) / 2;
+
       return {
         offsetX,
         offsetY,
         scale,
-      };
-    },
-    /**
-     * Converts video/map coordinates to canvas coordinates.
-     *
-     * @param {Number} x The value of the x coordinate.
-     * @param {Number} y The value of the y coordinate.
-     * @public
-     */
-    getCanvasCoordinatesFromVideo(x, y) {
-      const offsetAndScale = this.getVideoOffsetAndScale();
-
-      return {
-        x: (x * offsetAndScale.scale) + offsetAndScale.offsetX,
-        y: (y * offsetAndScale.scale) + offsetAndScale.offsetY,
       };
     },
     /**
@@ -321,6 +372,8 @@ export default {
           y: -1,
           yaw: 0,
         };
+
+        this.drawCanvas();
       }
     },
     /**
@@ -370,20 +423,10 @@ export default {
      */
     isClickValid(coord) {
       return coord.x >= 0
-        && coord.x < this.videoElement.videoWidth
+        && coord.x < this.mapSize.width
         && coord.y >= 0
-        && coord.y < this.videoElement.videoHeight;
+        && coord.y < this.mapSize.height;
     },
-    // showOverlay() {
-    //   // Create gradient
-    //   const grd = this.context.createRadialGradient(75, 50, 5, 90, 60, 100);
-    //   grd.addColorStop(0, '#00000000');
-    //   grd.addColorStop(1, 'gray');
-
-    //   // Fill with gradient
-    //   this.context.fillStyle = grd;
-    //   this.context.fillRect(10, 10, 150, 80);
-    // },
   },
 };
 </script>

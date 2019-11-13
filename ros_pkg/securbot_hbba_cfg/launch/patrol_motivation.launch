@@ -1,0 +1,9 @@
+<launch>
+    <node name="goto_generator" pkg="iw_tools" type="goto_generator">
+        <param name="id" value="patrol_desire" />
+        <param name="intensity" value="1" />
+        <param name="type" value="Patrol" />
+    </node>
+    <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" output="screen">
+    </node>
+</launch>

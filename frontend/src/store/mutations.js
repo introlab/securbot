@@ -29,6 +29,12 @@ export default {
   clearPatrolHTMLElement(state) {
     state.htmlElement.patrol = null;
   },
+  setEventHTMLElement(state, element) {
+    state.htmlElement.event = element;
+  },
+  clearEventHTMLElement(state) {
+    state.htmlElement.event = null;
+  },
   addWaypoint(state, add) {
     if ('index' in add) {
       state.patrol.waypointList.splice(add.index, 0, add.wp);
@@ -62,5 +68,22 @@ export default {
   },
   fillPatrolList(state, waypointList) {
     state.patrol.patrolList = waypointList;
+  },
+  increaseMapZoom(state) {
+    if (state.mapZoom < 2) {
+      state.mapZoom = Number((state.mapZoom + 0.1).toFixed(1));
+    } else {
+      state.mapZoom = 2;
+    }
+  },
+  decreaseMapZoom(state) {
+    if (state.mapZoom > 1) {
+      state.mapZoom = Number((state.mapZoom - 0.1).toFixed(1));
+    } else {
+      state.mapZoom = 1;
+    }
+  },
+  setMapSize(state, size) {
+    state.mapSize = size;
   },
 };
