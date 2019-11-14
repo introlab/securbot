@@ -33,11 +33,36 @@ export default {
     eventId: 'event-videobox-html-id',
     event: null,
   },
+  waypoints: {
+    headers: [{ key: 'index', label: '#' }, { key: 'x', label: 'X', formatter: 'fixFloat' }, { key: 'y', label: 'Y', formatter: 'fixFloat' }, { key: 'yaw', label: 'Yaw', formatter: 'fixFloat' }, { key: 'remove', label: 'Remove' }],
+    list: [],
+  },
   patrol: {
-    enable: false,
-    waypointList: [],
-    waypointHeaders: [{ key: 'index', label: '#' }, { key: 'x', label: 'X', formatter: 'fixFloat' }, { key: 'y', label: 'Y', formatter: 'fixFloat' }, { key: 'yaw', label: 'Yaw', formatter: 'fixFloat' }, { key: 'remove', label: 'Remove' }],
-    patrolList: [],
-    scheduleList: [],
+    current: {
+      id: '',
+      obj: {
+        name: '',
+        robot: '',
+        last_modified: '',
+        waypoints: [],
+      },
+    },
+    list: [],
+  },
+  schedule: {
+    current: {
+      id: '',
+      obj: {
+        name: '',
+        robot: '',
+        patrol: '',
+        last_modified: '',
+        cron: '',
+        timeout_s: '',
+        repetitions: '',
+        enabled: false,
+      },
+    },
+    list: [],
   },
 };

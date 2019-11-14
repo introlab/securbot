@@ -38,7 +38,7 @@
                 </h5>
               </div>
               <div
-                class="h-100 p-2"
+                class="p-2"
               >
                 <b-form-input
                   id="patrol-name-input"
@@ -48,7 +48,7 @@
                 />
               </div>
               <div
-                class="h-100 px-2 pb-2 pt-0"
+                class="px-2 pb-2 pt-0"
               >
                 <b-form-textarea
                   id="patrol-desc-input"
@@ -59,9 +59,43 @@
                   no-resize
                 />
               </div>
+              <div
+                id="patrol-button-container"
+                class="d-flex flex-row-reverse"
+              >
+                <b-button
+                  variant="danger"
+                  class="mr-2 my-1"
+                  @click="deleteCurrentPatrol"
+                >
+                  Delete
+                </b-button>
+                <b-button
+                  variant="danger"
+                  class="mr-2 my-1"
+                  @click="clearPatrolData"
+                >
+                  Clear
+                </b-button>
+                <b-button
+                  variant="success"
+                  class="mr-2 my-1"
+                  :disabled="!isConnected"
+                  @click="sendPatrolToRobot"
+                >
+                  Send
+                </b-button>
+                <b-button
+                  variant="success"
+                  class="mr-2 my-1"
+                  @click="savePatrol"
+                >
+                  Save
+                </b-button>
+              </div>
             </div>
             <!-- Waypoints -->
-            <div
+            <!-- <div
               class="border rounded m-1 sb-container"
             >
               <div
@@ -99,7 +133,7 @@
                   placeholder="Enter a time (sec) to hold there..."
                 />
               </div>
-            </div>
+            </div> -->
             <!-- Schedule -->
             <div
               class="border rounded m-1 sb-container"
@@ -131,6 +165,26 @@
                   rows="3"
                   max-rows="3"
                   no-resize
+                />
+              </div>
+              <div
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-input
+                  id="schedule-repetition-input"
+                  v-model="scheduleRepetition"
+                  type="number"
+                  placeholder="Enter the number of time to repeat..."
+                />
+              </div>
+              <div
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-input
+                  id="schedule-timeout-input"
+                  v-model="scheduleTimeout"
+                  type="number"
+                  placeholder="Enter the timeout time (sec)..."
                 />
               </div>
               <div
@@ -185,36 +239,41 @@
                   :options="weekDayOptions"
                 />
               </div>
-              <div>
-                <!-- Repetition + Timeout -->
+              <div
+                id="schedule-button-container"
+                class="d-flex flex-row-reverse"
+              >
+                <b-button
+                  variant="danger"
+                  class="mr-2 my-1"
+                  @click="deleteCurrentSchedule"
+                >
+                  Delete
+                </b-button>
+                <b-button
+                  variant="danger"
+                  class="mr-2 my-1"
+                  @click="clearScheduleData"
+                >
+                  Clear
+                </b-button>
+                <b-button
+                  variant="success"
+                  class="mr-2 my-1"
+                  :disabled="!isConnected"
+                  @click="sendScheduleToRobot"
+                >
+                  Send
+                </b-button>
+                <b-button
+                  variant="success"
+                  class="mr-2 my-1"
+                  @click="saveSchedule"
+                >
+                  Save
+                </b-button>
               </div>
             </div>
-            <div
-              id="schedule-button-container"
-            >
-              <b-button
-                variant="danger"
-                class="float-right m-2"
-                @click="clearData"
-              >
-                Clear
-              </b-button>
-              <b-button
-                variant="success"
-                class="float-right m-2"
-                :disabled="!isConnected"
-                @click="sendToRobot"
-              >
-                Send
-              </b-button>
-            </div>
-            <b-button
-              variant="success"
-              class="float-right m-2"
-              @click="saveToDB"
-            >
-              Save
-            </b-button>
           </div>
         </div>
       </b-col>
@@ -416,9 +475,9 @@ export default {
       currentRobot: state => state.currentRobot,
       mapZoom: state => state.mapZoom,
       mapSize: state => state.mapSize,
-      waypointList: state => state.patrol.waypointList,
-      patrolList: state => state.patrol.patrolList,
-      headers: state => state.patrol.waypointHeaders,
+      waypointList: state => state.waypoints.list,
+      patrolList: state => state.patrol.list,
+      headers: state => state.waypoints.headers,
       patrolId: state => state.htmlElement.patrolId,
       patrolElement: state => state.htmlElement.patrol,
       isConnected: state => state.client.connectionState.robot === 'connected',
@@ -434,26 +493,26 @@ export default {
     decreaseZoom() {
       this.$store.commit('decreaseMapZoom');
     },
-    clearData() {
+    clearPatrolData() {
       this.patrolName = '';
       this.patrolDesc = '';
+      this.$store.commit('clearCurrentPatrol');
+    },
+    clearScheduleDAta() {
       this.scheduleName = '';
       this.scheduleDesc = '';
       this.scheduleTimeout = '';
-      this.selectedWaypointIndex = '';
-      this.waypointTimeouts = [];
       this.cronTime = '';
       this.cronDate = '';
       this.cronWeekDay = '';
       this.cronInterval = '';
-      this.patrol = {};
-      this.schedule = {};
+      this.$store.commit('clearCurrentSchedule');
     },
-    createPlan() {
-      if (this.scheduleName) {
-        this.createSchedule();
-      }
-      this.createPatrol();
+    deleteCurrentPatrol() {
+
+    },
+    deleteCurrentSchedule() {
+
     },
     createSchedule() {
       const cron = '';
@@ -465,7 +524,7 @@ export default {
         patrol: '',
         cron,
         timeout_s: this.scheduleTimeout,
-        repetitions: this.scheduleRepetitions,
+        repetitions: this.scheduleRepetition,
         enabled: true,
       };
     },
@@ -478,20 +537,22 @@ export default {
         waypoints: this.waypointForDB,
       };
     },
-    saveToDB() {
-      console.log('Sendig patrolPlan:');
-      this.createPlan();
+    savePatrol() {
+      this.createPatrol();
       this.$store.dispatch('database/savePatrol', this.patrol)
-        .then(() => {
-          if (this.scheduleName) {
-            this.$store.dispatch('database/saveSchedule', this.schedule);
-          }
+        .then((result) => {
+          console.log(result);
         }).catch((err) => {
           console.log(err);
-          this.errorSaveToDB = true;
-          setTimeout(() => {
-            this.errorSaveToDB = false;
-          }, 2000);
+        });
+    },
+    saveSchedule() {
+      this.createSchedule();
+      this.$store.dispatch('database/saveSchedule', this.schedule)
+        .then((result) => {
+          console.log(result);
+        }).catch((err) => {
+          console.log(err);
         });
     },
     sendToRobot() {

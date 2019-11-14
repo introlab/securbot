@@ -449,8 +449,8 @@ export default {
           console.log(err);
         });
     },
-    getPatrol({ getters, commit }, info) {
-      commit('clearWaypointList', '', { root: true });
+    getPatrol({ getters, commit, dispatch }, info) {
+      commit('clearCurrentPatrol', '', { root: true });
       const req = {
         uri: `${getters.uri}/robots/${info.robotId}/patrols/${info.patrolId}`,
         headers: {
@@ -464,7 +464,7 @@ export default {
           for (const waypoint of result.waypoints) {
             wp.push(waypoint.coordinate);
           }
-          commit('fillWaypointList', wp, { root: true });
+          dispatch('configCurrentPatrol', result, { root: true });
         }).catch((err) => {
           console.log(err);
         });
