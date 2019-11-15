@@ -21,8 +21,6 @@ hbba_conf:
             - camera_rgb_image_rect_color: 1
             - camera_rgb_camera_info: 1
         - docker
-        - planner
-    custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 
 - strat:
     name: patrol
@@ -54,6 +52,6 @@ hbba_conf:
 - strat:
     name: reverse
     class: Reverse
-    utility: 1
+    utility: 6
     modules:
         - reverser

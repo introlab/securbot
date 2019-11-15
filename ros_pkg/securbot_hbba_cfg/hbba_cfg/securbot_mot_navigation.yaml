@@ -35,3 +35,4 @@ hbba_conf:
         - force_docking
         - battery_state
         - collision
+        - hbba/intention
