@@ -31,20 +31,42 @@
               class="border rounded m-1 sb-container"
             >
               <div
-                class="sb-container-header"
+                class="sb-container-header d-flex flex-row justify-content-between"
               >
-                <h5 class="m-0">
-                  <b>Patrol</b>
+                <h5
+                  class="mt-auto"
+                  style="max-height: 1.25rem;"
+                >
+                  Patrol
                 </h5>
+                <b-form-select
+                  id="patrol-select-input"
+                  v-model="selectedPatrol"
+                  :options="robotPatrol"
+                  text-field="name"
+                  value-field="info"
+                  size="sm"
+                  class="sb-selector"
+                  @change="loadPatrol"
+                >
+                  <template v-slot:first>
+                    <option
+                      value=""
+                    >
+                      New Patrol...
+                    </option>
+                  </template>
+                </b-form-select>
               </div>
               <div
                 class="p-2"
               >
                 <b-form-input
                   id="patrol-name-input"
-                  v-model="patrolName"
+                  v-model="currentPatrol.obj.name"
                   type="text"
                   placeholder="Enter a name..."
+                  @change="(event) => { $store.commit('setCurrentPatrol', { name: event }) }"
                 />
               </div>
               <div
@@ -52,11 +74,12 @@
               >
                 <b-form-textarea
                   id="patrol-desc-input"
-                  v-model="patrolDesc"
+                  v-model="currentPatrol.obj.description_text"
                   placeholder="Enter a description..."
                   rows="3"
                   max-rows="3"
                   no-resize
+                  @change="(event) => { $store.commit('setCurrentPatrol', { description_text: event }) }"
                 />
               </div>
               <div
@@ -66,6 +89,7 @@
                 <b-button
                   variant="danger"
                   class="mr-2 my-1"
+                  :disabled="!currentPatrol.id"
                   @click="deleteCurrentPatrol"
                 >
                   Delete
@@ -88,6 +112,7 @@
                 <b-button
                   variant="success"
                   class="mr-2 my-1"
+                  :disabled="!isConnected || !currentPatrol.obj.name"
                   @click="savePatrol"
                 >
                   Save
@@ -139,20 +164,42 @@
               class="border rounded m-1 sb-container"
             >
               <div
-                class="sb-container-header"
+                class="sb-container-header d-flex flex-row justify-content-between"
               >
-                <h5 class="m-0">
-                  <b>Schedule</b>
+                <h5
+                  class="mt-auto"
+                  style="max-height: 1.25rem;"
+                >
+                  Schedule
                 </h5>
+                <b-form-select
+                  id="schedule-select-input"
+                  v-model="selectedSchedule"
+                  :options="patrolSchedule"
+                  text-field="name"
+                  value-field="info"
+                  size="sm"
+                  class="sb-selector"
+                  @change="loadSchedule"
+                >
+                  <template v-slot:first>
+                    <option
+                      value=""
+                    >
+                      New Schedule...
+                    </option>
+                  </template>
+                </b-form-select>
               </div>
               <div
                 class="p-2"
               >
                 <b-form-input
                   id="schedule-name-input"
-                  v-model="scheduleName"
+                  v-model="currentSchedule.obj.name"
                   type="text"
                   placeholder="Enter a name..."
+                  @change="(event) => { $store.commit('setCurrentSchedule', { name: event }) }"
                 />
               </div>
               <div
@@ -160,11 +207,12 @@
               >
                 <b-form-textarea
                   id="schedule-desc-input"
-                  v-model="scheduleDesc"
+                  v-model="currentSchedule.obj.description_text"
                   placeholder="Enter a description..."
                   rows="3"
                   max-rows="3"
                   no-resize
+                  @change="(event) => { $store.commit('setCurrentSchedule', { description_text: event }) }"
                 />
               </div>
               <div
@@ -172,9 +220,10 @@
               >
                 <b-form-input
                   id="schedule-repetition-input"
-                  v-model="scheduleRepetition"
+                  v-model="currentSchedule.obj.repetitions"
                   type="number"
                   placeholder="Enter the number of time to repeat..."
+                  @change="(event) => { $store.commit('setCurrentSchedule', { repetitions: event }) }"
                 />
               </div>
               <div
@@ -182,9 +231,10 @@
               >
                 <b-form-input
                   id="schedule-timeout-input"
-                  v-model="scheduleTimeout"
+                  v-model="currentSchedule.obj.timeout_s"
                   type="number"
                   placeholder="Enter the timeout time (sec)..."
+                  @change="(event) => { $store.commit('setCurrentSchedule', { timeout_s: event }) }"
                 />
               </div>
               <div
@@ -195,6 +245,7 @@
                   id="cron-interval-input"
                   v-model="cronInterval"
                   :options="cronOptions"
+                  @change="setCron"
                 >
                   <template v-slot:first>
                     <option
@@ -207,36 +258,39 @@
                 </b-form-select>
               </div>
               <div
-                v-if="!cronInterval[0] && cronInterval.length"
                 id="cron-time-container"
                 class="px-2 pb-2 pt-0"
               >
                 <b-form-input
                   id="cron-time-input"
-                  v-model="cronTime"
+                  v-model="cronSchedule.time"
+                  :disabled="cron[0] === '*' && cron[1] === '*' || !cronInterval.length"
                   type="time"
+                  @change="setCron"
                 />
               </div>
               <div
-                v-if="!cronInterval[2] && cronInterval.length"
                 id="cron-date-container"
                 class="px-2 pb-2 pt-0"
               >
                 <b-form-input
                   id="cron-time-input"
-                  v-model="cronTime"
+                  v-model="cronSchedule.date"
+                  :disabled="cron[2] === '*' && cron[3] === '*' || !cronInterval.length"
                   type="date"
+                  @change="setCron"
                 />
               </div>
               <div
-                v-if="!cronInterval[0] && cronInterval.length && !cronInterval[4]"
                 id="cron-weekday-container"
                 class="px-2 pb-2 pt-0"
               >
                 <b-form-select
                   id="cron-time-input"
-                  v-model="cronWeekDay"
+                  v-model="cronSchedule.weekday"
+                  :disabled="cron[4] === '*' || !cronInterval.length"
                   :options="weekDayOptions"
+                  @change="setCron"
                 />
               </div>
               <div
@@ -246,6 +300,7 @@
                 <b-button
                   variant="danger"
                   class="mr-2 my-1"
+                  :disabled="!currentSchedule.id"
                   @click="deleteCurrentSchedule"
                 >
                   Delete
@@ -268,6 +323,7 @@
                 <b-button
                   variant="success"
                   class="mr-2 my-1"
+                  :disabled="!isConnected || !currentPatrol.id || !currentSchedule.obj.name || !isCronValid"
                   @click="saveSchedule"
                 >
                   Save
@@ -287,7 +343,7 @@
           <video-box
             :show="true"
             :zoom="mapZoom"
-            :video-id="patrolId"
+            :video-id="patrolHTMLId"
           />
           <waypoint-overlay
             :is-active="true"
@@ -297,7 +353,7 @@
             :map-size="mapSize"
             :list="waypointList"
             :nb-of-waypoint="-1"
-            :video-element="patrolElement"
+            :video-element="patrolHTMLElement"
           />
         </div>
         <div
@@ -377,20 +433,13 @@ export default {
   data() {
     return {
       errorSaveToDB: false,
-      patrol: {},
-      schedule: {},
-      patrolName: '',
-      patrolDesc: '',
-      scheduleName: '',
-      scheduleDesc: '',
-      scheduleTimeout: '',
-      scheduleRepetition: '',
-      selectedWaypointIndex: '',
       waypointTimeouts: [],
+      cron: ['', '', '', '', ''],
       cronTime: '',
       cronDate: '',
       cronWeekDay: '',
       cronInterval: '',
+      isCronValid: '',
       cronOptions: [
         {
           text: 'Once',
@@ -466,7 +515,7 @@ export default {
       for (let i = 0; i < wpList.length; i++) {
         wp4db[i] = {
           coordinate: wpList[i],
-          hold_time_s: (this.waypointTimeouts[i] ? this.waypointTimeouts[i] : 0),
+          hold_time_s: 0,
         };
       }
       return wp4db;
@@ -477,16 +526,79 @@ export default {
       mapSize: state => state.mapSize,
       waypointList: state => state.waypoints.list,
       patrolList: state => state.patrol.list,
-      headers: state => state.waypoints.headers,
-      patrolId: state => state.htmlElement.patrolId,
-      patrolElement: state => state.htmlElement.patrol,
+      scheduleList: state => state.schedule.list,
+      currentPatrol: state => state.patrol.current,
+      currentSchedule: state => state.schedule.current,
+      patrolHTMLId: state => state.htmlElement.patrolId,
+      patrolHTMLElement: state => state.htmlElement.patrol,
       isConnected: state => state.client.connectionState.robot === 'connected',
     }),
+    robotPatrol() {
+      const rp = [];
+      this.patrolList.forEach((p) => {
+        if (p.info.robotId === this.currentRobot.id.db) {
+          rp.push(p);
+        }
+      });
+      return rp;
+    },
+    patrolSchedule() {
+      const sc = [];
+      this.scheduleList.forEach((s) => {
+        if (s.info.patrolId === this.currentPatrol.id) {
+          sc.push(s);
+        }
+      });
+      return sc;
+    },
+    selectedPatrol() {
+      if (this.currentPatrol.id) {
+        return {
+          patrolId: this.currentPatrol.id,
+          robotId: this.currentPatrol.obj.robot,
+        };
+      } 
+      return '';
+    },
+    selectedSchedule() {
+      if (this.currentSchedule.id) {
+        return {
+          scheduleId: this.currentSchedule.id,
+          patrolId: this.currentSchedule.obj.patrol,
+          robotId: this.currentSchedule.obj.robot,
+        };
+      }
+      return '';
+    },
+    weekDayValue() {
+      const v = [];
+      for (const day of this.weekDayOptions) {
+        v.push(day.value);
+      }
+      return v;
+    },
+    cronSchedule() {
+      const c = this.currentSchedule.obj.cron.split(' ');
+      return {
+        time: `${(c[1] ? c[1] : '')}:${(c[0] ? c[0] : '')}`,
+        date: `${(c[2] ? c[2] : '')}/${(c[3] ? c[3] : '')}/${new Date().getFullYear()}`,
+        weekday: (c[4] ? c[4] : ''),
+      };
+    },
   },
   mounted() {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    validateCron() {
+      for (const unit of this.cron) {
+        if (!unit) {
+          this.isCronValid = false;
+          return;
+        }
+      }
+      this.isCronValid = true;
+    },
     increaseZoom() {
       this.$store.commit('increaseMapZoom');
     },
@@ -494,18 +606,12 @@ export default {
       this.$store.commit('decreaseMapZoom');
     },
     clearPatrolData() {
-      this.patrolName = '';
-      this.patrolDesc = '';
       this.$store.commit('clearCurrentPatrol');
+      this.$store.commit('clearWaypointList');
     },
-    clearScheduleDAta() {
-      this.scheduleName = '';
-      this.scheduleDesc = '';
-      this.scheduleTimeout = '';
-      this.cronTime = '';
-      this.cronDate = '';
-      this.cronWeekDay = '';
-      this.cronInterval = '';
+    clearScheduleData() {
+      this.cron = ['', '', '', '', ''];
+      this.cronInterval = [];
       this.$store.commit('clearCurrentSchedule');
     },
     deleteCurrentPatrol() {
@@ -514,50 +620,96 @@ export default {
     deleteCurrentSchedule() {
 
     },
-    createSchedule() {
-      const cron = '';
-      this.schedule = {
-        robot: this.currentRobot.id.db,
-        name: this.scheduleName,
-        description_text: this.scheduleDesc,
-        last_modified: new Date().toISOString(),
-        patrol: '',
-        cron,
-        timeout_s: this.scheduleTimeout,
-        repetitions: this.scheduleRepetition,
-        enabled: true,
-      };
-    },
-    createPatrol() {
-      this.patrol = {
-        robot: this.currentRobot.id.db,
-        name: this.patrolName,
-        description_text: this.patrolDesc,
-        last_modified: new Date().toISOString(),
-        waypoints: this.waypointForDB,
-      };
+    setCron(event) {
+      console.log(event);
+      if (Array.isArray(event)) {
+        this.cron = event;
+      } else if (event.includes(':')) {
+        const time = event.split(':');
+        if (this.cron[0] !== '*') {
+          this.cron[0] = time[1];
+        }
+        if (this.cron[1] !== '*') {
+          this.cron[1] = time[0];
+        }
+      } else if (event.includes('/')) {
+        const date = event.split('/');
+        if (this.cron[2] !== '*') {
+          this.cron[2] = date[0];
+        }
+        if (this.cron[3] !== '*') {
+          this.cron[3] = date[1];
+        }
+      } else if (this.weekDayValue.includes(event)) {
+        if (this.cron[4] !== '*') {
+          this.cron[4] = event;
+        }
+      } else {
+        console.log('There is an error with the cron option...');
+      }
+
+      this.validateCron();
+
+      if (this.isCronValid) {
+        this.$store.commit('setCurrentSchedule', { cron: this.cron.join(' ') });
+      }
     },
     savePatrol() {
-      this.createPatrol();
-      this.$store.dispatch('database/savePatrol', this.patrol)
-        .then((result) => {
-          console.log(result);
+      if (!this.currentPatrol.obj.robot) {
+        this.$store.commit('setCurrentPatrol', { robot: this.currentRobot.id.db });
+      }
+      this.$store.commit('setCurrentPatrol', { last_modified: new Date().toISOString() });
+      this.$store.commit('setCurrentPatrol', { waypoints: this.waypointForDB });
+      this.$store.dispatch('database/savePatrol', this.currentPatrol)
+        .then(() => {
+          this.$store.dispatch('database/queryPatrols')
+            .catch((err) => {
+              console.log(err);
+            });
         }).catch((err) => {
           console.log(err);
         });
     },
+    loadPatrol(event) {
+      this.clearScheduleData();
+      if (event) {
+        this.$store.dispatch('database/getPatrol', event);
+      } else {
+        this.$store.commit('clearWaypointList');
+        this.$store.commit('setCurrentPatrolId', '');
+        this.$store.commit('clearCurrentPatrol');
+      }
+    },
     saveSchedule() {
-      this.createSchedule();
-      this.$store.dispatch('database/saveSchedule', this.schedule)
-        .then((result) => {
-          console.log(result);
+      if (!this.currentSchedule.obj.robot) {
+        this.$store.commit('setCurrentSchedule', { robot: this.currentRobot.id.db });
+      }
+      if (!this.currentSchedule.obj.patrol) {
+        this.$store.commit('setCurrentSchedule', { patrol: this.currentPatrol.id });
+      }
+      this.$store.commit('setCurrentSchedule', { last_modified: new Date().toISOString() });
+      this.$store.commit('setCurrentSchedule', { enabled: true });
+      this.$store.dispatch('database/saveSchedule', this.currentSchedule)
+        .then(() => {
+          this.$store.dispatch('database/querySchedules')
+            .catch((err) => {
+              console.log(err);
+            });
         }).catch((err) => {
           console.log(err);
         });
+    },
+    loadSchedule(event) {
+      if (event) {
+        this.$store.dispatch('database/getSchedule', event);
+      } else {
+        this.$store.commit('setCurrentScheduleId', '');
+        this.$store.commit('clearCurrentSchedule');
+      }
     },
     sendToRobot() {
       this.createPlan();
-      this.$store.dispatch('sendPatrol', this.patrol);
+      this.$store.dispatch('sendPatrol', { patrol: this.waypointList });
     },
   },
 };
@@ -569,6 +721,14 @@ export default {
   color: white;
   padding: 0.5rem;
   border-radius: 0.25rem 0.25rem 0 0;
+}
+.sb-container-header-title {
+  font: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.sb-selector {
+  max-width: 150px;
 }
 .overlay-button {
   background-color: #b5b5b5;

@@ -43,6 +43,7 @@ export default {
       obj: {
         name: '',
         robot: '',
+        description_text: '',
         last_modified: '',
         waypoints: [],
       },
@@ -55,6 +56,7 @@ export default {
       obj: {
         name: '',
         robot: '',
+        description_text: '',
         patrol: '',
         last_modified: '',
         cron: '',

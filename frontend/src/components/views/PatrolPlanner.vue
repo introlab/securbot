@@ -46,12 +46,21 @@
                   >
                     <b-form-select
                       id="patrol-select-input"
+                      v-model="selectedPatrol"
                       :options="robotPatrol"
                       text-field="name"
                       value-field="info"
                       class="ml-2"
                       @change="loadPatrol"
-                    />
+                    >
+                      <template v-slot:first>
+                        <option
+                          value=""
+                        >
+                          New Patrol...
+                        </option>
+                      </template>
+                    </b-form-select>
                   </b-col>
                 </b-row>
               </b-container>
@@ -95,7 +104,7 @@
           <video-box
             :show="true"
             :zoom="mapZoom"
-            :video-id="patrolId"
+            :video-id="patrolHTMLId"
           />
           <waypoint-overlay
             :is-active="true"
@@ -105,7 +114,7 @@
             :map-size="mapSize"
             :list="waypointList"
             :nb-of-waypoint="-1"
-            :video-element="patrolElement"
+            :video-element="patrolHTMLElement"
             @newWaypoint="addWaypointToList"
           />
         </div>
@@ -185,8 +194,9 @@ export default {
       waypointList: state => state.waypoints.list,
       patrolList: state => state.patrol.list,
       headers: state => state.waypoints.headers,
-      patrolId: state => state.htmlElement.patrolId,
-      patrolElement: state => state.htmlElement.patrol,
+      currentPatrol: state => state.patrol.current,
+      patrolHTMLId: state => state.htmlElement.patrolId,
+      patrolHTMLElement: state => state.htmlElement.patrol,
       isConnected: state => state.client.connectionState.robot === 'connected',
     }),
     robotPatrol() {
@@ -197,6 +207,12 @@ export default {
         }
       });
       return rp;
+    },
+    selectedPatrol() {
+      return {
+        patrolId: this.currentPatrol.id,
+        robotId: this.currentPatrol.obj.robot,
+      };
     },
   },
   mounted() {
@@ -237,7 +253,13 @@ export default {
       this.$store.commit('clearWaypointList');
     },
     loadPatrol(event) {
-      this.$store.dispatch('database/getPatrol', event);
+      if (event) {
+        this.$store.dispatch('database/getPatrol', event);
+      } else {
+        this.clearWaypointList();
+        this.$store.commit('setCurrentPatrolId', '');
+        this.$store.commit('clearCurrentPatrol');
+      }
     },
   },
 };

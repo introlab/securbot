@@ -31,6 +31,7 @@ module.exports = {
     'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
     'vue/name-property-casing': ["error", "kebab-case"],
     'no-restricted-syntax':'off', // To disallow some javascript syntax, like some for of the for operator
+    "prefer-destructuring": [ "error", { "array": false, "object": true }, { "enforceForRenamedProperties": false }],
   },
   parserOptions: {
     parser: 'babel-eslint',

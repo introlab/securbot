@@ -85,7 +85,7 @@ export default {
     const pKeys = Object.keys(state.patrol.current.obj);
     for (const key of keys) {
       if (pKeys.includes(key)) {
-        Object.assign(state.patrol.current.obj[`${key}`], obj[`${key}`]);
+        state.patrol.current.obj[key] = obj[key];
       }
     }
   },
@@ -93,6 +93,7 @@ export default {
     state.patrol.current.obj = {
       name: '',
       robot: '',
+      description_text: '',
       last_modified: '',
       waypoints: [],
     };
@@ -117,7 +118,7 @@ export default {
     const sKeys = Object.keys(state.schedule.current.obj);
     for (const key of keys) {
       if (sKeys.includes(key)) {
-        Object.assign(state.schedule.current.obj[`${key}`], obj[`${key}`]);
+        state.schedule.current.obj[key] = obj[key];
       }
     }
   },
@@ -125,6 +126,7 @@ export default {
     state.schedule.current.obj = {
       name: '',
       robot: '',
+      description_text: '',
       patrol: '',
       last_modified: '',
       cron: '',

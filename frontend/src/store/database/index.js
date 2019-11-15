@@ -279,7 +279,6 @@ export default {
           resolve();
         }
         const currentRobot = options.robots[options.index];
-        console.log(currentRobot);
         _options.index += 1;
         const req = {
           uri: `${getters.uri}/robots/${currentRobot.id}/patrols`,
@@ -348,8 +347,16 @@ export default {
         // Request
         request(req)
           .then((result) => {
-            result.forEach((event) => {
-              commit('addSchedule', event, { root: true });
+            result.forEach((schedule) => {
+              const s = {
+                name: schedule.name,
+                info: {
+                  robotId: currentRobot.id,
+                  patrolId: schedule.patrol,
+                  scheduleId: schedule._id,
+                },
+              };
+              commit('addSchedule', s, { root: true });
             });
             return dispatch('_querySchedule', _options)
               .then(() => {
@@ -415,32 +422,35 @@ export default {
           });
       });
     },
-    savePatrol({ getters }, patrol) {
+    savePatrol({ getters, commit }, patrol) {
       const req = {
-        uri: `${getters.uri}/robots/${patrol.robot}/patrols`,
-        method: 'POST',
+        uri: `${getters.uri}/robots/${patrol.obj.robot}/patrols${patrol.id ? `/${patrol.id}` : ''}`,
+        method: (patrol.id ? 'PUT' : 'POST'),
         headers: {
           'User-Agent': 'Request-Promise',
         },
         json: true,
-        body: patrol,
+        body: patrol.obj,
       };
-      request(req)
-        .then((result) => {
-          console.log(result);
-        }).catch((err) => {
-          console.log(err);
-        });
+      return new Promise((resolve, reject) => {
+        request(req)
+          .then((result) => {
+            commit('setCurrentPatrolId', result._id, { root: true });
+            resolve();
+          }).catch((err) => {
+            reject(err);
+          });
+      });
     },
     saveSchedule({ getters }, schedule) {
       const req = {
-        uri: `${getters.uri}/robots/${schedule.robot}/schedule`,
+        uri: `${getters.uri}/robots/${schedule.obj.robot}/schedules`,
         method: 'POST',
         headers: {
           'User-Agent': 'Request-Promise',
         },
         json: true,
-        body: schedule,
+        body: schedule.obj,
       };
       request(req)
         .then((result) => {
@@ -449,7 +459,7 @@ export default {
           console.log(err);
         });
     },
-    getPatrol({ getters, commit, dispatch }, info) {
+    getPatrol({ getters, commit }, info) {
       commit('clearCurrentPatrol', '', { root: true });
       const req = {
         uri: `${getters.uri}/robots/${info.robotId}/patrols/${info.patrolId}`,
@@ -464,7 +474,26 @@ export default {
           for (const waypoint of result.waypoints) {
             wp.push(waypoint.coordinate);
           }
-          dispatch('configCurrentPatrol', result, { root: true });
+          commit('fillWaypointList', wp, { root: true });
+          commit('setCurrentPatrolId', result._id, { root: true });
+          commit('setCurrentPatrol', result, { root: true });
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
+    getSchedule({ getters, commit }, info) {
+      commit('clearCurrentSchedule', '', { root: true });
+      const req = {
+        uri: `${getters.uri}/robots/${info.robotId}/schedules/${info.scheduleId}`,
+        headers: {
+          'User-Agent': 'Request-Promise',
+        },
+        json: true,
+      };
+      request(req)
+        .then((result) => {
+          commit('setCurrentScheduleId', result._id, { root: true });
+          commit('setCurrentSchedule', result, { root: true });
         }).catch((err) => {
           console.log(err);
         });
