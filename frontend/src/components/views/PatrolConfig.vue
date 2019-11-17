@@ -79,7 +79,8 @@
                   rows="3"
                   max-rows="3"
                   no-resize
-                  @change="(event) => { $store.commit('setCurrentPatrol', { description_text: event }) }"
+                  @change="(event) =>
+                  { $store.commit('setCurrentPatrol', { description_text: event }) }"
                 />
               </div>
               <div
@@ -212,7 +213,8 @@
                   rows="3"
                   max-rows="3"
                   no-resize
-                  @change="(event) => { $store.commit('setCurrentSchedule', { description_text: event }) }"
+                  @change="(event) =>
+                  { $store.commit('setCurrentSchedule', { description_text: event }) }"
                 />
               </div>
               <div
@@ -223,7 +225,8 @@
                   v-model="currentSchedule.obj.repetitions"
                   type="number"
                   placeholder="Enter the number of time to repeat..."
-                  @change="(event) => { $store.commit('setCurrentSchedule', { repetitions: event }) }"
+                  @change="(event) =>
+                  { $store.commit('setCurrentSchedule', { repetitions: event }) }"
                 />
               </div>
               <div
@@ -261,45 +264,111 @@
                 id="cron-time-container"
                 class="px-2 pb-2 pt-0"
               >
-                <b-form-input
-                  id="cron-time-input"
-                  v-model="cronSchedule.time"
-                  :disabled="cron[0] === '*' && cron[1] === '*' || !cronInterval.length"
-                  type="time"
-                  @change="setCron"
-                />
+                <b-form-group
+                  label-cols-md="4"
+                  label="Enter Time:"
+                  class="m-0 pl-2"
+                >
+                  <div
+                    class="d-flex justify-content-end"
+                  >
+                    <b-form-input
+                      id="cron-time-hour-input"
+                      v-model="cronSchedule[0]"
+                      type="number"
+                      placeholder="HH"
+                      min="0"
+                      max="23"
+                      style="max-width: 4.5rem"
+                      :disabled="cron[1] === '*' || !cronInterval.length"
+                      @change="(value) => { setCron({ hour: value }) }"
+                    />
+                    <span
+                      class="text-center align-middle font-weight-bolder pt-1"
+                      style="width: 0.5rem"
+                    > : </span>
+                    <b-form-input
+                      id="cron-time-minute-input"
+                      v-model="cronSchedule[1]"
+                      type="number"
+                      placeholder="mm"
+                      min="0"
+                      max="59"
+                      style="max-width: 4.5rem"
+                      :disabled="cron[0] === '*' || !cronInterval.length"
+                      @change="(value) => { setCron({ min: value }) }"
+                    />
+                  </div>
+                </b-form-group>
               </div>
               <div
                 id="cron-date-container"
                 class="px-2 pb-2 pt-0"
               >
-                <b-form-input
-                  id="cron-time-input"
-                  v-model="cronSchedule.date"
-                  :disabled="cron[2] === '*' && cron[3] === '*' || !cronInterval.length"
-                  type="date"
-                  @change="setCron"
-                />
+                <b-form-group
+                  label-cols-md="5"
+                  label="Select Day of Month:"
+                  class="m-0 pl-2"
+                >
+                  <div
+                    class="d-flex justify-content-end"
+                  >
+                    <b-form-select
+                      id="cron-time-date-input"
+                      v-model="cronSchedule[2]"
+                      :options="monthDays"
+                      style="max-width: 9.5rem"
+                      :disabled="cron[2] === '*' || !cronInterval.length"
+                      @change="(value) => { setCron({ date: value }) }"
+                    />
+                  </div>
+                </b-form-group>
+              </div>
+              <div
+                id="cron-month-container"
+                class="px-2 pb-2 pt-0"
+              >
+                <b-form-group
+                  label-cols-md="4"
+                  label="Select Month:"
+                  class="m-0 pl-2"
+                >
+                  <div
+                    class="d-flex justify-content-end"
+                  >
+                    <b-form-select
+                      id="cron-time-month-input"
+                      v-model="cronSchedule[3]"
+                      :options="monthList"
+                      style="max-width: 9.5rem"
+                      :disabled="cron[3] === '*' || !cronInterval.length"
+                      @change="(value) => { setCron({ month: value }) }"
+                    />
+                  </div>
+                </b-form-group>
               </div>
               <div
                 id="cron-weekday-container"
                 class="px-2 pb-2 pt-0"
               >
-                <b-form-select
-                  id="cron-time-input"
-                  v-model="cronSchedule.weekday"
-                  :disabled="cron[4] === '*' || !cronInterval.length"
-                  :options="weekDayOptions"
-                  @change="setCron"
+                <b-form-group
+                  label-cols-md="5"
+                  label="Select Day of Week:"
+                  class="m-0 pl-2"
                 >
-                  <template v-slot:first>
-                    <option
-                      value=""
-                    >
-                      Select Day
-                    </option>
-                  </template>
-                </b-form-select>
+                  <div
+                    class="d-flex justify-content-end"
+                  >
+                    <b-form-select
+                      id="cron-day-input"
+                      v-model="cronSchedule[4]"
+                      style="max-width: 9.5rem"
+                      :disabled="cron[4] === '*' || !cronInterval.length"
+                      :options="weekDayOptions"
+                      @change="(value) => { setCron({ day: value }) }"
+                    />
+                  </div>
+                </b-form-group>
               </div>
               <div
                 id="schedule-button-container"
@@ -331,7 +400,8 @@
                 <b-button
                   variant="success"
                   class="mr-2 my-1"
-                  :disabled="!isConnected || !currentPatrol.id || !currentSchedule.obj.name || !isCronValid"
+                  :disabled="!isConnected || !currentPatrol.id
+                    || !currentSchedule.obj.name || !isCronValid"
                   @click="saveSchedule"
                 >
                   Save
@@ -443,9 +513,6 @@ export default {
       errorSaveToDB: false,
       waypointTimeouts: [],
       cron: ['', '', '', '', ''],
-      cronTime: '',
-      cronDate: '',
-      cronWeekDay: '',
       cronInterval: '',
       isCronValid: '',
       cronOptions: [
@@ -476,32 +543,82 @@ export default {
       ],
       weekDayOptions: [
         {
-          text: 'SUNDAY',
+          text: 'Sunday',
           value: 'SUN',
         },
         {
-          text: 'MONDAY',
+          text: 'Monday',
           value: 'MON',
         },
         {
-          text: 'TUESDAY',
+          text: 'Tuesday',
           value: 'TUE',
         },
         {
-          text: 'WEDNESDAY',
+          text: 'Wednesday',
           value: 'WED',
         },
         {
-          text: 'THURSDAY',
+          text: 'Thursday',
           value: 'THU',
         },
         {
-          text: 'FRIDAY',
+          text: 'Friday',
           value: 'FRI',
         },
         {
-          text: 'SATURDAY',
+          text: 'Saturday',
           value: 'SAT',
+        },
+      ],
+      monthList: [
+        {
+          text: 'January',
+          value: 1,
+        },
+        {
+          text: 'February',
+          value: 2,
+        },
+        {
+          text: 'March',
+          value: 3,
+        },
+        {
+          text: 'April',
+          value: 4,
+        },
+        {
+          text: 'May',
+          value: 5,
+        },
+        {
+          text: 'June',
+          value: 6,
+        },
+        {
+          text: 'July',
+          value: 7,
+        },
+        {
+          text: 'August',
+          value: 8,
+        },
+        {
+          text: 'September',
+          value: 9,
+        },
+        {
+          text: 'October',
+          value: 10,
+        },
+        {
+          text: 'November',
+          value: 11,
+        },
+        {
+          text: 'December',
+          value: 12,
         },
       ],
     };
@@ -587,11 +704,23 @@ export default {
     },
     cronSchedule() {
       const c = this.currentSchedule.obj.cron.split(' ');
-      return {
-        time: `${(c[1] ? c[1] : '')}:${(c[0] ? c[0] : '')}`,
-        date: `${(c[2] ? c[2] : '')}/${(c[3] ? c[3] : '')}/${new Date().getFullYear()}`,
-        weekday: (c[4] ? c[4] : ''),
-      };
+      return [
+        (c[0] === '*' ? '' : c[0]),
+        (c[1] === '*' ? '' : c[1]),
+        (c[2] === '*' ? '' : c[2]),
+        (c[3] === '*' ? '' : c[3]),
+        (c[4] === '*' ? '' : c[4]),
+      ];
+    },
+    monthDays() {
+      const l = [];
+      for (let i = 1; i <= 31; i++) {
+        l[i] = {
+          text: i.toString(),
+          value: i,
+        };
+      }
+      return l;
     },
   },
   mounted() {
@@ -632,30 +761,30 @@ export default {
       console.log(event);
       if (Array.isArray(event)) {
         this.cron = event;
-      } else if (event.includes(':')) {
-        const time = event.split(':');
-        if (this.cron[0] !== '*') {
-          this.cron[0] = time[1];
-        }
-        if (this.cron[1] !== '*') {
-          this.cron[1] = time[0];
-        }
-      } else if (event.includes('/')) {
-        const date = event.split('/');
-        if (this.cron[2] !== '*') {
-          this.cron[2] = date[0];
-        }
-        if (this.cron[3] !== '*') {
-          this.cron[3] = date[1];
-        }
-      } else if (this.weekDayValue.includes(event)) {
-        if (this.cron[4] !== '*') {
-          this.cron[4] = event;
-        }
       } else {
-        console.log('There is an error with the cron option...');
+        const keys = Object.keys(event);
+        if (keys.length === 1) {
+          switch (keys[0]) {
+            case 'min':
+              this.cron[0] = event[keys[0]];
+              break;
+            case 'hour':
+              this.cron[1] = event[keys[0]];
+              break;
+            case 'date':
+              this.cron[2] = event[keys[0]];
+              break;
+            case 'month':
+              this.cron[3] = event[keys[0]];
+              break;
+            case 'day':
+              this.cron[4] = event[keys[0]];
+              break;
+            default:
+              break;
+          }
+        }
       }
-
       this.validateCron();
 
       if (this.isCronValid) {
@@ -715,9 +844,10 @@ export default {
         this.$store.commit('clearCurrentSchedule');
       }
     },
-    sendToRobot() {
-      this.createPlan();
+    sendPatrolToRobot() {
       this.$store.dispatch('sendPatrol', { patrol: this.waypointList });
+    },
+    sendScheduleToRobot() {
     },
   },
 };
