@@ -29,68 +29,68 @@
             <div
               style="width: 100%; heigth: 60px"
             >
-              <b-container fluid>
-                <b-row>
-                  <b-col
-                    sm="6"
-                  >
-                    <label
-                      for="patrol-select-input"
-                      class="mt-2"
-                    >
-                      Load a patrol:
-                    </label>
-                  </b-col>
-                  <b-col
-                    sm="6"
-                  >
-                    <b-form-select
-                      id="patrol-select-input"
-                      v-model="selectedPatrol"
-                      :options="robotPatrol"
-                      text-field="name"
-                      value-field="info"
-                      class="ml-2"
-                      @change="loadPatrol"
-                    >
-                      <template v-slot:first>
-                        <option
-                          value=""
-                        >
-                          New Patrol...
-                        </option>
-                      </template>
-                    </b-form-select>
-                  </b-col>
-                </b-row>
-              </b-container>
-            </div>
-            <b-table
-              borderless
-              striped
-              hover
-              sticky-header="calc( 100% - 60px )"
-              table-class="m-0"
-              thead-class="text-center"
-              tbody-class="text-center"
-              fixed
-              :fields="headers"
-              :items="waypointList"
-            >
-              <template v-slot:cell(index)="data">
-                {{ data.index + 1 }}
-              </template>
-              <template v-slot:cell(remove)="data">
-                <button
-                  :id="'removeBtn'+data.index"
-                  type="button"
-                  class="btn btn-danger p-0 m-0 border border-secondary h-100 w-75"
-                  @click="removeRow(data.index)"
+              <div
+                class="border rounded m-1 sb-container"
+              >
+                <div
+                  class="sb-container-header d-flex flex-row justify-content-between"
                 >
-                  <font-awesome-icon icon="trash" />
-                </button>
-              </template>
-            </b-table>
+                  <h5
+                    class="mt-auto"
+                    style="max-height: 1.25rem;"
+                  >
+                    Waypoints
+                  </h5>
+                  <b-form-select
+                    id="patrol-select-input"
+                    v-model="selectedPatrol"
+                    :options="robotPatrol"
+                    text-field="name"
+                    value-field="info"
+                    size="sm"
+                    class="sb-selector"
+                    @change="loadPatrol"
+                  >
+                    <template v-slot:first>
+                      <option
+                        value=""
+                      >
+                        New Patrol...
+                      </option>
+                    </template>
+                  </b-form-select>
+                </div>
+                <div
+                  class="p-2"
+                >
+                  <b-table
+                    borderless
+                    no-border-collapse
+                    sticky-header="calc( 100% - 60px )"
+                    :table-class="['m-0', 'table-rounded']"
+                    thead-class="text-center"
+                    tbody-class="text-center"
+                    fixed
+                    :fields="headers"
+                    :items="waypointList"
+                  >
+                    <template v-slot:cell(index)="data">
+                      {{ data.index + 1 }}
+                    </template>
+                    <template v-slot:cell(remove)="data">
+                      <button
+                        :id="'removeBtn'+data.index"
+                        type="button"
+                        class="btn btn-danger p-0 m-0 border border-secondary h-100 w-75"
+                        @click="removeRow(data.index)"
+                      >
+                        <font-awesome-icon icon="trash" />
+                      </button>
+                    </template>
+                  </b-table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </b-col>
@@ -209,10 +209,13 @@ export default {
       return rp;
     },
     selectedPatrol() {
-      return {
-        patrolId: this.currentPatrol.id,
-        robotId: this.currentPatrol.obj.robot,
-      };
+      if (this.currentPatrol.id) {
+        return {
+          patrolId: this.currentPatrol.id,
+          robotId: this.currentPatrol.obj.robot,
+        };
+      }
+      return '';
     },
   },
   mounted() {
@@ -252,11 +255,15 @@ export default {
     clearWaypointList() {
       this.$store.commit('clearWaypointList');
     },
+    clearScheduleData() {
+      this.$store.commit('clearCurrentSchedule');
+    },
     loadPatrol(event) {
+      this.clearScheduleData();
       if (event) {
         this.$store.dispatch('database/getPatrol', event);
       } else {
-        this.clearWaypointList();
+        this.$store.commit('clearWaypointList');
         this.$store.commit('setCurrentPatrolId', '');
         this.$store.commit('clearCurrentPatrol');
       }
@@ -269,6 +276,32 @@ export default {
 .table-b-table-default {
   background-color: #00A759 !important;
   color: white !important;
+}
+.table-rounded {
+  border: solid 1px #00A759;
+  border-radius: 0.25rem;
+  border-collapse: separate;
+}
+.table-rounded th {
+  border-color: white;
+  border-top: none;
+}
+.table-rounded tr:last-child > td {
+  border-bottom: none;
+}
+.sb-container-header {
+  background-color: #00A759;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+.sb-container-header-title {
+  font: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.sb-selector {
+  max-width: 150px;
 }
 .overlay-button {
   background-color: #b5b5b5;

@@ -291,7 +291,15 @@
                   :disabled="cron[4] === '*' || !cronInterval.length"
                   :options="weekDayOptions"
                   @change="setCron"
-                />
+                >
+                  <template v-slot:first>
+                    <option
+                      value=""
+                    >
+                      Select Day
+                    </option>
+                  </template>
+                </b-form-select>
               </div>
               <div
                 id="schedule-button-container"
@@ -557,7 +565,7 @@ export default {
           patrolId: this.currentPatrol.id,
           robotId: this.currentPatrol.obj.robot,
         };
-      } 
+      }
       return '';
     },
     selectedSchedule() {
