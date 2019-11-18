@@ -84,7 +84,7 @@
             :class="{ 'overlay-button-active': keyboardCtrl.enabled }"
             :pressed.sync="keyboardCtrl.enabled"
             :disabled="!isDataChannelAvailable || gotoOverlayEnabled || joystickOverlayEnabled"
-            @click="changeJoystickState"
+            @click="sendKeyboardControl"
           >
             <font-awesome-icon icon="keyboard" />
           </b-button>
@@ -96,6 +96,27 @@
             {{ (joystickOverlayEnabled
               ? 'Deactivate Keyboard Control'
               : 'Activate Keyboard Control') }}
+          </b-tooltip>
+          <!-- Dock -->
+          <b-button
+            id="dock-request-button"
+            squared
+            class="overlay-button"
+            :class="{ 'overlay-button-active': dockingEnabled }"
+            :active="dockingEnabled"
+            :disabled="!isDataChannelAvailable"
+            @click="configDockingProcess"
+          >
+            <font-awesome-icon icon="plug" />
+          </b-button>
+          <b-tooltip
+            target="dock-request-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (dockingEnabled
+              ? 'Stop Docking Process'
+              : 'Start Docking Process') }}
           </b-tooltip>
         </div>
         <div
@@ -314,6 +335,7 @@ export default {
       joystickEnabled: state => state.joystickEnabled,
       isConnected: state => state.client.connectionState.robot === 'connected',
       isDataChannelAvailable: state => state.client.isDataChannelAvailable,
+      dockingEnabled: state => !!state.dockingInterval,
     }),
   },
   mounted() {
@@ -332,6 +354,8 @@ export default {
     this.keyboardCtrlInterval = setInterval(this.sendKeyboardControl, this.keyboardCtrlSendTime);
   },
   destroyed() {
+    this.$store.commit('disableJoystick');
+    this.$store.dispatch('stopTeleop');
     clearInterval(this.keyboardCtrlInterval);
     document.removeEventListener('keydown', this.onKeydown);
     document.removeEventListener('keyup', this.onKeyup);
@@ -418,6 +442,14 @@ export default {
         }
       }
     },
+    configDockingProcess() {
+      console.log('Docking Process...');
+      if (this.dockingEnabled) {
+        this.$store.dispatch('stopDockingProcess');
+      } else {
+        this.$store.dispatch('startDockingProcess');
+      }
+    },
     increaseZoom() {
       this.updateMainElement();
       this.$store.commit('increaseMapZoom');
@@ -464,6 +496,11 @@ export default {
         this.$store.commit('enableJoystick');
       } else {
         this.$store.commit('disableJoystick');
+        this.$store.dispatch('stopTeleop');
+      }
+    },
+    sendKeyboardLastCommand() {
+      if (!this.keyboardCtrl.enabled) {
         this.$store.dispatch('stopTeleop');
       }
     },

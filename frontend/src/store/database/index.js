@@ -313,7 +313,7 @@ export default {
     },
     querySchedules({ state, commit, dispatch }) {
       console.log('Querying Schedules');
-      commit('clearSchedules', { root: true });
+      commit('clearSchedules', '', { root: true });
       const { robots } = state;
       const options = {
         robots,
@@ -445,7 +445,7 @@ export default {
     saveSchedule({ getters }, schedule) {
       const req = {
         uri: `${getters.uri}/robots/${schedule.obj.robot}/schedules`,
-        method: 'POST',
+        method: (schedule.id ? 'PUT' : 'POST'),
         headers: {
           'User-Agent': 'Request-Promise',
         },
