@@ -274,7 +274,7 @@
                   >
                     <b-form-input
                       id="cron-time-hour-input"
-                      v-model="cronSchedule[0]"
+                      v-model="cronSchedule[1]"
                       type="number"
                       placeholder="HH"
                       min="0"
@@ -289,7 +289,7 @@
                     > : </span>
                     <b-form-input
                       id="cron-time-minute-input"
-                      v-model="cronSchedule[1]"
+                      v-model="cronSchedule[0]"
                       type="number"
                       placeholder="mm"
                       min="0"
