@@ -48,9 +48,9 @@ export default {
     commit('clearRobotList');
     if (Object.keys(occupants).length) {
       for (const occupant in occupants) {
-        if ('type' in occupants[occupant].apiField && occupants[occupant].apiField.type.fieldValue.match(/[rR]obot/g)) {
+        if ('type' in occupants[occupant].apiField && occupants[occupant].apiField.type.fieldValue === 'robot') {
           const robot = {
-            robotName: occupants[occupant].apiField.type.fieldValue,
+            robotName: occupants[occupant].apiField.name.fieldValue,
             robotId: occupant,
           };
           commit('addRobotToList', robot);

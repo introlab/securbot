@@ -94,7 +94,8 @@ function acceptCall(easyrtcid, acceptor) {
  * @function myInit
  */
 function myInit() {
-  easyrtc.setRoomApiField('default', 'type', `robot-${robotName}`);
+  easyrtc.setRoomApiField('default', 'name', robotName);
+  easyrtc.setRoomApiField('default', 'type', 'robot');
   easyrtc.setSocketUrl(webrtcServerURL);
 
   easyrtc.setAutoInitUserMedia(false);
