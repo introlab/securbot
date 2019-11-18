@@ -70,6 +70,10 @@ def waypointToPixelPoseStamped(waypointObject):
     waypoint.header.frame_id = "/map"
     waypoint.header.stamp = rospy.Time.now()
 
+    # Extract coordinate if we have a new waypoint type
+    if "hold_time_s" in waypointObject.keys():
+        waypointObject = waypointObject["coordinate"]
+
     # Formatting position
     waypoint.pose.position.x = waypointObject["x"]
     waypoint.pose.position.y = waypointObject["y"]
