@@ -28,6 +28,7 @@ import {
   faPlus,
   faMinus,
   faMapMarker,
+  faPlug,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -42,6 +43,7 @@ library.add(
   faPlus,
   faMinus,
   faMapMarker,
+  faPlug,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
