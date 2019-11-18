@@ -3,8 +3,8 @@
 import rospy, json, hashlib, actionlib, math
 from datetime import date, datetime
 from std_msgs.msg import String
-from sensor_msgs import Image
-import darknet_ros
+from sensor_msgs.msg import Image
+from darknet_ros_msgs.msg import BoundingBoxes
 
 class EventDetection:
     def __init__(self):
@@ -24,7 +24,7 @@ class EventDetection:
                 self.boundingBoxesCallback)
 
         # Subscribing to topic 'detection_image' with callback
-        rospy.Subscriber("/darknet_ros_msgs/detection_image", image,
+        rospy.Subscriber("/darknet_ros_msgs/detection_image", Image,
                 self.detectionImageCallback)
 
         # Subscribing to topic 'event_detection_config' with callback
@@ -36,16 +36,16 @@ class EventDetection:
             String, queue_size = 20)
         # Publishing to topic 'detection_frame'
         self.t_detectionFrame = rospy.Publisher("/event_detection/detection_frame",
-                image, queue_size =20)
+                Image, queue_size =20)
 
         rospy.spin()
 
     def stampEventNameDateTime(eConfig, probability):
         #Date and time's format as ISO 8601
         eventStamp = {
-                        "event_name": eConfig["event_name"]
-                        "probability" : probability
-                        "date" : date.today().strftime("%Y/%m/%d")
+                        "event_name": eConfig["event_name"],
+                        "probability" : probability,
+                        "date" : date.today().strftime("%Y/%m/%d"),
                         "time" : datetime.now().time().strftime("%H:%M:%S")
                      }
         return eventStamp
@@ -64,7 +64,7 @@ class EventDetection:
             if(eConfig["active"] == True):
                 if( eConfig["startTime"] <= datetime.now().time()   \
                                         and                         \
-                    eConfig["stopTime"] >= datetime.now().time())
+                                        eConfig["stopTime"] >= datetime.now().time()):
                     for bboxDict in bboxDictList:
                         #Check if threshold reached
                         if(eConfig["threshold"] == bboxDict["class"]):
@@ -82,7 +82,7 @@ class EventDetection:
         for ecd in self.eventsConfigDictList:
             if(ecd["event_name"] == eConfig["event_name"]):
                 hasSameEventName = True
-        if(hasSameEventName == False)
+        if(hasSameEventName == False):
             self.eventsConfigDictList.append(eConfig)
 
     def modifyEventConfig(eConfig):
