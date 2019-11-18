@@ -444,7 +444,7 @@ export default {
     },
     saveSchedule({ getters }, schedule) {
       const req = {
-        uri: `${getters.uri}/robots/${schedule.obj.robot}/schedules`,
+        uri: `${getters.uri}/robots/${schedule.obj.robot}/schedules${schedule.id ? `/${schedule.id}` : ''}`,
         method: (schedule.id ? 'PUT' : 'POST'),
         headers: {
           'User-Agent': 'Request-Promise',
