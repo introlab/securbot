@@ -16,6 +16,8 @@ export default {
 
     easyrtc.setDataChannelOpenListener(id => dispatch('openedDataChannelListener', id));
     easyrtc.setDataChannelCloseListener(() => commit('disableDataChannel'));
+    easyrtc.setPeerListener((id, channel, data) => commit('setMapSize', data, { root: true }), 'map-size');
+    easyrtc.setPeerListener((id, channel, data) => dispatch('handleRobotStatus', { id, channel, data }), 'robot-status');
     easyrtc.setPeerListener((id, channel, data) => dispatch('handleData', { id, channel, data }));
     easyrtc.setPeerClosedListener((id, other) => dispatch('handleRobotDisconnection', { id, other }));
 
@@ -169,6 +171,13 @@ export default {
       console.log('Received data from someone else than the peer, ignoring it...');
     }
   },
+  handleRobotStatus({ state, commit }, msg) {
+    if (state.robotId === msg.id) {
+      const status = JSON.parse(msg.data);
+      console.log(`Got status ${status}`);
+      commit('setRobotStatus', status);
+    }
+  },
   setStreams({ state }, htmlElement) {
     console.log('Setting html elements...');
     if (htmlElement.camera && state.cameraStream) {
@@ -182,6 +191,10 @@ export default {
     if (htmlElement.patrol && state.mapStream) {
       console.log('Setting patrol stream...');
       easyrtc.setVideoObjectSrc(htmlElement.patrol, state.mapStream);
+    }
+    if (htmlElement.event && state.mapStream) {
+      console.log('Setting patrol stream...');
+      easyrtc.setVideoObjectSrc(htmlElement.event, state.mapStream);
     }
   },
   resetStreams(_, htmlElement) {

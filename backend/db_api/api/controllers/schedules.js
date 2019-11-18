@@ -53,3 +53,15 @@ exports.read = function (req, res) {
         res.json(document)
     })
 }
+
+exports.remove = function (req, res) {
+    Model.findByIdAndDelete(req.params.scheduleId, (err, document) => {
+        if (err)
+            res.status(500).send(err)
+
+        if (! document)
+            res.status(404)
+
+        res.json(document)
+    })
+}

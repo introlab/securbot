@@ -1,0 +1,8 @@
+# goal definition
+int32 tag
+---
+# result definition
+bool success
+---
+# feed definition
+float32 distance

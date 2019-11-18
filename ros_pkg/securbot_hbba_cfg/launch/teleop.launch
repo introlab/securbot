@@ -1,0 +1,4 @@
+<launch>
+   <node name="teleop_passthrough" pkg="topic_tools" type="relay" 
+    args="cmd_vel_teleop cmd_vel"/>
+</launch>

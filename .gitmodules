@@ -1,0 +1,6 @@
+[submodule "ros_pkg/apriltag"]
+	path = ros_pkg/apriltag
+	url = https://github.com/AprilRobotics/apriltag.git
+[submodule "ros_pkg/apriltag_ros"]
+	path = ros_pkg/apriltag_ros
+	url = https://github.com/AprilRobotics/apriltag_ros.git

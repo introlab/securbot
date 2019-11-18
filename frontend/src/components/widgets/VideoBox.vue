@@ -5,11 +5,12 @@
     class="w-100 h-100 m-auto position-relative bg-black-sb shadow-sb"
   >
     <!-- Video container -->
-    <div class="w-100 h-100 position-relative">
+    <div class="w-100 h-100 position-relative overflow-hidden">
       <!-- Video -->
       <video
         v-show="show"
         :id="videoId"
+        :style="videoZoomTransform"
         class="w-100 h-100"
       />
     </div>
@@ -44,6 +45,21 @@ export default {
     show: {
       type: Boolean,
       required: true,
+    },
+    zoom: {
+      type: Number,
+      default: 1,
+    },
+  },
+  computed: {
+    videoZoomTransform() {
+      return {
+        '-moz-transform': `scale(${this.zoom})`,
+        '-webkit-transform': `scale(${this.zoom})`,
+        '-o-transform': `scale(${this.zoom})`,
+        '-ms-transform': `scale(${this.zoom})`,
+        transform: `scale(${this.zoom})`,
+      };
     },
   },
 };

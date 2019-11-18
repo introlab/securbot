@@ -83,11 +83,7 @@
                   class="btn btn-success p-0 m-0 border border-secondary h-100 w-50"
                   @click="selectPatrolFromList(index)"
                 >
-                  <img
-                    src="~/open-iconic/svg/check.svg"
-                    alt=""
-                    style="width:12px;height:12px;"
-                  >
+                  <font-awesome-icon icon="check" />
                 </button>
               </td>
               <!-- Remove button -->
@@ -98,11 +94,7 @@
                   class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
                   @click="removePatrolFromList(index)"
                 >
-                  <img
-                    src="~/open-iconic/svg/trash.svg"
-                    alt=""
-                    style="width:12px;height:12px;"
-                  >
+                  <font-awesome-icon icon="trash" />
                 </button>
               </td>
             </tr>

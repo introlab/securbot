@@ -1,9 +1,9 @@
 <template>
-  <div class="w-100 h-100 border rounded table-container">
+  <div class="w-100 h-100 border rounded table-container shadow-sb">
     <div class="mh-100 overflow-auto rounded">
       <!-- Table -->
       <table
-        id="waypoint-table"
+        id="inner-table"
         class="h-100 table table-borderless table-striped table-hover border-left border-right m-0"
         style="text-align: center"
       >
@@ -67,11 +67,7 @@
                   class="btn btn-danger p-0 m-0 border border-secondary h-100 w-50"
                   @click="removeIndex(index)"
                 >
-                  <img
-                    src="~/open-iconic/svg/trash.svg"
-                    alt=""
-                    style="width:12px;height:12px"
-                  >
+                  <font-awesome-icon icon="trash" />
                 </button>
               </td>
             </tr>
@@ -83,6 +79,30 @@
 </template>
 
 <script>
+/**
+ * To add/change
+ *
+ * - Add a select headers, aka make the header a list of object of the following format:
+ * ```javascript
+ * header: {
+ *  name: String,
+ *  prop: String,
+ *  visual: Array<enums>
+ *  style/class/css: Array<String>,
+ * }
+ * ```
+ * - Add visuals style option for elements in row.
+ *  - Add a badge option
+ * - Change the removable prop for a prependCol/appendCol prop with multiple options
+ *  - The prop should be given in an Array of string
+ *    -(e.i: ['remove', 'select', 'load', 'propToLoad'])
+ * - Add an option prop that enables some features/events (Given as an Array)
+ *  - Add a hover row option
+ *  - Add a select row option
+ *  - Add a reorder row (by selecting) option
+ */
+
+
 /**
  * A generic vue table component that allows for dynamic columns and offers a remove row button as
  * its last row that emits an event when clicked.
@@ -125,11 +145,12 @@ export default {
     };
   },
   mounted() {
-    if (this.list.length !== this.headers.length) {
-      this.validProp = false;
-    }
-    const nbCol = this.headers.length + (this.removable ? 2 : 1);
-    this.columnWidth = `${(100 / nbCol)}%`;
+    // if (this.list.length !== this.headers.length) {
+    //   this.validProp = false;
+    // }
+    // const nbCol = this.headers.length + (this.removable ? 2 : 1);
+    // this.columnWidth = `${(100 / nbCol)}%`;
+    this.columnWidth = 'auto';
   },
   methods: {
     /**
@@ -161,6 +182,6 @@ th {
 }
 .table-container {
   background-color: rgb(255, 255, 255);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.5), 0 3px 3px 0 rgba(0, 54, 5, 0.19);
+  /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.5), 0 3px 3px 0 rgba(0, 54, 5, 0.19); */
 }
 </style>
