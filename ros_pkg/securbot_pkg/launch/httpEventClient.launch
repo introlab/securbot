@@ -1,4 +1,6 @@
 
 <launch>
+    <include file="$(find darknet_ros)/darknet_ros/launch/darknet_ros_securbot.launch" />
+    <include file="$(find securbot_pkg)/launch/eventDetection.launch" />
     <node name="http_event_client" pkg="securbot_pkg" type="httpEventClient.py" output="screen" />
 </launch>
