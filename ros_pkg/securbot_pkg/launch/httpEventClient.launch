@@ -1,0 +1,4 @@
+
+<launch>
+    <node name="http_event_client" pkg="securbot_pkg" type="httpEventClient.py" output="screen" />
+</launch>
