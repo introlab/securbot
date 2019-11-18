@@ -39,8 +39,8 @@ class PatrolScheduler:
             rospy.logerr("Missing %s environement variable" % e.args[0])
             exit(-1)
 
-    def retrieve_schedules(self):
-        """Get the schedules from the server."""
+    def retrieve_robot_id(self):
+        """Get robot id matching this robot name from server."""
         # Get robot id
         request = requests.get("%s/robots" % self.api_url, timeout=10)
         request.raise_for_status()
@@ -55,8 +55,12 @@ class PatrolScheduler:
             return []
 
         rospy.loginfo("Robot id is %s" % self.robot_id)
+        return self.robot_id
 
-        # Get schedules matching our robot id
+    def retrieve_schedules(self):
+        """Get the schedules from the server."""
+        self.retrieve_robot_id()
+
         request = requests.get(
             "%s/robots/%s/schedules" % (self.api_url, self.robot_id),
             timeout=10)
@@ -128,11 +132,14 @@ class PatrolScheduler:
 
     def run(self):
         """Start node."""
-        process_rate = rospy.Rate(1.0/5.0)
+        process_rate = rospy.Rate(1.0/60.0)
 
         while not rospy.is_shutdown():
-            process_rate.sleep()
-            self.process_loop()
+            try:
+                process_rate.sleep()
+                self.process_loop()
+            except rospy.ROSInterruptException:
+                pass
 
 
 if __name__ == "__main__":
