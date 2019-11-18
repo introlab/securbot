@@ -10,7 +10,8 @@ import Router from 'vue-router';
 
 import Layout from '@/components/Layout';
 import Teleop from '@/components/views/Teleop';
-import Patrol from '@/components/views/Patrol';
+import PatrolPlanner from '@/components/views/PatrolPlanner';
+import PatrolConfig from '@/components/views/PatrolConfig';
 import Events from '@/components/views/Events';
 import Testing from '@/components/views/Testing';
 import Testing2 from '@/components/views/Testing2';
@@ -56,9 +57,14 @@ export default new Router({
           component: Teleop,
         },
         {
-          path: 'patrol',
+          path: 'patrol-planner',
           name: 'SecurBot Patrol Planner',
-          component: Patrol,
+          component: PatrolPlanner,
+        },
+        {
+          path: 'patrol-config',
+          name: 'SecurBot Patrol Config',
+          component: PatrolConfig,
         },
         {
           path: 'logs',

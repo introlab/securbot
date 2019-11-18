@@ -37,14 +37,17 @@
               Teleoperation
             </b-nav-item>
             <!-- Patrol -->
-            <b-nav-item to="patrol">
+            <b-nav-item to="patrol-planner">
               Patrol Planner
+            </b-nav-item>
+            <b-nav-item to="patrol-config">
+              Patrol Config
             </b-nav-item>
             <!-- Event -->
             <b-nav-item to="logs">
               Logs
             </b-nav-item>
-            <b-nav-item to="next">
+            <b-nav-item to="testing">
               .
             </b-nav-item>
           </b-navbar-nav>
@@ -145,6 +148,7 @@ export default {
       const { robotId } = robot;
       if (this.isConnected && robotId === this.robotId) {
         console.log('Disconnecting...');
+        this.$store.commit('setConnectedRobot', { robotName: '', robotId: '' });
         this.$store.commit('disableJoystick');
         this.$store.dispatch('client/disconnectFromRobot');
       } else if (this.isConnected && this.robotId) {
@@ -152,6 +156,7 @@ export default {
       } else if (this.connectionState === 'connecting') {
         console.log('Waiting for state...');
       } else {
+        this.$store.commit('setConnectedRobot', robot);
         this.$store.dispatch('client/connectToRobot', robotId);
       }
     },
