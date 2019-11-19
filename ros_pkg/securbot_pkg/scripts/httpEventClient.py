@@ -18,12 +18,12 @@ class HttpEventClient:
     HTTP Client that post events received from event detection to the database.
 
     """
-
     def __init__(self):
         self.api_url = ''
         self.robot_id = ''
         self.post_failed = 0
         self.event = ''
+        self.event_time = ''
         self.robot = {
             "name": "",
             "platform": {
@@ -110,7 +110,7 @@ class HttpEventClient:
             if self.post_failed < 3:
                 rospy.logerr("Trying to post the event again")
                 self.post_failed = self.post_failed + 1
-                self.post_event(self.event)
+                self.post_event()
             else:
                 rospy.logerr("Failed to post the event onto the database more that 3 times. Discarding the event...")
                 self.event = ''
@@ -122,15 +122,17 @@ class HttpEventClient:
     #     request.raise_for_status()
 
     def detection_callback(self, e):
-        time = timedelta().total_seconds() - self.event_time.total_seconds()
-        if time > 5:
-            rospy.logerr("Failed to received an image for the event in less than 5sec, posting the event without image.")
-            self.post_event()
+        if self.event_time:
+            time = timedelta().total_seconds() - self.event_time.total_seconds()
+            if time > 5:
+                rospy.logerr("Failed to received an image for the event in less than 5sec, posting the event without image.")
+                self.event_time = ''
+                self.post_event()
 
         if self.event:
             rospy.logerr("An new event was detected while the previous one still hasn't received its image. Ignoring new event.")
         else:
-            info = json.parse(e)
+            info = json.loads(e)
             coord = self.get_current_position()
             tags = self.get_current_tags()
             self.event = {
@@ -144,7 +146,7 @@ class HttpEventClient:
                 "tags": tags,
                 "alert": False,
             }
-            rospy.loginfo(event)
+            rospy.loginfo(json.dumps(self.event))
             self.event_time = timedelta()
             
 
