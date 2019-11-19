@@ -4,6 +4,9 @@
         <param name="intensity" value="1" />
         <param name="type" value="Patrol" />
     </node>
+
+    <remap from="scheduled_patrol" to="fromElectronWaypoints" />
     <node name="patrol_exec" pkg="securbot_pkg" type="patrolExecutive.py" output="screen">
     </node>
+    <node name="patrol_schedule" pkg="securbot_pkg" type="patrol_scheduler.py" output="screen" />
 </launch>

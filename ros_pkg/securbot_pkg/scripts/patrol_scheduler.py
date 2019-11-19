@@ -22,7 +22,7 @@ class PatrolScheduler:
         rospy.init_node("patrol_scheduler")
 
         self.patrol_publisher = rospy.Publisher(
-            "patrol",
+            "scheduled_patrol",
             String,
             queue_size=10)
 
@@ -135,11 +135,8 @@ class PatrolScheduler:
         process_rate = rospy.Rate(1.0/60.0)
 
         while not rospy.is_shutdown():
-            try:
-                process_rate.sleep()
-                self.process_loop()
-            except rospy.ROSInterruptException:
-                pass
+            process_rate.sleep()
+            self.process_loop()
 
 
 if __name__ == "__main__":
