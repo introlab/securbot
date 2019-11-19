@@ -171,6 +171,21 @@ Example of event document:
     robot: "5d9adfbcaba84367805737d8", // required
     object: "Event 1", // required
     description_text: "text",
+    files: [
+        {
+           fieldname: String,
+           originalname: String,
+           encoding: String,
+           mimetype: String,
+           id: String,
+           filename: String,
+           size: Number,
+           md5: String,
+           uploadDate: String,
+           contentType: String,
+        },
+        ...
+    ],
     context: "text",
     time: "2019-10-07T06:52:19.831Z",
     coordinate: {x: 0, y: 0, yaw: 180},
@@ -201,6 +216,7 @@ The following filters are available:
 Upload the event contained in request body.
 Request body should follow the schema defined in `api/models/event.js`.
 Returns the event object with assigned `_id`.
+Upload the files in the files array before making this request.
 
 ##### GET /API_PATH/robot/`robotId`/events/`eventId`
 Returns the complete event document associated with `eventId`.

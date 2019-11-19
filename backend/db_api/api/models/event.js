@@ -3,6 +3,20 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const CoordinateSchema = require('./coordinate');
 
 
+const FileSchema = new mongoose.Schema({
+    fieldname: String,
+    originalname: String,
+    encoding: String,
+    mimetype: String,
+    id: String,
+    filename: String,
+    size: Number,
+    md5: String,
+    uploadDate: String,
+    contentType: String,
+    _id: false
+})
+
 
 const EventSchema = new mongoose.Schema({
     robot: {
@@ -15,6 +29,7 @@ const EventSchema = new mongoose.Schema({
     },
     context: String,
     description_text: String,
+    files: [FileSchema],
     time: {
         type: Date,
         required: true
