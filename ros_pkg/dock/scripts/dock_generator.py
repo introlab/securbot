@@ -21,6 +21,7 @@ from hbba_msgs.srv import RemoveDesires
 
 class DockState(Enum):
     """Define dockig process states."""
+
     idle = 0            # No dock required
     approaching = 1     # Driving to dock approach goal
     docking = 2         # Docking to station
@@ -29,6 +30,7 @@ class DockState(Enum):
 
 class DockGenerator:
     """Generate dock desires according to robot and dock state."""
+
     def force_callback(self, msg):
         """Receive force docking command from electron."""
         self.lock.acquire()
@@ -74,7 +76,7 @@ class DockGenerator:
         self.lock.release()
 
     def approach_callback(self, msg):
-        """Sets approach goal."""
+        """Set approach goal."""
         self.lock.acquire()
 
         self.approach_goal['frame_id'] = msg.header.frame_id
@@ -93,7 +95,7 @@ class DockGenerator:
         self.lock.release()
 
     def start_docking(self):
-        """Initiate docking sequence."""
+        """Initialize docking sequence."""
         self.add_desire([self.dock_desire])
         self.restart_docking()
 
