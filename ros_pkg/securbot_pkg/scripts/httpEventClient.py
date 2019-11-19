@@ -3,7 +3,7 @@
 import rospy
 import os
 import platform
-import requests
+import requests 
 import json
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
@@ -14,16 +14,6 @@ class HttpEventClient:
     HTTP Client that post events received from event detection to the database.
 
     """
-    class Robot:
-        id = ''
-        name = ''
-        class platform:
-            OS = platform.linux_distribution
-            ROS = ''
-            CPU = platform.processor
-            GPU = ''
-            Batteries = ''
-            Frame = ''
 
     def __init__(self):
         rospy.init_node("http_event_client")
@@ -33,7 +23,9 @@ class HttpEventClient:
 
         # Get robot name and server url from environment variables
         try:
-            self.Robot.name = os.environ["SECURBOT_ROBOT_NAME"]
+            self.robot_id = ''
+            self.robot_name = ''
+            self.robot_name = os.environ["SECURBOT_ROBOT_NAME"]
 
             server_url = os.environ["SECURBOT_SERVER_URL"]
             api_path = os.environ["SECURBOT_API_PATH"]
@@ -46,11 +38,11 @@ class HttpEventClient:
         try:
             robots = self.get_robots_id()
             for robot in robots:
-                if robot["name"] == self.Robot.name:
-                    self.Robot.id = robot["_id"]
+                if robot["name"] == self.robot_name:
+                    self.robot_id = robot["_id"]
                     break
 
-                if self.Robot.id == "":
+                if self.robot_id == "":
                     self.post_myself()
         except requests.exceptions.RequestException, e:
             rospy.logerr("Failed to retrieve robot because %s", e.args[0])
@@ -62,18 +54,16 @@ class HttpEventClient:
         return request.json()
 
     def post_myself(self):
-        request = requests.post("%s/robots" % self.api_url, json.dumps(self.Robot))
-        request.raise_for_status()
-        robot = request.json()
-        self.Robot.id = robot["_id"]
+        # To be done
+        # Need to create a json with db format and fill it with the robot data (os, platform, etc.)
 
     def post_event(self, event):
-        request = requests.post(self.api_url + "/robots/%s" + self.Robot.id, json.dumps(event))
+        request = requests.post(self.api_url + "/robots/%s" + self.robot_id, json.dumps(event))
         request.raise_for_status()
         return request.json()
 
     def update_event(self, event):
-        request = requests.post(self.api_url + "/robots/%s" + self.Robot.id, json.dumps(event))
+        request = requests.post(self.api_url + "/robots/%s" + self.robot_id, json.dumps(event))
         request.raise_for_status()
         return request.json()
 

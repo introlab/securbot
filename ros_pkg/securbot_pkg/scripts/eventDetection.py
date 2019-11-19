@@ -20,11 +20,11 @@ class EventDetection:
         # there were many
 
         # Subscribing to topic 'bounding_boxes' with callback
-        rospy.Subscriber("/darknet_ros_msgs/bounding_boxes", BoundingBoxes,
+        rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes,
                 self.boundingBoxesCallback)
 
         # Subscribing to topic 'detection_image' with callback
-        rospy.Subscriber("/darknet_ros_msgs/detection_image", Image,
+        rospy.Subscriber("/darknet_ros/detection_image", Image,
                 self.detectionImageCallback)
 
         # Subscribing to topic 'event_detection_config' with callback
@@ -40,7 +40,7 @@ class EventDetection:
 
         rospy.spin()
 
-    def stampEventNameDateTime(eConfig, probability):
+    def stampEventNameDateTime(self, eConfig, probability):
         #Date and time's format as ISO 8601
         eventStamp = {
                         "event_name": eConfig["event_name"],
@@ -50,7 +50,7 @@ class EventDetection:
                      }
         return eventStamp
 
-    def boundingBoxesCallback(boundingBoxes):
+    def boundingBoxesCallback(self, boundingBoxes):
         #Parse every detected classes
         bboxDictList = list()
         for bbox in boundingBoxes.bounding_boxes:
@@ -69,15 +69,16 @@ class EventDetection:
                         #Check if threshold reached
                         if(eConfig["threshold"] == bboxDict["class"]):
                             triggeredEvent = self.stampEventNameDateTime(eConfig, bboxDict["probability"])
-                            self.t_eventDetection.pulish(json.dumps(triggeredEvent))
+                            self.t_eventDetection.publish(json.dumps(triggeredEvent))
                             self.hasDetectedVisualEvent = True
 
-    def detectionImageCallback(img):
+    def detectionImageCallback(self, img):
         if(self.hasDetectedVisualEvent == True):
+            rospy.loginfo('OwO')
             self.t_detectionFrame.publish(img)
             self.hasDetectedVisualEvent = False
 
-    def addEventConfig(eConfig):
+    def addEventConfig(self, eConfig):
         hasSameEventName = False
         for ecd in self.eventsConfigDictList:
             if(ecd["event_name"] == eConfig["event_name"]):
@@ -85,7 +86,7 @@ class EventDetection:
         if(hasSameEventName == False):
             self.eventsConfigDictList.append(eConfig)
 
-    def modifyEventConfig(eConfig):
+    def modifyEventConfig(self, eConfig):
         for ecd in self.eventsConfigDictList:
             if(ecd["event_name"] == eConfig["event_name"]):
                 #Check if the name needs to change
@@ -96,12 +97,12 @@ class EventDetection:
                     ecd = eConfig.pop("modify_event_name")#Copy without new name
                     ecd["event_name"] = modifiedName
 
-    def deleteEventConfig(eConfig):
+    def deleteEventConfig(self, eConfig):
         for ecd in self.eventsConfigDictList:
             if(ecd["event_name"] == eConfig["event_name"]):
                 self.eventsConfigDictList.remove(ecd)
 
-    def eventDetectionConfigCallback(eventConfig):
+    def eventDetectionConfigCallback(self, eventConfig):
         eConfig = json.loads(eventConfig)
         if(eConfig.get("config_type") != None):
             if(eConfig.get("event_name") != None):
