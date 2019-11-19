@@ -21,6 +21,23 @@ let peerIDs = [];
  */
 const streamNames = [];
 
+function sendtoPeer(channel, data) {
+  let toRemove = [];
+
+  // Send to each connected peer
+  peerIDs.forEach((peer) => {
+    try {
+      easyrtc.sendDataP2P(peer, channel, data);
+    }
+    catch(_) {  // Peer is disconnected
+      toRemove.push(peer);
+    }
+  });
+
+  // Remove disconnected peers from peers list
+  peerIDs = peerIDs.filter(peer => toRemove.findIndex(item => item === peer));
+}
+
 /**
  * Send data comming from ROS to the easyrtc server.
  * @method
@@ -28,16 +45,11 @@ const streamNames = [];
  * @listens rosdata
  */
 ipc.on('robot-status', (_, data) => {
-  let toRemove = [];
-  peerIDs.forEach((peer) => {
-    try {
-      easyrtc.sendDataP2P(peer, 'robot-status', data);
-    }
-    catch(_) {
-      toRemove.push(peer);
-    }
-  });
-  peerIDs = peerIDs.filter(peer => toRemove.findIndex(item => item === peer));
+  sendtoPeer('robot-status', data);
+});
+
+ipc.on('patrol-status', (_, data) => {
+  sendtoPeer('patrol-status', data);
 });
 
 /**

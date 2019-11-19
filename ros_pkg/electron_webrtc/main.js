@@ -68,6 +68,10 @@ function createWindow() {
     win.webContents.send('map-size', data);
   });
 
+  hub.on('patrol-status', (data) => {
+    win.webContents.send('patrol-status', data);
+  });
+
   /**
    * Emitted when the window is closed, remove listener and remove the window.
    */
@@ -128,6 +132,11 @@ function startNode() {
      */
     nodeHandle.subscribe('robot_status', std_msgs.String, (msg) => {
       hub.emit('robot-status', msg.data);
+    });
+
+    // Subscribe to patrol updates
+    nodeHandle.subscribe('patrol_status', std_msgs.String, (msg) => {
+      hub.emit('patrol-status', msg.data);
     });
 
     // Retrieves map size from parameter server
