@@ -1,24 +1,14 @@
 #!/usr/bin/python
 
-import rospy
-import os
-import platform
-import sys
-import requests 
-import json
-import tf
+import rospy, os, platform, sys, requests, json, tf
 from datetime import timedelta
 from tf.transformations import euler_from_quaternion
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 
-
 class HttpEventClient:
-    """
-    HTTP Client that post events received from event detection to the database.
-
-    """
     def __init__(self):
+        # Visual event detection flag for forwading a capture of the video feed
         self.api_url = ''
         self.robot_id = ''
         self.post_failed = 0
@@ -35,10 +25,11 @@ class HttpEventClient:
                 "Frame": "",
             }
         }
+
         rospy.init_node("http_event_client")
 
-        rospy.Subscriber("/event/infos", String, self.detection_callback)
-        rospy.Subscriber("/event/image", Image, self.frame_callback)
+        rospy.Subscriber("/event_detection/event_detection", String, self.detection_callback)
+        rospy.Subscriber("/event_detection/detection_frame", Image, self.frame_callback)
 
         self.map_frame = rospy.get_param('~map_frame', 'map')
         self.robot_frame = rospy.get_param('~robot_frame', 'base_footprint')
@@ -65,6 +56,40 @@ class HttpEventClient:
             exit(-1)
 
         rospy.spin()
+
+    def detection_callback(self, e):
+        if self.event_time:
+            time = timedelta().total_seconds() - self.event_time.total_seconds()
+            if time > 5:
+                rospy.logerr("Failed to received an image for the event in less than 5sec, posting the event without image.")
+                self.event_time = ''
+                self.post_event()
+
+        if self.event:
+            rospy.logerr("An new event was detected while the previous one still hasn't received its image. Ignoring new event.")
+        else:
+            info = json.loads(e)
+            coord = self.get_current_position()
+            tags = self.get_current_tags()
+            self.event = {
+                "robot": self.robot_id,
+                "object": info[0] + " Event",
+                "description_text": "",
+                "context": info[2],
+                "files": None,
+                "time": info[3],
+                "coordinate": coord,
+                "tags": tags,
+                "alert": False,
+            }
+            rospy.loginfo(json.dumps(self.event))
+            self.event_time = timedelta()
+
+    def frame_callback(self, image):
+        if self.event:
+            rospy.loginfo("Received an image for event " + self.event["object"])
+            self.event["files"] = image
+            self.post_event()
 
     def build_robot(self):
         self.robot["name"] = os.environ["SECURBOT_ROBOT_NAME"]
@@ -117,48 +142,6 @@ class HttpEventClient:
         else:
             self.event = ''
 
-    # def post_img_of_event(self, event):
-    #     request = requests.post(self.api_url + "/robots/" + self.robot_id, event)
-    #     request.raise_for_status()
-
-    def detection_callback(self, e):
-        if self.event_time:
-            time = timedelta().total_seconds() - self.event_time.total_seconds()
-            if time > 5:
-                rospy.logerr("Failed to received an image for the event in less than 5sec, posting the event without image.")
-                self.event_time = ''
-                self.post_event()
-
-        if self.event:
-            rospy.logerr("An new event was detected while the previous one still hasn't received its image. Ignoring new event.")
-        else:
-            info = json.loads(e)
-            coord = self.get_current_position()
-            tags = self.get_current_tags()
-            self.event = {
-                "robot": self.robot_id,
-                "object": info[0] + " Event",
-                "description_text": "",
-                "context": info[2],
-                "files": "",
-                "time": info[3],
-                "coordinate": coord,
-                "tags": tags,
-                "alert": False,
-            }
-            rospy.loginfo(json.dumps(self.event))
-            self.event_time = timedelta()
-            
-
-    def frame_callback(self, image):
-        if self.event:
-            rospy.loginfo("Received an image for event " + self.event["object"])
-            self.event["files"] = image
-            self.post_event()
-            
-        
-        # rospy.loginfo(json.dumps(image))
-
     def get_current_position(self):
         tf_listener = tf.TransformListener()
         try:
@@ -174,6 +157,5 @@ class HttpEventClient:
     def get_current_tags(self):
         pass
 
-
-if __name__ == '__main__':
-    HttpEventClient()
+if __name__ == "__main__":
+    node = HttpEventClient()

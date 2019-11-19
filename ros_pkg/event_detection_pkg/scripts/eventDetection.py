@@ -6,13 +6,23 @@ from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from darknet_ros_msgs.msg import BoundingBoxes
 
+defaultEventConfigDictList = [{
+                              "event_name": "face_recognition",
+                              "active": True,
+                              "startTime": None,
+                              "stopTime": None,
+                              "threshold": "face"
+                            }]
+
 class EventDetection:
-    def __init__(self):
+    def __init__(self, defaultEventConfigDictList = None):
         # Visual event detection flag for forwading a capture of the video feed
         self.hasDetectedVisualEvent = False
 
         # Events Config List
         self.eventsConfigDictList = list()
+        if(defaultEventConfigDictList != None and isinstance(defaultEventConfigDictList,list)):
+            self.eventsConfigDictList = defaultEventConfigDictList
 
         # Node name defined as eventDetection
         rospy.init_node("eventDetection", anonymous=True)
@@ -20,23 +30,18 @@ class EventDetection:
         # there were many
 
         # Subscribing to topic 'bounding_boxes' with callback
-        rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes,
-                self.boundingBoxesCallback)
+        rospy.Subscriber("/darknet_ros_msgs/bounding_boxes", BoundingBoxes, self.boundingBoxesCallback)
 
         # Subscribing to topic 'detection_image' with callback
-        rospy.Subscriber("/darknet_ros/detection_image", Image,
-                self.detectionImageCallback)
+        rospy.Subscriber("/darknet_ros_msgs/detection_image", Image, self.detectionImageCallback)
 
         # Subscribing to topic 'event_detection_config' with callback
-        rospy.Subscriber("/event_detection/event_detection_config", String,
-                self.eventDetectionConfigCallback)
+        #rospy.Subscriber("/event_detection/event_detection_config", String, self.eventDetectionConfigCallback)
 
         # Publishing to topic 'event_detection'
-        self.t_eventDetection = rospy.Publisher("/event_detection/event_detection",
-            String, queue_size = 20)
+        self.t_eventDetection = rospy.Publisher("/event_detection/event_detection", String, queue_size = 20)
         # Publishing to topic 'detection_frame'
-        self.t_detectionFrame = rospy.Publisher("/event_detection/detection_frame",
-                Image, queue_size =20)
+        self.t_detectionFrame = rospy.Publisher("/event_detection/detection_frame", Image, queue_size =20)
 
         rospy.spin()
 
@@ -62,9 +67,13 @@ class EventDetection:
         #Check if any active events
         for eConfig in self.eventsConfigDictList:
             if(eConfig["active"] == True):
-                if( eConfig["startTime"] <= datetime.now().time()   \
-                                        and                         \
-                                        eConfig["stopTime"] >= datetime.now().time()):
+                if( (eConfig["startTime"] <= datetime.now().time()   \
+                                        and                          \
+                     eConfig["stopTime"] >= datetime.now().time())   \
+                                        or                           \
+                     (eConfig["startTime"] == None                   \
+                                        and                          \
+                      eConfig["stopTime"] == None)                  ):
                     for bboxDict in bboxDictList:
                         #Check if threshold reached
                         if(eConfig["threshold"] == bboxDict["class"]):
@@ -122,4 +131,4 @@ class EventDetection:
                     + "[ERROR] : Missing 'config_type' key while configuring...")
 
 if __name__ == "__main__":
-    ed = EventDetection()
+    ed = EventDetection(defaultEventConfigDictList)

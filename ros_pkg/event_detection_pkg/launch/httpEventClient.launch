@@ -1,0 +1,6 @@
+<launch>
+    <node name="http_event_client" pkg="event_detection_pkg" type="httpEventClient.py" output="screen">
+        <remap from="/event_detection/event_detection" to="/event_detection/event_detection"/>
+        <remap from="/event_detection/detection_frame" to="/event_detection/detection_frame"/>
+    </node>
+</launch>

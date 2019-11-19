@@ -1,7 +1,0 @@
-
-<launch>
-    <node name="http_event_client" pkg="securbot_pkg" type="httpEventClient.py" output="screen">
-        <remap from="/event_detection/event_detection" to="/event/infos"/>
-        <remap from="/event_detection/detection_frame" to="/event/image"/>
-    </node>
-</launch>
