@@ -1,13 +1,13 @@
 
 <launch>
-    <node name="event_detection" pkg="securbot_pkg" type="eventDetection.py" output="screen">
+    <node name="event_detection" pkg="event_detection_pkg" type="eventDetection.py" output="screen">
         <remap from="/darknet_ros_msgs/bounding_boxes" to="darknet_ros_msgs/bounding_boxes"/>
         <remap from="/darknet_ros_msgs/detection_image" to="/darknet_ros_msgs/detection_image"/>
-        <remap from="/event_detection/event_detection_config" to="/event_detection/event_detection_config"/>
+        <!--<remap from="/event_detection/event_detection_config" to="/event_detection/event_detection_config"/>-->
         <remap from="/event_detection/event_detection" to="/event_detection/event_detection"/>
         <remap from="/event_detection/detection_frame" to="/event_detection/detection_frame"/>
     </node>
 
     <!-- Test nodes -->
-    <test test-name="event_detection_test" pkg="securbot_pkg" type="event_detection_test.py" />
+    <test test-name="event_detection_test" pkg="event_detection_pkg" type="event_detection_test.py" />
 </launch>
