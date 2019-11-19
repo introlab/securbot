@@ -10,6 +10,8 @@ import actions from './actions';
 
 Vue.use(Vuex);
 
+Vue.config.devtools = true;
+
 export default new Vuex.Store({
   modules: {
     client,

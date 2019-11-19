@@ -9,4 +9,5 @@ module.exports = function (app) {
     app.route('/patrols/:patrolId')
         .put(patrols.update)
         .get(patrols.read)
+        .delete(patrols.remove)
 }

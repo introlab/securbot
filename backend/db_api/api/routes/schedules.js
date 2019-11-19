@@ -9,4 +9,5 @@ module.exports = function (app) {
     app.route('/schedules/:scheduleId')
         .put(schedules.update)
         .get(schedules.read)
+        .delete(schedules.remove)
 }

@@ -94,7 +94,8 @@ function acceptCall(easyrtcid, acceptor) {
  * @function myInit
  */
 function myInit() {
-  easyrtc.setRoomApiField('default', 'type', `robot-${robotName}`);
+  easyrtc.setRoomApiField('default', 'name', robotName);
+  easyrtc.setRoomApiField('default', 'type', 'robot');
   easyrtc.setSocketUrl(webrtcServerURL);
 
   easyrtc.setAutoInitUserMedia(false);
@@ -114,8 +115,10 @@ function myInit() {
   // Send map size when data channel opens
   easyrtc.setDataChannelOpenListener((easyrtcid) => {
     console.log('Data channel open');
-    easyrtc.sendDataP2P(easyrtcid, 'map-size', mapSize);
-    console.log(`Sent map size ${mapSize.width}x${mapSize.height}`);
+    if (mapSize.height && mapSize.width) {
+      easyrtc.sendDataP2P(easyrtcid, 'map-size', mapSize);
+      console.log(`Sent map size ${mapSize.width}x${mapSize.height}`);
+    }
   });
 
   easyrtc.setAcceptChecker(acceptCall);

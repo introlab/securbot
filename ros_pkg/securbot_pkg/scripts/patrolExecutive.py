@@ -70,6 +70,10 @@ def waypointToPixelPoseStamped(waypointObject):
     waypoint.header.frame_id = "/map"
     waypoint.header.stamp = rospy.Time.now()
 
+    # Extract coordinate if we have a new waypoint type
+    if "hold_time_s" in waypointObject.keys():
+        waypointObject = waypointObject["coordinate"]
+
     # Formatting position
     waypoint.pose.position.x = waypointObject["x"]
     waypoint.pose.position.y = waypointObject["y"]
@@ -163,7 +167,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
 
     # Buffer and ensure the key "id" is present. Otherwise continue buffering json data.
     try:
-        patrolId = waypointsJsonBuffer["id"]
+        patrolId = waypointsJsonBuffer["id"].encode("ascii", "ignore")
     except KeyError:
         rospy.loginfo("ERROR : Missing patrol id, generating id")
         hasher = hashlib.sha1()
