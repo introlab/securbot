@@ -23,7 +23,7 @@ POST {{addr}}/db/robots HTTP/1.1
 content-type: application/json
 
 {
-  "name": "Robot2",
+  "name": "Robot-Test",
   "platform": {
       "OS": "Ubuntu 18.04",
       "ROS": "Melodic",
@@ -39,7 +39,7 @@ GET {{addr}}/db/robots
 
 
 ###
-@robot1 = 5dc59e1db7217d0014134503
+@robot1 = 5dcdc6b842aa01001b958a55
 @robot2  = 5dc59f3eb7217d0014134504
 
 ### Patrols
@@ -48,16 +48,16 @@ POST {{addr}}/db/robots/{{robot1}}/patrols
 content-type: application/json
 
 {
-  "name": "Patrol 1",
+  "name": "Patrol Test 1",
   "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
   "last_modified": "2019-11-07T06:52:19.831Z",
   "waypoints": [
-    {"coordinate" : {"x": 15, "y": 20, "yaw": 15}, "hold_time_s": 10 },
-    {"coordinate" : {"x": 50, "y": 70, "yaw": 65}, "hold_time_s": 10 },
-    {"coordinate" : {"x": 65, "y": 100, "yaw": 92}, "hold_time_s": 10 }
+    {"coordinate" : {"x": 1200, "y": 500, "yaw": 30}, "hold_time_s": 10 },
+    {"coordinate" : {"x": 600, "y": 600, "yaw": 65}, "hold_time_s": 10 },
+    {"coordinate" : {"x": 2000, "y": 1800, "yaw": 92}, "hold_time_s": 10 }
   ]
 }
-
+###
 POST {{addr}}/db/robots/{{robot1}}/patrols
 content-type: application/json
 
@@ -66,9 +66,9 @@ content-type: application/json
   "description_text": "huHFHOIHGL;HKL;HGLASHGLKHGLha;HOIHGIORHGIOERHGAHWE;GHWO",
   "last_modified": "2019-11-07T06:52:19.831Z",
   "waypoints": [
-    {"coordinate" : {"x": 15, "y": 20, "yaw": 15}, "hold_time_s": 25 },
-    {"coordinate" : {"x": 50, "y": 70, "yaw": 65}, "hold_time_s": 25 },
-    {"coordinate" : {"x": 65, "y": 100, "yaw": 92}, "hold_time_s": 25 }
+    {"coordinate" : {"x": 100, "y": 100, "yaw": 15}, "hold_time_s": 25 },
+    {"coordinate" : {"x": 1100, "y": 1100, "yaw": 65}, "hold_time_s": 25 },
+    {"coordinate" : {"x": 2200, "y": 2200, "yaw": 92}, "hold_time_s": 25 }
   ]
 }
 
@@ -86,6 +86,7 @@ content-type: application/json
   ]
 }
 
+###
 GET {{addr}}/db/robots/{{robot1}}/patrols
 
 ### Create events for the first robot
@@ -97,7 +98,7 @@ content-type: application/json
     "description_text": "asdasdadsa",
     "context": "night",
     "time": "2019-11-07T06:52:19.831Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "location_coordinate": {"x": 1000, "y": 1000, "yaw": 15},
     "tags": ["red"],
     "alert": false,
     "viewed": false
@@ -112,7 +113,7 @@ content-type: application/json
     "description_text": "asdasdadsa",
     "context": "night",
     "time": "2019-11-01T06:52:19.831Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "location_coordinate": {"x": 1200, "y": 100, "yaw": 32},
     "tags": ["blue"],
     "alert": false,
     "viewed": false
@@ -127,7 +128,7 @@ content-type: application/json
     "description_text": "asdasdadsa",
     "context": "night",
     "time": "2019-11-04T06:52:19.831Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "location_coordinate": {"x": 2200, "y": 2300, "yaw": 90},
     "tags": ["yellow"],
     "alert": false,
     "viewed": false
@@ -142,7 +143,7 @@ content-type: application/json
   "description_text": "asdasdadsa",
   "context": "night",
   "time": "2019-11-04T06:52:19.831Z",
-  "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+  "location_coordinate": {"x": 645, "y": 123, "yaw": 45},
   "tags": ["green"],
   "alert": false,
   "viewed": false
@@ -157,7 +158,7 @@ content-type: application/json
     "description_text": "asdasdadsa",
     "context": "night",
     "time": "2019-10-23T00:00:00.999Z",
-    "location_coordinate": {"x": 15, "y": 20, "yaw": 15},
+    "location_coordinate": {"x": 789, "y": 1234, "yaw": 15},
     "tags": ["a"],
     "alert": false,
     "viewed": false

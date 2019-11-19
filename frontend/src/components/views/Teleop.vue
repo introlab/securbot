@@ -311,7 +311,6 @@ export default {
       mapSize: state => state.mapSize,
       cameraId: state => state.htmlElement.cameraId,
       mapId: state => state.htmlElement.mapId,
-      waypointList: state => state.patrol.waypointList,
       joystickEnabled: state => state.joystickEnabled,
       isConnected: state => state.client.connectionState.robot === 'connected',
       isDataChannelAvailable: state => state.client.isDataChannelAvailable,
