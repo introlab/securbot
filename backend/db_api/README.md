@@ -29,6 +29,40 @@ $ node .
 ## API
 The endpoints and their usage
 
+### Files:
+Allows to store files upoaded by the robots
+
+##### POST /API_PATH/files
+The request body should be of type `form-data` and contain a single file key
+named `file`
+
+The request response will contain the id of the file:
+```js
+{
+    "success": true,
+    "_id": "5dd41a39f9080f0014249898",
+    "file": {
+        "fieldname": "file",
+        "originalname": "example.png",
+        "encoding": "7bit",
+        "mimetype": "image/png",
+        "id": "5dd41a39f9080f0014249898",
+        "filename": "8cc77539e533ae84b2b23951bcafe447",
+        "metadata": null,
+        "bucketName": "fs",
+        "chunkSize": 261120,
+        "size": 11871164,
+        "md5": "2de9925ba351392765b2586910a1958f",
+        "uploadDate": "2019-11-19T16:37:13.657Z",
+        "contentType": "image/png"
+    }
+}
+```
+
+##### GET /API_PATH/files/`fileId`
+Returns a binary chunked stream with `Content-Type` set to the content type
+of the uploaded file
+
 
 ### Robots:
 Example robot document:
@@ -137,6 +171,21 @@ Example of event document:
     robot: "5d9adfbcaba84367805737d8", // required
     object: "Event 1", // required
     description_text: "text",
+    files: [
+        {
+           fieldname: String,
+           originalname: String,
+           encoding: String,
+           mimetype: String,
+           id: String,
+           filename: String,
+           size: Number,
+           md5: String,
+           uploadDate: String,
+           contentType: String,
+        },
+        ...
+    ],
     context: "text",
     time: "2019-10-07T06:52:19.831Z",
     coordinate: {x: 0, y: 0, yaw: 180},
@@ -167,6 +216,7 @@ The following filters are available:
 Upload the event contained in request body.
 Request body should follow the schema defined in `api/models/event.js`.
 Returns the event object with assigned `_id`.
+Upload the files in the files array before making this request.
 
 ##### GET /API_PATH/robot/`robotId`/events/`eventId`
 Returns the complete event document associated with `eventId`.
