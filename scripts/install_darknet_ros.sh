@@ -10,4 +10,5 @@
 
 echo Installing DARKNET ROS...
 cd ~/catkin_ws/src/
-git clone 
+git clone https://github.com/leggedrobotics/darknet_ros.git
+
