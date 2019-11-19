@@ -37,7 +37,7 @@ ipc.on('robot-status', (_, data) => {
       toRemove.push(peer);
     }
   });
-  peerIDs = peerIDs.filter(peer => toRemove.findIndex(peer) == -1);
+  peerIDs = peerIDs.filter(peer => toRemove.findIndex(item => item === peer));
 });
 
 /**

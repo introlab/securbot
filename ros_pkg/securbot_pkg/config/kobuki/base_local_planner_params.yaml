@@ -17,7 +17,7 @@ TrajectoryPlannerROS:
 
   holonomic_robot: false
 
-  xy_goal_tolerance: 0.3
+  xy_goal_tolerance: 0.15
 
 NavfnROS:
   allow_unknown: false

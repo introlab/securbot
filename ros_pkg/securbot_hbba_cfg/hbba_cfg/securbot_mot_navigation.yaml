@@ -28,6 +28,7 @@ hbba_conf:
         - toElectron
         - toMapImageGenerator
 
+- remap: {from: force_docking, to: /electron/force_docking}
 - motivation:
     name: docking_motivation
     launch: {pkg: "securbot_hbba_cfg", path: "launch/docking_motivation.launch"}

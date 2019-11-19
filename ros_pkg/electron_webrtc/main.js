@@ -185,7 +185,15 @@ function startNode() {
     const zoomPublisher = nodeHandle.advertise('map_zoom', std_msgs.String);
     ipcMain.on('changeMapZoom', (_, zoomString) => {
       zoomPublisher.publish({ data: zoomString });
-    })
+    });
+
+    /** Publish received force dock command */
+    const dockPublisher = nodeHandle.advertise('force_docking', std_msgs.Bool);
+    ipcMain.on('force-dock', (_, dockString) => {
+      command = JSON.parse(dockString)
+      console.log(`Pub force_docking = ${command.force}`)
+      dockPublisher.publish({ data: command.force });
+    });
   });
 }
 
