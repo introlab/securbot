@@ -14,6 +14,7 @@ export default {
     height: 2400,
   },
   joystickEnabled: false,
+  dockingInterval: '',
   joystickConfig: {
     maxX: 0,
     maxY: 0,

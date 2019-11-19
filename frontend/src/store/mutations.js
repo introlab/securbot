@@ -22,6 +22,15 @@ export default {
   disableJoystick(state) {
     state.joystickEnabled = false;
   },
+  setDockingProcess(state, interval) {
+    state.dockingInterval = interval;
+  },
+  clearDockingProcess(state) {
+    if (state.dockingInterval) {
+      clearInterval(state.dockingInterval);
+    }
+    state.dockingInterval = '';
+  },
   setCameraHTMLElement(state, element) {
     state.htmlElement.camera = element;
   },
