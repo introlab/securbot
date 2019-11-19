@@ -71,4 +71,7 @@ export default {
   setRobotStatus(state, status) {
     state.robotStatus = status;
   },
+  setPatrolStatus(state, status) {
+    state.patrolStatus = status;
+  },
 };

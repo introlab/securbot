@@ -18,10 +18,14 @@
       <p>CPU: {{ cpu }}%</p>
       <p>Mem: {{ mem }}%</p>
     </div>
-    <div class="stat-col wifi">
+    <div class="stat-col patrol">
+      <p>Patrol: {{ patrol }}</p>
+      <p>Waypoints: {{ reached }}/{{ planned }}</p>
+    </div>
+    <!--div class="stat-col wifi">
       <p>RSSI: {{ rssi }}dBm</p>
       <p>Noise: {{ noise }}dBm</p>
-    </div>
+    </div-->
     <!--div class="stat-col stat-group">
       <label>Strategies</label>
       <ul>
@@ -45,6 +49,9 @@ export default {
     noise: state => state.client.robotStatus.wifi.noise.toFixed(0),
     strategies: state => state.client.robotStatus.intention.strategies,
     desires: state => state.client.robotStatus.intention.desires.filter(desire => desire.type !== 'Reverse'),
+    patrol: state => state.client.patrolStatus.state,
+    reached: state => state.client.patrolStatus.reached,
+    planned: state => state.client.patrolStatus.planned,
     show: state => state.client.connectionState.robot === 'connected',
   }),
 };

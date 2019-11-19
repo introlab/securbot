@@ -18,6 +18,7 @@ export default {
     easyrtc.setDataChannelCloseListener(() => commit('disableDataChannel'));
     easyrtc.setPeerListener((id, channel, data) => commit('setMapSize', data, { root: true }), 'map-size');
     easyrtc.setPeerListener((id, channel, data) => dispatch('handleRobotStatus', { id, channel, data }), 'robot-status');
+    easyrtc.setPeerListener((id, channel, data) => dispatch('handlePatrolStatus', { id, channel, data }), 'patrol-status');
     easyrtc.setPeerListener((id, channel, data) => dispatch('handleData', { id, channel, data }));
     easyrtc.setPeerClosedListener((id, other) => dispatch('handleRobotDisconnection', { id, other }));
 
@@ -176,6 +177,17 @@ export default {
       const status = JSON.parse(msg.data);
       console.log(`Got status ${status}`);
       commit('setRobotStatus', status);
+    }
+  },
+  handlePatrolStatus({ state, commit }, msg) {
+    if (state.robotId === msg.id) {
+      const data = JSON.parse(msg.data);
+      const status = {
+        state: data.status,
+        planned: data.goalsPlanned,
+        reached: data.goalsReached,
+      };
+      commit('setPatrolStatus', status);
     }
   },
   setStreams({ state }, htmlElement) {
