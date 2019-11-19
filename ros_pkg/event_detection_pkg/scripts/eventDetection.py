@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import rospy, json, hashlib, actionlib, math
-from datetime import date, datetime
+import datetime
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from darknet_ros_msgs.msg import BoundingBoxes
@@ -35,6 +35,7 @@ class EventDetection:
         # Subscribing to topic 'detection_image' with callback
         rospy.Subscriber("/darknet_ros_msgs/detection_image", Image, self.detectionImageCallback)
 
+        #TODO: For future Securbot version, support configuration request on the end-device/web client side
         # Subscribing to topic 'event_detection_config' with callback
         #rospy.Subscriber("/event_detection/event_detection_config", String, self.eventDetectionConfigCallback)
 
@@ -46,12 +47,11 @@ class EventDetection:
         rospy.spin()
 
     def stampEventNameDateTime(self, eConfig, probability):
-        #Date and time's format as ISO 8601
+        #Date and time's format as ISO 8601 UTC
         eventStamp = {
                         "event_name": eConfig["event_name"],
-                        "probability" : probability,
-                        "date" : date.today().strftime("%Y/%m/%d"),
-                        "time" : datetime.now().time().strftime("%H:%M:%S")
+                        "probability" : str(probability),
+                        "datetime" : datetime.datetime.utcnow().replace(microsecond=0).isoformat()+'Z'
                      }
         return eventStamp
 
@@ -102,7 +102,8 @@ class EventDetection:
                     ecd = eConfig
                 else:
                     modifiedName = eConfig.get("modify_event_name")
-                    ecd = eConfig.pop("modify_event_name")#Copy without new name
+                    eConfig.pop("modify_event_name")#Copy without new name key/value
+                    ecd = eConfig
                     ecd["event_name"] = modifiedName
 
     def deleteEventConfig(self, eConfig):
@@ -115,19 +116,22 @@ class EventDetection:
         if(eConfig.get("config_type") != None):
             if(eConfig.get("event_name") != None):
                 if(eConfig["config_type"] == "add"):
+                    eConfig.pop("config_type")
                     self.addEventConfig(eConfig)
                 elif(eConfig["config_type"] == "modify"):
+                    eConfig.pop("config_type")
                     self.modifyEventConfig(eConfig)
                 elif(eConfig["config_type"] == "delete"):
+                    eConfig.pop("config_type")
                     self.deleteEventConfig(eConfig)
                 elif(eConfig["config_type"] == "clear_all"):
                     self.eventsConfigDictList.clear()
             else:
                 rospy.loginfo(datetime.now().strftime("[%H:%M:%S]")\
-                        + "[ERROR] : Missing 'event_name' key while configuring...")
+                        + "[WARNING] : Missing 'event_name' key while configuring...")
         else:
             rospy.loginfo(datetime.now().strftime("[%H:%M:%S]")\
-                    + "[ERROR] : Missing 'config_type' key while configuring...")
+                    + "[WARNING] : Missing 'config_type' key while configuring...")
 
 if __name__ == "__main__":
     ed = EventDetection(defaultEventConfigDictList)
