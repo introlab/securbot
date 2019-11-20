@@ -16,6 +16,9 @@ defaultEventConfigDictList = [{
 
 class EventDetection:
     def __init__(self, defaultEventConfigDictList = None):
+        rospy.loginfo(datetime.datetime.now().strftime("[%H:%M:%S]")\
+                + "[DEBUG]: Initializing Event Detection Node...")
+
         # Visual event detection flag for forwading a capture of the video feed
         self.hasDetectedVisualEvent = False
 
@@ -56,6 +59,9 @@ class EventDetection:
         return eventStamp
 
     def boundingBoxesCallback(self, boundingBoxes):
+        rospy.loginfo(datetime.datetime.now().strftime("[%H:%M:%S]")\
+            + " [DEBUG]: Visual Object Detected!")
+
         #Parse every detected classes
         bboxDictList = list()
         for bbox in boundingBoxes.bounding_boxes:
@@ -67,22 +73,24 @@ class EventDetection:
         #Check if any active events
         for eConfig in self.eventsConfigDictList:
             if(eConfig["active"] == True):
-                if( (eConfig["startTime"] <= datetime.now().time()   \
-                                        and                          \
-                     eConfig["stopTime"] >= datetime.now().time())   \
-                                        or                           \
-                     (eConfig["startTime"] == None                   \
-                                        and                          \
-                      eConfig["stopTime"] == None)                  ):
+                if( (eConfig["startTime"] == None                             \
+                                        and                                   \
+                     eConfig["stopTime"] == None)                             \
+                                        or                                    \
+                     (eConfig["startTime"] <= datetime.datetime.now().time()  \
+                                        and                                   \
+                      eConfig["stopTime"] >= datetime.datetime.now().time())                  ):
                     for bboxDict in bboxDictList:
                         #Check if threshold reached
                         if(eConfig["threshold"] == bboxDict["class"]):
                             triggeredEvent = self.stampEventNameDateTime(eConfig, bboxDict["probability"])
-                            self.t_eventDetection.pulish(json.dumps(triggeredEvent))
+                            self.t_eventDetection.publish(json.dumps(triggeredEvent))
                             self.hasDetectedVisualEvent = True
 
     def detectionImageCallback(self, img):
         if(self.hasDetectedVisualEvent == True):
+            rospy.loginfo(datetime.datetime.now().strftime("[%H:%M:%S]")\
+                + " [DEBUG]: Publishing Frame!")
             self.t_detectionFrame.publish(img)
             self.hasDetectedVisualEvent = False
 
@@ -127,10 +135,10 @@ class EventDetection:
                 elif(eConfig["config_type"] == "clear_all"):
                     self.eventsConfigDictList.clear()
             else:
-                rospy.loginfo(datetime.now().strftime("[%H:%M:%S]")\
+                rospy.loginfo(datetime.datetime.now().strftime("[%H:%M:%S]")\
                         + "[WARNING] : Missing 'event_name' key while configuring...")
         else:
-            rospy.loginfo(datetime.now().strftime("[%H:%M:%S]")\
+            rospy.loginfo(datetime.datetime.now().strftime("[%H:%M:%S]")\
                     + "[WARNING] : Missing 'config_type' key while configuring...")
 
 if __name__ == "__main__":
