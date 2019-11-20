@@ -26,7 +26,8 @@ mongoose.connect(DB_URI, {
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true
-});
+})
+
 
 
 
@@ -41,16 +42,21 @@ app.use(paramSelector({ order: ['query', 'body', 'params'] }))
 
 
 // API routes
-const router = express.Router()
-const routeRobots = require('./api/routes/robots')
-routeRobots(router)
+mongoose.connection.on('open', () => {
 
-app.use(API_PATH, router)
+    const router = express.Router()
+    const routeRobots = require('./api/routes/robots')
+    const routeFiles = require('./api/routes/files')
+    routeRobots(router)
+    routeFiles(router)
 
-app.use((req, res) => {
-    res.status(404).send({error: 'API could not find: ' + req.originalUrl})
+    app.use(API_PATH, router)
+
+
+    app.use((req, res) => {
+        res.status(404).send({error: 'API could not find: ' + req.originalUrl})
+    })
+
+
+    app.listen(API_PORT)
 })
-
-
-
-app.listen(API_PORT)
