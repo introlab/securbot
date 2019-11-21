@@ -29,8 +29,11 @@ class Status(Enum):
     LOST = 9
 
 # Global indexes used in the waypointsPatrolList to access the
+# Waypoint specific format
+WAYPOINT_INDEX = 0
 # PoseStampeds specific format
 PIXEL_POSESTAMPED_INDEX = 1
+# Real PoseStampeds specific format
 REAL_POSESTAMPED_INDEX = 2
 
 
@@ -48,6 +51,9 @@ currentWaypointIndex = 0
 # Global indicating if the patrol received is looped
 isLooped = False
 
+# Global indicating at what time of the current date (in seconds) the "loitering" should end
+currentLoiteringEndTimeInSeconds = 0
+
 # Global patrol ID
 patrolId = ""
 
@@ -58,6 +64,13 @@ toMapImageGenerator = rospy.Publisher("toMapImageGenerator", PoseStamped, queue_
 # Global publisher to send status that waypoint is reached toward
 # Electron node
 toElectron = rospy.Publisher("toElectron", String, queue_size=20)
+
+##  Get time offset in seconds since the EPOCH according to intial time in seconds gave as an input 
+#   @param offsetTimeInSeconds Offset time in seconds to add to current time
+#   @return timeResultInSeconds Result time in seconds since the epoch with the added offset
+def getTimeOffsetInSeconds(offsetTimeInSeconds):
+    timeResultInSeconds = int(round(time.time())) + offsetTimeInSeconds
+    return timeResultInSeconds
 
 ##  Format Waypoint to Pixel PoseStamped
 #   @param waypointObject The waypoint in dictionnary form from
@@ -121,7 +134,7 @@ def realPoseStampedReceiverCallback(realPoseStamped):
 ##  This function starts sending the different waypoint that were
 #   converted in the list
 def startPatrolNavigation():
-    global currentWaypointIndex, waypointsPatrolList, patrolId
+    global currentWaypointIndex, waypointsPatrolList, patrolId, currentLoiteringEndTimeInSeconds
 
     # Make sure no goals are active
     actionClient.cancel_all_goals()
@@ -132,6 +145,18 @@ def startPatrolNavigation():
 
     goal = MoveBaseGoal()
     goal.target_pose = waypointsPatrolList[currentWaypointIndex][REAL_POSESTAMPED_INDEX]
+
+    #Get what's the "loitering time" for the first waypoint
+    try:
+        offsetTimeInSeconds = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"] 
+    except KeyError:
+        rospy.loginfo("ERROR : While accessing value at key [hold_time_s] KeyError, non-existent or undefined!")
+        rospy.loginfo("Assigning default loitering time of 0 second...")
+        offsetTimeInSeconds = 0
+
+    currentLoiteringEndTimeInSeconds = getTimeOffsetInSeconds(offsetTimeInSeconds)
+
+    #Send goal for the first waypoint
     actionClient.send_goal(goal, sendGoalDoneCallback)
 
 
@@ -278,7 +303,7 @@ def publishPatrolFeedBack(patrolId, status, acheivedWaypointCount, plannedWaypoi
 #                        (ie: SUCCEEDED / ABORTED)
 #   @param result
 def sendGoalDoneCallback(terminalState, result):
-    global waypointsPatrolList, currentWaypointIndex, patrolId
+    global waypointsPatrolList, currentWaypointIndex, patrolId, currentLoiteringEndTimeInSeconds
 
     rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
 
@@ -289,7 +314,23 @@ def sendGoalDoneCallback(terminalState, result):
         publishPatrolFeedBack(patrolId, "failed", currentWaypointIndex, len(waypointsPatrolList))
         return
     else:
+        #Loiter 
+        while(currentLoiteringEndTimeInSeconds > int(round(time.time()))):
+            rospy.sleep(0.7) # Sleeps 700 milliseconds
+            rospy.loginfo("[DEBUG] End loitering in...[%s]", currentLoiteringEndTimeInSeconds - int(round(time.time())))
+
         currentWaypointIndex += 1
+
+        #Get what's the "loitering time" for the next waypoint
+        try:
+            offsetTimeInSeconds = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"] 
+        except KeyError:
+            rospy.loginfo("ERROR : While accessing value at key [hold_time_s] KeyError, non-existent or undefined!")
+            rospy.loginfo("Assigning default loitering time of 0 second...")
+            offsetTimeInSeconds = 0
+
+        currentLoiteringEndTimeInSeconds = getTimeOffsetInSeconds(offsetTimeInSeconds)
+
         # Check if all waypoints are done
         if currentWaypointIndex >= len(waypointsPatrolList):
             publishPatrolFeedBack(patrolId, "finished", currentWaypointIndex, len(waypointsPatrolList))
