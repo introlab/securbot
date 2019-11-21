@@ -147,7 +147,13 @@ def startPatrolNavigation():
     goal.target_pose = waypointsPatrolList[currentWaypointIndex][REAL_POSESTAMPED_INDEX]
 
     #Get what's the "loitering time" for the first waypoint
-    offsetTimeInSeconds = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"] 
+    try:
+        offsetTimeInSeconds = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"] 
+    except KeyError:
+        rospy.loginfo("ERROR : While accessing value at key [hold_time_s] KeyError, non-existent or undefined!")
+        rospy.loginfo("Assigning default loitering time of 0 second...")
+        offsetTimeInSeconds = 0
+
     currentLoiteringEndTimeInSeconds = getTimeOffsetInSeconds(offsetTimeInSeconds)
 
     #Send goal for the first waypoint
@@ -316,7 +322,13 @@ def sendGoalDoneCallback(terminalState, result):
         currentWaypointIndex += 1
 
         #Get what's the "loitering time" for the next waypoint
-        offsetTimeInSeconds = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"] 
+        try:
+            offsetTimeInSeconds = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"] 
+        except KeyError:
+            rospy.loginfo("ERROR : While accessing value at key [hold_time_s] KeyError, non-existent or undefined!")
+            rospy.loginfo("Assigning default loitering time of 0 second...")
+            offsetTimeInSeconds = 0
+
         currentLoiteringEndTimeInSeconds = getTimeOffsetInSeconds(offsetTimeInSeconds)
 
         # Check if all waypoints are done
