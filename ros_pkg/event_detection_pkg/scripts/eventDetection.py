@@ -2,6 +2,7 @@
 
 import rospy, json, hashlib, actionlib, math
 import datetime
+import time
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from darknet_ros_msgs.msg import BoundingBoxes
@@ -21,6 +22,8 @@ class EventDetection:
 
         # Visual event detection flag for forwading a capture of the video feed
         self.hasDetectedVisualEvent = False
+        self.eventTimeout = 10
+        self.prevEventTime = time.time()
 
         # Events Config List
         self.eventsConfigDictList = list()
@@ -33,10 +36,10 @@ class EventDetection:
         # there were many
 
         # Subscribing to topic 'bounding_boxes' with callback
-        rospy.Subscriber("/darknet_ros_msgs/bounding_boxes", BoundingBoxes, self.boundingBoxesCallback)
+        rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, self.boundingBoxesCallback)
 
         # Subscribing to topic 'detection_image' with callback
-        rospy.Subscriber("/darknet_ros_msgs/detection_image", Image, self.detectionImageCallback)
+        rospy.Subscriber("/darknet_ros/detection_image", Image, self.detectionImageCallback)
 
         #TODO: For future Securbot version, support configuration request on the end-device/web client side
         # Subscribing to topic 'event_detection_config' with callback
@@ -45,7 +48,7 @@ class EventDetection:
         # Publishing to topic 'event_detection'
         self.t_eventDetection = rospy.Publisher("/event_detection/event_detection", String, queue_size = 20)
         # Publishing to topic 'detection_frame'
-        self.t_detectionFrame = rospy.Publisher("/event_detection/detection_frame", Image, queue_size =20)
+        self.t_detectionFrame = rospy.Publisher("/event_detection/detection_frame", Image, queue_size = 20)
 
         rospy.spin()
 
@@ -59,33 +62,38 @@ class EventDetection:
         return eventStamp
 
     def boundingBoxesCallback(self, boundingBoxes):
-        rospy.loginfo(datetime.datetime.now().strftime("[%H:%M:%S]")\
+        if time.time() - self.prevEventTime > self.eventTimeout:
+            rospy.loginfo(datetime.datetime.now().strftime("[%H:%M:%S]")\
             + " [DEBUG]: Visual Object Detected!")
 
-        #Parse every detected classes
-        bboxDictList = list()
-        for bbox in boundingBoxes.bounding_boxes:
-            bboxDict = dict()
-            bboxDict["class"] = bbox.Class
-            bboxDict["probability"] = bbox.probability
-            bboxDictList.append(bboxDict)
+            #Parse every detected classes
+            bboxDictList = list()
+            for bbox in boundingBoxes.bounding_boxes:
+                bboxDict = dict()
+                bboxDict["class"] = bbox.Class
+                bboxDict["probability"] = bbox.probability
+                bboxDictList.append(bboxDict)
 
-        #Check if any active events
-        for eConfig in self.eventsConfigDictList:
-            if(eConfig["active"] == True):
-                if( (eConfig["startTime"] == None                             \
-                                        and                                   \
-                     eConfig["stopTime"] == None)                             \
-                                        or                                    \
-                     (eConfig["startTime"] <= datetime.datetime.now().time()  \
-                                        and                                   \
-                      eConfig["stopTime"] >= datetime.datetime.now().time())                  ):
-                    for bboxDict in bboxDictList:
-                        #Check if threshold reached
-                        if(eConfig["threshold"] == bboxDict["class"]):
-                            triggeredEvent = self.stampEventNameDateTime(eConfig, bboxDict["probability"])
-                            self.t_eventDetection.publish(json.dumps(triggeredEvent))
-                            self.hasDetectedVisualEvent = True
+            #Check if any active events
+            for eConfig in self.eventsConfigDictList:
+                if(eConfig["active"] == True):
+                    if( (eConfig["startTime"] == None                             \
+                                            and                                   \
+                        eConfig["stopTime"] == None)                             \
+                                            or                                    \
+                        (eConfig["startTime"] <= datetime.datetime.now().time()  \
+                                            and                                   \
+                        eConfig["stopTime"] >= datetime.datetime.now().time())                  ):
+                        for bboxDict in bboxDictList:
+                            #Check if threshold reached
+                            if(eConfig["threshold"] == bboxDict["class"]):
+                                triggeredEvent = self.stampEventNameDateTime(eConfig, bboxDict["probability"])
+                                self.t_eventDetection.publish(json.dumps(triggeredEvent))
+                                self.hasDetectedVisualEvent = True
+                                self.prevEventTime = time.time()
+                                break
+            
+
 
     def detectionImageCallback(self, img):
         if(self.hasDetectedVisualEvent == True):

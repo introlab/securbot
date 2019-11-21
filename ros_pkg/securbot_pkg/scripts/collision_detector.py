@@ -19,7 +19,7 @@ class CollisionDetector:
 
     def __init__(self):
         rospy.init_node('collision_detector')
-        self.delta_max = rospy.get_param('~delta_max', 0.08)
+        self.delta_max = rospy.get_param('~delta_max', 0.04)
         self.over_counter = 0
 
         self.coll_pub = rospy.Publisher('collision', Empty, queue_size=10)

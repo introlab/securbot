@@ -7,10 +7,10 @@
                 <arg name="smooth_cmd_vel_topic" default="/smooth_cmd_vel"/>
 		<arg name="robot_cmd_vel_topic"   value="robot_cmd_vel"/>
 
-		
+
 		<node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager_name)" args="manager"/>
 
-		
+
 		<include file="$(find yocs_velocity_smoother)/launch/velocity_smoother.launch">
 			<arg name="node_name"             value="$(arg node_name)"/>
 		        <arg name="nodelet_manager_name"  value="$(arg nodelet_manager_name)"/>
@@ -24,6 +24,11 @@
 	<group>
 		<remap from="/cmd_vel" to="/smooth_cmd_vel"/>
 		<include file="$(find roboclaw_node)/launch/roboclaw.launch" />
+	</group>
+	<group>
+		<remap from="odom" to="/rtabmap/odom"/>
+		<remap from="cmd_vel" to="/smooth_cmd_vel"/>
+		<node name="vel_watcher" pkg="securbot_pkg" type="collision_detector.py" output="screen"/>
 	</group>
 </launch>
 
