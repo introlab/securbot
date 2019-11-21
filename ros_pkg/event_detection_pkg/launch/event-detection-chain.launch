@@ -1,0 +1,6 @@
+<launch>
+	<!-- Robot -->
+	<include file="$(find event_detection_pkg)/launch/includes/securbot-darknet.launch" />
+    <include file="$(find event_detection_pkg)/launch/eventDetection.launch"/>
+    <include file="$(find event_detection_pkg)/launch/httpEventClient.launch"/>
+</launch>

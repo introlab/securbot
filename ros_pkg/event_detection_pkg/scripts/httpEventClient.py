@@ -111,7 +111,7 @@ class HttpEventClient:
 
 
     def build_robot(self):
-        self.robot["name"] = os.environ["ROBOT_NAME"]
+        self.robot["name"] = os.environ["SECURBOT_ROBOT_NAME"]
         _os = platform.linux_distribution()
         self.robot["platform"]["OS"] = _os[0] + " " + _os[1]
         self.robot["platform"]["ROS"] = rospy.get_param("rosdistro")[0:-1] + " " + rospy.get_param("rosversion")[0:-1]
