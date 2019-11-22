@@ -29,6 +29,8 @@ hbba_conf:
     costs:
         robotic_base: 1
     modules:
+        - darknet:
+            - camera_rgb_image_rect_color: 10
         - planner
     custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 

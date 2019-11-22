@@ -36,8 +36,8 @@ class HttpEventClient:
 
         rospy.init_node("http_event_client")
 
-        rospy.Subscriber("/event_detection/event_detection", String, self.detection_callback)
-        rospy.Subscriber("/camera/rgb/image_rect_color", Image, self.frame_callback)
+        rospy.Subscriber("event_detection/event_detection", String, self.detection_callback)
+        rospy.Subscriber("image_rect_color", Image, self.frame_callback)
 
         self.map_frame = rospy.get_param('~map_frame', 'map')
         self.robot_frame = rospy.get_param('~robot_frame', 'base_footprint')
@@ -114,7 +114,7 @@ class HttpEventClient:
         self.robot["name"] = os.environ["SECURBOT_ROBOT_NAME"]
         _os = platform.linux_distribution()
         self.robot["platform"]["OS"] = _os[0] + " " + _os[1]
-        self.robot["platform"]["ROS"] = rospy.get_param("rosdistro")[0:-1] + " " + rospy.get_param("rosversion")[0:-1]
+        self.robot["platform"]["ROS"] = rospy.get_param("/rosdistro")[0:-1] + " " + rospy.get_param("/rosversion")[0:-1]
         self.robot["platform"]["CPU"] = platform.processor()
         self.robot["platform"]["GPU"] = "Nvidia"
         self.robot["platform"]["Batteries"] = ""

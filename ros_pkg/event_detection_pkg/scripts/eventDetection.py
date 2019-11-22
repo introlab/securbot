@@ -36,19 +36,19 @@ class EventDetection:
         # there were many
 
         # Subscribing to topic 'bounding_boxes' with callback
-        rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, self.boundingBoxesCallback)
+        rospy.Subscriber("darknet_ros/bounding_boxes", BoundingBoxes, self.boundingBoxesCallback)
 
         # Subscribing to topic 'detection_image' with callback
-        rospy.Subscriber("/darknet_ros/detection_image", Image, self.detectionImageCallback)
+        rospy.Subscriber("darknet_ros/detection_image", Image, self.detectionImageCallback)
 
         #TODO: For future Securbot version, support configuration request on the end-device/web client side
         # Subscribing to topic 'event_detection_config' with callback
         #rospy.Subscriber("/event_detection/event_detection_config", String, self.eventDetectionConfigCallback)
 
         # Publishing to topic 'event_detection'
-        self.t_eventDetection = rospy.Publisher("/event_detection/event_detection", String, queue_size = 20)
+        self.t_eventDetection = rospy.Publisher("event_detection/event_detection", String, queue_size = 20)
         # Publishing to topic 'detection_frame'
-        self.t_detectionFrame = rospy.Publisher("/event_detection/detection_frame", Image, queue_size = 20)
+        self.t_detectionFrame = rospy.Publisher("event_detection/detection_frame", Image, queue_size = 20)
 
         rospy.spin()
 
@@ -92,7 +92,7 @@ class EventDetection:
                                 self.hasDetectedVisualEvent = True
                                 self.prevEventTime = time.time()
                                 break
-            
+
 
 
     def detectionImageCallback(self, img):

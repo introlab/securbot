@@ -23,7 +23,7 @@ hbba_conf:
 #        - move_base/status: {src: move_base/status, filtered: false}
 #        - toMapImageGenerator: {src: map_image_generator/input_goal, filtered: false}
 #    output:
-#        - move_base/goal  
+#        - move_base/goal
 #        - move_base/cancel
 #        - toElectron
 
@@ -37,3 +37,9 @@ hbba_conf:
         - tf
         - tag_detections
         - tag_detections_image
+
+- procmodule:
+    name: darknet
+    launch: {pkg: 'event_detection_pkg', path: 'launch/event-detection-chain.launch'}
+    input:
+     - image_rect_color: {src: camera/rgb/image_rect_color}
