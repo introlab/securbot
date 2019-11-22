@@ -192,7 +192,7 @@ class DockGenerator:
             angles = euler_from_quaternion(quat)
             yaw_dst = angles[2] - self.approach_goal['t']
 
-            if lin_dst < self.appr_lin_tol and yaw_dst < self.appr_yaw_tol:
+            if lin_dst < self.appr_lin_tol and abs(yaw_dst) < self.appr_yaw_tol:
                 self.finish_approach()
 
             self.lock.release()

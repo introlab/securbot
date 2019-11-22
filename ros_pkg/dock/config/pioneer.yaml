@@ -1,5 +1,5 @@
 approach:
-  x: 2.420
-  y: -1.491
-  t: -0.805
+  x: 0.0
+  y: 0.0
+  t: 0.0
   frame_id: map

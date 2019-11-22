@@ -3,7 +3,7 @@
 
     <!-- Docking -->
     <node name="target" pkg="dock" type="target_node" output="screen">
-        <param name="tag_id" value="0" />
+        <param name="tag_id" value="1" />
     </node>
     <node name="planner" pkg="dock" type="planner_node" output="screen">
         <param name="target_frame_id" value="station_0"/>
