@@ -111,8 +111,8 @@ export default {
     },
   },
   getters: {
-    // uri: state => `${(process.env.VUE_APP_SERVER_URL.startsWith('http') ? '' : 'http://')}${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
-    uri: state => `http://localhost:3000${state.apiPath}`,
+    uri: state => `${(process.env.VUE_APP_SERVER_URL.startsWith('http') ? '' : 'http://')}${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
+    // uri: state => `http://localhost:3000${state.apiPath}`,
     eventsWaypoints: (state) => {
       const wpl = [];
       for (const event of state.events) {
