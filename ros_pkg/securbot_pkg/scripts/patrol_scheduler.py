@@ -118,7 +118,7 @@ class PatrolScheduler:
             rospy.loginfo("Patrol %s must run now. Retrieving..." % id)
             try:
                 patrol = self.retrieve_patrol_by_id(id)
-                patrol["loop"] = rep
+                patrol["repetitions"] = rep
                 patrols.append(patrol)
             except requests.exceptions.RequestException, e:
                 rospy.logwarn(

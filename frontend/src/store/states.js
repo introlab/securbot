@@ -67,7 +67,7 @@ export default {
         cron: '',
         timeout_s: '',
         repetitions: '',
-        enabled: false,
+        enabled: true,
       },
     },
     list: [],

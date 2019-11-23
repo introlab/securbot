@@ -790,9 +790,10 @@ export default {
       }
     },
     sendPatrolToRobot() {
-      this.$store.dispatch('sendPatrol', this.currentPatrol.obj);
+      this.$store.dispatch('sendPatrol', { patrol: this.currentPatrol.obj });
     },
     sendScheduleToRobot() {
+      this.$store.dispatch('sendPatrol', { patrol: this.currentPatrol.obj, repetitions: this.currentSchedule.obj.repetitions });
     },
   },
 };
