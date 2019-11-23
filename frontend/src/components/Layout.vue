@@ -1,7 +1,7 @@
 <template>
   <div
     id="operator-layout"
-    class="vh-100"
+    class="vh-100 mh-100"
   >
     <navbar />
     <div style="height:calc(100% - 64px)">

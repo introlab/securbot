@@ -111,8 +111,8 @@ export default {
     },
   },
   getters: {
-    uri: state => `${(process.env.VUE_APP_SERVER_URL.startsWith('http') ? '' : 'http://')}${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
-    // uri: state => `http://localhost:3000${state.apiPath}`,
+    // uri: state => `${(process.env.VUE_APP_SERVER_URL.startsWith('http') ? '' : 'http://')}${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
+    uri: state => `http://localhost:3000${state.apiPath}`,
     eventsWaypoints: (state) => {
       const wpl = [];
       for (const event of state.events) {
@@ -474,7 +474,6 @@ export default {
           for (const waypoint of result.waypoints) {
             wp.push(waypoint.coordinate);
           }
-          commit('fillWaypointList', wp, { root: true });
           commit('setCurrentPatrolId', result._id, { root: true });
           commit('setCurrentPatrol', result, { root: true });
         }).catch((err) => {

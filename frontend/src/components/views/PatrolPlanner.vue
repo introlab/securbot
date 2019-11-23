@@ -27,10 +27,10 @@
             style="height: calc( 100% - 60px - 0.25rem );"
           >
             <div
-              style="width: 100%; heigth: 60px"
+              class="w-100 h-100"
             >
               <div
-                class="border rounded m-1 sb-container"
+                class="border rounded m-1 h-100"
               >
                 <div
                   class="sb-container-header d-flex flex-row justify-content-between"
@@ -61,7 +61,7 @@
                   </b-form-select>
                 </div>
                 <div
-                  class="p-2"
+                  class="p-2 h-100"
                 >
                   <b-table
                     borderless
@@ -70,12 +70,31 @@
                     :table-class="['m-0', 'table-rounded']"
                     thead-class="text-center"
                     tbody-class="text-center"
-                    fixed
                     :fields="headers"
                     :items="waypointList"
                   >
                     <template v-slot:cell(index)="data">
                       {{ data.index + 1 }}
+                    </template>
+                    <template v-slot:cell(label)="data">
+                      <b-form-input
+                        v-model="data.item.label"
+                        placeholder="label"
+                        style="max-height: 24px; font-size: 0.8rem;"
+                        @input="(event) => { $store.commit('setWaypointLabel',
+                                                           { index: data.index, value: event }) }"
+                        @focus="testFocus"
+                      />
+                    </template>
+                    <template v-slot:cell(holdTime)="data">
+                      <b-form-input
+                        v-model="data.item.hold_time_s"
+                        type="number"
+                        placeholder="sec"
+                        style="max-height: 24px; font-size: 0.8rem;"
+                        @input="(event) => { $store.commit('setWaypointHold',
+                                                           { index: data.index, value: event }) }"
+                      />
                     </template>
                     <template v-slot:cell(remove)="data">
                       <button
@@ -115,7 +134,8 @@
             :list="waypointList"
             :nb-of-waypoint="-1"
             :video-element="patrolHTMLElement"
-            @newWaypoint="addWaypointToList"
+            :refresh-rate="30"
+            @newWaypoint="(wp) => { $store.commit('addWaypoint', { wp }) }"
           />
         </div>
         <div
@@ -191,9 +211,9 @@ export default {
       currentRobot: state => state.currentRobot,
       mapZoom: state => state.mapZoom,
       mapSize: state => state.mapSize,
-      waypointList: state => state.waypoints.list,
+      waypointList: state => state.patrol.current.obj.waypoints,
       patrolList: state => state.patrol.list,
-      headers: state => state.waypoints.headers,
+      headers: state => state.headers.waypoints,
       currentPatrol: state => state.patrol.current,
       patrolHTMLId: state => state.htmlElement.patrolId,
       patrolHTMLElement: state => state.htmlElement.patrol,
@@ -222,6 +242,9 @@ export default {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    testFocus(event) {
+      console.log(event);
+    },
     fixFloat(value) {
       return value.toFixed(1);
     },
@@ -247,14 +270,6 @@ export default {
     addWaypointToList(wp) {
       this.$store.commit('addWaypoint', { wp });
     },
-    /**
-     * Removes all waypoints from the patrol.
-     *
-     * @public
-     */
-    clearWaypointList() {
-      this.$store.commit('clearWaypointList');
-    },
     clearScheduleData() {
       this.$store.commit('clearCurrentSchedule');
     },
@@ -263,7 +278,6 @@ export default {
       if (event) {
         this.$store.dispatch('database/getPatrol', event);
       } else {
-        this.$store.commit('clearWaypointList');
         this.$store.commit('setCurrentPatrolId', '');
         this.$store.commit('clearCurrentPatrol');
       }

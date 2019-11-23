@@ -95,9 +95,10 @@ export default {
       easyrtc.setAcceptChecker(this.acceptCall);
 
       const id = Math.round(Math.random() * 1000);
-      easyrtc.setRoomApiField('default', 'type', 'Robot-Test');
+      easyrtc.setRoomApiField('default', 'name', 'Dev-Test');
+      easyrtc.setRoomApiField('default', 'type', 'robot');
       easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);
-      easyrtc.connect('easyrtc.securbot', this.loginSuccess, this.loginFailure);
+      easyrtc.connect(process.env.VUE_APP_SERVER_ROOM_NAME, this.loginSuccess, this.loginFailure);
 
       // eslint-disable-next-line no-loop-func
       easyrtc.getVideoSourceList((videoSources) => {

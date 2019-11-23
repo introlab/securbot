@@ -57,22 +57,28 @@ export default {
   },
   addWaypoint(state, add) {
     if ('index' in add) {
-      state.waypoints.list.splice(add.index, 0, add.wp);
+      state.patrol.current.obj.waypoints.splice(add.index, 0, add.wp);
     } else {
-      state.waypoints.list.push(add.wp);
+      state.patrol.current.obj.waypoints.push(add.wp);
     }
   },
+  setWaypointLabel(state, data) {
+    state.patrol.current.obj.waypoints[data.index].label = data.value;
+  },
+  setWaypointHold(state, data) {
+    state.patrol.current.obj.waypoints[data.index].hold_time_s = data.value;
+  },
   updateWaypoint(state, update) {
-    state.waypoints.list.splice(update.index, 1, update.wp);
+    state.patrol.current.obj.waypoints.splice(update.index, 1, update.wp);
   },
   removeWaypoint(state, index) {
-    state.waypoints.list.splice(index, 1);
+    state.patrol.current.obj.waypoints.splice(index, 1);
   },
   clearWaypointList(state) {
-    state.waypoints.list = [];
+    state.patrol.current.obj.waypoints = [];
   },
   fillWaypointList(state, waypointList) {
-    state.waypoints.list = waypointList;
+    state.patrol.current.obj.waypoints = waypointList;
   },
   addPatrol(state, patrol) {
     state.patrol.list.push(patrol);
