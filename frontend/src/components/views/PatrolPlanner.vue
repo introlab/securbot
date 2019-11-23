@@ -90,10 +90,11 @@
                       <b-form-input
                         v-model="data.item.hold_time_s"
                         type="number"
+                        min="0"
                         placeholder="sec"
                         style="max-height: 24px; font-size: 0.8rem;"
-                        @input="(event) => { $store.commit('setWaypointHold',
-                                                           { index: data.index, value: event }) }"
+                        @change="(event) => { $store.commit('setWaypointHold',
+                                                            { index: data.index, value: event }) }"
                       />
                     </template>
                     <template v-slot:cell(remove)="data">

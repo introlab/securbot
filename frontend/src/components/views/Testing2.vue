@@ -94,7 +94,7 @@ export default {
       easyrtc.setOnStreamClosed(this.closePeerVideo);
       easyrtc.setAcceptChecker(this.acceptCall);
 
-      const id = Math.round(Math.random() * 1000);
+      // const id = Math.round(Math.random() * 1000);
       easyrtc.setRoomApiField('default', 'name', 'Dev-Test');
       easyrtc.setRoomApiField('default', 'type', 'robot');
       easyrtc.setSocketUrl(process.env.VUE_APP_SERVER_URL);

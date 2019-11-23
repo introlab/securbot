@@ -4,10 +4,14 @@ export default {
     state.currentRobot.id.db = '';
     state.currentRobot.name = robot.robotName;
     state.currentRobot.id.client = robot.robotId;
-    for (const r of state.database.robots) {
-      if (state.currentRobot.name === r.name) {
-        state.currentRobot.id.db = r.id;
+    if (state.currentRobot.name) {
+      for (const r of state.database.robots) {
+        if (state.currentRobot.name === r.name) {
+          state.currentRobot.id.db = r.id;
+        }
       }
+    } else {
+      state.currentRobot.id.db = '';
     }
   },
   showStreams(state) {
