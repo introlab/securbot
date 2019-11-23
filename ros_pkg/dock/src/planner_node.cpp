@@ -4,7 +4,6 @@
 #include "geometry_msgs/TransformStamped.h"
 #include "geometry_msgs/Twist.h"
 #include "nav_msgs/Path.h"
-#include "std_msgs/Empty.h"
 #include "dock/ApproachPath.h"
 #include <string>
 #include <cmath>
@@ -21,12 +20,9 @@ double g_dThetaMax;
 double g_close_range;
 double g_dx_approach;
 double g_dx_close_approach;
-double g_stuck_tolerance;
-double g_stuck_time;
 tf2_ros::Buffer g_tfBuffer;
 ros::Publisher g_pathPublisher;
 ros::Publisher g_commandPublisher;
-ros::Publisher g_collisionPublisher;
 
 
 
@@ -51,11 +47,6 @@ void FollowPath(const dock::ApproachPath & path)
 {
     static double lastThetaError = 0;
     static double totalThetaError = 0;
-
-    static ros::Time collision_last_check = ros::Time(0);
-    static ros::Duration collision_dt = ros::Duration(g_stuck_time);
-    static bool collision_new_run = true;
-    static double collision_last_length = 0.0;
 
     double currentThetaError = path.getAngleError();
     double derivativeThetaError = (lastThetaError - currentThetaError) / g_dt_ms;
@@ -97,32 +88,6 @@ void FollowPath(const dock::ApproachPath & path)
     motorOutput.angular.z = thetaTwist;
 
     g_commandPublisher.publish(motorOutput);
-
-    // Check for collision
-    if (ros::Time::now() - collision_last_check > collision_dt) {
-        collision_last_check = ros::Time::now();
-
-        // Near end of path
-        if (pathLength < 0) {
-            if (collision_new_run) {
-                collision_last_length = pathLength;
-                collision_new_run = false;
-            }
-            else {
-                double shouldTravel = g_stuck_time * g_dx_close_approach;
-                double travelled = fabs(pathLength - collision_last_length);
-
-                if (travelled - shouldTravel < g_stuck_tolerance) {
-                    g_collisionPublisher.publish(std_msgs::Empty());
-                }
-
-                collision_last_length = pathLength;
-            }
-        }
-        else {
-            collision_new_run = true;
-        }
-    }
 }
 
 
@@ -148,18 +113,16 @@ void DockRoutine()
 
 void LoadParameters(ros::NodeHandle * nh)
 {
-    nh->param("target_frame_id", g_target_frame_id, std::string("target"));
-    nh->param("base_frame_id", g_base_frame_id, std::string("base_footprint"));
-    nh->param("dt_ms", g_dt_ms, 100.0);
-    nh->param("P_theta", g_P_theta, 0.0);
-    nh->param("I_theta", g_I_theta, 0.0);
-    nh->param("D_theta", g_D_theta, 0.0);
-    nh->param("dThetaMax", g_dThetaMax, 100.0);
-    nh->param("close_range", g_close_range, -1.0);
-    nh->param("dx_approach", g_dx_approach, 0.4);
-    nh->param("dx_close_approach", g_dx_close_approach, 0.2);
-    nh->param("stuck_tolerance", g_stuck_tolerance, 0.05);
-    nh->param("suck_time", g_stuck_time, 1.0);
+    nh->param("planner/target_frame_id", g_target_frame_id, std::string("target"));
+    nh->param("planner/base_frame_id", g_base_frame_id, std::string("base_footprint"));
+    nh->param("planner/dt_ms", g_dt_ms, 100.0);
+    nh->param("planner/P_theta", g_P_theta, 0.0);
+    nh->param("planner/I_theta", g_I_theta, 0.0);
+    nh->param("planner/D_theta", g_D_theta, 0.0);
+    nh->param("planner/dThetaMax", g_dThetaMax, 100.0);
+    nh->param("planner/close_range", g_close_range, -1.0);
+    nh->param("planner/dx_approach", g_dx_approach, 0.4);
+    nh->param("planner/dx_close_approach", g_dx_close_approach, 0.2);
 }
 
 int main (int argc, char **argv)
@@ -167,10 +130,9 @@ int main (int argc, char **argv)
     ros::init(argc, argv, "planner");
 
     ros::NodeHandle nh;
-    ros::NodeHandle pnh("~");
 
     // Parameters
-    LoadParameters(&pnh);
+    LoadParameters(&nh);
 
     // Initializing the transform buffer
     tf2_ros::TransformListener tfListener(g_tfBuffer);
@@ -179,7 +141,6 @@ int main (int argc, char **argv)
     // Init publisher
     g_pathPublisher = nh.advertise<nav_msgs::Path>("approach_plan", 10);
     g_commandPublisher = nh.advertise<geometry_msgs::Twist>("cmd_vel", 10);
-    g_collisionPublisher = nh.advertise<std_msgs::Empty>("collision", 10);
 
 
     ros::Rate rate(1/(g_dt_ms/1000.0));
