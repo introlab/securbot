@@ -7,7 +7,7 @@ POST {{addr}}/db/robots HTTP/1.1
 content-type: application/json
 
 {
-  "name": "Robot1",
+  "name": "Dev-Test",
   "platform": {
       "OS": "Ubuntu 16.04",
       "ROS": "Kinetic",
@@ -39,7 +39,7 @@ GET {{addr}}/db/robots
 
 
 ###
-@robot1 = 5dcdc6b842aa01001b958a55
+@robot1 = 5dd97f955c07e0001433aefa
 @robot2  = 5dc59f3eb7217d0014134504
 
 ### Patrols

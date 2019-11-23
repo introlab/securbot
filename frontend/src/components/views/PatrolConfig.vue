@@ -120,46 +120,6 @@
                 </b-button>
               </div>
             </div>
-            <!-- Waypoints -->
-            <!-- <div
-              class="border rounded m-1 sb-container"
-            >
-              <div
-                class="sb-container-header"
-              >
-                <h5 class="m-0">
-                  <b>Waypoints</b>
-                </h5>
-              </div>
-              <div
-                class="h-100 p-2"
-              >
-                <b-form-select
-                  id="patrol-name-input"
-                  v-model="selectedWaypointIndex"
-                  :options="waypointIndexes"
-                >
-                  <template v-slot:first>
-                    <option
-                      value=""
-                      disabled
-                    >
-                      Select a Waypoint
-                    </option>
-                  </template>
-                </b-form-select>
-              </div>
-              <div
-                class="h-100 px-2 pb-2 pt-0"
-              >
-                <b-form-input
-                  id="patrol-desc-input"
-                  v-model="waypointTimeouts[selectedWaypointIndex]"
-                  type="number"
-                  placeholder="Enter a time (sec) to hold there..."
-                />
-              </div>
-            </div> -->
             <!-- Schedule -->
             <div
               class="border rounded m-1 sb-container"
@@ -511,7 +471,6 @@ export default {
   data() {
     return {
       errorSaveToDB: false,
-      waypointTimeouts: [],
       cron: ['', '', '', '', ''],
       cronInterval: '',
       isCronValid: '',
@@ -634,22 +593,11 @@ export default {
       }
       return ind;
     },
-    waypointForDB() {
-      const wp4db = [];
-      const wpList = JSON.parse(JSON.stringify(this.waypointList));
-      for (let i = 0; i < wpList.length; i++) {
-        wp4db[i] = {
-          coordinate: wpList[i],
-          hold_time_s: 0,
-        };
-      }
-      return wp4db;
-    },
     ...mapState({
       currentRobot: state => state.currentRobot,
       mapZoom: state => state.mapZoom,
       mapSize: state => state.mapSize,
-      waypointList: state => state.waypoints.list,
+      waypointList: state => state.patrol.current.obj.waypoints,
       patrolList: state => state.patrol.list,
       scheduleList: state => state.schedule.list,
       currentPatrol: state => state.patrol.current,
@@ -744,7 +692,6 @@ export default {
     },
     clearPatrolData() {
       this.$store.commit('clearCurrentPatrol');
-      this.$store.commit('clearWaypointList');
     },
     clearScheduleData() {
       this.cron = ['', '', '', '', ''];
@@ -796,7 +743,6 @@ export default {
         this.$store.commit('setCurrentPatrol', { robot: this.currentRobot.id.db });
       }
       this.$store.commit('setCurrentPatrol', { last_modified: new Date().toISOString() });
-      this.$store.commit('setCurrentPatrol', { waypoints: this.waypointForDB });
       this.$store.dispatch('database/savePatrol', this.currentPatrol)
         .then(() => {
           this.$store.dispatch('database/queryPatrols')
@@ -812,7 +758,6 @@ export default {
       if (event) {
         this.$store.dispatch('database/getPatrol', event);
       } else {
-        this.$store.commit('clearWaypointList');
         this.$store.commit('setCurrentPatrolId', '');
         this.$store.commit('clearCurrentPatrol');
       }
@@ -845,7 +790,7 @@ export default {
       }
     },
     sendPatrolToRobot() {
-      this.$store.dispatch('sendPatrol', { patrol: this.waypointList });
+      this.$store.dispatch('sendPatrol', this.currentPatrol.obj);
     },
     sendScheduleToRobot() {
     },

@@ -87,9 +87,13 @@ export default {
       canvas: null,
       context: null,
       currentWaypoint: {
-        x: -1,
-        y: -1,
-        yaw: 0,
+        coordinate: {
+          x: -1,
+          y: -1,
+          yaw: 0,
+        },
+        label: '',
+        hold_time_s: 0,
       },
       isMouseDown: false,
       loopIntervalId: null,
@@ -164,19 +168,31 @@ export default {
     drawWaypointList() {
       if (this.nbOfWaypoint >= 0) {
         for (let i = 0; i < this.nbOfWaypoint && i < this.list.length; i++) {
-          this.drawWaypoint(this.list[i], -1);
+          this.drawWaypoint(this.list[i]);
           this.drawYawArrow(this.list[i]);
         }
       } else {
         for (const [index, wp] of this.list.entries()) {
-          this.drawWaypoint(wp, index);
+          this.drawWaypoint(wp);
           this.drawYawArrow(wp);
+          this.writeWaypointInfos(wp, index);
         }
       }
       if (this.isMouseDown) {
-        this.drawWaypoint(this.currentWaypoint, (this.nbOfWaypoint >= 0 ? -1 : this.list.length));
+        this.drawWaypoint(this.currentWaypoint);
         this.drawYawArrow(this.currentWaypoint);
       }
+    },
+    writeWaypointInfos(wp, index) {
+      const wpCoord = wp.coordinate;
+      const coord = this.getCanvasCoordinatesFromVideo(wpCoord.x, wpCoord.y);
+      // const radYaw = -wpCoord.yaw / 180 * Math.PI;
+
+      const text = `${index + 1}${(wp.label ? `. ${wp.label}` : '')}`;
+
+      this.context.font = '20px serif';
+      this.context.fillStyle = '#000000';
+      this.context.fillText(text, coord.x + 8, coord.y + 8);
     },
     /**
      * Draws a the point/dot.
@@ -185,21 +201,16 @@ export default {
      * @param {Number} index The index of the waypoint in the list (Is written next to the dot).
      * @public
      */
-    drawWaypoint(wp, index) {
+    drawWaypoint(wp) {
+      const wpCoord = wp.coordinate;
       const { wpColor } = this;
-      const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
+      const coord = this.getCanvasCoordinatesFromVideo(wpCoord.x, wpCoord.y);
 
       const wpRadius = 7;
       this.context.beginPath();
       this.context.arc(coord.x, coord.y, wpRadius, 0, 2 * Math.PI);
       this.context.fillStyle = wpColor;
       this.context.fill();
-
-      if (index >= 0) {
-        this.context.font = '20px serif';
-        this.context.fillStyle = '#000000';
-        this.context.fillText(index + 1, coord.x + 8, coord.y + 8, 25);
-      }
     },
     /**
      * Draws the arrows.
@@ -208,12 +219,13 @@ export default {
      * @public
      */
     drawYawArrow(wp) {
+      const wpCoord = wp.coordinate;
       const { wpColor } = this;
-      const coord = this.getCanvasCoordinatesFromVideo(wp.x, wp.y);
+      const coord = this.getCanvasCoordinatesFromVideo(wpCoord.x, wpCoord.y);
 
       const arrowLength = Math.min(this.canvas.width, this.canvas.height) / 15;
       const headLength = arrowLength / 4;
-      const radYaw = -wp.yaw / 180 * Math.PI;
+      const radYaw = -wpCoord.yaw / 180 * Math.PI;
       const arrowEnd = {
         x: coord.x + arrowLength * Math.cos(radYaw),
         y: coord.y + arrowLength * Math.sin(radYaw),
@@ -343,9 +355,9 @@ export default {
       if (this.isMouseDown) {
         console.log('MouseMoved');
         const mousePosition = this.getVideoCoordinatesOfEvent(event);
-        this.currentWaypoint.yaw = -Math.atan2(
-          mousePosition.y - this.currentWaypoint.y,
-          mousePosition.x - this.currentWaypoint.x,
+        this.currentWaypoint.coordinate.yaw = -Math.atan2(
+          mousePosition.y - this.currentWaypoint.coordinate.y,
+          mousePosition.x - this.currentWaypoint.coordinate.x,
         ) * 180 / Math.PI;
       }
     },
@@ -360,14 +372,14 @@ export default {
         console.log('MouseUP');
         const mousePosition = this.getVideoCoordinatesOfEvent(event);
 
-        this.currentWaypoint.yaw = -Math.atan2(
-          mousePosition.y - this.currentWaypoint.y,
-          mousePosition.x - this.currentWaypoint.x,
+        this.currentWaypoint.coordinate.yaw = -Math.atan2(
+          mousePosition.y - this.currentWaypoint.coordinate.y,
+          mousePosition.x - this.currentWaypoint.coordinate.x,
         ) * 180 / Math.PI;
         this.emitWaypoint();
         this.isMouseDown = false;
 
-        this.currentWaypoint = {
+        this.currentWaypoint.coordinate = {
           x: -1,
           y: -1,
           yaw: 0,
@@ -384,7 +396,7 @@ export default {
     onMouseOut() {
       if (this.isMouseDown) {
         console.log('MouseOut');
-        this.currentWaypoint = {
+        this.currentWaypoint.coordinate = {
           x: -1,
           y: -1,
           yaw: 0,
@@ -399,7 +411,7 @@ export default {
      * @public
      */
     addWaypointCoord(wp) {
-      Object.assign(this.currentWaypoint, wp);
+      Object.assign(this.currentWaypoint.coordinate, wp);
     },
     /**
      * Updates the current waypoint.
@@ -413,7 +425,9 @@ export default {
        *
        * @type {Object} The valid internal waypoint.
        */
-      this.$emit('newWaypoint', this.currentWaypoint);
+      const temp = {};
+      Object.assign(temp, this.currentWaypoint);
+      this.$emit('newWaypoint', temp);
     },
     /**
      * Verifies if the operator click was valid.

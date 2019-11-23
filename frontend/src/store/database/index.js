@@ -474,7 +474,6 @@ export default {
           for (const waypoint of result.waypoints) {
             wp.push(waypoint.coordinate);
           }
-          commit('fillWaypointList', wp, { root: true });
           commit('setCurrentPatrolId', result._id, { root: true });
           commit('setCurrentPatrol', result, { root: true });
         }).catch((err) => {
