@@ -226,7 +226,7 @@ class DockGenerator:
         self.robot_frame = rospy.get_param('~robot_frame', 'base_footprint')
 
         self.appr_lin_tol = rospy.get_param('~appr_lin_tol', 0.40)
-        self.appr_yaw_tol = rospy.get_param('~appr_yaw_tol', 0.05)
+        self.appr_yaw_tol = rospy.get_param('~appr_yaw_tol', 0.1)
 
         self.min_percent = rospy.get_param('~min_percent', 30)
         self.charge_percent = rospy.get_param('~charge_percent', 80)
