@@ -187,7 +187,8 @@ function startNode() {
     /** Publish received goto to ROS */
     const gotoPublisher = nodeHandle.advertise('goto', std_msgs.String);
     ipcMain.on('goto', (_, gotoString) => {
-      gotoPublisher.publish({ data: gotoString });
+      const goto = JSON.parse(gotoString).coordinate;
+      gotoPublisher.publish({ data: JSON.stringify(goto) });
     });
 
     /** Publish received map zoom to ROS */
