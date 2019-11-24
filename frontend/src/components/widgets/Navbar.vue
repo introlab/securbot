@@ -58,7 +58,7 @@
             </transition>
             <!-- Dropdown with connection widget -->
             <b-nav-item-dropdown
-              :text="(isConnected ? robotIdToName(robotId) : 'Connect to Robot')"
+              :text="(isConnected ? `Connected to ${robotIdToName(robotId)}` : 'Connect to Robot')"
               right
             >
               <!-- Connection container -->
