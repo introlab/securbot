@@ -107,7 +107,7 @@ Example of patrol document:
     description_text: "text",
     last_modified: "2019-10-07T06:52:19.831Z",
     waypoints: [ // required
-        { coordinate: {x: 0, y: 0, yaw: 180}, hold_time_s: 10 },
+        { coordinate: {x: 0, y: 0, yaw: 180}, label: 'vantage point', hold_time_s: 10 },
         { coordinate: {x: 0, y: 0, yaw: 180}, hold_time_s: 10 },
         { coordinate: {x: 0, y: 0, yaw: 180}, hold_time_s: 10 }
     ]
