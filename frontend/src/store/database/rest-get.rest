@@ -1,0 +1,35 @@
+@addr = uri
+@path = /db
+@robot = id
+@patrol = id
+@schedule = id
+
+### Get all robots
+GET {{addr}}{{path}}/robots
+
+### Get all patrols of robot
+GET {{addr}}{{path}}/robots/{{robot}}/patrols
+
+### Get specified patrol of robot
+GET {{addr}}{{path}}/robots/{{robot}}/patrols/{{patrol}}
+
+### Get all schedules of robot
+GET {{addr}}{{path}}/robots/{{robot}}/schedules
+
+### Get specified schedule of robot
+GET {{addr}}{{path}}/robots/{{robot}}/schedules/{{schedule}}
+
+### Get all events of robot
+GET {{addr}}{{path}}/robots/{{robot}}/events
+
+### Get filtered events of robots
+GET {{addr}}{{path}}/robots/{{robot}}/events
+content-type: application/json
+
+{
+  "after": "2019-10-11T22:04:07.921Z",
+  "before": "2019-11-08T22:04:07.921Z",
+  "search_expression": "",
+  "alert": false,
+  "viewed": false
+}

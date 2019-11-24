@@ -53,10 +53,12 @@
           </b-navbar-nav>
           <!-- Navbar left side content -->
           <b-navbar-nav class="ml-auto">
-            <robot-status />
+            <transition name="fade">
+              <robot-status />
+            </transition>
             <!-- Dropdown with connection widget -->
             <b-nav-item-dropdown
-              text="Connect to Robot"
+              :text="(isConnected ? robotIdToName(robotId) : 'Connect to Robot')"
               right
             >
               <!-- Connection container -->
@@ -68,12 +70,6 @@
                   @click="handleConnection"
                 >
                   <template v-slot:header>
-                    <!-- <h5
-                      id="who-am-i"
-                      class="text-muted ml-1"
-                    >
-                      I am: {{ myId }}
-                    </h5> -->
                     <h5 class="ml-1 mb-0 mt-0">
                       List of Robots:
                     </h5>
@@ -160,11 +156,25 @@ export default {
         this.$store.dispatch('client/connectToRobot', robotId);
       }
     },
+    robotIdToName(robotId) {
+      for (const robot of this.robotList) {
+        if (robot.robotId === robotId) {
+          return robot.robotName;
+        }
+      }
+      return '';
+    },
   },
 };
 </script>
 
 <style lang="css" scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 .navbar{
   min-height:64px;
 }

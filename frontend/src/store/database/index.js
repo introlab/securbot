@@ -8,15 +8,6 @@ export default {
     queryingDB: false,
     errorDuringQuery: false,
     events: [],
-    headers: [
-      { key: 'name', label: 'Robot' },
-      { key: 'object', label: 'Object' },
-      { key: 'context', label: 'Context' },
-      { key: 'description_text', label: 'Description' },
-      { key: 'tags', label: 'Tags' },
-      { key: 'time', label: 'DateTime' },
-      { key: 'image', label: 'Image' },
-    ],
     robots: [],
     robotFilter: [],
     tagList: ['red', 'yellow', 'blue', 'green', 'a', 'b', 'c'],
@@ -143,7 +134,10 @@ export default {
     resetEvents(state) {
       state.events = [];
     },
-    setRobotFilters(state, robot) {
+    resetRobotFilter(state) {
+      state.robotFilter = [];
+    },
+    setRobotFilter(state, robot) {
       if (robot === 'all') {
         state.robotFilter = state.robots;
       } else {
@@ -181,7 +175,7 @@ export default {
         commit('queryStarted');
         dispatch('queryRobots')
           .then(() => {
-            commit('setRobotFilters', 'all');
+            commit('setRobotFilter', 'all');
             dispatch('queryEvents', { filters: state.defaultFilter })
               .then(() => {
                 commit('queryFinished');
