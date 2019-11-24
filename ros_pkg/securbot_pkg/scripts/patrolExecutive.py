@@ -310,21 +310,6 @@ def sendGoalDoneCallback(terminalState, result):
         return
     else:
         # #Loiter 
-        # while(currentLoiteringEndTimeInSeconds > int(round(time.time()))):
-        #     rospy.sleep(0.7) # Sleeps 700 milliseconds
-        #     rospy.loginfo("[DEBUG] End loitering in...[%s]", currentLoiteringEndTimeInSeconds - int(round(time.time())))
-
-        # currentWaypointIndex += 1
-
-        # #Get what's the "loitering time" for the next waypoint
-        # try:
-        #     offsetTimeInSeconds = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"] 
-        # except KeyError:
-        #     rospy.loginfo("ERROR : While accessing value at key [hold_time_s] KeyError, non-existent or undefined!")
-        #     rospy.loginfo("Assigning default loitering time of 0 second...")
-        #     offsetTimeInSeconds = 0
-
-        # currentLoiteringEndTimeInSeconds = getTimeOffsetInSeconds(offsetTimeInSeconds)
         try:
             timeout = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"]
             rospy.sleep(timeout)
@@ -336,7 +321,7 @@ def sendGoalDoneCallback(terminalState, result):
 
         # Check if all waypoints are done
         if currentWaypointIndex >= len(waypointsPatrolList):
-            publishPatrolFeedBack(patrolId, "finished loop #" + repIndex, currentWaypointIndex, len(waypointsPatrolList))
+            publishPatrolFeedBack(patrolId, "finished loop #" + str(repIndex), currentWaypointIndex, len(waypointsPatrolList))
             rospy.loginfo("Patrol done. All waypoints reached.")
             repIndex += 1
             # Check if the patrol has to be restarted
