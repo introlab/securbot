@@ -136,7 +136,7 @@
  * @brief battery monitoring rate.
  * configures the rate at which the firmware reads the battery board state
  */
-#define MONITOR_PERIOD_MS 1000
+#define MONITOR_PERIOD_MS 5000
 
 /**
  * @brief Maximum adapter current.
