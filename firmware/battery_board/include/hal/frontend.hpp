@@ -4,9 +4,9 @@
  * @brief Hardware abstraction for the battery board analog front end
  * @version 0.1
  * @date 2019-10-14
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  */
 
 #pragma once
@@ -143,4 +143,10 @@ private:
      * mutex to protect the front end instance against concurrent calls
      */
     SemaphoreHandle_t _mutex;
+
+    /**
+     * @brief Cell number configured for balancing.
+     * store cell number that should be bypassed for balancing
+     */
+    BQ76925::bal_ctl_register_map _balanceState;
 };

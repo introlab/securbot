@@ -4,9 +4,9 @@
  * @brief Hardware abstraction for the battery board analog frontend
  * @version 0.1
  * @date 2019-10-14
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  */
 
 #include "hal/frontend.hpp"
@@ -39,13 +39,14 @@ Frontend::Frontend()
 {
     _mutex = xSemaphoreCreateMutex();
     _analog = AnalogInput::instance();
+    _balanceState.bytes[0] = 0;
 }
 
 esp_err_t Frontend::begin()
 {
     esp_err_t ret;
     uint8_t id;
-    
+
     // set alert pin as input
     gpio_pad_select_gpio(BQ76925PWR_ALERT_GPIO);
     gpio_set_direction((gpio_num_t)BQ76925PWR_ALERT_GPIO, GPIO_MODE_INPUT);
@@ -57,7 +58,7 @@ esp_err_t Frontend::begin()
     ESP_LOGI(TAG, "BQ76925 chip id is 0x%02x", id);
     if (ret != ESP_OK)
     {
-        
+
         xSemaphoreGive(_mutex);
         return ret;
     }
@@ -116,7 +117,17 @@ esp_err_t Frontend::getCellsVoltage(float voltage[4])
     esp_err_t ret;
     uint8_t cells[4] = {0, 1, 2, 5};
 
+    BQ76925::bal_ctl_register_map noBalance;
+    noBalance.bytes[0] = 0;
+
     xSemaphoreTake(_mutex, portMAX_DELAY);
+
+    ret = _bq76.balanceCell(noBalance);
+    if (ret != ESP_OK)
+    {
+        xSemaphoreGive(_mutex);
+        return ret;
+    }
 
     for (uint8_t i = 0; i < 4; i++)
     {
@@ -127,6 +138,13 @@ esp_err_t Frontend::getCellsVoltage(float voltage[4])
             return ret;
         }
         ESP_LOGI(TAG, "Cell %d is %4.2fV at VC%d", i+1, voltage[i], cells[i]+1);
+    }
+
+    ret = _bq76.balanceCell(_balanceState);
+    if (ret != ESP_OK)
+    {
+        xSemaphoreGive(_mutex);
+        return ret;
     }
 
     xSemaphoreGive(_mutex);
@@ -155,7 +173,7 @@ esp_err_t Frontend::getBoardTemperature(float temperature[2])
     }
 
     xSemaphoreGive(_mutex);
-    
+
     for (uint8_t i = 0; i < 2; i++) // convert voltage to temperature
     {
         temperature[i] = -(voltage[i] - 2.10) * 41.4 + 22;
@@ -169,20 +187,19 @@ esp_err_t Frontend::setBalance(uint8_t cell)
 {
     esp_err_t ret;
 
-    BQ76925::bal_ctl_register_map balance;
+    xSemaphoreTake(_mutex, portMAX_DELAY);
 
     // Convert cell number to proper bit in balance control register
     if (cell == 0)
     {
-        balance.bytes[0] = 0;
+        _balanceState.bytes[0] = 0;
     }
     else
     {
-        balance.bytes[0] = 0b1 << (cell-1);
+        _balanceState.bytes[0] = 0b1 << (cell-1);
     }
 
-    xSemaphoreTake(_mutex, portMAX_DELAY);
-    ret = _bq76.balanceCell(balance);
+    ret = _bq76.balanceCell(_balanceState);
     xSemaphoreGive(_mutex);
 
     return ret;
