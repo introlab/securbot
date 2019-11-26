@@ -53,50 +53,81 @@
           </b-navbar-nav>
           <!-- Navbar left side content -->
           <b-navbar-nav class="ml-auto">
-            <robot-status />
+            <div
+              style="font-size: 0.8rem; max-height: calc( 64px - 2rem )"
+            >
+              <transition name="nav-fade">
+                <robot-status />
+              </transition>
+            </div>
             <!-- Dropdown with connection widget -->
             <b-nav-item-dropdown
-              text="Connect to Robot"
+              :text="(isConnected ? `Connected to ${robotIdToName(robotId)}` : 'Connect to Robot')"
               right
             >
               <!-- Connection container -->
               <div class="px-2 py-1">
                 <!-- Connection -->
-                <interactive-list
-                  :list="robotList"
-                  display-key="robotName"
-                  @click="handleConnection"
-                >
-                  <template v-slot:header>
-                    <!-- <h5
-                      id="who-am-i"
-                      class="text-muted ml-1"
-                    >
-                      I am: {{ myId }}
-                    </h5> -->
-                    <h5 class="ml-1 mb-0 mt-0">
-                      List of Robots:
-                    </h5>
-                  </template>
-                  <template v-slot:tag="robot">
-                    <span
-                      v-if="robot.item.robotId === robotId && connectionState === 'connecting'"
-                      class="spinner-border spinner-border-sm text-warning"
-                    />
-                    <span
-                      v-else-if="robot.item.robotId === robotId"
-                      class="badge badge-success"
-                    >
-                      Connected
-                    </span>
-                    <span
-                      v-else
-                      class="badge badge-secondary"
-                    >
-                      Not Connected
-                    </span>
-                  </template>
-                </interactive-list>
+                <transition name="conn-fade">
+                  <interactive-list
+                    :list="robotList"
+                    display-key="robotName"
+                    @click="handleConnection"
+                  >
+                    <template v-slot:header>
+                      <div class="d-flex flex-row justify-content-between">
+                        <h5 class="ml-1 mb-0 mt-0">
+                          List of Robots:
+                        </h5>
+                        <b-button
+                          id="disconnect-all-button"
+                          class="m-0"
+                          size="sm"
+                          style="max-height: 30px"
+                          variant="outline-danger"
+                          @click="disconnectAll"
+                        >
+                          <font-awesome-icon
+                            icon="power-off"
+                          />
+                        </b-button>
+                        <b-tooltip
+                          target="disconnect-all-button"
+                          placement="left"
+                          variant="secondary"
+                        >
+                          Disconnect
+                        </b-tooltip>
+                      </div>
+                    </template>
+                    <template v-slot:tag="robot">
+                      <transition
+                        name="status-fade"
+                        mode="out-in"
+                      >
+                        <span
+                          v-if="robot.item.robotId === robotId && connectionState === 'connecting'"
+                          :key="0"
+                          class="spinner-border spinner-border-sm text-warning"
+                        />
+                        <span
+                          v-else-if="robot.item.robotId === robotId"
+                          :key="1"
+                          class="badge badge-success"
+                        >
+                          Connected
+                        </span>
+                        <span
+                          v-else
+                          :key="2"
+                          class="badge badge-secondary"
+                        >
+                          Not Connected
+                        </span>
+                      </transition>
+                    </template>
+                  </interactive-list>
+                </transition>
               </div>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -160,13 +191,45 @@ export default {
         this.$store.dispatch('client/connectToRobot', robotId);
       }
     },
+    disconnectAll() {
+      console.log('Disconnecting...');
+      this.$store.commit('setConnectedRobot', { robotName: '', robotId: '' });
+      this.$store.commit('disableJoystick');
+      this.$store.dispatch('client/disconnectFromRobot');
+    },
+    robotIdToName(robotId) {
+      for (const robot of this.robotList) {
+        if (robot.robotId === robotId) {
+          return robot.robotName;
+        }
+      }
+      return '';
+    },
   },
 };
 </script>
 
-<style lang="css" scoped>
+<style>
+.conn-fade-enter-active, .conn-fade-leave-active {
+  transition: transform 2s ease-in-out;
+}
+.conn-fade-enter, .conn-fade-leave-to {
+  opacity: 0;
+}
+.status-fade-enter-active, .status-fade-leave-active {
+  transition: opacity 0.5s;
+}
+.status-fade-enter, .status-fade-leave-to {
+  opacity: 0;
+}
+.nav-fade-enter-active, .nav-fade-leave-active {
+  transition: opacity 1s;
+}
+.nav-fade-enter, .nav-fade-leave-to {
+  opacity: 0;
+}
 .navbar{
-  min-height:64px;
+  min-height: 64px;
 }
 #sec-nav a.router-link-exact-active {
   color: white;

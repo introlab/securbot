@@ -9,6 +9,7 @@ const WaypointSchema = new mongoose.Schema({
         type: CoordinateSchema,
         required: true
     },
+    label: String,
     hold_time_s: Number,
     _id: false
 });

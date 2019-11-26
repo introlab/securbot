@@ -84,7 +84,7 @@
             :class="{ 'overlay-button-active': keyboardCtrl.enabled }"
             :pressed.sync="keyboardCtrl.enabled"
             :disabled="!isDataChannelAvailable || gotoOverlayEnabled || joystickOverlayEnabled"
-            @click="sendKeyboardControl"
+            @click="sendKeyboardLastCommand"
           >
             <font-awesome-icon icon="keyboard" />
           </b-button>
@@ -339,8 +339,6 @@ export default {
     }),
   },
   mounted() {
-    console.log('Teleop have been mounted');
-
     this.mainVideoId = this.mapId;
     this.overlayVideoId = this.cameraId;
 
@@ -359,7 +357,6 @@ export default {
     clearInterval(this.keyboardCtrlInterval);
     document.removeEventListener('keydown', this.onKeydown);
     document.removeEventListener('keyup', this.onKeyup);
-    console.log('Teleop have been destroyed');
   },
   methods: {
     demo(event) {

@@ -1,6 +1,5 @@
 export default {
   setConnectedRobot(state, robot) {
-    console.log('Setting Up robot');
     state.currentRobot.id.db = '';
     state.currentRobot.name = robot.robotName;
     state.currentRobot.id.client = robot.robotId;
@@ -77,6 +76,12 @@ export default {
   },
   removeWaypoint(state, index) {
     state.patrol.current.obj.waypoints.splice(index, 1);
+  },
+  reorderWaypoint(state, data) {
+    if (data.newIndex >= 0 && data.newIndex < state.patrol.current.obj.waypoints.length) {
+      const wp = state.patrol.current.obj.waypoints.splice(data.oldIndex, 1);
+      state.patrol.current.obj.waypoints.splice(data.newIndex, 0, wp[0]);
+    }
   },
   clearWaypointList(state) {
     state.patrol.current.obj.waypoints = [];

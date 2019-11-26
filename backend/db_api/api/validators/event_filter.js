@@ -11,36 +11,50 @@
 //     before: Date, (ISO 8601)
 //     after: Date (ISO 8601)
 // }
+
+
+function toTagList(parameter, {req, loc, path}) {
+    if (typeof parameter === 'string')
+    {
+        try {
+            parameter = JSON.parse(parameter)
+        }
+        catch(e) {}
+    }
+
+    if (typeof parameter === 'string')
+        parameter = [parameter]
+
+    return parameter
+}
+
+function checkTagList(parameter, {req, loc, path}) {
+    try {
+        return parameter.every((tag) => typeof tag === 'string')
+    }
+    catch(e)
+    {
+        throw new Error('Invalid tag list')
+    }
+}
+
+
+
 module.exports = {
     tag_and: {
         optional: true,
-        toArray: true,
-        custom: {
-            options: (array, {req, loc, path}) => {
-                return array.every((tag) => typeof tag === 'string')
-            }
-        },
-        errorMessage: 'Invalid tag_whitelist syntax'
+        customSanitizer: { options: toTagList },
+        custom: { options: checkTagList },
     },
     tag_or: {
         optional: true,
-        toArray: true,
-        custom: {
-            options: (array, {req, loc, path}) => {
-                return array.every((tag) => typeof tag === 'string')
-            }
-        },
-        errorMessage: 'Invalid `tag_whitelist` syntax'
+        customSanitizer: { options: toTagList },
+        custom: { options: checkTagList },
     },
     tag_not: {
         optional: true,
-        toArray: true,
-        custom: {
-            options: (array, {req, loc, path}) => {
-                return array.every((tag) => typeof tag === 'string')
-            }
-        },
-        errorMessage: 'Invalid `tag_whitelist` syntax'
+        customSanitizer: { options: toTagList },
+        custom: { options: checkTagList },
     },
     search_expression: {
         optional: true,

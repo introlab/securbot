@@ -1,5 +1,4 @@
 export default {
-  darkMode: true,
   showStreams: true,
   currentRobot: {
     name: '',
@@ -35,12 +34,21 @@ export default {
     event: null,
   },
   headers: {
-    waypoints: [{ key: 'index', label: '#' }, { key: 'label', label: 'Label' }, { key: 'holdTime', label: 'Hold Time' }, { key: 'remove', label: 'remove' }],
-    events: [],
-  },
-  waypoints: {
-    headers: [{ key: 'index', label: '#' }, { key: 'x', label: 'X', formatter: 'fixFloat' }, { key: 'y', label: 'Y', formatter: 'fixFloat' }, { key: 'yaw', label: 'Yaw', formatter: 'fixFloat' }, { key: 'remove', label: 'Remove' }],
-    list: [],
+    waypoints: [
+      { key: 'index', label: '#' },
+      { key: 'label', label: 'Label' },
+      { key: 'holdTime', label: 'Hold Time' },
+      { key: 'remove', label: 'Remove' },
+    ],
+    events: [
+      { key: 'time', label: 'DateTime', sortable: true },
+      { key: 'robot', label: 'Robot', sortable: true },
+      { key: 'object', label: 'Object', sortable: true },
+      { key: 'context', label: 'Context' },
+      { key: 'description_text', label: 'Description' },
+      { key: 'tags', label: 'Tags' },
+      { key: 'image', label: 'Image' },
+    ],
   },
   patrol: {
     current: {

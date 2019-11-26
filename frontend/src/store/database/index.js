@@ -4,115 +4,72 @@ import request from 'request-promise';
 export default {
   namespaced: true,
   state: {
-    apiPath: '/db',
+    apiPath: process.env.VUE_APP_DB_PATH,
+    serverURL: (
+      process.env.VUE_APP_DEV_DB_URL
+        ? process.env.VUE_APP_DEV_DB_URL
+        : process.env.VUE_APP_SERVER_URL
+    ),
     queryingDB: false,
     errorDuringQuery: false,
     events: [],
-    headers: [
-      { key: 'name', label: 'Robot' },
-      { key: 'object', label: 'Object' },
-      { key: 'context', label: 'Context' },
-      { key: 'description_text', label: 'Description' },
-      { key: 'tags', label: 'Tags' },
-      { key: 'time', label: 'DateTime' },
-      { key: 'image', label: 'Image' },
-    ],
+    eventImageURL: '',
     robots: [],
     robotFilter: [],
-    tagList: ['red', 'yellow', 'blue', 'green', 'a', 'b', 'c'],
+    tagList: ['blue', 'yellow', 'red', 'green'],
     defaultFilter: {
-      before: new Date().toISOString(),
-      after: new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)).toISOString(),
+      after: 7 * 24 * 60 * 60 * 1000,
       viewed: false,
-      alert: true,
+      alert: false,
     },
-    predefFilters: [
+    predefFiltersFormat: [
       {
         name: 'Last 24 Hours',
         filters: {
-          tag_and: [],
-          tag_not: [],
-          search_expression: '',
-          alert: '',
-          viewed: '',
-          before: new Date().toISOString(),
-          after: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString(),
+          after: 24 * 60 * 60 * 1000,
         },
       },
       {
         name: 'Last 7 Days',
         filters: {
-          tag_and: [],
-          tag_not: [],
-          search_expression: '',
-          alert: '',
-          viewed: '',
-          before: new Date().toISOString(),
-          after: new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)).toISOString(),
+          after: 7 * 24 * 60 * 60 * 1000,
         },
       },
       {
         name: 'Last 30 Days',
         filters: {
-          tag_and: [],
-          tag_not: [],
-          search_expression: '',
-          alert: '',
-          viewed: '',
-          before: new Date().toISOString(),
-          after: new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString(),
-        },
-      },
-      {
-        name: 'Alerts from Last 30 Days',
-        filters: {
-          tag_and: [],
-          tag_not: [],
-          search_expression: '',
-          alert: true,
-          viewed: '',
-          before: new Date().toISOString(),
-          after: new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString(),
-        },
-      },
-      {
-        name: 'New Events from Last 30 Days',
-        filters: {
-          tag_and: [],
-          tag_not: [],
-          search_expression: '',
-          alert: '',
-          viewed: false,
-          before: new Date().toISOString(),
-          after: new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString(),
+          after: 30 * 24 * 60 * 60 * 1000,
         },
       },
       {
         name: 'Current Month',
         filters: {
-          tag_and: [],
-          tag_not: [],
-          search_expression: '',
-          alert: false,
-          viewed: false,
-          before: new Date().toISOString(),
           after: new Date(new Date().setDate(1)).toISOString(),
         },
       },
+      {
+        name: 'All',
+        filters: {},
+      },
+      {
+        name: 'Alerts from Last 30 Days',
+        filters: {
+          alert: true,
+          after: 30 * 24 * 60 * 60 * 1000,
+        },
+      },
+      {
+        name: 'New Events from Last 30 Days',
+        filters: {
+          viewed: false,
+          after: 30 * 24 * 60 * 60 * 1000,
+        },
+      },
     ],
-    currentFilter: {
-      tag_and: [],
-      tag_not: [],
-      search_expression: '',
-      alert: false,
-      viewed: false,
-      before: '',
-      after: '',
-    },
+    eventFilter: {},
   },
   getters: {
-    uri: state => `${(process.env.VUE_APP_SERVER_URL.startsWith('http') ? '' : 'http://')}${process.env.VUE_APP_SERVER_URL}${state.apiPath}`,
-    // uri: state => `http://localhost:3000${state.apiPath}`,
+    uri: state => `${(state.serverURL.startsWith('http') ? '' : 'http://')}${state.serverURL}${state.apiPath}`,
     eventsWaypoints: (state) => {
       const wpl = [];
       for (const event of state.events) {
@@ -143,31 +100,90 @@ export default {
     resetEvents(state) {
       state.events = [];
     },
-    setRobotFilters(state, robot) {
-      if (robot === 'all') {
-        state.robotFilter = state.robots;
-      } else {
-        for (const r of state.robots) {
-          if (r.id === robot) {
-            state.robotFilter = [r];
+    setEventImageURL(state, url) {
+      state.eventImageURL = url;
+    },
+    clearEventImageURL(state) {
+      state.eventImageURL = '';
+    },
+    resetRobotFilter(state) {
+      state.robotFilter = [];
+    },
+    setRobotFilter(state, robots) {
+      if (robots && robots.length) {
+        if (robots.includes('all')) {
+          state.robotFilter = state.robots;
+        } else {
+          state.robotFilter = [];
+          for (const r of state.robots) {
+            if (robots.includes(r.id)) {
+              state.robotFilter.push(r);
+            }
           }
         }
       }
     },
-    setEventFilters(state, filters) {
-      const f = {
-        tag_and: (filters.includeTags ? filters.includeTags : []),
-        tag_not: (filters.excludeTags ? filters.excludeTags : []),
-        search_expression: (filters.textSearch ? filters.textSearch : ''),
-        alert: !!filters.other.notify,
-        viewed: !!filters.other.onlyNew,
-        before: (filters.beforeDate ? new Date(filters.beforeDate).toISOString() : ''),
-        after: (filters.afterDate ? new Date(filters.afterDate).toISOString() : ''),
-      };
-      state.currentFilter = f;
+    resetEventFilter(state) {
+      state.eventFilter = {};
+    },
+    setEventFilter(state, filters) {
+      const f = {};
+      const prevFilter = JSON.parse(JSON.stringify(state.eventFilter));
+      const keys = Object.keys(filters);
+      if (keys.length) {
+        for (const key of keys) {
+          switch (key) {
+            case 'tag_not':
+              f.tag_not = filters.tag_not;
+              break;
+            case 'tag_and':
+              f.tag_and = filters.tag_and;
+              break;
+            case 'search_expression':
+              f.search_expression = filters.search_expression;
+              break;
+            case 'alert':
+              f.alert = filters.alert;
+              break;
+            case 'viewed':
+              f.viewed = filters.viewed;
+              break;
+            case 'before':
+              if (typeof filters.before === 'number') {
+                // eslint-disable-next-line max-len
+                f.before = new Date(new Date().getTime() - filters.before).toISOString();
+              } else if (typeof filters.before === 'string') {
+                f.before = new Date(filters.before).toISOString();
+              } else {
+                console.log('Before date format is unsable... Ignoring...');
+              }
+              break;
+            case 'after':
+              if (typeof filters.after === 'number') {
+                // eslint-disable-next-line max-len
+                f.after = new Date(new Date().getTime() - filters.after).toISOString();
+              } else if (typeof filters.after === 'string') {
+                f.after = new Date(filters.after).toISOString();
+              } else {
+                console.log('After date format is unsable... Ignoring...');
+              }
+              break;
+            default:
+              break;
+          }
+        }
+        Object.assign(prevFilter, f);
+        state.eventFilter = prevFilter;
+      } else {
+        state.eventFilter = {};
+      }
     },
   },
   actions: {
+    setEventImageURL({ getters, commit }, file) {
+      const url = `${getters.uri}/files/${file}`;
+      commit('setEventImageURL', url);
+    },
     initLocalData({ state, commit, dispatch }) {
       /**
        * Steps
@@ -181,8 +197,9 @@ export default {
         commit('queryStarted');
         dispatch('queryRobots')
           .then(() => {
-            commit('setRobotFilters', 'all');
-            dispatch('queryEvents', { filters: state.defaultFilter })
+            commit('setRobotFilter', ['all']);
+            commit('setEventFilter', state.defaultFilter);
+            dispatch('queryEvents')
               .then(() => {
                 commit('queryFinished');
                 dispatch('queryPatrols')
@@ -208,10 +225,10 @@ export default {
           });
       });
     },
-    filterEvents({ state, commit, dispatch }) {
+    filterEvents({ commit, dispatch }) {
       commit('resetEvents');
       commit('queryStarted');
-      dispatch('queryEvents', { filters: state.currentFilter })
+      dispatch('queryEvents')
         .then(() => {
           commit('queryFinished');
         }).catch((err) => {
@@ -255,7 +272,6 @@ export default {
      */
     // eslint-disable-next-line object-curly-newline
     queryPatrols({ state, commit, dispatch }) {
-      console.log('Querying Patrols');
       const { robots } = state;
       const options = {
         robots,
@@ -312,7 +328,6 @@ export default {
       });
     },
     querySchedules({ state, commit, dispatch }) {
-      console.log('Querying Schedules');
       commit('clearSchedules', '', { root: true });
       const { robots } = state;
       const options = {
@@ -370,14 +385,13 @@ export default {
       });
     },
     // eslint-disable-next-line object-curly-newline
-    queryEvents({ state, commit, dispatch }, filters) {
-      console.log('Querying Events');
+    queryEvents({ state, commit, dispatch }) {
       commit('resetEvents');
       const robots = state.robotFilter;
       const options = {
         robots,
         index: 0,
-        filters: filters.filters,
+        filters: state.eventFilter,
       };
       return new Promise((resolve, reject) => {
         dispatch('_queryEvents', options)
@@ -442,7 +456,7 @@ export default {
           });
       });
     },
-    saveSchedule({ getters }, schedule) {
+    saveSchedule({ getters, commit }, schedule) {
       const req = {
         uri: `${getters.uri}/robots/${schedule.obj.robot}/schedules${schedule.id ? `/${schedule.id}` : ''}`,
         method: (schedule.id ? 'PUT' : 'POST'),
@@ -452,12 +466,15 @@ export default {
         json: true,
         body: schedule.obj,
       };
-      request(req)
-        .then((result) => {
-          console.log(result);
-        }).catch((err) => {
-          console.log(err);
-        });
+      return new Promise((resolve, reject) => {
+        request(req)
+          .then((result) => {
+            commit('setCurrentScheduleId', result._id, { root: true });
+            resolve(result);
+          }).catch((err) => {
+            reject(err);
+          });
+      });
     },
     getPatrol({ getters, commit }, info) {
       commit('clearCurrentPatrol', '', { root: true });
@@ -496,6 +513,46 @@ export default {
         }).catch((err) => {
           console.log(err);
         });
+    },
+    removePatrol({ getters, commit }, patrol) {
+      const req = {
+        uri: `${getters.uri}/robots/${patrol.obj.robot}/patrols/${patrol.id}`,
+        method: 'DELETE',
+        headers: {
+          'User-Agent': 'Request-Promise',
+        },
+        json: true,
+      };
+      return new Promise((resolve, reject) => {
+        request(req)
+          .then(() => {
+            commit('setCurrentPatrolId', '', { root: true });
+            commit('clearCurrentPatrol', '', { root: true });
+            resolve();
+          }).catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    removeSchedule({ getters, commit }, schedule) {
+      const req = {
+        uri: `${getters.uri}/robots/${schedule.obj.robot}/schedules/${schedule.id}`,
+        method: 'DELETE',
+        headers: {
+          'User-Agent': 'Request-Promise',
+        },
+        json: true,
+      };
+      return new Promise((resolve, reject) => {
+        request(req)
+          .then(() => {
+            commit('setCurrentScheduleId', '', { root: true });
+            commit('clearCurrentSchedule', '', { root: true });
+            resolve();
+          }).catch((err) => {
+            reject(err);
+          });
+      });
     },
   },
 };
