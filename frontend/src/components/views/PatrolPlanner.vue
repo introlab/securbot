@@ -43,7 +43,7 @@
                   </h5>
                   <b-form-select
                     id="patrol-select-input"
-                    v-model="selectedPatrol"
+                    :value="selectedPatrol"
                     :options="robotPatrol"
                     text-field="name"
                     value-field="info"
@@ -70,11 +70,33 @@
                     :table-class="['m-0', 'table-rounded']"
                     thead-class="text-center"
                     tbody-class="text-center"
+                    primary-key="coordinate.x"
                     :fields="headers"
                     :items="waypointList"
+                    :tbody-transition-props="transProps"
                   >
                     <template v-slot:cell(index)="data">
-                      {{ data.index + 1 }}
+                      <div class="d-flex flex-row">
+                        <b-button
+                          variant="outline-secondary"
+                          class="p-0 border-0 mr-1"
+                          style="opacity: 0.75"
+                          size="sm"
+                          @click="increaseWPOrder(data.index)"
+                        >
+                          <font-awesome-icon icon="chevron-up" />
+                        </b-button>
+                        {{ data.index + 1 }}
+                        <b-button
+                          variant="outline-secondary"
+                          class="p-0 border-0 ml-1"
+                          style="opacity: 0.75"
+                          size="sm"
+                          @click="decreaseWPOrder(data.index)"
+                        >
+                          <font-awesome-icon icon="chevron-down" />
+                        </b-button>
+                      </div>
                     </template>
                     <template v-slot:cell(label)="data">
                       <b-form-input
@@ -207,6 +229,14 @@ export default {
     VideoBox,
     WaypointOverlay,
   },
+  data() {
+    return {
+      transProps: {
+        name: 'wp-table',
+      },
+      selectedRow: '',
+    };
+  },
   computed: {
     ...mapState({
       currentRobot: state => state.currentRobot,
@@ -243,11 +273,17 @@ export default {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
-    testFocus(event) {
-      console.log(event);
+    testFocus() {
+      // console.log(event);
     },
     fixFloat(value) {
       return value.toFixed(1);
+    },
+    increaseWPOrder(index) {
+      this.$store.commit('reorderWaypoint', { oldIndex: index, newIndex: index - 1 });
+    },
+    decreaseWPOrder(index) {
+      this.$store.commit('reorderWaypoint', { oldIndex: index, newIndex: index + 1 });
     },
     increaseZoom() {
       this.$store.commit('increaseMapZoom');
@@ -288,6 +324,15 @@ export default {
 </script>
 
 <style>
+.wp-table-move {
+  transition: transform 1s;
+}
+.wp-table-enter-active, .wp-table-leave-active {
+  transition: all 0.75s;
+}
+.wp-table-enter, .wp-table-leave-to {
+  opacity: 0;
+}
 .table-b-table-default {
   background-color: #00A759 !important;
   color: white !important;

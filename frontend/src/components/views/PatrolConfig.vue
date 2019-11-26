@@ -41,7 +41,7 @@
                 </h5>
                 <b-form-select
                   id="patrol-select-input"
-                  v-model="selectedPatrol"
+                  :value="selectedPatrol"
                   :options="robotPatrol"
                   text-field="name"
                   value-field="info"
@@ -91,7 +91,7 @@
                   variant="danger"
                   class="mr-2 my-1"
                   :disabled="!currentPatrol.id"
-                  @click="deleteCurrentPatrol"
+                  @click="removePatrol"
                 >
                   Delete
                 </b-button>
@@ -113,7 +113,7 @@
                 <b-button
                   variant="success"
                   class="mr-2 my-1"
-                  :disabled="!isConnected || !currentPatrol.obj.name"
+                  :disabled="!isConnected || !currentPatrol.obj.name || !currentRobot.id.db"
                   @click="savePatrol"
                 >
                   Save
@@ -135,7 +135,7 @@
                 </h5>
                 <b-form-select
                   id="schedule-select-input"
-                  v-model="selectedSchedule"
+                  :value="selectedSchedule"
                   :options="patrolSchedule"
                   text-field="name"
                   value-field="info"
@@ -338,7 +338,7 @@
                   variant="danger"
                   class="mr-2 my-1"
                   :disabled="!currentSchedule.id"
-                  @click="deleteCurrentSchedule"
+                  @click="removeSchedule"
                 >
                   Delete
                 </b-button>
@@ -691,18 +691,14 @@ export default {
       this.$store.commit('decreaseMapZoom');
     },
     clearPatrolData() {
+      this.$store.commit('setCurrentPatrolId', '');
       this.$store.commit('clearCurrentPatrol');
     },
     clearScheduleData() {
       this.cron = ['', '', '', '', ''];
       this.cronInterval = [];
+      this.$store.commit('setCurrentScheduleId', '');
       this.$store.commit('clearCurrentSchedule');
-    },
-    deleteCurrentPatrol() {
-
-    },
-    deleteCurrentSchedule() {
-
     },
     setCron(event) {
       console.log(event);
@@ -794,6 +790,28 @@ export default {
     },
     sendScheduleToRobot() {
       this.$store.dispatch('sendPatrol', { patrol: this.currentPatrol.obj.waypoints, repetitions: this.currentSchedule.obj.repetitions });
+    },
+    removePatrol() {
+      this.$store.dispatch('database/removePatrol', this.currentPatrol)
+        .then(() => {
+          this.$store.dispatch('database/queryPatrols')
+            .catch((err) => {
+              console.log(err);
+            });
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
+    removeSchedule() {
+      this.$store.dispatch('database/removeSchedule', this.currentSchedule)
+        .then(() => {
+          this.$store.dispatch('database/querySchedules')
+            .catch((err) => {
+              console.log(err);
+            });
+        }).catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

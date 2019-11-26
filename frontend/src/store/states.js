@@ -1,5 +1,4 @@
 export default {
-  darkMode: true,
   showStreams: true,
   currentRobot: {
     name: '',
@@ -39,7 +38,7 @@ export default {
       { key: 'index', label: '#' },
       { key: 'label', label: 'Label' },
       { key: 'holdTime', label: 'Hold Time' },
-      { key: 'remove', label: 'remove' },
+      { key: 'remove', label: 'Remove' },
     ],
     events: [
       { key: 'time', label: 'DateTime', sortable: true },

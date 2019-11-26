@@ -31,6 +31,10 @@ import {
   faPlug,
   faFileImage,
   faExclamationCircle,
+  faRedo,
+  faPowerOff,
+  faChevronUp,
+  faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -48,6 +52,10 @@ library.add(
   faPlug,
   faFileImage,
   faExclamationCircle,
+  faRedo,
+  faPowerOff,
+  faChevronUp,
+  faChevronDown,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

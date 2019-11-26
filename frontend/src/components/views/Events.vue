@@ -5,7 +5,7 @@
   >
     <transition name="image-fade">
       <div
-        v-if="image"
+        v-if="eventImageURL"
         id="event-img-container"
         class="position-absolute w-100 h-100"
         style="z-index: 1000; top: 0;"
@@ -17,7 +17,7 @@
         >
           <b-img
             thumbnail
-            :src="`${uri}/files/${image}`"
+            :src="eventImageURL"
             alt="There was a problem loading the image..."
             @mouseover="() => { imageHovered = true }"
             @mouseout="() => { imageHovered = false }"
@@ -26,7 +26,7 @@
             class="position-absolute"
             style="top: 0.5rem; right: 1rem; opacity: 1; font-size: 2.5rem"
             text-variant="danger"
-            @click="() => { image = '' }"
+            @click="() => { $store.commit('database/clearEventImageURL') }"
           />
         </div>
       </div>
@@ -38,6 +38,7 @@
       class="h-100 w-100 bg-transparent"
     >
       <b-row class="h-100">
+        <!--                    LEFT COLUMN                    -->
         <b-col
           id="filter-col"
           md="3"
@@ -48,15 +49,31 @@
             class="h-100 w-100 border rounded shadow-sb"
             style="max-height: 100%"
           >
-            <h4 class="m-3">
-              Filters
-            </h4>
+            <!--                    TITLE                    -->
+            <div class="d-flex flex-row justify-content-between">
+              <h4 class="m-3">
+                Filters
+              </h4>
+              <b-button
+                class="m-3"
+                size="sm"
+                style="max-height: 60px"
+                variant="outline-secondary"
+                @click="applyFilter"
+              >
+                <font-awesome-icon
+                  icon="redo"
+                />
+              </b-button>
+            </div>
+            <!--                    FILTERS                    -->
             <div
               id="inner-filter-container"
               class="border rounded mx-1 my-0 p-2 overflow-auto"
               style="height: calc( 100% - 60px - 50px);"
             >
               <b-container fluid>
+                <!--                    SELECT FORMAT                    -->
                 <b-row>
                   <b-form-select
                     v-model="selectedFilter"
@@ -64,7 +81,7 @@
                     text-field="name"
                     value-field="filters"
                     class="m-2"
-                    @change="setLocalFilters"
+                    @change="(event) => { $store.commit('database/setEventFilter', event) }"
                   >
                     <template v-slot:first>
                       <option
@@ -76,6 +93,7 @@
                     </template>
                   </b-form-select>
                 </b-row>
+                <!--                    SELECT ROBOT                    -->
                 <b-row>
                   <b-col
                     sm="4"
@@ -92,12 +110,15 @@
                   >
                     <b-form-select
                       id="robot-select-filter"
-                      v-model="filters.robot"
+                      :value="selectedRobot"
                       class="ml-2"
                       :options="display"
+                      :select-size="0"
+                      @change="(event) => { $store.commit('database/setRobotFilter', event) }"
                     />
                   </b-col>
                 </b-row>
+                <!--                    AFTER DATE                    -->
                 <b-row>
                   <b-col
                     sm="4"
@@ -114,12 +135,15 @@
                   >
                     <b-form-input
                       id="after-input-filter"
-                      v-model="filters.afterDate"
+                      :value="( eventFilter.after ? eventFilter.after.slice(0, 10) : '' )"
                       class="ml-2"
                       type="date"
+                      @change="(event) =>
+                        $store.commit('database/setEventFilter', { after: event })"
                     />
                   </b-col>
                 </b-row>
+                <!--                    BEFORE DATE                    -->
                 <b-row>
                   <b-col
                     sm="4"
@@ -136,12 +160,15 @@
                   >
                     <b-form-input
                       id="before-input-filter"
-                      v-model="filters.beforeDate"
+                      :value="( eventFilter.before ? eventFilter.before.slice(0, 10) : '' )"
                       class="ml-2"
                       type="date"
+                      @change="(event) =>
+                        $store.commit('database/setEventFilter', { before: event })"
                     />
                   </b-col>
                 </b-row>
+                <!--                    OTHER FILTERS                    -->
                 <b-row class="mt-2">
                   <h6
                     class="w-100"
@@ -152,25 +179,25 @@
                   <b-col>
                     <b-form-checkbox
                       id="new-filter-checkbox"
-                      v-model="filters.other.onlyNew"
-                      :value="true"
-                      :unchecked-value="false"
+                      :checked="!!eventFilter.viewed"
+                      @change="(event) =>
+                        $store.commit('database/setEventFilter', { viewed: event })"
                     >
-                      Only New
+                      Only Viewed
                     </b-form-checkbox>
                   </b-col>
                   <b-col>
                     <b-form-checkbox
                       id="alert-filter-checkbox"
-                      v-model="filters.other.notify"
-                      :value="true"
-                      :unchecked-value="false"
+                      :checked="!!eventFilter.alert"
+                      @change="(event) =>
+                        $store.commit('database/setEventFilter', { alert: event })"
                     >
                       Alerts
                     </b-form-checkbox>
                   </b-col>
                 </b-row>
-                <!-- Tag Filters -->
+                <!--                    TAG INLCUDE                    -->
                 <b-row class="mt-3 position-relative">
                   <b-badge
                     class="position-absolute"
@@ -200,6 +227,7 @@
                     </div>
                   </b-col>
                 </b-row>
+                <!--                    TAG EXCLUDE                    -->
                 <b-row class="mt-3 position-relative">
                   <b-badge
                     class="position-absolute"
@@ -229,21 +257,29 @@
                     </div>
                   </b-col>
                 </b-row>
+                <!--                    TEXT SEARCH                    -->
                 <b-row class="my-3 position-relative">
                   <b-col>
                     <div id="search-for-filter">
                       <b-form-textarea
                         id="search-for-input-filter"
-                        v-model="filters.textSearch"
+                        :value="(
+                          eventFilter.search_expression
+                            ? eventFilter.search_expression
+                            : ''
+                        )"
                         placeholder="Search for..."
                         rows="3"
                         max-rows="6"
+                        @change="(event) =>
+                          $store.commit('database/setEventFilter', { search_expression: event })"
                       />
                     </div>
                   </b-col>
                 </b-row>
               </b-container>
             </div>
+            <!--                    BUTTON                    -->
             <div
               style="height: 50px;"
             >
@@ -261,6 +297,7 @@
             </div>
           </div>
         </b-col>
+        <!--                    EVENT TABLE AND MAP                    -->
         <b-col
           id="table-col"
           md="9"
@@ -270,6 +307,7 @@
             id="table-container"
             class="h-100 w-100 position-relative"
           >
+            <!--                    MAP                    -->
             <div
               v-if="isConnected && viewMap"
               class="position-absolute overlay-container"
@@ -312,6 +350,7 @@
                 </b-tooltip>
               </div>
             </div>
+            <!--                    TOGGLE                    -->
             <div
               class="position-absolute"
               style="top:-35px;right:10px;z-index:10;"
@@ -325,6 +364,7 @@
                 @change="changeMapView"
               />
             </div>
+            <!--                    TABLE                    -->
             <div
               class="w-100 h-100 border rounded shadow-sb"
             >
@@ -351,6 +391,9 @@
                     <b-spinner class="align-middle" />
                     <strong>Querying database...</strong>
                   </div>
+                </template>
+                <template v-slot:cell(time)="data">
+                  {{ new Date(data.item.time).toLocaleString() }}
                 </template>
                 <template v-slot:cell(robot)="data">
                   {{ (robotIdToName(data.item.robot)
@@ -424,7 +467,8 @@
                     <b-button
                       :id="'image-btn-' + data.item.files[0].id"
                       class="bg-transparent m-0 p-0 border-0"
-                      @click="loadEventImage(data.item.files[0])"
+                      @click="() =>
+                        $store.dispatch('database/setEventImageURL', data.item.files[0].id)"
                     >
                       <font-awesome-icon
                         icon="file-image"
@@ -459,6 +503,7 @@
                   </div>
                 </template>
               </b-table>
+              <!--                    MAP VIDEO AND OVERLAY                    -->
               <div
                 v-else-if="viewMap && isConnected"
                 class="h-100 w-100 m-auto position-relative"
@@ -511,18 +556,6 @@ export default {
   },
   data() {
     return {
-      filters: {
-        robot: 'all',
-        beforeDate: '',
-        afterDate: '',
-        other: {
-          onlyNew: false,
-          notify: false,
-        },
-        includeTags: [],
-        excludeTags: [],
-        textSearch: '',
-      },
       selectedFilter: '',
       viewMap: false,
       switchColor: {
@@ -531,8 +564,6 @@ export default {
         disabled: '#E8E8E8',
       },
       imageHovered: false,
-      image: '',
-      showImage: false,
       transProps: {
         name: 'flip-list',
       },
@@ -552,8 +583,10 @@ export default {
       headers: state => state.headers.events,
     }),
     ...mapState('database', {
-      predefFilters: state => JSON.parse(JSON.stringify(state.predefFilters)),
+      predefFilters: state => JSON.parse(JSON.stringify(state.predefFiltersFormat)),
+      eventFilter: state => state.eventFilter,
       eventList: state => state.events,
+      eventImageURL: state => state.eventImageURL,
       robots: state => state.robots,
       tagList: state => state.tagList,
       querying: state => state.queryingDB,
@@ -569,18 +602,21 @@ export default {
         });
         return _display;
       },
+      selectedRobot: (state) => {
+        if (state.robotFilter.length === state.robots.length) {
+          return 'all';
+        }
+        return (state.robotFilter.length ? state.robotFilter[0].id : '');
+      },
     }),
   },
   mounted() {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
-    test() {
-      console.log('Test!');
-    },
     resetView() {
       if (!this.imageHovered) {
-        this.image = '';
+        this.$store.commit('database/clearEventImageURL');
       }
     },
     robotIdToName(robotId) {
@@ -618,39 +654,44 @@ export default {
       });
     },
     isIncludeTagSelected(tag) {
-      return this.filters.includeTags.includes(tag);
+      if (this.eventFilter.tag_and) return this.eventFilter.tag_and.includes(tag);
+      return false;
     },
     isExcludeTagSelected(tag) {
-      return this.filters.excludeTags.includes(tag);
+      if (this.eventFilter.tag_not) return this.eventFilter.tag_not.includes(tag);
+      return false;
     },
     tagIncludeClicked(tag) {
-      console.log(tag);
-      console.log(this.isIncludeTagSelected(tag));
-      if (this.isIncludeTagSelected(tag)) {
-        this.filters.includeTags.splice(this.filters.includeTags.indexOf(tag), 1);
+      if (this.eventFilter.tag_and) {
+        const copy = JSON.parse(JSON.stringify(this.eventFilter.tag_and));
+        if (copy.includes(tag)) {
+          copy.splice(copy.indexOf(tag), 1);
+        } else {
+          copy.push(tag);
+        }
+        this.$store.commit('database/setEventFilter', { tag_and: copy });
       } else {
-        this.filters.includeTags.push(tag);
+        this.$store.commit('database/setEventFilter', { tag_and: [tag] });
       }
     },
     tagExcludeClicked(tag) {
-      if (this.isExcludeTagSelected(tag)) {
-        this.filters.excludeTags.splice(this.filters.excludeTags.indexOf(tag), 1);
+      if (this.eventFilter.tag_not) {
+        const copy = JSON.parse(JSON.stringify(this.eventFilter.tag_not));
+        if (copy.includes(tag)) {
+          copy.splice(copy.indexOf(tag), 1);
+        } else {
+          copy.push(tag);
+        }
+        this.$store.commit('database/setEventFilter', { tag_not: copy });
       } else {
-        this.filters.excludeTags.push(tag);
+        this.$store.commit('database/setEventFilter', { tag_not: [tag] });
       }
     },
     applyFilter() {
       this.viewMap = false;
-      const { filters } = this;
       this.$store.commit('database/resetQuery');
       this.$store.commit('database/resetEvents');
-      this.$store.commit('database/setRobotFilter', filters.robot);
-      this.$store.commit('database/setEventFilters', filters);
       this.$store.dispatch('database/filterEvents');
-    },
-    loadEventImage(file) {
-      this.image = file.id;
-      // this.$store.commit('database/setImageUrl', file.id);
     },
   },
 };
