@@ -9,8 +9,11 @@
       ref="canvas"
       class="h-100 m-100"
       @mousedown="onMouseDown"
+      @touchstart="onMouseDown"
       @mouseup="onMouseUp"
+      @touchend="onMouseUp"
       @mousemove="onMouseMove"
+      @touchmove="onMouseMove"
       @mouseout="onMouseOut"
     />
   </div>
@@ -120,6 +123,9 @@ export default {
       if (event.button === 0) {
         this.updateJoystickPositionFromMouseEvent(event);
         this.isMouseDown = true;
+      } else if (event.type === 'touchstart') {
+        this.updateJoystickPositionFromMouseEvent(event.touches[0]);
+        this.isMouseDown = true;
       }
     },
     /**
@@ -129,7 +135,7 @@ export default {
      * @public
      */
     onMouseUp(event) {
-      if (event.button === 0) {
+      if (event.button === 0 || event.type === 'touchend') {
         this.x = this.getCenterX();
         this.y = this.getCenterY();
         this.isMouseDown = false;
@@ -146,7 +152,11 @@ export default {
      */
     onMouseMove(event) {
       if (this.isMouseDown) {
-        this.updateJoystickPositionFromMouseEvent(event);
+        if (event.clientX) {
+          this.updateJoystickPositionFromMouseEvent(event);
+        } else {
+          this.updateJoystickPositionFromMouseEvent(event.touches[0]);
+        }
       }
     },
     /**
