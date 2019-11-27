@@ -235,7 +235,7 @@ export default {
 
       // draw center cross
       this.context.lineWidth = 2;
-      this.context.strokeStyle = '#4682B4';
+      this.context.strokeStyle = '#222222';
       this.context.beginPath();
       this.context.moveTo(centerX, centerY - pointOffset);
       this.context.lineTo(centerX, centerY + pointOffset);
@@ -250,7 +250,7 @@ export default {
       // draw the up triangle
       const upTriangleStartY = centerY - ((3 * radius) / 4);
 
-      this.context.fillStyle = '#4682B4';
+      this.context.fillStyle = '#222222';
       this.context.beginPath();
       this.context.moveTo(centerX, upTriangleStartY);
       this.context.lineTo(centerX - halfPointOffset, upTriangleStartY + pointOffset);

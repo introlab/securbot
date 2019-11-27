@@ -19,8 +19,18 @@
 
 export default {
   name: 'app',
+  data() {
+    return {
+      mobileDeviceCheck: '',
+    };
+  },
   mounted() {
     this.$store.dispatch('database/initLocalData');
+    this.mobileDeviceCheck = setInterval(() => {
+      if (document.documentElement.clientWidth < 576 && !this.$route.path.includes('teleop')) {
+        this.$router.push('teleop');
+      }
+    }, 1000);
   },
 };
 </script>

@@ -70,13 +70,6 @@ export default {
   },
   getters: {
     uri: state => `${(state.serverURL.startsWith('http') ? '' : 'http://')}${state.serverURL}${state.apiPath}`,
-    eventsWaypoints: (state) => {
-      const wpl = [];
-      for (const event of state.events) {
-        wpl.push(event.location_coordinate);
-      }
-      return wpl;
-    },
   },
   mutations: {
     queryStarted(state) {

@@ -310,7 +310,7 @@
             <!--                    MAP                    -->
             <div
               v-if="isConnected && viewMap"
-              class="position-absolute overlay-container"
+              class="position-absolute overlay-container-event"
             >
               <div
                 id="event-overlay-button-container"
@@ -570,11 +570,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('database', [
+    ...mapGetters([
       'eventsWaypoints',
+    ]),
+    ...mapGetters('database', [
       'uri',
     ]),
     ...mapState({
+      currentRobot: state => state.currentRobot,
       mapZoom: state => state.mapZoom,
       mapSize: state => state.mapSize,
       eventId: state => state.htmlElement.eventId,
@@ -754,7 +757,7 @@ export default {
   margin: auto;
   margin-bottom: 5px;
 }
-.overlay-container {
+.overlay-container-event {
   top: 5px;
   right: 0px;
   z-index: 100;
