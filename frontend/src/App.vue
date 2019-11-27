@@ -29,7 +29,6 @@ export default {
     this.mobileDeviceCheck = setInterval(() => {
       if (document.documentElement.clientWidth < 576 && !this.$route.path.includes('teleop')) {
         this.$router.push('teleop');
-        document.body.requestFullscreen();
       }
     }, 1000);
   },
