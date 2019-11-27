@@ -64,8 +64,8 @@
     <node pkg="image_capture" type="virtualcam_node" name="virtual_Camera" output="screen">
         <param name="image_topic" value="/camera/rgb/image_rect_color" />
         <param name="virtual_dev" value="/dev/video4" />
-        <param name="image_width" value="640"/>
-        <param name="image_height" value="360"/>
+        <param name="image_width" value="1920"/>
+        <param name="image_height" value="1080"/>
     </node>
 
     <!-- Map virtual device -->

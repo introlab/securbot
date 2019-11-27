@@ -12,10 +12,8 @@
 		<arg name="visual_odometry" default="false" />
 		<arg name="odom_tf_angular_variance" default="0.05"/>
 		<arg name="odom_tf_linear_variance"  default="0.01"/>
-		<arg if="$(eval env('SECURBOT_CAMERA')=='realsense')" name="rgbd_sync" default="true" />
-		<arg if="$(eval env('SECURBOT_CAMERA')=='realsense')" name="approx_rgbd_sync" default="false"/>
-		<arg unless="$(eval env('SECURBOT_CAMERA')=='realsense')" name="rgbd_sync" default="false" />
-		<arg unless="$(eval env('SECURBOT_CAMERA')=='realsense')" name="approx_rgbd_sync" default="true"/>
+		<arg name="rgbd_sync" default="true" />
+		<arg name="approx_rgbd_sync" default="false"/>
 	</include>
 	<node pkg="nodelet" type="nodelet" name="obstacles_detection" args="standalone rtabmap_ros/obstacles_detection">
 		<param name="frame_id" value="base_footprint"/>
