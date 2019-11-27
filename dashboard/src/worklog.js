@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const datediff = require('date-diff');
 
 
-// Genrate list total time spent
+// Genrate list total time spent per user
 module.exports.getWorklog = async function (settings)
 {
     // Opening chromium
@@ -88,19 +88,28 @@ module.exports.addMeans= function (records){
 
     for(let container of lines) {
         var name = '';
+        var nameContainer = null;
         try{
-            name = container.querySelector('.sc-gPEVay.gmMOGg>span>span>span').innerText.trim();
+            nameContainer = container.querySelector('.sc-gPEVay.gmMOGg>span>span>span');
+            name = nameContainer.innerText.trim();
         } catch(e){};
-        if (name == '') return;
+        if (name == '' || container == null) return;
 
         records.find((member)=>{
             if (name ==  member.name)
             {
                 // Change the field with total
-                container.querySelectorAll('.total_cell>div>div')[0].innerHTML =
+                /*container.querySelectorAll('.total_cell>div>div')[0].innerHTML =
                     `Avg(${member.mean}h) Total`;
 
-                return true;
+                return true;*/
+
+                // Put hour average under name
+                nameContainer.innerHTML =
+                `${name}<br>
+                 Avg. <b>${member.mean}h</b>/sem.`;
+
+                 return true;
             }
 
             return false;
