@@ -18,16 +18,16 @@ hbba_conf:
     CPU: 100
 
 # Proc Modules
-- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_proc_navigation.yaml'}
+- include: {pkg: 'securbot_hbba_cfg', file: 'pioneer_securbot_proc_navigation.yaml'}
 
 # Behavior Modules
-- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_bhvr_navigation.yaml'}
+- include: {pkg: 'securbot_hbba_cfg', file: 'pioneer_securbot_bhvr_navigation.yaml'}
 
 # Motivations
-- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_mot_navigation.yaml'}
+- include: {pkg: 'securbot_hbba_cfg', file: 'pioneer_securbot_mot_navigation.yaml'}
 
 # Strategies
-- include: {pkg: 'securbot_hbba_cfg', file: 'securbot_strat_navigation.yaml'}
+- include: {pkg: 'securbot_hbba_cfg', file: 'pioneer_securbot_strat_navigation.yaml'}
 
 # Initial desire
 - desire:

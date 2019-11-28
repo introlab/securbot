@@ -148,7 +148,8 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_hbba_cfg(securbot_navigation hbba_cfg/securbot_navigation.yaml)
+add_hbba_cfg(securbot_pioneer hbba_cfg/pioneer/pioneer_securbot_navigation.yaml)
+add_hbba_cfg(securbot_turtlebot hbba_cfg/turtlebot/turtlebot_securbot_navigation.yaml)
 
 #############
 ## Install ##

@@ -67,7 +67,7 @@ class DockGenerator:
                 self.state = DockState.docked
 
             elif self.dock_desire.id not in msg.desires:
-                self.restart_docking()
+                self.start_docking()
 
         if self.state == DockState.docked:
             if self.loiter_desire.id not in msg.desires:
@@ -97,7 +97,8 @@ class DockGenerator:
     def start_docking(self):
         """Initialize docking sequence."""
         self.add_desire([self.dock_desire])
-        self.restart_docking()
+        self.state = DockState.docking
+
 
     def restart_docking(self):
         """Restart approach after interuption."""

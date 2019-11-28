@@ -1,0 +1,57 @@
+hbba_conf:
+
+#- strat:
+#    name: goto
+#    class: GoTo
+#    utility: 4
+#    costs:
+#        robotic_base: 1
+#    modules:
+#        - planner
+#    custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
+
+- strat:
+    name: dock
+    class: Dock
+    utility: 3
+    costs:
+        robotic_base: 1
+    modules:
+        - apriltag:
+                - camera_rgb_image_rect_color: 1
+                - camera_rgb_camera_info: 1
+        - docker
+
+#- strat:
+#    name: patrol
+#    class: Patrol
+#    utility: 1
+#    costs:
+#        robotic_base: 1
+#    modules:
+#        - planner
+#    custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
+
+- strat:
+    name: loiter
+    class: Loiter
+    utility: 2
+    costs:
+        robotic_base: 1
+    custom_bringdn: "pubFloat32('/reverse_time', params.t);"
+
+- strat:
+    name: Move_base_teleop
+    class: Teleop
+    utility: 5
+    costs:
+        robotic_base: 1
+    modules:
+        - teleop_manager
+
+- strat:
+    name: reverse
+    class: Reverse
+    utility: 6
+    modules:
+        - reverser

@@ -11,25 +11,17 @@ import message_filters
 class CollisionDetector:
     def sync_callback(self, cmd, odom):
         if abs(cmd.linear.x - odom.twist.twist.linear.x) > self.delta_max:
-            if self.over_counter >= 10:
+            if self.over_counter >= 5:
                 self.coll_pub.publish(Empty())
             else:
                 self.over_counter = self.over_counter + 1
         else:
             self.over_counter = 0
 
-        if abs(cmd.linear.x) > self.delta_max and abs(self.tag_vx) < self.delta_max:
-            if self.tag_counter >= 4:
-                self.coll_pub.publish(Empty())
-            else:
-                self.tag_counter = self.tag_counter + 1
-        elif self.tag_counter > 0:
-            self.tag_counter = self.tag_counter - 1
-        rospy.loginfo(self.tag_counter)
 
     def __init__(self):
         rospy.init_node('collision_detector')
-        self.delta_max = rospy.get_param('~delta_max', 0.04)
+        self.delta_max = rospy.get_param('~delta_max', 0.08)
         self.over_counter = 0
 
         self.coll_pub = rospy.Publisher('collision', Empty, queue_size=10)
