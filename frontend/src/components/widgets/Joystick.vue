@@ -9,8 +9,11 @@
       ref="canvas"
       class="h-100 m-100"
       @mousedown="onMouseDown"
+      @touchstart="onMouseDown"
       @mouseup="onMouseUp"
+      @touchend="onMouseUp"
       @mousemove="onMouseMove"
+      @touchmove="onMouseMove"
       @mouseout="onMouseOut"
     />
   </div>
@@ -120,6 +123,9 @@ export default {
       if (event.button === 0) {
         this.updateJoystickPositionFromMouseEvent(event);
         this.isMouseDown = true;
+      } else if (event.type === 'touchstart') {
+        this.updateJoystickPositionFromMouseEvent(event.touches[0]);
+        this.isMouseDown = true;
       }
     },
     /**
@@ -129,7 +135,7 @@ export default {
      * @public
      */
     onMouseUp(event) {
-      if (event.button === 0) {
+      if (event.button === 0 || event.type === 'touchend') {
         this.x = this.getCenterX();
         this.y = this.getCenterY();
         this.isMouseDown = false;
@@ -146,7 +152,11 @@ export default {
      */
     onMouseMove(event) {
       if (this.isMouseDown) {
-        this.updateJoystickPositionFromMouseEvent(event);
+        if (event.clientX) {
+          this.updateJoystickPositionFromMouseEvent(event);
+        } else {
+          this.updateJoystickPositionFromMouseEvent(event.touches[0]);
+        }
       }
     },
     /**
@@ -235,7 +245,7 @@ export default {
 
       // draw center cross
       this.context.lineWidth = 2;
-      this.context.strokeStyle = '#4682B4';
+      this.context.strokeStyle = '#222222';
       this.context.beginPath();
       this.context.moveTo(centerX, centerY - pointOffset);
       this.context.lineTo(centerX, centerY + pointOffset);
@@ -250,7 +260,7 @@ export default {
       // draw the up triangle
       const upTriangleStartY = centerY - ((3 * radius) / 4);
 
-      this.context.fillStyle = '#4682B4';
+      this.context.fillStyle = '#222222';
       this.context.beginPath();
       this.context.moveTo(centerX, upTriangleStartY);
       this.context.lineTo(centerX - halfPointOffset, upTriangleStartY + pointOffset);

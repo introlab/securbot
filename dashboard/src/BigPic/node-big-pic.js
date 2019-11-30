@@ -28,4 +28,15 @@ module.exports = function({width = "80px", height = "80px", paddingBottom = "10p
     catch (err) {
         console.log(err)
     }
+
+    // Resize columns
+    let secCol = gadget.contentDocument.querySelectorAll("[name *= \"gadget-second-column\"]");
+    secCol.forEach(col => {
+        col.style.cssText = 'width:100% !important';
+    })
+
+    let cells = gadget.contentDocument.querySelectorAll('.cell-content-gadget');
+    cells.forEach(cell => {
+        cell.style.width = '100%';
+    })
 }

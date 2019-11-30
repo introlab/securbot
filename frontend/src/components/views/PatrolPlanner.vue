@@ -163,7 +163,7 @@
         </div>
         <div
           v-if="isConnected"
-          class="position-absolute overlay-container"
+          class="position-absolute overlay-container-planner"
         >
           <div
             id="patrol-overlay-button-container"
@@ -382,7 +382,7 @@ export default {
   margin: auto;
   margin-bottom: 5px;
 }
-.overlay-container {
+.overlay-container-planner {
   top: 5px;
   right: 15px;
   z-index: 100;
