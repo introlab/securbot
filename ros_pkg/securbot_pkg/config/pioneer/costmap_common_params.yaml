@@ -10,7 +10,7 @@ laser_scan_sensor:
   clearing: true
   min_obstacle_height: -9.0
   max_obstacle_height: 9.0
-  obstacle_range: 10.0
+  obstacle_range: 4.0
   raytrace_range: 25.0
 
 point_cloud_sensor:

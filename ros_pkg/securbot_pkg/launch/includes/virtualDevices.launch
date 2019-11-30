@@ -31,8 +31,8 @@
 
     <!-- Parameters used to generate the image (resize and position) -->
     <arg name="refresh_rate_param" default="1.0"/>
-    <arg name="resolution_param" default="40"/>
-    <arg name="width_param" default="60"/>
+    <arg name="resolution_param" default="16"/>
+    <arg name="width_param" default="150"/>
     <arg name="height_param" default="$(arg width_param)"/>
     <arg name="x_origin_param" default="$(eval arg('resolution_param') * arg('width_param') / 2)"/>
     <arg name="y_origin_param" default="$(eval arg('resolution_param') * arg('height_param') / 2)"/>
@@ -64,8 +64,8 @@
     <node pkg="image_capture" type="virtualcam_node" name="virtual_Camera" output="screen">
         <param name="image_topic" value="/camera/rgb/image_rect_color" />
         <param name="virtual_dev" value="/dev/video4" />
-        <param name="image_width" value="1920"/>
-        <param name="image_height" value="1080"/>
+        <param name="image_width" value="640"/>
+        <param name="image_height" value="360"/>
     </node>
 
     <!-- Map virtual device -->
@@ -73,8 +73,8 @@
     <node pkg="image_capture" type="virtualcam_node" name="virtual_Map" output="screen">
         <param name="image_topic" value="/map_image_generator/image"/>
         <param name="virtual_dev" value="/dev/video5" />
-        <param name="image_width" type="int" value="$(arg image_width_param)"/>
-        <param name="image_height" type="int" value="$(arg image_height_param)"/>
+        <param name="image_width" type="int" value="600"/>
+        <param name="image_height" type="int" value="600"/>
     </node>
 
     <!-- Map Image Generator and its parameters -->
