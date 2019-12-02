@@ -13,8 +13,10 @@ import Teleop from '@/components/views/Teleop';
 import PatrolPlanner from '@/components/views/PatrolPlanner';
 import PatrolConfig from '@/components/views/PatrolConfig';
 import Events from '@/components/views/Events';
-import Testing from '@/components/views/Testing';
+// import Testing from '@/components/views/Testing';
 import Testing2 from '@/components/views/Testing2';
+
+import Mega from '@/components/views/MegaGenial';
 
 Vue.use(Router);
 
@@ -72,8 +74,9 @@ export default new Router({
           component: Events,
         },
         {
-          path: 'testing',
-          component: Testing,
+          path: 'mega-genial',
+          name: 'Securbot MegaGenial',
+          component: Mega,
         },
       ],
     },
