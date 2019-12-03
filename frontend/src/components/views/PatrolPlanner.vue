@@ -18,9 +18,19 @@
           class="h-100 w-100 border rounded shadow-sb"
         >
           <!-- Title -->
-          <h4 class="m-3 w-100">
-            Patrol Planner
-          </h4>
+          <div class="d-flex flex-row">
+            <h4 class="m-3 w-100">
+              Patrol Planner
+            </h4>
+            <b-button
+              variant="success"
+              class="mr-3 m-2"
+              :disabled="!isConnected"
+              @click="sendPatrolToRobot"
+            >
+              Send
+            </b-button>
+          </div>
           <div
             id="inner-planner-container"
             class="border rounded mx-1 my-0 p-2"
@@ -275,6 +285,9 @@ export default {
   methods: {
     testFocus() {
       // console.log(event);
+    },
+    sendPatrolToRobot() {
+      this.$store.dispatch('sendPatrol', { patrol: this.currentPatrol.obj.waypoints });
     },
     fixFloat(value) {
       return value.toFixed(1);
