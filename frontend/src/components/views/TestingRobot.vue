@@ -37,7 +37,7 @@ import VideoBox from '../widgets/VideoBox';
 import Connection from '../widgets/Connection';
 
 export default {
-  name: 'testing2',
+  name: 'testing-robot',
   components: {
     VideoBox,
     Connection,

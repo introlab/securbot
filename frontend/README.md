@@ -17,7 +17,7 @@
 
 ## Summary
 
-The frontend is been develop using the Vue.js framework with bootstrap toolbox and so is web base.
+The frontend has been developed using the Vue.js framework with the bootstrap toolbox.
 The interface is there to offer an easy way for operators to connect to any robot in services and perform some specific actions on them.
 
 > We currently do not support mobile devices.

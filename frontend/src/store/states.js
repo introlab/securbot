@@ -1,28 +1,51 @@
+/**
+ * The root store states.
+ *
+ * @module Store
+ * @exports
+ */
 export default {
-  showStreams: true,
+  /**
+   * The robot object of the current connected robot. If not connected to a robot, all properties
+   * are going to be undefined.
+   */
   currentRobot: {
-    name: '',
+    name: '', // The robot name
     id: {
-      client: '',
-      db: '',
+      client: '', // The easyrtc robot id
+      db: '', // The database robot id
     },
   },
+  /**
+   * The value of the zoom tranform for the map stream
+   */
   mapZoom: 1,
+  /**
+   * The map size to compute absolute waypoint coordinates
+   */
   mapSize: {
     width: 2400,
     height: 2400,
   },
+  /**
+   * The state of the joystick
+   */
   joystickEnabled: false,
+  /**
+   * The docking setInterval object
+   */
   dockingInterval: '',
-  joystickConfig: {
-    maxX: 0,
-    maxY: 0,
-  },
+  /**
+   * The different update rates of some interactive components
+   */
   rates: {
     joystickCanvasRefreshRate: 60,
     joystickPositionRefreshRate: 100,
     patrolCanvasRefreshRate: 60,
   },
+  /**
+   * An object that keep tracks of html elements for video streams binding
+   */
   htmlElement: {
     cameraId: 'camera-videobox-html-id',
     camera: null,
@@ -33,6 +56,9 @@ export default {
     eventId: 'event-videobox-html-id',
     event: null,
   },
+  /**
+   * The headers use for the different vue-bootstrap table
+   */
   headers: {
     waypoints: [
       { key: 'index', label: '#' },
@@ -50,6 +76,10 @@ export default {
       { key: 'image', label: 'Image' },
     ],
   },
+  /**
+   * A patrol object that keep track of all patrols found on the database and the current patrol
+   * being configured by the user.
+   */
   patrol: {
     current: {
       id: '',
@@ -63,6 +93,10 @@ export default {
     },
     list: [],
   },
+  /**
+   * A schedule object that keep track of all patrols found on the database and the current schedule
+   * being configured by the user.
+   */
   schedule: {
     current: {
       id: '',

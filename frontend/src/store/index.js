@@ -12,6 +12,12 @@ Vue.use(Vuex);
 
 Vue.config.devtools = true;
 
+/**
+ * The store component. This component is split into multiple files to make it easier to understand
+ * and use. For Vuex documentation see [docs](https://vuex.vuejs.org/).
+ * @module Store
+ * @exports
+ */
 export default new Vuex.Store({
   modules: {
     client,
