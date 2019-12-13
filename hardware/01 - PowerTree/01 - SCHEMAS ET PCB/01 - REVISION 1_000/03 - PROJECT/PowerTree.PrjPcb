@@ -30,7 +30,7 @@ DItemRevisionGUID=
 ReportSuppressedErrorsInMessages=0
 FSMCodingStyle=eFMSDropDownList_OneProcess
 FSMEncodingStyle=eFMSDropDownList_OneHot
-OutputPath=Project Outputs for PowerTree
+OutputPath=
 LogFolderPath=
 ManagedProjectGUID=
 
@@ -208,6 +208,18 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TBSNSOJW
 
+[GeneratedDocument1]
+DocumentPath=Project Outputs for PowerTree\Design Rule Check - PowerTree.html
+DItemRevisionGUID=
+
+[GeneratedDocument2]
+DocumentPath=..\..\..\..\99 - LIBRARY\SecureBot.csv
+DItemRevisionGUID=
+
+[GeneratedDocument3]
+DocumentPath=..\..\..\..\99 - LIBRARY\SecureBot.rep
+DItemRevisionGUID=
+
 [Parameter1]
 Name=Project_Date
 Value=12/03/2019
@@ -291,7 +303,7 @@ SCH_HasExpandLogicalToPhysicalSheets=-1
 SaveSettingsToOutJob=0
 
 [Generic_EDE]
-OutputDir=Project Outputs for PowerTree
+OutputDir=
 
 [OutputGroup1]
 Name=Netlist Outputs
