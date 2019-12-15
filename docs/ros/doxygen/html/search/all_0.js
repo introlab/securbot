@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['_5f_5finit_5f_5f',['__init__',['../classpatrol__test_1_1_patrol_test_suite.html#ac17d03d4bf21a506cc25d095eda84e29',1,'patrol_test::PatrolTestSuite']]]
+  ['_5f_5finit_5f_5f_0',['__init__',['../classpatrol__test_1_1_patrol_test_suite.html#a6bc188497983c95d6f09e60c7be827fa',1,'patrol_test::PatrolTestSuite']]],
+  ['_5f_5fpad0_5f_5f_1',['__pad0__',['../union_b_q24725_a_1_1charge__option__register__map.html#ac841651fb85c65f9f17b60cf1dad0c28',1,'BQ24725A::charge_option_register_map::__pad0__()'],['../union_b_q24725_a_1_1charge__current__register__map.html#a91a1b04d0a14fddb46fa842201480757',1,'BQ24725A::charge_current_register_map::__pad0__()'],['../union_b_q24725_a_1_1charge__voltage__register__map.html#a668b068c4fcc823c8aedf605d592db0f',1,'BQ24725A::charge_voltage_register_map::__pad0__()'],['../union_b_q24725_a_1_1input__current__register__map.html#a70bc8bd72d2a65696734e7a326846b50',1,'BQ24725A::input_current_register_map::__pad0__()']]],
+  ['_5f_5fpad1_5f_5f_2',['__pad1__',['../union_b_q24725_a_1_1charge__current__register__map.html#aa19db5f31d6cfea93609fb497ed99293',1,'BQ24725A::charge_current_register_map::__pad1__()'],['../union_b_q24725_a_1_1charge__voltage__register__map.html#acd994caf7ba3cb86fe43682ec2d9d1ed',1,'BQ24725A::charge_voltage_register_map::__pad1__()'],['../union_b_q24725_a_1_1input__current__register__map.html#ae927fa0c675daf76972e32bb2d72b19c',1,'BQ24725A::input_current_register_map::__pad1__()']]]
 ];

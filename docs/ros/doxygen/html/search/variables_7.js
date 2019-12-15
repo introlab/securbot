@@ -1,7 +1,19 @@
 var searchData=
 [
-  ['real_5fposestamped_5findex',['REAL_POSESTAMPED_INDEX',['../namespacepatrol_executive.html#a75b5593940d99021aeee363eadc8f039',1,'patrolExecutive']]],
-  ['recalled',['RECALLED',['../classpatrol_executive_1_1_status.html#a2a35aa0f9d656c485fcdb943beaf2ff5',1,'patrolExecutive::Status']]],
-  ['recalling',['RECALLING',['../classpatrol_executive_1_1_status.html#a1d4472eb8213ccfed82116afe358f586',1,'patrolExecutive::Status']]],
-  ['rejected',['REJECTED',['../classpatrol_executive_1_1_status.html#ab2f8583fad507eb92ec8ebd207f5c6a9',1,'patrolExecutive::Status']]]
+  ['i_5famp_5fcal_833',['I_AMP_CAL',['../union_b_q76925_1_1config__1__register__map.html#a2a588257a010f90c45ea6226652d6b7a',1,'BQ76925::config_1_register_map']]],
+  ['i_5famp_5fen_834',['I_AMP_EN',['../union_b_q76925_1_1power__ctl__register__map.html#ab94d2dacb716e78ecedf25ebcb2badbf',1,'BQ76925::power_ctl_register_map']]],
+  ['i_5fcomp_5fen_835',['I_COMP_EN',['../union_b_q76925_1_1power__ctl__register__map.html#ae812863925772467b34bfde21631c53b',1,'BQ76925::power_ctl_register_map']]],
+  ['i_5fcomp_5fpol_836',['I_COMP_POL',['../union_b_q76925_1_1config__1__register__map.html#afaa530ff2c93aef5f3c19c99962e9c91',1,'BQ76925::config_1_register_map']]],
+  ['i_5fgain_837',['I_GAIN',['../union_b_q76925_1_1config__1__register__map.html#a82f7cd73bad165d920f3609aeafc8799',1,'BQ76925::config_1_register_map']]],
+  ['i_5fthresh_838',['I_THRESH',['../union_b_q76925_1_1config__1__register__map.html#a2729dfac5456d66fde9b53124277f298',1,'BQ76925::config_1_register_map']]],
+  ['ifault_5fhi_839',['IFAULT_HI',['../union_b_q24725_a_1_1charge__option__register__map.html#a889772ddf78d9b5d887893d3ce37dbe3',1,'BQ24725A::charge_option_register_map']]],
+  ['ifault_5flow_840',['IFAULT_LOW',['../union_b_q24725_a_1_1charge__option__register__map.html#af6289493446c1930967220df6a7f697d',1,'BQ24725A::charge_option_register_map']]],
+  ['interrupt_5ftrue_5fjson_841',['INTERRUPT_TRUE_JSON',['../namespacepatrol__test.html#ab5f464844af9693189a5ad77f8972b6f',1,'patrol_test']]],
+  ['iout_842',['IOUT',['../union_b_q24725_a_1_1charge__option__register__map.html#abbfd9ca599b4222abd1fab8b2540185b',1,'BQ24725A::charge_option_register_map']]],
+  ['isadapterconnected_843',['isAdapterConnected',['../structstate_1_1_board_status.html#acc521f64d0a989e629440640d398955a',1,'state::BoardStatus']]],
+  ['isbalancing_844',['isBalancing',['../structstate_1_1_board_status.html#ad7b3c7833da553b8c8561a10a9a5a592',1,'state::BoardStatus']]],
+  ['ischarged_845',['isCharged',['../structstate_1_1_board_status.html#ad6d5c7e89f7d88f0dbd9a8f15dc82d46',1,'state::BoardStatus']]],
+  ['ischargerbooted_846',['isChargerBooted',['../structstate_1_1_board_status.html#a4bbd745c71221c3a41b5b5176e2699a7',1,'state::BoardStatus']]],
+  ['ischarging_847',['isCharging',['../structstate_1_1_board_status.html#aef77816f4a390659ac0354efcbddf9e2',1,'state::BoardStatus']]],
+  ['islooped_848',['isLooped',['../namespacepatrol_executive.html#afffb19bc289301a6eb58e0edca10391e',1,'patrolExecutive']]]
 ];

@@ -1,0 +1,8 @@
+prefix=/home/alex/catkin_ws/src/securbot/ros_pkg/securbot_hbba_cfg/devel
+
+Name: securbot_hbba_cfg
+Description: Description of securbot_hbba_cfg
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/alex/catkin_ws/src/securbot/ros_pkg/securbot_hbba_cfg/devel/lib 
+Requires: 

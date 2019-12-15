@@ -1,0 +1,4 @@
+<launch>
+    <node name="teleop_motiv" pkg="securbot_pkg" type="teleop_generator.py" output="screen">
+    </node>
+</launch>

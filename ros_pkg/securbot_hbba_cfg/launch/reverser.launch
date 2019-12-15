@@ -1,0 +1,3 @@
+<launch>
+    <node name="reverser" pkg="securbot_pkg" type="reverser.py"/>
+</launch>

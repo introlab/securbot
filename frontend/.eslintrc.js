@@ -29,10 +29,9 @@ module.exports = {
     }],
     // Rule correction
     'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
-    "vue/html-closing-bracket-newline": ["error", {"singleline": "never","multiline": "never"}],
     'vue/name-property-casing': ["error", "kebab-case"],
-    'no-unused-vars':'off',
-    'no-restricted-syntax':'off',
+    'no-restricted-syntax':'off', // To disallow some javascript syntax, like some for of the for operator
+    "prefer-destructuring": [ "error", { "array": false, "object": true }, { "enforceForRenamedProperties": false }],
   },
   parserOptions: {
     parser: 'babel-eslint',

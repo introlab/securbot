@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vel_5fmsg',['vel_msg',['../namespaceelectron_teleop.html#a451494e5076bad8957b7f4f6488d0f08',1,'electronTeleop']]]
+  ['os_855',['OS',['../union_a_d_s1015_1_1config__register__map.html#a6bf4ee937967a26f54b4bd4013da87c2',1,'ADS1015::config_register_map']]]
 ];

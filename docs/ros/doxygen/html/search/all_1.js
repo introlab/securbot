@@ -1,7 +1,25 @@
 var searchData=
 [
-  ['aborted',['ABORTED',['../classpatrol_executive_1_1_status.html#a167d82c2acdb71531dda8996ea65ace2',1,'patrolExecutive::Status']]],
-  ['actionclient',['actionClient',['../namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99',1,'patrolExecutive']]],
-  ['actionserver',['actionServer',['../classpatrol__test_1_1_patrol_test_suite.html#ae0e6164681386ad8d7d2402b65e0fe6c',1,'patrol_test::PatrolTestSuite']]],
-  ['active',['ACTIVE',['../classpatrol_executive_1_1_status.html#a62f3f83f1beb93629548f78797043b1d',1,'patrolExecutive::Status']]]
+  ['aborted_3',['ABORTED',['../classpatrol_executive_1_1_status.html#a167d82c2acdb71531dda8996ea65ace2',1,'patrolExecutive::Status']]],
+  ['ac_4',['AC',['../union_b_q24725_a_1_1charge__option__register__map.html#ab76b3cc458b6db8f56a39a55295eeb80',1,'BQ24725A::charge_option_register_map']]],
+  ['acoc_5',['ACOC',['../union_b_q24725_a_1_1charge__option__register__map.html#afcc51b499d7fb5b99c66d9036a6632ea',1,'BQ24725A::charge_option_register_map']]],
+  ['acok_6',['ACOK',['../union_b_q24725_a_1_1charge__option__register__map.html#aa8e8768a077de5cf818bf6e9ad9475ee',1,'BQ24725A::charge_option_register_map']]],
+  ['actionclient_7',['actionClient',['../namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99',1,'patrolExecutive']]],
+  ['actionserver_8',['actionServer',['../classpatrol__test_1_1_patrol_test_suite.html#ae0e6164681386ad8d7d2402b65e0fe6c',1,'patrol_test::PatrolTestSuite']]],
+  ['active_9',['ACTIVE',['../classpatrol_executive_1_1_status.html#a62f3f83f1beb93629548f78797043b1d',1,'patrolExecutive::Status']]],
+  ['adapter_5fcurrent_10',['ADAPTER_CURRENT',['../defines_8hpp.html#afd0bad151a5c633e07b0d1749b098b96',1,'defines.hpp']]],
+  ['adc0_5fi2c_5faddress_11',['ADC0_I2C_ADDRESS',['../defines_8hpp.html#aa8269f73df56df6688e4a3f0e6244d65',1,'defines.hpp']]],
+  ['adc1_5fi2c_5faddress_12',['ADC1_I2C_ADDRESS',['../defines_8hpp.html#af476f885a3444d188647fd76b393555a',1,'defines.hpp']]],
+  ['address_13',['address',['../union_b_q76925_1_1address__map.html#afb51734d5ff85aede037db6e90f2c13c',1,'BQ76925::address_map']]],
+  ['address_5fmap_14',['address_map',['../union_b_q76925_1_1address__map.html',1,'BQ76925']]],
+  ['address_5fpointer_5fregister_5fmap_15',['address_pointer_register_map',['../union_a_d_s1015_1_1address__pointer__register__map.html',1,'ADS1015']]],
+  ['ads1015_16',['ADS1015',['../class_a_d_s1015.html',1,'ADS1015'],['../class_a_d_s1015.html#afcd27a82e4d2c5472e6206b1e5db44a2',1,'ADS1015::ADS1015()']]],
+  ['ads1015_2ecpp_17',['ADS1015.cpp',['../_a_d_s1015_8cpp.html',1,'']]],
+  ['ads1015_2ehpp_18',['ADS1015.hpp',['../_a_d_s1015_8hpp.html',1,'']]],
+  ['ads1015_5fi2c_5fnum_19',['ADS1015_I2C_NUM',['../defines_8hpp.html#a2dd956dcf89f3c73bc77fb33bfa5c153',1,'defines.hpp']]],
+  ['alert_20',['ALERT',['../union_b_q76925_1_1status__register__map.html#a46961526e7f663c08997b7c0432557ba',1,'BQ76925::status_register_map']]],
+  ['analoginput_21',['AnalogInput',['../class_analog_input.html',1,'']]],
+  ['analoginput_2ecpp_22',['analogInput.cpp',['../analog_input_8cpp.html',1,'']]],
+  ['analoginput_2ehpp_23',['analogInput.hpp',['../analog_input_8hpp.html',1,'']]],
+  ['app_5fmain_24',['app_main',['../main_8cpp.html#a630544a7f0a2cc40d8a7fefab7e2fe70',1,'main.cpp']]]
 ];

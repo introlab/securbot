@@ -11,6 +11,7 @@ module.exports.getWorklog = async function (settings)
 
     try {
         const page = await browser.newPage();
+
         console.log('Chromium started');
 
         console.log('Pulling worklog');
@@ -42,14 +43,13 @@ module.exports.getWorklog = async function (settings)
 
         // Fetching entries in page
         console.log('Parsing entries');
-        var entriesList = await page.$$('.sc-hORach.kapOQE');
+        var entriesList = await page.$$('.sc-jDwBTQ.kSZgUu');
         entriesList.pop(); // removing total row
 
         var record = [];
-
         entriesList.forEach((line)=>{
             var nameP = line.$eval(
-                '.sc-bMVAic.bKTmPP>span>span>span',
+                '.sc-gPEVay.gmMOGg>span>span>span',
                 element => element.innerText.trim());
             var timeP = line.$$eval(
                 '.cell_component>.cell_wrapper_component',
@@ -65,9 +65,11 @@ module.exports.getWorklog = async function (settings)
 
         // Computing average time per 7 days according to start date
         console.log('Computing averages');
-        var projectDays = new datediff(new Date(), new Date(settings.startDate)).days();
+        var projectDays = new datediff(new Date(), new Date(settings.startDate)).days() - 124;
         record.forEach((entry) =>
-            {entry.mean = Math.round( 100 * entry.time * 7.0 / projectDays)/100;});
+        {
+            entry.mean = Math.round( 100 * entry.time * 7.0 / projectDays)/100;
+        });
     } catch (e) {
         browser.close();
         throw e;
@@ -82,12 +84,12 @@ module.exports.getWorklog = async function (settings)
 // Adds the means in the browser context
 module.exports.addMeans= function (records){
     let gadget = document.getElementById("iframe-gadget")
-    let lines = gadget.contentDocument.getElementsByClassName('sc-hORach kapOQE');
+    let lines = gadget.contentDocument.getElementsByClassName('sc-jDwBTQ kSZgUu');
 
     for(let container of lines) {
         var name = '';
         try{
-            name = container.querySelector('.sc-bMVAic.bKTmPP>span>span>span').innerText.trim();
+            name = container.querySelector('.sc-gPEVay.gmMOGg>span>span>span').innerText.trim();
         } catch(e){};
         if (name == '') return;
 

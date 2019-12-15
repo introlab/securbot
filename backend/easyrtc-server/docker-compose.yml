@@ -1,0 +1,11 @@
+version: '2.1'
+
+services:
+  easyrtc-server:
+    image: easyrtc-server
+    build: .
+    environment:
+      NODE_ENV: production
+      PORT: 8000
+    ports:
+      - 8000:8000
