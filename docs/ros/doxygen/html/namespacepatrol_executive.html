@@ -80,6 +80,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a6c8e128995fa11e650de8181cbbb07c3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a6c8e128995fa11e650de8181cbbb07c3">getTimeOffsetInSeconds</a> (offsetTimeInSeconds)</td></tr>
+<tr class="memdesc:a6c8e128995fa11e650de8181cbbb07c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get time offset in seconds since the EPOCH according to intial time in seconds gave as an input.  <a href="namespacepatrol_executive.html#a6c8e128995fa11e650de8181cbbb07c3">More...</a><br /></td></tr>
+<tr class="separator:a6c8e128995fa11e650de8181cbbb07c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19240022b9a69b09dd8759d33616e8d8"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a19240022b9a69b09dd8759d33616e8d8">waypointToPixelPoseStamped</a> (waypointObject)</td></tr>
 <tr class="memdesc:a19240022b9a69b09dd8759d33616e8d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format Waypoint to Pixel PoseStamped.  <a href="namespacepatrol_executive.html#a19240022b9a69b09dd8759d33616e8d8">More...</a><br /></td></tr>
 <tr class="separator:a19240022b9a69b09dd8759d33616e8d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,11 +116,13 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:ac3ca089d9ade63cf86dde5f9373fbeaa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#ac3ca089d9ade63cf86dde5f9373fbeaa">WAYPOINT_INDEX</a> = 0</td></tr>
+<tr class="separator:ac3ca089d9ade63cf86dde5f9373fbeaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a180a159337dbeb59ac203d3ac937f5f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a180a159337dbeb59ac203d3ac937f5f6">PIXEL_POSESTAMPED_INDEX</a> = 1</td></tr>
 <tr class="separator:a180a159337dbeb59ac203d3ac937f5f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75b5593940d99021aeee363eadc8f039"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a75b5593940d99021aeee363eadc8f039">REAL_POSESTAMPED_INDEX</a> = 2</td></tr>
 <tr class="separator:a75b5593940d99021aeee363eadc8f039"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c84d05f959175af3eb8b11c81d71a99"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99">actionClient</a> = actionlib.SimpleActionClient('move_base', MoveBaseAction)</td></tr>
+<tr class="memitem:a6c84d05f959175af3eb8b11c81d71a99"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a6c84d05f959175af3eb8b11c81d71a99">actionClient</a> = actionlib.SimpleActionClient('goto', MoveBaseAction)</td></tr>
 <tr class="separator:a6c84d05f959175af3eb8b11c81d71a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5012d6c6e1f67b98385f4ffab8b677f"><td class="memItemLeft" align="right" valign="top">list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#ac5012d6c6e1f67b98385f4ffab8b677f">waypointsPatrolList</a> = []</td></tr>
 <tr class="separator:ac5012d6c6e1f67b98385f4ffab8b677f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,6 +130,12 @@ Variables</h2></td></tr>
 <tr class="separator:a8ad7674bddfa1ae554aba971d3fc60ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afffb19bc289301a6eb58e0edca10391e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#afffb19bc289301a6eb58e0edca10391e">isLooped</a> = False</td></tr>
 <tr class="separator:afffb19bc289301a6eb58e0edca10391e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8beec04d70ecc3837187c71cb79981b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#ac8beec04d70ecc3837187c71cb79981b">repIndex</a> = 0</td></tr>
+<tr class="separator:ac8beec04d70ecc3837187c71cb79981b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d846e0eb7f1272dd6810fa624e4428f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a4d846e0eb7f1272dd6810fa624e4428f">repetitions</a> = 0</td></tr>
+<tr class="separator:a4d846e0eb7f1272dd6810fa624e4428f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe63ac3f12967edd3051be4f0d3904fd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#abe63ac3f12967edd3051be4f0d3904fd">currentLoiteringEndTimeInSeconds</a> = 0</td></tr>
+<tr class="separator:abe63ac3f12967edd3051be4f0d3904fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc3900570327f4100816af6d160d9528"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#afc3900570327f4100816af6d160d9528">patrolId</a> = &quot;&quot;</td></tr>
 <tr class="separator:afc3900570327f4100816af6d160d9528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0127a20e1aa0b2e6107e2cf643b30068"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepatrol_executive.html#a0127a20e1aa0b2e6107e2cf643b30068">toMapImageGenerator</a> = rospy.Publisher(&quot;toMapImageGenerator&quot;, PoseStamped, queue_size=20)</td></tr>
@@ -157,6 +168,33 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>String representation of the status </dd></dl>
+
+</div>
+</div>
+<a id="a6c8e128995fa11e650de8181cbbb07c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c8e128995fa11e650de8181cbbb07c3">&#9670;&nbsp;</a></span>getTimeOffsetInSeconds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def patrolExecutive.getTimeOffsetInSeconds </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>offsetTimeInSeconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get time offset in seconds since the EPOCH according to intial time in seconds gave as an input. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offsetTimeInSeconds</td><td>Offset time in seconds to add to current time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>timeResultInSeconds Result time in seconds since the epoch with the added offset </dd></dl>
 
 </div>
 </div>
@@ -426,7 +464,21 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">patrolExecutive.actionClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)</td>
+          <td class="memname">patrolExecutive.actionClient = actionlib.SimpleActionClient('goto', MoveBaseAction)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe63ac3f12967edd3051be4f0d3904fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe63ac3f12967edd3051be4f0d3904fd">&#9670;&nbsp;</a></span>currentLoiteringEndTimeInSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int patrolExecutive.currentLoiteringEndTimeInSeconds = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -503,6 +555,34 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a4d846e0eb7f1272dd6810fa624e4428f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d846e0eb7f1272dd6810fa624e4428f">&#9670;&nbsp;</a></span>repetitions</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int patrolExecutive.repetitions = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8beec04d70ecc3837187c71cb79981b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8beec04d70ecc3837187c71cb79981b">&#9670;&nbsp;</a></span>repIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int patrolExecutive.repIndex = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a561e58b7fc32f992655a0d0f66393629"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a561e58b7fc32f992655a0d0f66393629">&#9670;&nbsp;</a></span>toElectron</h2>
 
@@ -525,6 +605,20 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">patrolExecutive.toMapImageGenerator = rospy.Publisher(&quot;toMapImageGenerator&quot;, PoseStamped, queue_size=20)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3ca089d9ade63cf86dde5f9373fbeaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3ca089d9ade63cf86dde5f9373fbeaa">&#9670;&nbsp;</a></span>WAYPOINT_INDEX</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int patrolExecutive.WAYPOINT_INDEX = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">

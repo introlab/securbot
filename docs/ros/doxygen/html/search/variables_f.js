@@ -1,7 +1,10 @@
 var searchData=
 [
-  ['vc_5famp_5fen_886',['VC_AMP_EN',['../union_b_q76925_1_1power__ctl__register__map.html#af0d53b49a27f9882e1ecc527227d9112',1,'BQ76925::power_ctl_register_map']]],
-  ['vcout_5fsel_887',['VCOUT_SEL',['../union_b_q76925_1_1cell__ctl__register__map.html#a12d0281da4301934184ccd7d339cc88b',1,'BQ76925::cell_ctl_register_map']]],
-  ['vel_5fmsg_888',['vel_msg',['../namespaceelectron_teleop.html#a451494e5076bad8957b7f4f6488d0f08',1,'electronTeleop']]],
-  ['vtb_5fen_889',['VTB_EN',['../union_b_q76925_1_1power__ctl__register__map.html#ab6e20c4d17047da64dcc5ce3f29b7acd',1,'BQ76925::power_ctl_register_map']]]
+  ['tag_963',['TAG',['../_b_q24725_a_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'BQ24725A.cpp']]],
+  ['tag_5fcounter_964',['tag_counter',['../classcollision__detector_1_1_collision_detector.html#a802f232b7f6da222b23ad629319a6648',1,'collision_detector::CollisionDetector']]],
+  ['tag_5fvx_965',['tag_vx',['../classcollision__detector_1_1_collision_detector.html#afb678cbf2d4f6ec96fba5456d367e961',1,'collision_detector::CollisionDetector']]],
+  ['teleop_5fdesire_966',['teleop_desire',['../classteleop__generator_1_1_teleop_generator.html#a9f4cdc13f37778eae87786661fc52766',1,'teleop_generator::TeleopGenerator']]],
+  ['timeout_967',['TIMEOUT',['../namespacepatrol__test.html#aa72156bf1994082054ce1a8c22383a81',1,'patrol_test']]],
+  ['toelectron_968',['toElectron',['../namespacepatrol_executive.html#a561e58b7fc32f992655a0d0f66393629',1,'patrolExecutive']]],
+  ['tomapimagegenerator_969',['toMapImageGenerator',['../namespacepatrol_executive.html#a0127a20e1aa0b2e6107e2cf643b30068',1,'patrolExecutive']]]
 ];

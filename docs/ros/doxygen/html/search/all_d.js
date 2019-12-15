@@ -1,26 +1,6 @@
 var searchData=
 [
-  ['p_547',['P',['../union_a_d_s1015_1_1address__pointer__register__map.html#a094e87a157b7b28950b5ddb247574d93',1,'ADS1015::address_pointer_register_map']]],
-  ['patrol_5ftest_548',['patrol_test',['../namespacepatrol__test.html',1,'']]],
-  ['patrol_5ftest_2epy_549',['patrol_test.py',['../patrol__test_8py.html',1,'']]],
-  ['patrolcanceller_550',['patrolCanceller',['../classpatrol__test_1_1_patrol_test_suite.html#a617e9add97df4428b3f48d4bb0429fd2',1,'patrol_test::PatrolTestSuite']]],
-  ['patrolexecutive_551',['patrolExecutive',['../namespacepatrol_executive.html',1,'patrolExecutive'],['../namespacepatrol_executive.html#a1fa0e341e435a163ce0efbeda4cb08b3',1,'patrolExecutive.patrolExecutive()']]],
-  ['patrolexecutive_2epy_552',['patrolExecutive.py',['../patrol_executive_8py.html',1,'']]],
-  ['patrolid_553',['patrolId',['../namespacepatrol_executive.html#afc3900570327f4100816af6d160d9528',1,'patrolExecutive']]],
-  ['patrolpublisher_554',['patrolPublisher',['../classpatrol__test_1_1_patrol_test_suite.html#a7a9ca59e0ecd8bda33030b508eb7f760',1,'patrol_test::PatrolTestSuite']]],
-  ['patroltestsuite_555',['PatrolTestSuite',['../classpatrol__test_1_1_patrol_test_suite.html',1,'patrol_test']]],
-  ['pending_556',['PENDING',['../classpatrol_executive_1_1_status.html#ac9fb79634a4cbe557e204ee5f7075f0d',1,'patrolExecutive::Status']]],
-  ['pga_557',['PGA',['../union_a_d_s1015_1_1config__register__map.html#a81befc5c68f57b70db01a0031d032cc4',1,'ADS1015::config_register_map']]],
-  ['pixel_5fposestamped_5findex_558',['PIXEL_POSESTAMPED_INDEX',['../namespacepatrol_executive.html#a180a159337dbeb59ac203d3ac937f5f6',1,'patrolExecutive']]],
-  ['pixelposestampedtorealposestamped_559',['pixelPoseStampedToRealPoseStamped',['../namespacepatrol_executive.html#a291bff7df650d9f38b4c5b521bcf117b',1,'patrolExecutive']]],
-  ['pkg_560',['PKG',['../namespacepatrol__test.html#ab1c1330dab43685c2fabe465ca3d2ba8',1,'patrol_test']]],
-  ['por_561',['POR',['../union_b_q76925_1_1status__register__map.html#a6b83927e8b6b67f1d05d5d2fa35dad22',1,'BQ76925::status_register_map']]],
-  ['postadapterinit_562',['postAdapterInit',['../class_charger.html#ac9adfd1570fa59391e52a1347817330e',1,'Charger']]],
-  ['power_5fctl_5freg_5fadr_563',['POWER_CTL_REG_ADR',['../_b_q76925_8cpp.html#a8f6f3d3a0c03b47884d16d35948e885a',1,'BQ76925.cpp']]],
-  ['power_5fctl_5fregister_5fmap_564',['power_ctl_register_map',['../union_b_q76925_1_1power__ctl__register__map.html',1,'BQ76925']]],
-  ['preempted_565',['PREEMPTED',['../classpatrol_executive_1_1_status.html#a7f7767a0867d8fe7dbba659973e8f88b',1,'patrolExecutive::Status']]],
-  ['preempting_566',['PREEMPTING',['../classpatrol_executive_1_1_status.html#afb4bbddd1aa6cac5c41d0325aa15cfca',1,'patrolExecutive::Status']]],
-  ['printregisters_567',['printRegisters',['../class_b_q24725_a.html#aef1bbfcd6a8cbe577533e918a23668e8',1,'BQ24725A']]],
-  ['publisher_568',['publisher',['../namespaceelectron_teleop.html#ab4c9cba70f72eba974bdfdbca27a6d10',1,'electronTeleop']]],
-  ['publishpatrolfeedback_569',['publishPatrolFeedBack',['../namespacepatrol_executive.html#a52e09ea6ac1c05860facef17d809c3e5',1,'patrolExecutive']]]
+  ['onboard_5fled_5fpin_560',['ONBOARD_LED_PIN',['../defines_8hpp.html#aec8aa9e381e77464a8025b88f2ea885b',1,'defines.hpp']]],
+  ['os_561',['OS',['../union_a_d_s1015_1_1config__register__map.html#a6bf4ee937967a26f54b4bd4013da87c2',1,'ADS1015::config_register_map']]],
+  ['over_5fcounter_562',['over_counter',['../classcollision__detector_1_1_collision_detector.html#a3eb0b78801e5a09645695f3b3101c66a',1,'collision_detector::CollisionDetector']]]
 ];

@@ -1,15 +1,5 @@
 var searchData=
 [
-  ['p_856',['P',['../union_a_d_s1015_1_1address__pointer__register__map.html#a094e87a157b7b28950b5ddb247574d93',1,'ADS1015::address_pointer_register_map']]],
-  ['patrolcanceller_857',['patrolCanceller',['../classpatrol__test_1_1_patrol_test_suite.html#a617e9add97df4428b3f48d4bb0429fd2',1,'patrol_test::PatrolTestSuite']]],
-  ['patrolid_858',['patrolId',['../namespacepatrol_executive.html#afc3900570327f4100816af6d160d9528',1,'patrolExecutive']]],
-  ['patrolpublisher_859',['patrolPublisher',['../classpatrol__test_1_1_patrol_test_suite.html#a7a9ca59e0ecd8bda33030b508eb7f760',1,'patrol_test::PatrolTestSuite']]],
-  ['pending_860',['PENDING',['../classpatrol_executive_1_1_status.html#ac9fb79634a4cbe557e204ee5f7075f0d',1,'patrolExecutive::Status']]],
-  ['pga_861',['PGA',['../union_a_d_s1015_1_1config__register__map.html#a81befc5c68f57b70db01a0031d032cc4',1,'ADS1015::config_register_map']]],
-  ['pixel_5fposestamped_5findex_862',['PIXEL_POSESTAMPED_INDEX',['../namespacepatrol_executive.html#a180a159337dbeb59ac203d3ac937f5f6',1,'patrolExecutive']]],
-  ['pkg_863',['PKG',['../namespacepatrol__test.html#ab1c1330dab43685c2fabe465ca3d2ba8',1,'patrol_test']]],
-  ['por_864',['POR',['../union_b_q76925_1_1status__register__map.html#a6b83927e8b6b67f1d05d5d2fa35dad22',1,'BQ76925::status_register_map']]],
-  ['preempted_865',['PREEMPTED',['../classpatrol_executive_1_1_status.html#a7f7767a0867d8fe7dbba659973e8f88b',1,'patrolExecutive::Status']]],
-  ['preempting_866',['PREEMPTING',['../classpatrol_executive_1_1_status.html#afb4bbddd1aa6cac5c41d0325aa15cfca',1,'patrolExecutive::Status']]],
-  ['publisher_867',['publisher',['../namespaceelectron_teleop.html#ab4c9cba70f72eba974bdfdbca27a6d10',1,'electronTeleop']]]
+  ['os_929',['OS',['../union_a_d_s1015_1_1config__register__map.html#a6bf4ee937967a26f54b4bd4013da87c2',1,'ADS1015::config_register_map']]],
+  ['over_5fcounter_930',['over_counter',['../classcollision__detector_1_1_collision_detector.html#a3eb0b78801e5a09645695f3b3101c66a',1,'collision_detector::CollisionDetector']]]
 ];

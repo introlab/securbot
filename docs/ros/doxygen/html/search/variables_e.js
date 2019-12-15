@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['tag_882',['TAG',['../_b_q24725_a_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'BQ24725A.cpp']]],
-  ['timeout_883',['TIMEOUT',['../namespacepatrol__test.html#aa72156bf1994082054ce1a8c22383a81',1,'patrol_test']]],
-  ['toelectron_884',['toElectron',['../namespacepatrol_executive.html#a561e58b7fc32f992655a0d0f66393629',1,'patrolExecutive']]],
-  ['tomapimagegenerator_885',['toMapImageGenerator',['../namespacepatrol_executive.html#a0127a20e1aa0b2e6107e2cf643b30068',1,'patrolExecutive']]]
+  ['sleep_960',['SLEEP',['../union_b_q76925_1_1power__ctl__register__map.html#a34df5ecc4e895766c6d14669866df615',1,'BQ76925::power_ctl_register_map']]],
+  ['sleep_5fdis_961',['SLEEP_DIS',['../union_b_q76925_1_1power__ctl__register__map.html#a6fd64de3d56e772392557d72df3fbab8',1,'BQ76925::power_ctl_register_map']]],
+  ['succeeded_962',['SUCCEEDED',['../classpatrol_executive_1_1_status.html#af031bda2bd70b1d13e36258a4400693b',1,'patrolExecutive::Status']]]
 ];

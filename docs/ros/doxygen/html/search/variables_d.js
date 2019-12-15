@@ -1,7 +1,19 @@
 var searchData=
 [
-  ['secret_878',['SECRET',['../union_b_q24725_a_1_1charge__option__register__map.html#ad5af5491df76afc804c22bc0fb1a8d38',1,'BQ24725A::charge_option_register_map']]],
-  ['sleep_879',['SLEEP',['../union_b_q76925_1_1power__ctl__register__map.html#a34df5ecc4e895766c6d14669866df615',1,'BQ76925::power_ctl_register_map']]],
-  ['sleep_5fdis_880',['SLEEP_DIS',['../union_b_q76925_1_1power__ctl__register__map.html#a6fd64de3d56e772392557d72df3fbab8',1,'BQ76925::power_ctl_register_map']]],
-  ['succeeded_881',['SUCCEEDED',['../classpatrol_executive_1_1_status.html#af031bda2bd70b1d13e36258a4400693b',1,'patrolExecutive::Status']]]
+  ['real_5fposestamped_5findex_944',['REAL_POSESTAMPED_INDEX',['../namespacepatrol_executive.html#a75b5593940d99021aeee363eadc8f039',1,'patrolExecutive']]],
+  ['recalled_945',['RECALLED',['../classpatrol_executive_1_1_status.html#a2a35aa0f9d656c485fcdb943beaf2ff5',1,'patrolExecutive::Status']]],
+  ['recalling_946',['RECALLING',['../classpatrol_executive_1_1_status.html#a1d4472eb8213ccfed82116afe358f586',1,'patrolExecutive::Status']]],
+  ['ref_5fen_947',['REF_EN',['../union_b_q76925_1_1power__ctl__register__map.html#a4dc3d2138a16981d73c09f31a1a5c644',1,'BQ76925::power_ctl_register_map']]],
+  ['ref_5fsel_948',['REF_SEL',['../union_b_q76925_1_1config__2__register__map.html#aba30353436a660e5cbe71c7c22c41e04',1,'BQ76925::config_2_register_map']]],
+  ['register_949',['REGISTER',['../union_b_q76925_1_1address__map.html#a6d8b60923966acdd55526dea7e465ea5',1,'BQ76925::address_map']]],
+  ['rejected_950',['REJECTED',['../classpatrol_executive_1_1_status.html#ab2f8583fad507eb92ec8ebd207f5c6a9',1,'patrolExecutive::Status']]],
+  ['remove_5fdesires_951',['remove_desires',['../classteleop__generator_1_1_teleop_generator.html#a5f90c3a519be5bef3d17d01eced64d4d',1,'teleop_generator::TeleopGenerator']]],
+  ['repetitions_952',['repetitions',['../namespacepatrol_executive.html#a4d846e0eb7f1272dd6810fa624e4428f',1,'patrolExecutive']]],
+  ['repindex_953',['repIndex',['../namespacepatrol_executive.html#ac8beec04d70ecc3837187c71cb79981b',1,'patrolExecutive']]],
+  ['reserved_954',['RESERVED',['../union_a_d_s1015_1_1address__pointer__register__map.html#afec4537913a963cd7ed88dbd8733ee54',1,'ADS1015::address_pointer_register_map::RESERVED()'],['../union_a_d_s1015_1_1conversion__register__map.html#aeb54d7dedafe97f768491bcfa9a2415a',1,'ADS1015::conversion_register_map::RESERVED()'],['../union_b_q76925_1_1address__map.html#aa18a9a05d196bd7d3098d489e7f41b28',1,'BQ76925::address_map::RESERVED()'],['../union_b_q76925_1_1status__register__map.html#ac6379b1c9dc2db3c51924a33716fa2c8',1,'BQ76925::status_register_map::RESERVED()'],['../union_b_q76925_1_1bal__ctl__register__map.html#a42f7cc4757b079399f0a77d5e40b9a57',1,'BQ76925::bal_ctl_register_map::RESERVED()'],['../union_b_q76925_1_1config__1__register__map.html#a1c385bbd8137222b92ec5eaad928bc7b',1,'BQ76925::config_1_register_map::RESERVED()'],['../union_b_q76925_1_1config__2__register__map.html#a6a2a0ef11ea1cfd7bc909da987dd9af7',1,'BQ76925::config_2_register_map::RESERVED()'],['../union_b_q76925_1_1power__ctl__register__map.html#ab0abdf12d189090da59ef0ebfe18e822',1,'BQ76925::power_ctl_register_map::RESERVED()']]],
+  ['reserved0_955',['RESERVED0',['../union_b_q76925_1_1cell__ctl__register__map.html#ae01bfaa8ca4f18167bec621a732da428',1,'BQ76925::cell_ctl_register_map']]],
+  ['reserved1_956',['RESERVED1',['../union_b_q76925_1_1cell__ctl__register__map.html#a8bced180345da893b4114076b10690e4',1,'BQ76925::cell_ctl_register_map']]],
+  ['reverse_5fspeed_957',['reverse_speed',['../classreverser_1_1_reverser.html#a805e2892ab262190bc62e76e8a171e44',1,'reverser::Reverser']]],
+  ['robot_5fid_958',['robot_id',['../classpatrol__scheduler_1_1_patrol_scheduler.html#a51fbdf66a9447b9f417acb5003273b79',1,'patrol_scheduler::PatrolScheduler']]],
+  ['robot_5fname_959',['robot_name',['../classpatrol__scheduler_1_1_patrol_scheduler.html#a2462eee858ac4b19800b90c6bcf57cba',1,'patrol_scheduler::PatrolScheduler']]]
 ];

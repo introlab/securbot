@@ -1,23 +1,11 @@
 var searchData=
 [
-  ['selectcell_756',['selectCell',['../class_b_q76925.html#ae87577cf07a1f877f6958e99338a33c4',1,'BQ76925']]],
-  ['selectiout_757',['selectIOUT',['../class_b_q24725_a.html#a74b7d058a66cd7f88516865a2d9ff591',1,'BQ24725A']]],
-  ['sendgoaldonecallback_758',['sendGoalDoneCallback',['../namespacepatrol_executive.html#a2748fed61621678f4ea0b3d732482ae9',1,'patrolExecutive']]],
-  ['setadaptercurrent_759',['setAdapterCurrent',['../class_charger.html#ab1c087c4390988793d0d7028deabd371',1,'Charger']]],
-  ['setbalance_760',['setBalance',['../class_frontend.html#a875fdf19ac3454cb096de12e815d3884',1,'Frontend']]],
-  ['setbq24725apower_761',['setBQ24725APower',['../class_switches.html#a03ef42a5e502910845d349c4aceac09a',1,'Switches']]],
-  ['setchargecurrent_762',['setChargeCurrent',['../class_b_q24725_a.html#a469d7c8666a042c4f0c3df1b8c07c3a9',1,'BQ24725A::setChargeCurrent()'],['../class_charger.html#af2c8f3d209b18fccef8b53c7d690e906',1,'Charger::setChargeCurrent()']]],
-  ['setchargeinhibit_763',['setChargeInhibit',['../class_b_q24725_a.html#a7aba40728ee85b000baf3d26e6a5588f',1,'BQ24725A']]],
-  ['setchargevoltage_764',['setChargeVoltage',['../class_b_q24725_a.html#a40718653e5bbe3cd7b66ec3e2b2ca8be',1,'BQ24725A::setChargeVoltage()'],['../class_charger.html#ac474dad79a14fcf95aa6701c1ac7d6ff',1,'Charger::setChargeVoltage()']]],
-  ['setcurrentpolarity_765',['setCurrentPolarity',['../class_frontend.html#a62338509212e123a4a195e4f6651bd82',1,'Frontend']]],
-  ['setfanpower_766',['setFanPower',['../class_switches.html#a20a5a4fc9bcd1e2c29618ddd3fba3780',1,'Switches']]],
-  ['setinputcurrent_767',['setInputCurrent',['../class_b_q24725_a.html#a56c415f3d8e42553e350f721d2ca4554',1,'BQ24725A']]],
-  ['setmonitormode_768',['setMonitorMode',['../class_b_q76925.html#a926df3da6721be24191ee45ad2f70d1f',1,'BQ76925']]],
-  ['setrobotpower_769',['setRobotPower',['../class_switches.html#a2f17d6567eeb5be127d9593423c3015d',1,'Switches']]],
-  ['setup_770',['setUp',['../classpatrol__test_1_1_patrol_test_suite.html#a8e2c5d056c4d289212f98752a2aab5fb',1,'patrol_test::PatrolTestSuite']]],
-  ['smashthatsubscribebutton_771',['smashThatSubscribeButton',['../namespacemonitor.html#af79175e193ad2bd1d70a94d34a0d98f9',1,'monitor']]],
-  ['smread_772',['smread',['../class_i2_c.html#a280e49a4d8586e4737e15f3d25c3a40e',1,'I2C']]],
-  ['smwrite_773',['smwrite',['../class_i2_c.html#af3345395ec374c7f5c23eee5122cc51d',1,'I2C']]],
-  ['startpatrolnavigation_774',['startPatrolNavigation',['../namespacepatrol_executive.html#a053fc2b8c4c45559e05ef75b84f3b570',1,'patrolExecutive']]],
-  ['startreading_775',['startReading',['../class_a_d_s1015.html#af6b30bc1992454f0573eb855eccd379b',1,'ADS1015']]]
+  ['read_809',['read',['../class_analog_input.html#a25ff78721e3f68bf14afb9b434b2c073',1,'AnalogInput::read()'],['../class_i2_c.html#a27a13c0fd1c52607c2f34ee682adaa53',1,'I2C::read()']]],
+  ['readchipid_810',['readChipId',['../class_b_q76925.html#ac30942168225cb14be5a78eb63a2d3d0',1,'BQ76925']]],
+  ['realposestampedreceivercallback_811',['realPoseStampedReceiverCallback',['../namespacepatrol_executive.html#a97c5e5053d7b7eb75a5eb38cbe4cec6b',1,'patrolExecutive']]],
+  ['retrieve_5fpatrol_5fby_5fid_812',['retrieve_patrol_by_id',['../classpatrol__scheduler_1_1_patrol_scheduler.html#a143eb56881cd7cf2873a37ab6cb3ae09',1,'patrol_scheduler::PatrolScheduler']]],
+  ['retrieve_5frobot_5fid_813',['retrieve_robot_id',['../classpatrol__scheduler_1_1_patrol_scheduler.html#a984d15e3512b9675888de747e5017282',1,'patrol_scheduler::PatrolScheduler']]],
+  ['retrieve_5fschedules_814',['retrieve_schedules',['../classpatrol__scheduler_1_1_patrol_scheduler.html#a7207d61b7efc31d9a59041c5e3fbf4e7',1,'patrol_scheduler::PatrolScheduler']]],
+  ['run_815',['run',['../classpatrol__scheduler_1_1_patrol_scheduler.html#afeb44c58b73c7ddaa7a4c479808e7f95',1,'patrol_scheduler::PatrolScheduler']]],
+  ['runcommand_816',['runCommand',['../namespaceelectron_teleop.html#a1709ad691e0e812082578aeea7a73488',1,'electronTeleop']]]
 ];
