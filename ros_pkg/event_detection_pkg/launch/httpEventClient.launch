@@ -1,0 +1,3 @@
+<launch>
+    <node name="http_event_client" pkg="event_detection_pkg" type="httpEventClient.py" output="screen" />
+</launch>

@@ -1,11 +1,16 @@
 <template>
   <div
     id="operator-layout"
-    class="vh-100"
+    class="vh-100 mh-100"
   >
     <navbar />
     <div style="height:calc(100% - 64px)">
-      <router-view />
+      <transition
+        name="component-fade"
+        mode="out-in"
+      >
+        <router-view />
+      </transition>
     </div>
   </div>
 </template>
@@ -41,6 +46,12 @@ export default {
 </script>
 
 <style>
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .25s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
+}
 /* Changes to the bootstrap CSS */
 .jumbotron {
   margin-bottom: 0;

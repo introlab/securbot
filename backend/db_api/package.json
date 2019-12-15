@@ -20,6 +20,7 @@
   "homepage": "https://github.com/introlab/securbot#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "cron-validator": "^1.0.5",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",

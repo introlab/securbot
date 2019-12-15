@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const paramSelector = require('request-param')
+const cors = require('cors')
 
 
 
@@ -35,6 +36,7 @@ mongoose.connect(DB_URI, {
 console.log('Starting REST server on port: ' + API_PORT)
 app = express()
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 

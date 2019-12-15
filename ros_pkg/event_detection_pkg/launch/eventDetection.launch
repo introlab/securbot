@@ -1,0 +1,7 @@
+
+<launch>
+    <node name="event_detection" pkg="event_detection_pkg" type="eventDetection.py" output="screen" />
+
+    <!-- Test nodes -->
+    <test test-name="event_detection_test" pkg="event_detection_pkg" type="event_detection_test.py" />
+</launch>

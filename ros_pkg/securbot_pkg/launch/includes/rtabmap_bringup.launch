@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <launch>
     <arg name="localization" default="false" />
 
@@ -8,18 +9,16 @@
 		<arg name="user_data_async_topic" default="/user_data_wifi" />
 		<arg name="subscribe_scan" default="true" />
 		<arg unless="$(arg localization)" name="args" default="--Reg/Force3DoF true --RGBD/NeighborLinkRefining true --Reg/Strategy 1 --RGBD/OptimizeMaxError 0 --Optimizer/Strategy 0" />
-		<arg if="$(arg localization)" name="args" default="--Reg/Force3DoF true --RGBD/NeighborLinkRefining true --Reg/Strategy 1 --RGBD/OptimizeMaxError 0 --Optimizer/Strategy 0 --Mem/IncrementalMemory false --Mem/InitWMWithAllNodes true" />
+		<arg if="$(arg localization)" name="args" default="--Mem/IncrementalMemory false --Mem/InitWMWithAllNodes true" />
 		<arg name="visual_odometry" default="false" />
 		<arg name="odom_tf_angular_variance" default="0.05"/>
 		<arg name="odom_tf_linear_variance"  default="0.01"/>
-		<arg if="$(eval env('SECURBOT_CAMERA')=='realsense')" name="rgbd_sync" default="true" />
-		<arg if="$(eval env('SECURBOT_CAMERA')=='realsense')" name="approx_rgbd_sync" default="false"/>
-		<arg unless="$(eval env('SECURBOT_CAMERA')=='realsense')" name="rgbd_sync" default="false" />
-		<arg unless="$(eval env('SECURBOT_CAMERA')=='realsense')" name="approx_rgbd_sync" default="true"/>
+		<arg name="rgbd_sync" default="true" />
+		<arg name="approx_rgbd_sync" default="false"/>
 	</include>
-	<node pkg="nodelet" type="nodelet" name="obstacles_detection" args="standalone rtabmap_ros/obstacles_detection">
+	<!--node pkg="nodelet" type="nodelet" name="obstacles_detection" args="standalone rtabmap_ros/obstacles_detection">
 		<param name="frame_id" value="base_footprint"/>
 		<remap from="cloud" to="/pointcloud"/>
 		<remap from="obstacles" to="/obstacles"/>
-	</node>
+	</node-->
 </launch>

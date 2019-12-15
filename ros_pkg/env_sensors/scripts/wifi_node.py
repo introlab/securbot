@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""Provide node to publish current wifi level."""
+
 import rospy
 from pythonwifi.iwlibs import Wireless
 from rtabmap_ros.msg import UserData
@@ -8,10 +10,12 @@ import struct
 
 
 def quality_to_dbm(quality):
+    """Convert quality metric to dBm."""
     return quality / 2 - 100
 
 
 def wifiPub():
+    """Run a ROS node that published the current wifi level."""
     # Create node
     user_pub = rospy.Publisher('user_data_wifi', UserData, queue_size=1)
     wifi_pub = rospy.Publisher('wifi_level', WifiSignal, queue_size=1)

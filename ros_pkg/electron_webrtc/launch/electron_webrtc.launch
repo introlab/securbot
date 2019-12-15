@@ -7,7 +7,8 @@
     <node pkg="electron_webrtc" type="start_node.bash" name="electron_webrtc" ns="electron"/>
 
     <group>
-        <remap from="robot_status" to="electron/robot_status"/>
+        <remap from="robot_status" to="electron/robot_status" />
+        <remap from="patrol_status" to="electron/patrol_status" />
         <node pkg="env_sensors" type="wifi_node.py" name="wifi_monitor"/>
         <node pkg="electron_webrtc" type="status_aggregator.py" name="status_aggregator"/>
     </group>

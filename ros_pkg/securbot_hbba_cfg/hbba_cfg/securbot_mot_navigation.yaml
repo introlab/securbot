@@ -16,7 +16,7 @@ hbba_conf:
 
 - remap: {from: fromElectronWaypoints, to: /electron/patrol}
 - remap: {from: fromMapImageGenerator, to: /map_image_generator/output_goal}
-- remap: {from: toElectron, to: /toElectron}
+- remap: {from: toElectron, to: /electron/patrol_status}
 - remap: {from: toMapImageGenerator, to: /map_image_generator/input_goal}
 - motivation:
     name: patrol_motivation
@@ -28,6 +28,7 @@ hbba_conf:
         - toElectron
         - toMapImageGenerator
 
+- remap: {from: force_docking, to: /electron/force_docking}
 - motivation:
     name: docking_motivation
     launch: {pkg: "securbot_hbba_cfg", path: "launch/docking_motivation.launch"}
@@ -35,3 +36,4 @@ hbba_conf:
         - force_docking
         - battery_state
         - collision
+        - hbba/intention

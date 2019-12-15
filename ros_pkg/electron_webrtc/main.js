@@ -68,6 +68,10 @@ function createWindow() {
     win.webContents.send('map-size', data);
   });
 
+  hub.on('patrol-status', (data) => {
+    win.webContents.send('patrol-status', data);
+  });
+
   /**
    * Emitted when the window is closed, remove listener and remove the window.
    */
@@ -130,6 +134,11 @@ function startNode() {
       hub.emit('robot-status', msg.data);
     });
 
+    // Subscribe to patrol updates
+    nodeHandle.subscribe('patrol_status', std_msgs.String, (msg) => {
+      hub.emit('patrol-status', msg.data);
+    });
+
     // Retrieves map size from parameter server
     let mapParam = {
       resolution: 0,
@@ -178,14 +187,23 @@ function startNode() {
     /** Publish received goto to ROS */
     const gotoPublisher = nodeHandle.advertise('goto', std_msgs.String);
     ipcMain.on('goto', (_, gotoString) => {
-      gotoPublisher.publish({ data: gotoString });
+      const goto = JSON.parse(gotoString).coordinate;
+      gotoPublisher.publish({ data: JSON.stringify(goto) });
     });
 
     /** Publish received map zoom to ROS */
     const zoomPublisher = nodeHandle.advertise('map_zoom', std_msgs.String);
     ipcMain.on('changeMapZoom', (_, zoomString) => {
       zoomPublisher.publish({ data: zoomString });
-    })
+    });
+
+    /** Publish received force dock command */
+    const dockPublisher = nodeHandle.advertise('force_docking', std_msgs.Bool);
+    ipcMain.on('force-dock', (_, dockString) => {
+      command = JSON.parse(dockString)
+      console.log(`Pub force_docking = ${command.force}`)
+      dockPublisher.publish({ data: command.force });
+    });
   });
 }
 

@@ -22,7 +22,6 @@
     "minami": "^1.2.3"
   },
   "dependencies": {
-    "dotenv": "^8.2.0",
     "easyrtc": "github:priologic/easyrtc#f6365959801209f13b153c10bc9ca8ec398ca9ad",
     "electron": "=6.0",
     "rosnodejs": "^3.0.0",

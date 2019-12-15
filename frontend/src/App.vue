@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 /**
  * This is the main Vue component used to call all the other using the router-view element.
  *
@@ -20,11 +19,18 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'app',
-  computed: mapState({
-    darkMode: state => state.darkMode,
-  }),
+  data() {
+    return {
+      mobileDeviceCheck: '',
+    };
+  },
   mounted() {
     this.$store.dispatch('database/initLocalData');
+    this.mobileDeviceCheck = setInterval(() => {
+      if (document.documentElement.clientWidth < 576 && !this.$route.path.includes('teleop')) {
+        this.$router.push('teleop');
+      }
+    }, 1000);
   },
 };
 </script>

@@ -21,6 +21,23 @@ let peerIDs = [];
  */
 const streamNames = [];
 
+function sendtoPeer(channel, data) {
+  let toRemove = [];
+
+  // Send to each connected peer
+  peerIDs.forEach((peer) => {
+    try {
+      easyrtc.sendDataP2P(peer, channel, data);
+    }
+    catch(_) {  // Peer is disconnected
+      toRemove.push(peer);
+    }
+  });
+
+  // Remove disconnected peers from peers list
+  peerIDs = peerIDs.filter(peer => toRemove.findIndex(item => item === peer));
+}
+
 /**
  * Send data comming from ROS to the easyrtc server.
  * @method
@@ -28,16 +45,11 @@ const streamNames = [];
  * @listens rosdata
  */
 ipc.on('robot-status', (_, data) => {
-  let toRemove = [];
-  peerIDs.forEach((peer) => {
-    try {
-      easyrtc.sendDataP2P(peer, 'robot-status', data);
-    }
-    catch(_) {
-      toRemove.push(peer);
-    }
-  });
-  peerIDs = peerIDs.filter(peer => toRemove.findIndex(peer) == -1);
+  sendtoPeer('robot-status', data);
+});
+
+ipc.on('patrol-status', (_, data) => {
+  sendtoPeer('patrol-status', data);
 });
 
 /**
@@ -94,7 +106,8 @@ function acceptCall(easyrtcid, acceptor) {
  * @function myInit
  */
 function myInit() {
-  easyrtc.setRoomApiField('default', 'type', `robot-${robotName}`);
+  easyrtc.setRoomApiField('default', 'name', robotName);
+  easyrtc.setRoomApiField('default', 'type', 'robot');
   easyrtc.setSocketUrl(webrtcServerURL);
 
   easyrtc.setAutoInitUserMedia(false);
@@ -114,8 +127,10 @@ function myInit() {
   // Send map size when data channel opens
   easyrtc.setDataChannelOpenListener((easyrtcid) => {
     console.log('Data channel open');
-    easyrtc.sendDataP2P(easyrtcid, 'map-size', mapSize);
-    console.log(`Sent map size ${mapSize.width}x${mapSize.height}`);
+    if (mapSize.height && mapSize.width) {
+      easyrtc.sendDataP2P(easyrtcid, 'map-size', mapSize);
+      console.log(`Sent map size ${mapSize.width}x${mapSize.height}`);
+    }
   });
 
   easyrtc.setAcceptChecker(acceptCall);

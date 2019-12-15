@@ -23,4 +23,9 @@ export default {
       desires: [],
     },
   },
+  patrolStatus: {
+    state: 'None',
+    planned: 0,
+    reached: 0,
+  },
 };

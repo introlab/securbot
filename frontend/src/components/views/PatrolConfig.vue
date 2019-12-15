@@ -41,7 +41,7 @@
                 </h5>
                 <b-form-select
                   id="patrol-select-input"
-                  v-model="selectedPatrol"
+                  :value="selectedPatrol"
                   :options="robotPatrol"
                   text-field="name"
                   value-field="info"
@@ -91,7 +91,7 @@
                   variant="danger"
                   class="mr-2 my-1"
                   :disabled="!currentPatrol.id"
-                  @click="deleteCurrentPatrol"
+                  @click="removePatrol"
                 >
                   Delete
                 </b-button>
@@ -113,53 +113,13 @@
                 <b-button
                   variant="success"
                   class="mr-2 my-1"
-                  :disabled="!isConnected || !currentPatrol.obj.name"
+                  :disabled="!isConnected || !currentPatrol.obj.name || !currentRobot.id.db"
                   @click="savePatrol"
                 >
                   Save
                 </b-button>
               </div>
             </div>
-            <!-- Waypoints -->
-            <!-- <div
-              class="border rounded m-1 sb-container"
-            >
-              <div
-                class="sb-container-header"
-              >
-                <h5 class="m-0">
-                  <b>Waypoints</b>
-                </h5>
-              </div>
-              <div
-                class="h-100 p-2"
-              >
-                <b-form-select
-                  id="patrol-name-input"
-                  v-model="selectedWaypointIndex"
-                  :options="waypointIndexes"
-                >
-                  <template v-slot:first>
-                    <option
-                      value=""
-                      disabled
-                    >
-                      Select a Waypoint
-                    </option>
-                  </template>
-                </b-form-select>
-              </div>
-              <div
-                class="h-100 px-2 pb-2 pt-0"
-              >
-                <b-form-input
-                  id="patrol-desc-input"
-                  v-model="waypointTimeouts[selectedWaypointIndex]"
-                  type="number"
-                  placeholder="Enter a time (sec) to hold there..."
-                />
-              </div>
-            </div> -->
             <!-- Schedule -->
             <div
               class="border rounded m-1 sb-container"
@@ -175,7 +135,7 @@
                 </h5>
                 <b-form-select
                   id="schedule-select-input"
-                  v-model="selectedSchedule"
+                  :value="selectedSchedule"
                   :options="patrolSchedule"
                   text-field="name"
                   value-field="info"
@@ -274,7 +234,7 @@
                   >
                     <b-form-input
                       id="cron-time-hour-input"
-                      v-model="cronSchedule[0]"
+                      v-model="cronSchedule[1]"
                       type="number"
                       placeholder="HH"
                       min="0"
@@ -289,7 +249,7 @@
                     > : </span>
                     <b-form-input
                       id="cron-time-minute-input"
-                      v-model="cronSchedule[1]"
+                      v-model="cronSchedule[0]"
                       type="number"
                       placeholder="mm"
                       min="0"
@@ -378,7 +338,7 @@
                   variant="danger"
                   class="mr-2 my-1"
                   :disabled="!currentSchedule.id"
-                  @click="deleteCurrentSchedule"
+                  @click="removeSchedule"
                 >
                   Delete
                 </b-button>
@@ -436,7 +396,7 @@
         </div>
         <div
           v-if="isConnected"
-          class="position-absolute overlay-container"
+          class="position-absolute overlay-container-config"
         >
           <div
             id="patrol-overlay-button-container"
@@ -511,7 +471,6 @@ export default {
   data() {
     return {
       errorSaveToDB: false,
-      waypointTimeouts: [],
       cron: ['', '', '', '', ''],
       cronInterval: '',
       isCronValid: '',
@@ -634,22 +593,11 @@ export default {
       }
       return ind;
     },
-    waypointForDB() {
-      const wp4db = [];
-      const wpList = JSON.parse(JSON.stringify(this.waypointList));
-      for (let i = 0; i < wpList.length; i++) {
-        wp4db[i] = {
-          coordinate: wpList[i],
-          hold_time_s: 0,
-        };
-      }
-      return wp4db;
-    },
     ...mapState({
       currentRobot: state => state.currentRobot,
       mapZoom: state => state.mapZoom,
       mapSize: state => state.mapSize,
-      waypointList: state => state.waypoints.list,
+      waypointList: state => state.patrol.current.obj.waypoints,
       patrolList: state => state.patrol.list,
       scheduleList: state => state.schedule.list,
       currentPatrol: state => state.patrol.current,
@@ -743,19 +691,14 @@ export default {
       this.$store.commit('decreaseMapZoom');
     },
     clearPatrolData() {
+      this.$store.commit('setCurrentPatrolId', '');
       this.$store.commit('clearCurrentPatrol');
-      this.$store.commit('clearWaypointList');
     },
     clearScheduleData() {
       this.cron = ['', '', '', '', ''];
       this.cronInterval = [];
+      this.$store.commit('setCurrentScheduleId', '');
       this.$store.commit('clearCurrentSchedule');
-    },
-    deleteCurrentPatrol() {
-
-    },
-    deleteCurrentSchedule() {
-
     },
     setCron(event) {
       console.log(event);
@@ -796,7 +739,6 @@ export default {
         this.$store.commit('setCurrentPatrol', { robot: this.currentRobot.id.db });
       }
       this.$store.commit('setCurrentPatrol', { last_modified: new Date().toISOString() });
-      this.$store.commit('setCurrentPatrol', { waypoints: this.waypointForDB });
       this.$store.dispatch('database/savePatrol', this.currentPatrol)
         .then(() => {
           this.$store.dispatch('database/queryPatrols')
@@ -812,7 +754,6 @@ export default {
       if (event) {
         this.$store.dispatch('database/getPatrol', event);
       } else {
-        this.$store.commit('clearWaypointList');
         this.$store.commit('setCurrentPatrolId', '');
         this.$store.commit('clearCurrentPatrol');
       }
@@ -845,9 +786,32 @@ export default {
       }
     },
     sendPatrolToRobot() {
-      this.$store.dispatch('sendPatrol', { patrol: this.waypointList });
+      this.$store.dispatch('sendPatrol', { patrol: this.currentPatrol.obj.waypoints });
     },
     sendScheduleToRobot() {
+      this.$store.dispatch('sendPatrol', { patrol: this.currentPatrol.obj.waypoints, repetitions: this.currentSchedule.obj.repetitions });
+    },
+    removePatrol() {
+      this.$store.dispatch('database/removePatrol', this.currentPatrol)
+        .then(() => {
+          this.$store.dispatch('database/queryPatrols')
+            .catch((err) => {
+              console.log(err);
+            });
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
+    removeSchedule() {
+      this.$store.dispatch('database/removeSchedule', this.currentSchedule)
+        .then(() => {
+          this.$store.dispatch('database/querySchedules')
+            .catch((err) => {
+              console.log(err);
+            });
+        }).catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
@@ -887,7 +851,7 @@ export default {
   margin: auto;
   margin-bottom: 5px;
 }
-.overlay-container {
+.overlay-container-config {
   top: 5px;
   right: 15px;
   z-index: 100;

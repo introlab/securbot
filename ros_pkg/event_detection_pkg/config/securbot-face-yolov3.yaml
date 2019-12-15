@@ -1,0 +1,11 @@
+yolo_model:
+
+  config_file:
+    name: face-yolov3_securbot.cfg
+  weight_file:
+    name: face-yolov3-wider_16000_securbot.weights
+  threshold:
+    value: 0.5
+  detection_classes:
+    names:
+      - face

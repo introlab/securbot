@@ -34,7 +34,7 @@ hbba_conf:
 - behavior:
     name: planner
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/navigation.launch'}
-    priority: 3
+    priority: 2
     input:
         - move_base_simple/goal: {src: planner_goal, filtered: false}
         - odom: {src: rtabmap/odom, filtered: false}
@@ -46,7 +46,7 @@ hbba_conf:
 - behavior:
     name: docker
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/docker.launch'}
-    priority: 4
+    priority: 3
     input:
         - detect_array: {src: tag_detections}
     output:
@@ -56,7 +56,7 @@ hbba_conf:
 - behavior:
     name: reverser
     launch: {pkg: 'securbot_hbba_cfg', path: 'launch/reverser.launch'}
-    priority: 2
+    priority: 4
     input:
         - time: {src: /reverse_time, filtered: false}
     output:

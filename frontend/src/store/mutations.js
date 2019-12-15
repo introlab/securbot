@@ -1,13 +1,16 @@
 export default {
   setConnectedRobot(state, robot) {
-    console.log('Setting Up robot');
     state.currentRobot.id.db = '';
     state.currentRobot.name = robot.robotName;
     state.currentRobot.id.client = robot.robotId;
-    for (const r of state.database.robots) {
-      if (state.currentRobot.name === r.name) {
-        state.currentRobot.id.db = r.id;
+    if (state.currentRobot.name) {
+      for (const r of state.database.robots) {
+        if (state.currentRobot.name === r.name) {
+          state.currentRobot.id.db = r.id;
+        }
       }
+    } else {
+      state.currentRobot.id.db = '';
     }
   },
   showStreams(state) {
@@ -21,6 +24,15 @@ export default {
   },
   disableJoystick(state) {
     state.joystickEnabled = false;
+  },
+  setDockingProcess(state, interval) {
+    state.dockingInterval = interval;
+  },
+  clearDockingProcess(state) {
+    if (state.dockingInterval) {
+      clearInterval(state.dockingInterval);
+    }
+    state.dockingInterval = '';
   },
   setCameraHTMLElement(state, element) {
     state.htmlElement.camera = element;
@@ -48,22 +60,34 @@ export default {
   },
   addWaypoint(state, add) {
     if ('index' in add) {
-      state.waypoints.list.splice(add.index, 0, add.wp);
+      state.patrol.current.obj.waypoints.splice(add.index, 0, add.wp);
     } else {
-      state.waypoints.list.push(add.wp);
+      state.patrol.current.obj.waypoints.push(add.wp);
     }
   },
+  setWaypointLabel(state, data) {
+    state.patrol.current.obj.waypoints[data.index].label = data.value;
+  },
+  setWaypointHold(state, data) {
+    state.patrol.current.obj.waypoints[data.index].hold_time_s = data.value;
+  },
   updateWaypoint(state, update) {
-    state.waypoints.list.splice(update.index, 1, update.wp);
+    state.patrol.current.obj.waypoints.splice(update.index, 1, update.wp);
   },
   removeWaypoint(state, index) {
-    state.waypoints.list.splice(index, 1);
+    state.patrol.current.obj.waypoints.splice(index, 1);
+  },
+  reorderWaypoint(state, data) {
+    if (data.newIndex >= 0 && data.newIndex < state.patrol.current.obj.waypoints.length) {
+      const wp = state.patrol.current.obj.waypoints.splice(data.oldIndex, 1);
+      state.patrol.current.obj.waypoints.splice(data.newIndex, 0, wp[0]);
+    }
   },
   clearWaypointList(state) {
-    state.waypoints.list = [];
+    state.patrol.current.obj.waypoints = [];
   },
   fillWaypointList(state, waypointList) {
-    state.waypoints.list = waypointList;
+    state.patrol.current.obj.waypoints = waypointList;
   },
   addPatrol(state, patrol) {
     state.patrol.list.push(patrol);
@@ -132,7 +156,7 @@ export default {
       cron: '',
       timeout_s: '',
       repetitions: '',
-      enabled: false,
+      enabled: true,
     };
   },
   increaseMapZoom(state) {

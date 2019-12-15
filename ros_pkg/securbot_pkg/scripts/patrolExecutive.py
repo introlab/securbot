@@ -29,8 +29,11 @@ class Status(Enum):
     LOST = 9
 
 # Global indexes used in the waypointsPatrolList to access the
+# Waypoint specific format
+WAYPOINT_INDEX = 0
 # PoseStampeds specific format
 PIXEL_POSESTAMPED_INDEX = 1
+# Real PoseStampeds specific format
 REAL_POSESTAMPED_INDEX = 2
 
 
@@ -47,6 +50,11 @@ currentWaypointIndex = 0
 
 # Global indicating if the patrol received is looped
 isLooped = False
+repIndex = 0
+repetitions = 0
+
+# Global indicating at what time of the current date (in seconds) the "loitering" should end
+currentLoiteringEndTimeInSeconds = 0
 
 # Global patrol ID
 patrolId = ""
@@ -59,6 +67,13 @@ toMapImageGenerator = rospy.Publisher("toMapImageGenerator", PoseStamped, queue_
 # Electron node
 toElectron = rospy.Publisher("toElectron", String, queue_size=20)
 
+##  Get time offset in seconds since the EPOCH according to intial time in seconds gave as an input 
+#   @param offsetTimeInSeconds Offset time in seconds to add to current time
+#   @return timeResultInSeconds Result time in seconds since the epoch with the added offset
+def getTimeOffsetInSeconds(offsetTimeInSeconds):
+    timeResultInSeconds = int(round(time.time())) + offsetTimeInSeconds
+    return timeResultInSeconds
+
 ##  Format Waypoint to Pixel PoseStamped
 #   @param waypointObject The waypoint in dictionnary form from
 #          the JSON object
@@ -69,6 +84,10 @@ def waypointToPixelPoseStamped(waypointObject):
     waypoint = PoseStamped()
     waypoint.header.frame_id = "/map"
     waypoint.header.stamp = rospy.Time.now()
+
+    # Extract coordinate if we have a new waypoint type
+    if "hold_time_s" in waypointObject.keys():
+        waypointObject = waypointObject["coordinate"]
 
     # Formatting position
     waypoint.pose.position.x = waypointObject["x"]
@@ -117,7 +136,7 @@ def realPoseStampedReceiverCallback(realPoseStamped):
 ##  This function starts sending the different waypoint that were
 #   converted in the list
 def startPatrolNavigation():
-    global currentWaypointIndex, waypointsPatrolList, patrolId
+    global currentWaypointIndex, waypointsPatrolList, patrolId, currentLoiteringEndTimeInSeconds
 
     # Make sure no goals are active
     actionClient.cancel_all_goals()
@@ -128,6 +147,8 @@ def startPatrolNavigation():
 
     goal = MoveBaseGoal()
     goal.target_pose = waypointsPatrolList[currentWaypointIndex][REAL_POSESTAMPED_INDEX]
+
+    #Send goal for the first waypoint
     actionClient.send_goal(goal, sendGoalDoneCallback)
 
 
@@ -136,14 +157,16 @@ def startPatrolNavigation():
 #   waypoints for them to be sent to move_base sequentially.
 #   @param waypointsJsonStr The patrol plan in JSON representation
 def waypointsListReceiverCallback(waypointsJsonStr):
-    global waypointsPatrolList, isLooped, patrolId
+    global waypointsPatrolList, repetitions, repIndex, patrolId
     # Log Strings received before other formats generation
     rospy.loginfo(rospy.get_caller_id() + "Received json Strings waypoints :   %s   ", waypointsJsonStr.data)
 
     # Clear global patrol list for upcoming new list of waypoints
     # and loop flag
     del waypointsPatrolList[:]
-    isLooped = False
+    # isLooped = False
+    repetitions = 0
+    repIndex = 0
 
     # Loads and ensure the data type is correct. Otherwise stop processing waypoints list.
     try:
@@ -155,7 +178,7 @@ def waypointsListReceiverCallback(waypointsJsonStr):
 
     # Buffer and ensure the key "patrol" is present. Otherwise stop processing waypoints list.
     try:
-         waypoints = waypointsJsonBuffer["patrol"]
+        waypoints = waypointsJsonBuffer["patrol"]
     except KeyError:
         rospy.loginfo("ERROR : While accessing value at key [patrol] KeyError, non-existent or undefined in json string!")
         rospy.loginfo("Ignoring waypoints list received...")
@@ -163,19 +186,20 @@ def waypointsListReceiverCallback(waypointsJsonStr):
 
     # Buffer and ensure the key "id" is present. Otherwise continue buffering json data.
     try:
-        patrolId = waypointsJsonBuffer["id"]
+        patrolId = waypointsJsonBuffer["id"].encode("ascii", "ignore")
     except KeyError:
         rospy.loginfo("ERROR : Missing patrol id, generating id")
         hasher = hashlib.sha1()
         hasher.update(waypointsJsonStr.data)
         patrolId = hasher.hexdigest()
 
-    # Buffer and ensure the key "loop" is present. Otherwise assume no loops for this patrol.
+    # Buffer and ensure the key "loop" is present. Otherwise assume no repetitions for this patrol.
     try:
-         isLooped = waypointsJsonBuffer["loop"]
+        # isLooped = waypointsJsonBuffer["loop"]
+        repetitions = waypointsJsonBuffer["repetitions"]
     except KeyError:
         rospy.loginfo("ERROR :While accessing value at key [loop] KeyError, non-existent or undefined in json string!")
-        rospy.loginfo("Will assume no loops. Will patrol this list once.")
+        rospy.loginfo("Will assume no repetitions. Will patrol this list once.")
 
     for wpStr in waypoints:
         # Format waypoint to Pixel PoseStamped
@@ -274,7 +298,7 @@ def publishPatrolFeedBack(patrolId, status, acheivedWaypointCount, plannedWaypoi
 #                        (ie: SUCCEEDED / ABORTED)
 #   @param result
 def sendGoalDoneCallback(terminalState, result):
-    global waypointsPatrolList, currentWaypointIndex, patrolId
+    global waypointsPatrolList, currentWaypointIndex, patrolId, repIndex
 
     rospy.loginfo("Received waypoint terminal state : [%s]", getStatusString(terminalState))
 
@@ -285,13 +309,23 @@ def sendGoalDoneCallback(terminalState, result):
         publishPatrolFeedBack(patrolId, "failed", currentWaypointIndex, len(waypointsPatrolList))
         return
     else:
+        # #Loiter 
+        try:
+            timeout = waypointsPatrolList[currentWaypointIndex][WAYPOINT_INDEX]["hold_time_s"]
+            rospy.sleep(timeout)
+        except KeyError:
+            rospy.sleep(0)
+
         currentWaypointIndex += 1
+
+
         # Check if all waypoints are done
         if currentWaypointIndex >= len(waypointsPatrolList):
-            publishPatrolFeedBack(patrolId, "finished", currentWaypointIndex, len(waypointsPatrolList))
+            publishPatrolFeedBack(patrolId, "finished loop #" + str(repIndex), currentWaypointIndex, len(waypointsPatrolList))
             rospy.loginfo("Patrol done. All waypoints reached.")
+            repIndex += 1
             # Check if the patrol has to be restarted
-            if isLooped == True:
+            if repIndex <= repetitions:
                 rospy.loginfo("Restarting patrol with same waypoints...")
                 startPatrolNavigation()
         # Proceed to next waypoint of the patrol

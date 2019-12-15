@@ -1,5 +1,4 @@
 export default {
-  darkMode: true,
   showStreams: true,
   currentRobot: {
     name: '',
@@ -14,6 +13,7 @@ export default {
     height: 2400,
   },
   joystickEnabled: false,
+  dockingInterval: '',
   joystickConfig: {
     maxX: 0,
     maxY: 0,
@@ -33,9 +33,22 @@ export default {
     eventId: 'event-videobox-html-id',
     event: null,
   },
-  waypoints: {
-    headers: [{ key: 'index', label: '#' }, { key: 'x', label: 'X', formatter: 'fixFloat' }, { key: 'y', label: 'Y', formatter: 'fixFloat' }, { key: 'yaw', label: 'Yaw', formatter: 'fixFloat' }, { key: 'remove', label: 'Remove' }],
-    list: [],
+  headers: {
+    waypoints: [
+      { key: 'index', label: '#' },
+      { key: 'label', label: 'Label' },
+      { key: 'holdTime', label: 'Hold Time' },
+      { key: 'remove', label: 'Remove' },
+    ],
+    events: [
+      { key: 'time', label: 'DateTime', sortable: true },
+      { key: 'robot', label: 'Robot', sortable: true },
+      { key: 'object', label: 'Object', sortable: true },
+      { key: 'context', label: 'Context' },
+      { key: 'description_text', label: 'Description' },
+      { key: 'tags', label: 'Tags' },
+      { key: 'image', label: 'Image' },
+    ],
   },
   patrol: {
     current: {
@@ -62,7 +75,7 @@ export default {
         cron: '',
         timeout_s: '',
         repetitions: '',
-        enabled: false,
+        enabled: true,
       },
     },
     list: [],

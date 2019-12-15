@@ -1,12 +1,12 @@
 <launch>
-    <node pkg="tf" type="static_transform_publisher" name="station_transform" args="-0.022 -0.319 0.238 -0.486 0.507 0.500 0.506 tag_0 station_0 50" />
+    <node pkg="tf" type="static_transform_publisher" name="station_transform" args="-0.022 -0.319 0.238 -0.486 0.507 0.500 0.506 tag_1 station_1 50" />
 
     <!-- Docking -->
     <node name="target" pkg="dock" type="target_node" output="screen">
-        <param name="tag_id" value="0" />
+        <param name="tag_id" value="1" />
     </node>
     <node name="planner" pkg="dock" type="planner_node" output="screen">
-        <param name="target_frame_id" value="station_0"/>
+        <param name="target_frame_id" value="station_1"/>
         <param name="base_frame_id" value="base_footprint"/>
         <param name="dt_ms" value="10.0"/>
         <param name="P_theta" value="0.5"/>

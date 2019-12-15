@@ -18,11 +18,9 @@ hbba_conf:
         robotic_base: 1
     modules:
         - apriltag:
-            - camera_rgb_image_rect_color: 1
-            - camera_rgb_camera_info: 1
+                - camera_rgb_image_rect_color: 1
+                - camera_rgb_camera_info: 1
         - docker
-        - planner
-    custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 
 - strat:
     name: patrol
@@ -31,6 +29,8 @@ hbba_conf:
     costs:
         robotic_base: 1
     modules:
+        - darknet:
+            - camera_rgb_image_rect_color: 30
         - planner
     custom_bringup: "pubNavGoal('/planner_goal', params.frame_id, params.x, params.y, params.t);"
 
@@ -54,6 +54,6 @@ hbba_conf:
 - strat:
     name: reverse
     class: Reverse
-    utility: 1
+    utility: 6
     modules:
         - reverser

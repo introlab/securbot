@@ -8,6 +8,16 @@ export default {
   sendGoTo({ state, dispatch }, data) {
     dispatch('client/sendData', { id: state.client.robotId, channel: 'goto', data: JSON.stringify(data) });
   },
+  sendDockingProcess({ state, dispatch }, data) {
+    dispatch('client/sendData', { id: state.client.robotId, channel: 'force-dock', data: JSON.stringify(data) });
+  },
+  startDockingProcess({ commit, dispatch }) {
+    commit('setDockingProcess', setInterval(() => { dispatch('sendDockingProcess', { force: true }); }, 1000));
+  },
+  stopDockingProcess({ commit, dispatch }) {
+    commit('clearDockingProcess');
+    dispatch('sendDockingProcess', { force: false });
+  },
   sendChangeMapZoom({ state, dispatch }, data) {
     dispatch('client/sendData', { id: state.client.robotId, channel: 'changeMapZoom', data });
   },

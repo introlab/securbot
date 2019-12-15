@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import rospy
+import tf
 from std_msgs.msg import Empty
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
@@ -17,9 +18,18 @@ class CollisionDetector:
         else:
             self.over_counter = 0
 
+        if abs(cmd.linear.x) > self.delta_max and abs(self.tag_vx) < self.delta_max:
+            if self.tag_counter >= 4:
+                self.coll_pub.publish(Empty())
+            else:
+                self.tag_counter = self.tag_counter + 1
+        elif self.tag_counter > 0:
+            self.tag_counter = self.tag_counter - 1
+        rospy.loginfo(self.tag_counter)
+
     def __init__(self):
         rospy.init_node('collision_detector')
-        self.delta_max = rospy.get_param('~delta_max', 0.08)
+        self.delta_max = rospy.get_param('~delta_max', 0.04)
         self.over_counter = 0
 
         self.coll_pub = rospy.Publisher('collision', Empty, queue_size=10)
@@ -34,7 +44,34 @@ class CollisionDetector:
             True)
         sync_sub.registerCallback(self.sync_callback)
 
-        rospy.spin()
+        tf_listener = tf.TransformListener()
+        self.tag_vx = 0
+        self.tag_counter = 0
+        last_px = 0
+        last_transform = rospy.Time(0)
+
+        while not rospy.is_shutdown():
+            try:
+                now = rospy.Time.now()
+                tf_listener.waitForTransform(
+                    "tag_1",
+                    "base_footprint",
+                    now,
+                    rospy.Duration(5.0)
+                )
+                pos, _ = tf_listener.lookupTransform(
+                    "tag_1",
+                    "base_footprint",
+                    now)
+
+                self.tag_vx = (pos[0] - last_px) / (now - last_transform).to_sec()
+                last_px = pos[0]
+                last_transform = now
+
+                rospy.loginfo("tag vx %04.2f m/s" % self.tag_vx)
+
+            except tf.Exception:
+                continue
 
 
 if __name__ == '__main__':

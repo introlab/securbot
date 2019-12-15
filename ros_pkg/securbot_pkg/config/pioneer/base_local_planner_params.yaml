@@ -1,23 +1,32 @@
 controller_frequency: 20.0
-planner_frequency: 5.0
+planner_frequency: 20.0
 
 TrajectoryPlannerROS:
-  max_vel_x: 0.5
+  max_vel_x: 0.3
   min_vel_x: 0.02
-  max_vel_theta: 1.0
-  min_vel_theta: -1.0
-  min_in_place_vel_theta: 0.05
+  max_vel_theta: 0.5
+  min_vel_theta: -0.5
+  min_in_place_vel_theta: 0.1
 
-  acc_lim_theta: 1.5
+  acc_lim_theta: 0.8
   acc_lim_x: 0.3
 
-  pdist_scale: 0.8
-  gdist_scale: 1.2
-  occdist_scale: 0.01
+  sim_time: 2.0
+  heading_lookahead: 1.0
 
+  vx_samples: 4
+  vtheta_samples: 8
+
+  pdist_scale: 4.0
+  gdist_scale: 3.0
+  occdist_scale: 0.02
+  heading_scoring: false
+ 
   holonomic_robot: false
 
-  xy_goal_tolerance: 0.3
+  xy_goal_tolerance: 0.2
+  yaw_goal_tolerance: 0.05
+  latch_xy_goal_tolerance: true
 
 NavfnROS:
   allow_unknown: false

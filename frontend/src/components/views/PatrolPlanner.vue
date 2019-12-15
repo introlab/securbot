@@ -18,19 +18,29 @@
           class="h-100 w-100 border rounded shadow-sb"
         >
           <!-- Title -->
-          <h4 class="m-3 w-100">
-            Patrol Planner
-          </h4>
+          <div class="d-flex flex-row">
+            <h4 class="m-3 w-100">
+              Patrol Planner
+            </h4>
+            <b-button
+              variant="success"
+              class="mr-3 m-2"
+              :disabled="!isConnected"
+              @click="sendPatrolToRobot"
+            >
+              Send
+            </b-button>
+          </div>
           <div
             id="inner-planner-container"
             class="border rounded mx-1 my-0 p-2"
             style="height: calc( 100% - 60px - 0.25rem );"
           >
             <div
-              style="width: 100%; heigth: 60px"
+              class="w-100 h-100"
             >
               <div
-                class="border rounded m-1 sb-container"
+                class="border rounded m-1 h-100"
               >
                 <div
                   class="sb-container-header d-flex flex-row justify-content-between"
@@ -43,7 +53,7 @@
                   </h5>
                   <b-form-select
                     id="patrol-select-input"
-                    v-model="selectedPatrol"
+                    :value="selectedPatrol"
                     :options="robotPatrol"
                     text-field="name"
                     value-field="info"
@@ -61,7 +71,7 @@
                   </b-form-select>
                 </div>
                 <div
-                  class="p-2"
+                  class="p-2 h-100"
                 >
                   <b-table
                     borderless
@@ -70,12 +80,54 @@
                     :table-class="['m-0', 'table-rounded']"
                     thead-class="text-center"
                     tbody-class="text-center"
-                    fixed
+                    primary-key="coordinate.x"
                     :fields="headers"
                     :items="waypointList"
+                    :tbody-transition-props="transProps"
                   >
                     <template v-slot:cell(index)="data">
-                      {{ data.index + 1 }}
+                      <div class="d-flex flex-row">
+                        <b-button
+                          variant="outline-secondary"
+                          class="p-0 border-0 mr-1"
+                          style="opacity: 0.75"
+                          size="sm"
+                          @click="increaseWPOrder(data.index)"
+                        >
+                          <font-awesome-icon icon="chevron-up" />
+                        </b-button>
+                        {{ data.index + 1 }}
+                        <b-button
+                          variant="outline-secondary"
+                          class="p-0 border-0 ml-1"
+                          style="opacity: 0.75"
+                          size="sm"
+                          @click="decreaseWPOrder(data.index)"
+                        >
+                          <font-awesome-icon icon="chevron-down" />
+                        </b-button>
+                      </div>
+                    </template>
+                    <template v-slot:cell(label)="data">
+                      <b-form-input
+                        v-model="data.item.label"
+                        placeholder="label"
+                        style="max-height: 24px; font-size: 0.8rem;"
+                        @input="(event) => { $store.commit('setWaypointLabel',
+                                                           { index: data.index, value: event }) }"
+                        @focus="testFocus"
+                      />
+                    </template>
+                    <template v-slot:cell(holdTime)="data">
+                      <b-form-input
+                        v-model="data.item.hold_time_s"
+                        type="number"
+                        min="0"
+                        placeholder="sec"
+                        style="max-height: 24px; font-size: 0.8rem;"
+                        @change="(event) => { $store.commit('setWaypointHold',
+                                                            { index: data.index, value: event }) }"
+                      />
                     </template>
                     <template v-slot:cell(remove)="data">
                       <button
@@ -115,12 +167,13 @@
             :list="waypointList"
             :nb-of-waypoint="-1"
             :video-element="patrolHTMLElement"
-            @newWaypoint="addWaypointToList"
+            :refresh-rate="30"
+            @newWaypoint="(wp) => { $store.commit('addWaypoint', { wp }) }"
           />
         </div>
         <div
           v-if="isConnected"
-          class="position-absolute overlay-container"
+          class="position-absolute overlay-container-planner"
         >
           <div
             id="patrol-overlay-button-container"
@@ -186,14 +239,22 @@ export default {
     VideoBox,
     WaypointOverlay,
   },
+  data() {
+    return {
+      transProps: {
+        name: 'wp-table',
+      },
+      selectedRow: '',
+    };
+  },
   computed: {
     ...mapState({
       currentRobot: state => state.currentRobot,
       mapZoom: state => state.mapZoom,
       mapSize: state => state.mapSize,
-      waypointList: state => state.waypoints.list,
+      waypointList: state => state.patrol.current.obj.waypoints,
       patrolList: state => state.patrol.list,
-      headers: state => state.waypoints.headers,
+      headers: state => state.headers.waypoints,
       currentPatrol: state => state.patrol.current,
       patrolHTMLId: state => state.htmlElement.patrolId,
       patrolHTMLElement: state => state.htmlElement.patrol,
@@ -222,8 +283,20 @@ export default {
     this.$store.dispatch('updateHTMLVideoElements');
   },
   methods: {
+    testFocus() {
+      // console.log(event);
+    },
+    sendPatrolToRobot() {
+      this.$store.dispatch('sendPatrol', { patrol: this.currentPatrol.obj.waypoints });
+    },
     fixFloat(value) {
       return value.toFixed(1);
+    },
+    increaseWPOrder(index) {
+      this.$store.commit('reorderWaypoint', { oldIndex: index, newIndex: index - 1 });
+    },
+    decreaseWPOrder(index) {
+      this.$store.commit('reorderWaypoint', { oldIndex: index, newIndex: index + 1 });
     },
     increaseZoom() {
       this.$store.commit('increaseMapZoom');
@@ -247,14 +320,6 @@ export default {
     addWaypointToList(wp) {
       this.$store.commit('addWaypoint', { wp });
     },
-    /**
-     * Removes all waypoints from the patrol.
-     *
-     * @public
-     */
-    clearWaypointList() {
-      this.$store.commit('clearWaypointList');
-    },
     clearScheduleData() {
       this.$store.commit('clearCurrentSchedule');
     },
@@ -263,7 +328,6 @@ export default {
       if (event) {
         this.$store.dispatch('database/getPatrol', event);
       } else {
-        this.$store.commit('clearWaypointList');
         this.$store.commit('setCurrentPatrolId', '');
         this.$store.commit('clearCurrentPatrol');
       }
@@ -273,6 +337,15 @@ export default {
 </script>
 
 <style>
+.wp-table-move {
+  transition: transform 1s;
+}
+.wp-table-enter-active, .wp-table-leave-active {
+  transition: all 0.75s;
+}
+.wp-table-enter, .wp-table-leave-to {
+  opacity: 0;
+}
 .table-b-table-default {
   background-color: #00A759 !important;
   color: white !important;
@@ -322,7 +395,7 @@ export default {
   margin: auto;
   margin-bottom: 5px;
 }
-.overlay-container {
+.overlay-container-planner {
   top: 5px;
   right: 15px;
   z-index: 100;

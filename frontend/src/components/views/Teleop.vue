@@ -10,195 +10,7 @@
       fluid
       class="h-100 w-100 m-auto position-relative"
     >
-      <div
-        v-if="isConnected"
-        class="position-absolute overlay-container"
-      >
-        <div
-          id="teleop-overlay-button-container"
-          class="overlay-button-container"
-        >
-          <!-- Switch Video -->
-          <b-button
-            id="switch-video-button"
-            squared
-            class="overlay-button"
-            @click="switchHTMLIds"
-          >
-            <font-awesome-icon icon="exchange-alt" />
-          </b-button>
-          <b-tooltip
-            target="switch-video-button"
-            placement="left"
-            variant="secondary"
-          >
-            {{ (mainVideoId === mapId ? 'Switch to Camera Stream' : 'Switch to Map Stream') }}
-          </b-tooltip>
-          <!-- Hide Video -->
-          <b-button
-            id="hide-stream-button"
-            squared
-            class="overlay-button"
-            @click="switchStreamState"
-          >
-            <font-awesome-icon
-              v-if="showStream"
-              icon="eye-slash"
-            />
-            <font-awesome-icon
-              v-else
-              icon="eye"
-            />
-          </b-button>
-          <b-tooltip
-            target="hide-stream-button"
-            placement="left"
-            variant="secondary"
-          >
-            {{ (showStream ? 'Hide Streams' : 'Show Streams') }}
-          </b-tooltip>
-          <!-- Joystick -->
-          <b-button
-            id="joystick-enable-button"
-            squared
-            class="overlay-button"
-            :class="{ 'overlay-button-active': joystickOverlayEnabled }"
-            :pressed.sync="joystickOverlayEnabled"
-            :disabled="!isDataChannelAvailable || gotoOverlayEnabled || keyboardCtrl.enabled"
-            @click="changeJoystickState"
-          >
-            <font-awesome-icon icon="gamepad" />
-          </b-button>
-          <b-tooltip
-            target="joystick-enable-button"
-            placement="left"
-            variant="secondary"
-          >
-            {{ (joystickOverlayEnabled ? 'Deactivate Joystick' : 'Activate Joystick') }}
-          </b-tooltip>
-          <!-- Keyboard -->
-          <b-button
-            id="keyboard-enable-button"
-            squared
-            class="overlay-button"
-            :class="{ 'overlay-button-active': keyboardCtrl.enabled }"
-            :pressed.sync="keyboardCtrl.enabled"
-            :disabled="!isDataChannelAvailable || gotoOverlayEnabled || joystickOverlayEnabled"
-            @click="changeJoystickState"
-          >
-            <font-awesome-icon icon="keyboard" />
-          </b-button>
-          <b-tooltip
-            target="keyboard-enable-button"
-            placement="left"
-            variant="secondary"
-          >
-            {{ (joystickOverlayEnabled
-              ? 'Deactivate Keyboard Control'
-              : 'Activate Keyboard Control') }}
-          </b-tooltip>
-        </div>
-        <div
-          id="map-button-container"
-          class="overlay-button-container"
-        >
-          <!-- Zoom Map -->
-          <b-button
-            id="increase-zoom-button"
-            squared
-            class="overlay-button"
-            :disabled="mainVideoId !== mapId"
-            @click="increaseZoom"
-          >
-            <font-awesome-icon icon="plus" />
-          </b-button>
-          <b-tooltip
-            target="increase-zoom-button"
-            placement="left"
-            variant="secondary"
-          >
-            Increase Map Zoom
-          </b-tooltip>
-          <!-- Unzoom Map -->
-          <b-button
-            id="decrease-zoom-button"
-            squared
-            class="overlay-button"
-            :disabled="mainVideoId !== mapId"
-            @click="decreaseZoom"
-          >
-            <font-awesome-icon icon="minus" />
-          </b-button>
-          <b-tooltip
-            target="decrease-zoom-button"
-            placement="left"
-            variant="secondary"
-          >
-            Decrease Map Zoom
-          </b-tooltip>
-          <!-- GoTo -->
-          <b-button
-            id="goto-button"
-            squared
-            class="overlay-button"
-            :class="{ 'overlay-button-active': gotoOverlayEnabled }"
-            :disabled="mainVideoId !== mapId || joystickOverlayEnabled || keyboardCtrl.enabled"
-            :pressed.sync="gotoOverlayEnabled"
-            @click="updateMainElement"
-          >
-            <font-awesome-icon icon="map-marker" />
-          </b-button>
-          <b-tooltip
-            target="goto-button"
-            placement="left"
-            variant="secondary"
-          >
-            {{ (gotoOverlayEnabled ? 'Cancel GoTo...' : 'Send a GoTo Request') }}
-          </b-tooltip>
-        </div>
-        <!-- <div
-          id="camera-button-container"
-          class="overlay-button-container"
-        /> -->
-        <div
-          v-if="joystickOverlayEnabled || keyboardCtrl.enabled"
-          id="teleop-control-container"
-          class="overlay-button-container"
-        >
-          <b-button
-            id="increase-teleop-gain-button"
-            squared
-            class="overlay-button"
-            @click="increaseGain"
-          >
-            <font-awesome-icon icon="plus" />
-          </b-button>
-          <b-tooltip
-            target="increase-teleop-gain-button"
-            placement="left"
-            variant="secondary"
-          >
-            Increase Teleop Gain ({{ (teleopGain * 100).toFixed(0) }}%)
-          </b-tooltip>
-          <b-button
-            id="decrease-teleop-gain-button"
-            squared
-            class="overlay-button"
-            @click="decreaseGain"
-          >
-            <font-awesome-icon icon="minus" />
-          </b-button>
-          <b-tooltip
-            target="decrease-teleop-gain-button"
-            placement="left"
-            variant="secondary"
-          >
-            Decrease Teleop Gain ({{ (teleopGain * 100).toFixed(0) }}%)
-          </b-tooltip>
-        </div>
-      </div>
-      <div class="h-100 w-100 m-auto position-relative">
-        <!-- Camera -->
+      <div class="position-relative main-video-container shadow-sb">
         <video-box
           :show="showStream"
           :zoom="(mainVideoId === mapId ? mapZoom : 1)"
@@ -227,9 +39,247 @@
           :video-id="overlayVideoId"
         />
       </div>
+      <!-- BUTTONS -->
+      <div
+        v-if="isConnected"
+        class="overlay-container-teleop"
+      >
+        <div
+          id="teleop-overlay-button-container"
+          class="overlay-button-container"
+        >
+          <!-- Switch Video -->
+          <b-button
+            id="switch-video-button"
+            squared
+            class="overlay-button"
+            @click="switchHTMLIds"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="exchange-alt"
+            />
+          </b-button>
+          <b-tooltip
+            target="switch-video-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (mainVideoId === mapId ? 'Switch to Camera Stream' : 'Switch to Map Stream') }}
+          </b-tooltip>
+          <!-- Hide Video -->
+          <b-button
+            id="hide-stream-button"
+            squared
+            class="overlay-button"
+            @click="switchStreamState"
+          >
+            <font-awesome-icon
+              v-if="showStream"
+              class="icon-button-teleop"
+              icon="eye-slash"
+            />
+            <font-awesome-icon
+              v-else
+              class="icon-button-teleop"
+              icon="eye"
+            />
+          </b-button>
+          <b-tooltip
+            target="hide-stream-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (showStream ? 'Hide Streams' : 'Show Streams') }}
+          </b-tooltip>
+          <!-- Joystick -->
+          <b-button
+            id="joystick-enable-button"
+            squared
+            class="overlay-button"
+            :class="{ 'overlay-button-active': joystickOverlayEnabled }"
+            :pressed.sync="joystickOverlayEnabled"
+            :disabled="!isDataChannelAvailable || gotoOverlayEnabled || keyboardCtrl.enabled"
+            @click="changeJoystickState"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="gamepad"
+            />
+          </b-button>
+          <b-tooltip
+            target="joystick-enable-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (joystickOverlayEnabled ? 'Deactivate Joystick' : 'Activate Joystick') }}
+          </b-tooltip>
+          <!-- Keyboard -->
+          <b-button
+            id="keyboard-enable-button"
+            squared
+            class="overlay-button"
+            :class="{ 'overlay-button-active': keyboardCtrl.enabled }"
+            :pressed.sync="keyboardCtrl.enabled"
+            :disabled="!isDataChannelAvailable || gotoOverlayEnabled || joystickOverlayEnabled"
+            @click="sendKeyboardLastCommand"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="keyboard"
+            />
+          </b-button>
+          <b-tooltip
+            target="keyboard-enable-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (joystickOverlayEnabled
+              ? 'Deactivate Keyboard Control'
+              : 'Activate Keyboard Control') }}
+          </b-tooltip>
+          <!-- Dock -->
+          <b-button
+            id="dock-request-button"
+            squared
+            class="overlay-button"
+            :class="{ 'overlay-button-active': dockingEnabled }"
+            :active="dockingEnabled"
+            :disabled="!isDataChannelAvailable"
+            @click="configDockingProcess"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="plug"
+            />
+          </b-button>
+          <b-tooltip
+            target="dock-request-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (dockingEnabled
+              ? 'Stop Docking Process'
+              : 'Start Docking Process') }}
+          </b-tooltip>
+        </div>
+        <div
+          id="map-button-container"
+          class="overlay-button-container"
+        >
+          <!-- Zoom Map -->
+          <b-button
+            id="increase-zoom-button"
+            squared
+            class="overlay-button"
+            :disabled="mainVideoId !== mapId"
+            @click="increaseZoom"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="plus"
+            />
+          </b-button>
+          <b-tooltip
+            target="increase-zoom-button"
+            placement="left"
+            variant="secondary"
+          >
+            Increase Map Zoom
+          </b-tooltip>
+          <!-- Unzoom Map -->
+          <b-button
+            id="decrease-zoom-button"
+            squared
+            class="overlay-button"
+            :disabled="mainVideoId !== mapId"
+            @click="decreaseZoom"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="minus"
+            />
+          </b-button>
+          <b-tooltip
+            target="decrease-zoom-button"
+            placement="left"
+            variant="secondary"
+          >
+            Decrease Map Zoom
+          </b-tooltip>
+          <!-- GoTo -->
+          <b-button
+            id="goto-button"
+            squared
+            class="overlay-button"
+            :class="{ 'overlay-button-active': gotoOverlayEnabled }"
+            :disabled="mainVideoId !== mapId || joystickOverlayEnabled || keyboardCtrl.enabled"
+            :pressed.sync="gotoOverlayEnabled"
+            @click="updateMainElement"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="map-marker-alt"
+            />
+          </b-button>
+          <b-tooltip
+            target="goto-button"
+            placement="left"
+            variant="secondary"
+          >
+            {{ (gotoOverlayEnabled ? 'Cancel GoTo...' : 'Send a GoTo Request') }}
+          </b-tooltip>
+        </div>
+        <!-- <div
+          id="camera-button-container"
+          class="overlay-button-container"
+        /> -->
+        <div
+          v-if="joystickOverlayEnabled || keyboardCtrl.enabled"
+          id="teleop-control-container"
+          class="overlay-button-container"
+        >
+          <b-button
+            id="increase-teleop-gain-button"
+            squared
+            class="overlay-button"
+            @click="increaseGain"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="plus"
+            />
+          </b-button>
+          <b-tooltip
+            target="increase-teleop-gain-button"
+            placement="left"
+            variant="secondary"
+          >
+            Increase Teleop Gain ({{ (teleopGain * 100).toFixed(0) }}%)
+          </b-tooltip>
+          <b-button
+            id="decrease-teleop-gain-button"
+            squared
+            class="overlay-button"
+            @click="decreaseGain"
+          >
+            <font-awesome-icon
+              class="icon-button-teleop"
+              icon="minus"
+            />
+          </b-button>
+          <b-tooltip
+            target="decrease-teleop-gain-button"
+            placement="left"
+            variant="secondary"
+          >
+            Decrease Teleop Gain ({{ (teleopGain * 100).toFixed(0) }}%)
+          </b-tooltip>
+        </div>
+      </div>
       <div
         v-if="joystickOverlayEnabled"
-        class="position-absolute overlay-joystick-container"
+        class="overlay-joystick-container"
       >
         <joystick
           :enable="joystickEnabled"
@@ -314,11 +364,10 @@ export default {
       joystickEnabled: state => state.joystickEnabled,
       isConnected: state => state.client.connectionState.robot === 'connected',
       isDataChannelAvailable: state => state.client.isDataChannelAvailable,
+      dockingEnabled: state => !!state.dockingInterval,
     }),
   },
   mounted() {
-    console.log('Teleop have been mounted');
-
     this.mainVideoId = this.mapId;
     this.overlayVideoId = this.cameraId;
 
@@ -332,10 +381,11 @@ export default {
     this.keyboardCtrlInterval = setInterval(this.sendKeyboardControl, this.keyboardCtrlSendTime);
   },
   destroyed() {
+    this.$store.commit('disableJoystick');
+    this.$store.dispatch('stopTeleop');
     clearInterval(this.keyboardCtrlInterval);
     document.removeEventListener('keydown', this.onKeydown);
     document.removeEventListener('keyup', this.onKeyup);
-    console.log('Teleop have been destroyed');
   },
   methods: {
     demo(event) {
@@ -418,6 +468,14 @@ export default {
         }
       }
     },
+    configDockingProcess() {
+      console.log('Docking Process...');
+      if (this.dockingEnabled) {
+        this.$store.dispatch('stopDockingProcess');
+      } else {
+        this.$store.dispatch('startDockingProcess');
+      }
+    },
     increaseZoom() {
       this.updateMainElement();
       this.$store.commit('increaseMapZoom');
@@ -467,6 +525,11 @@ export default {
         this.$store.dispatch('stopTeleop');
       }
     },
+    sendKeyboardLastCommand() {
+      if (!this.keyboardCtrl.enabled) {
+        this.$store.dispatch('stopTeleop');
+      }
+    },
     sendJoystickPosition(event) {
       const pos = {};
       Object.assign(pos, event);
@@ -479,16 +542,158 @@ export default {
 </script>
 
 <style scoped>
-.icon {
-  color: white;
-  height: 20px;
-  width: 20px;
+.icon-button-teleop {
+  color: black;
+  height: 10px;
+  width: 10px;
 }
 .overlay-button {
-  background-color: #b5b5b5;
+  background-color: grey;
   opacity: 0.4;
-  height: 60px !important;
-  width: 60px !important;
+  padding: 0rem;
+  height: 25px !important;
+  width: 25px !important;
+}
+.main-video-container {
+  height: 40%;
+  width: 100%;
+  margin: auto;
+}
+.overlay-video-container {
+  z-index: 100;
+  opacity: 0.6;
+  width: 0px;
+  max-width: 0px;
+  height: 0px;
+  max-height: 0px;
+}
+.overlay-joystick-container {
+  position: relative;
+  opacity: 0.5;
+  width: 100%;
+  max-width: 100%;
+  height: 50%;
+  max-height: 50%;
+}
+.overlay-container-teleop {
+  margin-top: 0rem;
+  position: relative;
+  display: flex;
+}
+.overlay-button-container {
+  display: flex;
+  padding: 7px;
+  background-color: rgba(25, 25, 25, 0.75);
+  border-radius: 0 0 5px 5px;
+  margin: auto;
+  margin-bottom: 5px;
+}
+#keyboard-enable-button {
+  display: none;
+}
+@media (min-width: 800px) and (min-height: 600px) {
+  #keyboard-enable-button {
+    display: block;
+  }
+  .icon-button-teleop {
+    color: white;
+    height: 10px;
+    width: 10px;
+  }
+  .overlay-button {
+    background-color: #b5b5b5;
+  }
+  .overlay-container-teleop {
+    display: block;
+    margin-top: 0px;
+    position: absolute;
+    max-width: 45px;
+    top: 5px;
+    right: 15px;
+    z-index: 100;
+    height: calc( 100% - 40px );
+  }
+  .overlay-button-container {
+    display: block;
+    padding: 7px;
+    background-color: rgba(245, 245, 245, 0.75);
+    border-radius: 5px 0 0 5px;
+    margin: auto;
+    margin-bottom: 5px;
+  }
+  .main-video-container {
+    height: 100%;
+  }
+  .overlay-video-container {
+    bottom: 5px;
+    left: 20px;
+    width: 200px;
+    max-width: 200px;
+    height: 150px;
+    max-height: 150px;
+  }
+  .overlay-joystick-container {
+    position: absolute;
+    z-index: 100;
+    opacity: 0.5;
+    bottom: 0px;
+    right: 50px;
+    width: 200px;
+    max-width: 200px;
+    height: 200px;
+    max-height: 200px;
+  }
+}
+@media (min-width: 1366px) and (min-height: 768px) {
+  .icon-button-teleop {
+    color: white;
+    height: 15px;
+    width: 15px;
+  }
+  .overlay-button {
+    padding: 0.5rem;
+    height: 45px !important;
+    width: 45px !important;
+  }
+  .overlay-container-teleop {
+    max-width: 60px;
+  }
+  .overlay-joystick-container {
+    right: 70px;
+    width: 300px;
+    max-width: 300px;
+    height: 300px;
+    max-height: 300px;
+  }
+}
+@media (min-width: 1600px) and (min-height: 900px) {
+  .icon-button-teleop {
+    height: 20px;
+    width: 20px;
+  }
+  .overlay-button {
+    opacity: 0.4;
+    height: 60px !important;
+    width: 60px !important;
+  }
+  .overlay-container-teleop {
+    max-width: 80px;
+  }
+  .overlay-video-container {
+    bottom: 20px;
+    left: 40px;
+    width: 400px;
+    max-width: 400px;
+    height: 300px;
+    max-height: 300px;
+  }
+  .overlay-joystick-container {
+    right: 90px;
+    width: 400px;
+    max-width: 400px;
+    height: 400px;
+    max-height: 400px;
+  }
 }
 .overlay-button-active {
   opacity: 0.8;
@@ -500,44 +705,8 @@ export default {
   opacity: 0.2;
   background-color: grey;
 }
-.overlay-button-container {
-  padding: 7px;
-  background-color: rgba(245, 245, 245, 0.75);
-  /* border: solid;
-  border-color: black; */
-  border-radius: 5px 0 0 5px;
-  margin: auto;
-  margin-bottom: 5px;
-}
 .overlay-button-group {
   border: 2px;
   border-color: gray;
-}
-.overlay-video-container {
-  z-index: 100;
-  opacity: 0.6;
-  bottom: 20px;
-  left: 40px;
-  width: 320px;
-  max-width: 320px;
-  height: 240px;
-  max-height: 240px;
-}
-.overlay-joystick-container {
-  z-index: 100;
-  opacity: 0.5;
-  bottom: 0px;
-  right: 70px;
-  width: 300px;
-  max-width: 300px;
-  height: 300px;
-  max-height: 300px;
-}
-.overlay-container {
-  top: 5px;
-  right: 15px;
-  z-index: 100;
-  max-width: 80px;
-  height: calc( 100% - 40px );
 }
 </style>
