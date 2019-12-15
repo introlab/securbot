@@ -7,7 +7,7 @@ var easyrtc = require("easyrtc");
 process.title = "node-easyrtc";
 
 // Resolve port
-var app_port = process.env.PORT || 8080
+var app_port = process.env.PORT || 8085
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
@@ -34,12 +34,6 @@ easyrtc.events.on("easyrtcAuth", function(socket, easyrtcid, msg, socketCallback
 
         callback(err, connectionObj);
     });
-});
-
-// To test, lets print the credential to the console for every room join!
-easyrtc.events.on("roomJoin", function(connectionObj, roomName, roomParameter, callback) {
-    console.log("["+connectionObj.getEasyrtcid()+"] Credential retrieved!", connectionObj.getFieldValueSync("credential"));
-    easyrtc.events.defaultListeners.roomJoin(connectionObj, roomName, roomParameter, callback);
 });
 
 // Start EasyRTC server

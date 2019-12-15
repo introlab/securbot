@@ -1,0 +1,47 @@
+<launch>
+    <arg name="camera_name" default="usb_cam" />
+    <arg name="image_topic" default="image_raw" />
+
+    <!-- Webcam -->
+    <include file="$(find securbot_pkg)/launch/includes/sensors/c920.launch" />
+    <node pkg="tf" type="static_transform_publisher" name="base_transform" args="0 0 0 0 0 0 map base_footprint 50" />
+    <node pkg="tf" type="static_transform_publisher" name="camera_transform" args="0.15 0 0.12 -0.5 0.5 -0.5 0.5 base_footprint camera_link 50" />
+
+    <node pkg="tf" type="static_transform_publisher" name="station_transform" args="0 -0.12 0.15 -0.5 0.5 0.5 0.5 tag_0 station_0 50" />
+
+    <!-- April Tags -->
+    <include file="$(find securbot_pkg)/launch/includes/sensors/apriltag.launch">
+        <arg name="camera_name" value="$(arg camera_name)" />
+        <arg name="image_topic" value="$(arg image_topic)" />
+    </include>
+
+
+
+    <!-- Docking -->
+    <node name="target" pkg="dock" type="target_node" output="screen">
+        <remap from="detect_array" to="tag_detections"/>
+        <param name="tag_id" value="0" />
+    </node>
+    <node name="planner" pkg="dock" type="planner_node" output="screen">
+        <param name="target_frame_id" value="target"/>
+        <param name="base_frame_id" value="base_footprint"/>
+        <param name="dx" value="0.05" />
+    </node>
+
+
+
+    <!-- Image viewers for debugging -->
+    <!--
+    <node name="input_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="$(arg camera_name)/$(arg image_topic)"/>
+        <param name="autosize" value="true" />
+    </node>
+    -->
+    <node name="output_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="/tag_detections_image"/>
+        <param name="autosize" value="true" />
+    </node>
+
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find dock)/config/config.rviz" />
+</launch>
+

@@ -8,4 +8,9 @@ try{
     process.exit(1);
 }
 
-dModule.saveDashboard(settings);
+try {
+    dModule.saveDashboard(settings);
+}
+catch (e) {
+    process.exit(1);
+}

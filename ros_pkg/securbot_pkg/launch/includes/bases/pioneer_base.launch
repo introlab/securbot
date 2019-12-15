@@ -26,3 +26,4 @@
 		<include file="$(find roboclaw_node)/launch/roboclaw.launch" />
 	</group>
 </launch>
+

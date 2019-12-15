@@ -1,6 +1,6 @@
 module.exports = function({width = "80px", height = "80px", paddingBottom = "10px"} = {}) {
     let gadget = document.getElementById("iframe-gadget")
-    let pictures = gadget.contentDocument.getElementsByClassName("dmmjUH")
+    let pictures = gadget.contentDocument.getElementsByClassName("sc-elJkPf lhRrZk")
 
     console.log("Enlarging...")
 
@@ -12,7 +12,7 @@ module.exports = function({width = "80px", height = "80px", paddingBottom = "10p
 
             let child = pic.firstChild
             let background = child.style.backgroundImage
-            let updatedBackground = background.replace("medium", "large")
+            let updatedBackground = background.replace("medium", "xxxl")
             child.style.backgroundImage = updatedBackground
 
             let parent = pic.parentNode

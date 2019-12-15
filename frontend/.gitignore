@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-package-lock.json
 /dist
 /docs
 
@@ -8,6 +7,9 @@ package-lock.json
 selenium-debug.log
 
 # local env files
+# the .env file without the local extension are meant to be commited on the repo
+# they can include non sensitive infos that can be pushed and shared (for example, the room name could be in one of them)
+# this is how **Vue** classify those files, we should not modify that classification
 .env.local
 .env.*.local
 
@@ -18,7 +20,6 @@ yarn-error.log*
 
 # Editor directories and files
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj

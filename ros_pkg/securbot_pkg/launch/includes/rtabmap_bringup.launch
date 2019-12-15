@@ -5,6 +5,7 @@
 		<arg name="rtabmapviz" default="false" />
 		<arg name="frame_id" default="base_footprint" />
 		<arg name="odom_frame_id" default="odom" />
+		<arg name="user_data_async_topic" default="/user_data_wifi" />
 		<arg name="subscribe_scan" default="true" />
 		<arg unless="$(arg localization)" name="args" default="--Reg/Force3DoF true --RGBD/NeighborLinkRefining true --Reg/Strategy 1 --RGBD/OptimizeMaxError 0 --Optimizer/Strategy 0" />
 		<arg if="$(arg localization)" name="args" default="--Reg/Force3DoF true --RGBD/NeighborLinkRefining true --Reg/Strategy 1 --RGBD/OptimizeMaxError 0 --Optimizer/Strategy 0 --Mem/IncrementalMemory false --Mem/InitWMWithAllNodes true" />
