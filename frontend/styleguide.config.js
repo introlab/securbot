@@ -4,12 +4,13 @@ module.exports = {
 	// set your styleguidist configuration here
 	title: 'Securbot Frontend Documentation',
 	simpleEditor: false,
-	ignore: ['**/components/views/Testing.vue', '**/components/views/Testing2.vue'],
-	components: 'src/components/**/[A-Z]*.vue',
+	ignore: ['**/components/views/TestingRobot.vue'],
+	components: 'src/**/[aA-zZ]*.vue',
 	defaultExample: false,
-	renderRootJsx: path.join(__dirname, 'config/styleguide.root.js'),
+	// renderRootJsx: path.join(__dirname, 'config/styleguide.root.js'),
 	styleguideDir: '../docs/frontend',
 	usageMode: 'expand',
+	vuex: 'src/store/index.js',
 	pagePerSection: true,
 	sections: [
 		{

@@ -1,3 +1,4 @@
+### To be used with the REST Client extensions of vs code.
 @addr = uri
 @path = /db
 @robot = id
