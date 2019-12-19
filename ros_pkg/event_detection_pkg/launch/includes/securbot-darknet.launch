@@ -10,7 +10,7 @@
 
   <!-- ROS and network parameter files -->
   <arg name="ros_param_file"             default="$(find event_detection_pkg)/config/securbot-darknet-ros.yaml"/>
-  <arg name="network_param_file"         default="$(find event_detection_pkg)/config/securbot-face-yolov3.yaml"/>
+  <arg name="network_param_file"         default="$(find event_detection_pkg)/config/default-yolov2-tiny.yaml"/>
 
   <!-- Load parameters -->
   <rosparam command="load" ns="darknet_ros" file="$(arg ros_param_file)"/>

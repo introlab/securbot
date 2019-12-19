@@ -8,11 +8,11 @@ from sensor_msgs.msg import Image
 from darknet_ros_msgs.msg import BoundingBoxes
 
 defaultEventConfigDictList = [{
-                              "event_name": "face_recognition",
+                              "event_name": "person_recognition",
                               "active": True,
                               "startTime": None,
                               "stopTime": None,
-                              "threshold": "face"
+                              "threshold": "aeroplane"
                             }]
 
 class EventDetection:
